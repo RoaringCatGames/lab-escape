@@ -1,10 +1,12 @@
 package com.kasetagen.game.bubblerunner.scene2d;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.kasetagen.game.bubblerunner.data.GameStats;
+import com.kasetagen.game.bubblerunner.scene2d.actor.Floor;
 import com.kasetagen.game.bubblerunner.scene2d.actor.Player;
 import com.kasetagen.game.bubblerunner.scene2d.actor.Wall;
 
@@ -17,27 +19,29 @@ import com.kasetagen.game.bubblerunner.scene2d.actor.Wall;
  */
 public class BubbleRunnerStage extends Stage {
 
+    private float[] playerDimensions = new float[] { 20f, 20f, 80f, 320f };
+    private float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), 20f };
+
     public Player player;
     public Actor floor;
     public Array<Wall> walls;
 
     public GameStats stats;
 
-
     public BubbleRunnerStage(){
 
         //Add Floor
-        floor = new Actor();
-        floor.setPosition(0f, 0f);
-        floor.setWidth(getWidth());
-        floor.setHeight(20f);
-        floor.setOrigin(floor.getWidth() / 2, floor.getHeight() / 2);
-        floor.setBounds(0f, 0f, floor.getWidth(), floor.getHeight());
-        floor.setColor(Color.BLACK);
+        floor = new Floor(floorDimensions[0],
+                          floorDimensions[1],
+                          floorDimensions[2],
+                          floorDimensions[3]);
         addActor(floor);
 
         //Add Player
-        player = new Player();
+        player = new Player(playerDimensions[0],
+                            playerDimensions[1],
+                            playerDimensions[2],
+                            playerDimensions[3]);
         addActor(player);
 
         //Initialize Walls
