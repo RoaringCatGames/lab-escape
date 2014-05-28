@@ -1,27 +1,86 @@
 package com.kasetagen.game.bubblerunner;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
+import com.kasetagen.game.bubblerunner.delegate.IStageManager;
+import com.kasetagen.game.bubblerunner.screen.BubbleRunnerMenu;
+import com.kasetagen.game.bubblerunner.screen.BubbleRunnerScreen;
+import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
-public class BubbleRunnerGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
+public class BubbleRunnerGame extends Game implements IGameProcessor {
+
+    private static final String MENU = "menu";
+    private static final String RUNNER = "runner";
+
+    BubbleRunnerMenu menu;
+    BubbleRunnerScreen runnerScreen;
+
+    boolean isInitialized = false;
+
+    protected AssetManager assetManager;
+
+
+
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+        assetManager = new AssetManager();
+        loadAssets();
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+
+        if(assetManager.update()){
+
+            if(!isInitialized){
+                changeToScreen(MENU);
+                isInitialized = true;
+            }
+
+            Gdx.gl.glClearColor(.16f, .14f, .13f, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+            super.render();
+        }
 	}
+
+    public void loadAssets(){
+        assetManager.load(AssetsUtil.BLG_LOGO, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
+
+    }
+
+ //IGameProcessor
+    @Override
+    public AssetManager getAssetManager() {
+        return assetManager;
+    }
+
+    @Override
+    public void changeToScreen(String screenName) {
+        if(MENU.equalsIgnoreCase(screenName)){
+            if(menu == null){
+                menu = new BubbleRunnerMenu(this);
+            }
+
+            setScreen(menu);
+            Gdx.input.setInputProcessor(menu.getStage());
+
+        }else if(RUNNER.equalsIgnoreCase(screenName)){
+            //Load the Game Screen!!
+            if(runnerScreen == null){
+                runnerScreen = new BubbleRunnerScreen(this);
+            }
+
+            setScreen(runnerScreen);
+            Gdx.input.setInputProcessor(runnerScreen.getStage());
+        }
+
+    }
+
+
 }

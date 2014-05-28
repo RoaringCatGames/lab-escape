@@ -11,6 +11,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
+        config.orientationLandscape = true;
         return new IOSApplication(new BubbleRunnerGame(), config);
     }
 
