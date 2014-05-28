@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.scene2d.actor.Floor;
+import com.kasetagen.game.bubblerunner.scene2d.actor.ForceField;
 import com.kasetagen.game.bubblerunner.scene2d.actor.Player;
 import com.kasetagen.game.bubblerunner.scene2d.actor.Wall;
 
@@ -24,6 +25,7 @@ public class BubbleRunnerStage extends Stage {
     private float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), 20f };
     private float[] wallDimensions = new float[] {Gdx.graphics.getWidth()-20f,
                                                   20f, 40f, Gdx.graphics.getHeight()-20f };
+    private ForceField[] wallTypes = new ForceField[] { ForceField.BUBBLE, ForceField.ELECTRIC, ForceField.ION };
 
     private Array<Wall> wallsToRemove;
     private long lastWallTime = 0L;
@@ -72,13 +74,10 @@ public class BubbleRunnerStage extends Stage {
         //Calculate timestep
         timePassed += delta*1000;
 
-        //Update GameStats
-
         //Move Walls Closer based on Speed
         for(Wall w:walls){
-
             //Check for Collisions and apply player/wall information
-            if(w.collider.overlaps(player.collider)){
+            if(player.collider.overlaps(w.collider)){
                 Gdx.app.log("RUNNER GAME", "Player collided!");
             }
 
@@ -102,13 +101,16 @@ public class BubbleRunnerStage extends Stage {
             Wall w = new Wall(wallDimensions[0],
                               wallDimensions[1],
                               wallDimensions[2],
-                              wallDimensions[3]);
+                              wallDimensions[3],
+                              wallTypes[walls.size % 3]);
             walls.add(w);
             addActor(w);
             w.setZIndex(0);
             lastWallTime = System.currentTimeMillis();
             nextGeneration += timeBetweenWalls;
         }
+
+        //Update GameStats
     }
 
     @Override

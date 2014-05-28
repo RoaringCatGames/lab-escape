@@ -30,6 +30,12 @@ public class GenericActor extends Actor {
     }
 
     @Override
+    public void act(float delta) {
+        super.act(delta);
+        collider.setPosition(getX(), getY());
+    }
+
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
