@@ -3,6 +3,7 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
@@ -15,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class GenericActor extends Actor {
     protected ShapeRenderer shaper;
 
+    public Rectangle collider;
+
     public GenericActor(float x, float y, float width, float height, Color color){
         shaper = new ShapeRenderer();
         setPosition(x, y);
@@ -23,6 +26,7 @@ public class GenericActor extends Actor {
         setHeight(height);
         setOrigin(x + width/2, y + height/2);
         setColor(color);
+        collider = new Rectangle(x, y, width, height);
     }
 
     @Override
