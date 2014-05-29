@@ -21,7 +21,7 @@ public class BubbleRunnerScreen extends ApplicationAdapter implements Screen, In
 
     private float bgMin = 0.85f;
     private float bgMax = 1f;
-    private float bgShift = 0.01f;
+    private float bgShift = 0.005f;
     private float bgCurrent = bgMin;
     private boolean isBgIncreasing = true;
 
