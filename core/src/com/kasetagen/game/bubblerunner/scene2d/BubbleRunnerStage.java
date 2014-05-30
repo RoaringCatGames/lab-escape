@@ -2,17 +2,23 @@ package com.kasetagen.game.bubblerunner.scene2d;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
+
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.kasetagen.game.bubblerunner.data.GameStats;
+import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.actor.Floor;
-import com.kasetagen.game.bubblerunner.scene2d.actor.ForceField;
+import com.kasetagen.game.bubblerunner.scene2d.actor.ForceFieldType;
 import com.kasetagen.game.bubblerunner.scene2d.actor.Player;
 import com.kasetagen.game.bubblerunner.scene2d.actor.Wall;
+import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,13 +28,16 @@ import com.kasetagen.game.bubblerunner.scene2d.actor.Wall;
  * To change this template use File | Settings | File Templates.
  */
 public class BubbleRunnerStage extends Stage {
+	
+	private IGameProcessor gameProcessor;
+	private AssetManager assetManager;
 
     //Order of values:  xPos, yPos, width, height
     private float[] playerDimensions = new float[] { 20f, 20f, 160f, Gdx.graphics.getHeight()/2 };
     private float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), 20f };
     private float[] wallDimensions = new float[] {Gdx.graphics.getWidth()-20f,
                                                   20f, 40f, Gdx.graphics.getHeight()-20f };
-    private ForceField[] wallTypes = new ForceField[] { ForceField.BUBBLE, ForceField.ELECTRIC, ForceField.ION };
+    private ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.BUBBLE, ForceFieldType.ELECTRIC, ForceFieldType.ION };
 
     private Array<Wall> wallsToRemove;
     private long lastWallTime = 0L;
@@ -36,6 +45,10 @@ public class BubbleRunnerStage extends Stage {
     private float timePassed = 0f;
     private long timeBetweenWalls = 2000L;
     private float wallAdjustment = 10f;
+    
+    private ParticleEffect particleBubble;
+    
+    private Batch batch;
 
     private InputListener createAndLeaveListener;
     private InputListener keysReleasedListener;
@@ -44,11 +57,15 @@ public class BubbleRunnerStage extends Stage {
     public Player player;
     public Actor floor;
     public Array<Wall> walls;
+    public Wall collidedWall = null;
 
 
     public GameStats stats;
-
-    public BubbleRunnerStage(){
+    
+    
+    public BubbleRunnerStage(IGameProcessor gameProcessor){
+    	assetManager = gameProcessor.getAssetManager();
+    	batch = this.getBatch();
 
         //Initialize Privates
         wallsToRemove = new Array<Wall>();
@@ -66,9 +83,9 @@ public class BubbleRunnerStage extends Stage {
                             playerDimensions[2],
                             playerDimensions[3]);
         addActor(player);
-//        player.addField(ForceField.BUBBLE);
-//        player.addField(ForceField.ELECTRIC);
-//        player.addField(ForceField.ION);
+//        player.addField(ForceFieldType.BUBBLE);
+//        player.addField(ForceFieldType.ELECTRIC);
+//        player.addField(ForceFieldType.ION);
 
         //Initialize Walls
         walls = new Array<Wall>();
@@ -80,11 +97,11 @@ public class BubbleRunnerStage extends Stage {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if(Input.Keys.A == keycode){
-                    player.addField(ForceField.BUBBLE);
+                    player.addField(ForceFieldType.BUBBLE);
                 }else if(Input.Keys.S == keycode){
-                    player.addField(ForceField.ELECTRIC);
+                    player.addField(ForceFieldType.ELECTRIC);
                 }else if(Input.Keys.D == keycode){
-                    player.addField(ForceField.ION);
+                    player.addField(ForceFieldType.ION);
                 }else if(Input.Keys.TAB == keycode){
                     toggleListener();
                 }
@@ -101,14 +118,16 @@ public class BubbleRunnerStage extends Stage {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if(Input.Keys.A == keycode && !isADown){
-                    player.addField(ForceField.BUBBLE, 0);
+                    player.addField(ForceFieldType.BUBBLE, 0);
                     isADown = true;
                 }else if(Input.Keys.S == keycode && !isSDown){
-                    player.addField(ForceField.ELECTRIC, 0);
+                    player.addField(ForceFieldType.ELECTRIC, 0);
                     isSDown = true;
                 }else if(Input.Keys.D == keycode & !isDDown){
-                    player.addField(ForceField.ION, 0);
+                    player.addField(ForceFieldType.ION, 0);
                     isDDown = true;
+                }else if(Input.Keys.TAB == keycode){
+                    toggleListener();
                 }
                 return super.keyDown(event, keycode);
             }
@@ -116,13 +135,13 @@ public class BubbleRunnerStage extends Stage {
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
                 if(Input.Keys.A == keycode && isADown){
-                    player.removeField(ForceField.BUBBLE);
+                    player.removeField(ForceFieldType.BUBBLE);
                     isADown = false;
                 }else if(Input.Keys.S == keycode && isSDown){
-                    player.removeField(ForceField.ELECTRIC);
+                    player.removeField(ForceFieldType.ELECTRIC);
                     isSDown = false;
                 }else if(Input.Keys.D == keycode & isDDown){
-                    player.removeField(ForceField.ION);
+                    player.removeField(ForceFieldType.ION);
                     isDDown = false;
                 }
                 return super.keyDown(event, keycode);
@@ -131,6 +150,11 @@ public class BubbleRunnerStage extends Stage {
 
         this.addListener(createAndLeaveListener);
         currentListener = createAndLeaveListener;
+        
+        particleBubble = assetManager.get(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
+        //particleBubble.load(Gdx.files.internal("particles/bubble.p"), Gdx.files.internal("data/images/particles"));	
+        particleBubble.start();
+        particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
     }
 
     @Override
@@ -141,10 +165,18 @@ public class BubbleRunnerStage extends Stage {
         timePassed += delta*1000;
 
         //Move Walls Closer based on Speed
+        
         for(Wall w:walls){
             //Check for Collisions and apply player/wall information
             if(player.collider.overlaps(w.collider)){
-                Gdx.app.log("RUNNER GAME", "Player collided!");
+                Gdx.app.log("RUNNER GAME", "colliding with Player");  
+
+                //Checking so we only sound once for now
+                //TODO: remove the wall on destruction or end the game if forcefield is wrong
+                if(!w.equals(collidedWall)){
+                	assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND).play(1.0f);
+                	collidedWall = w;
+                }        
             }
 
             if(w.getX() <= (0f-w.getWidth()/2)){
@@ -176,17 +208,24 @@ public class BubbleRunnerStage extends Stage {
             nextGeneration += timeBetweenWalls;
         }
 
+		particleBubble.update(delta);
+		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 2);
+		
         //Update GameStats
     }
 
     @Override
     public void draw() {
         super.draw();
+        batch.begin();
+        particleBubble.draw(batch);
+        batch.end();
     }
 
 
     public void toggleListener(){
 
+        player.clearFields();
         if(currentListener == createAndLeaveListener){
             this.removeListener(createAndLeaveListener);
             this.addListener(keysReleasedListener);

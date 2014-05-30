@@ -18,8 +18,8 @@ allprojects {
     version = '1.0'
     ext {
         appName = 'bubblerunner'
-        gdxVersion = '1.0.0'
-        roboVMVersion = '0.0.11'
+        gdxVersion = '1.1.0'
+        roboVMVersion = '0.0.13'
     }
 
     repositories {
@@ -88,6 +88,7 @@ project(":core") {
 
 
     dependencies {
+	compile files('../../kasetengine/core/build/libs/core-1.0.jar')
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     }
 }

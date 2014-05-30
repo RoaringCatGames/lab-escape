@@ -7,8 +7,7 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
  * Time: 9:36 PM
  * To change this template use File | Settings | File Templates.
  */
-public enum ForceField {
-
+public enum ForceFieldType {
     BUBBLE,
     ELECTRIC,
     ION

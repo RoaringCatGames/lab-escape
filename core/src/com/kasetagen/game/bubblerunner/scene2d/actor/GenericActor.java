@@ -2,9 +2,11 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenActor;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,9 +15,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * Time: 10:23 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GenericActor extends Actor {
+public class GenericActor extends KasetagenActor {
     protected ShapeRenderer shaper;
-
+    protected TextureRegion textureRegion;
+    
     public Rectangle collider;
 
     public GenericActor(float x, float y, float width, float height, Color color){
@@ -52,4 +55,12 @@ public class GenericActor extends Actor {
         batch.end();
         batch.begin();
     }
+    
+	@Override
+	protected void drawFull(SpriteBatch batch, float parentAlpha) {
+		if(textureRegion != null){
+			batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(),
+	                getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+		}
+	}
 }
