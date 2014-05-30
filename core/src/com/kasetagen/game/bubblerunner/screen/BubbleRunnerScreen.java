@@ -1,9 +1,6 @@
 package com.kasetagen.game.bubblerunner.screen;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
@@ -42,6 +39,9 @@ public class BubbleRunnerScreen extends ApplicationAdapter implements Screen, In
     //InputProcessor
     @Override
     public boolean keyDown(int keycode) {
+        if(Input.Keys.TAB == keycode){
+            stage.toggleListener();
+        }
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
