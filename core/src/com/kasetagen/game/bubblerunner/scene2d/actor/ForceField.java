@@ -37,6 +37,12 @@ public class ForceField extends GenericActor {
             setY(getY() -1);
             setWidth(radius*2);
             setHeight(radius*2);
+        }else if(targetRadius < radius){
+            radius--;
+            setX(getX() + 1);
+            setY(getY() + 1);
+            setWidth(radius*2);
+            setHeight(radius*2);
         }
     }
 

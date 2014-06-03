@@ -2,6 +2,7 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
 
@@ -17,24 +18,17 @@ public class Player extends GenericGroup {
 
     private static final float FIELD_ADJUST = 20f;
 
-    //set them in reverse order so they match with the order of the
-    //  forcefields being added.
-    private float[] forceFieldColliders = new float[] { 200f, 180f, 160f };
     public ForceFieldType forceFieldType;
 
 
     public int maxFields = 3;
-    //private Array<ForceFieldType> fields;
     private Array<ForceField> fields;
 
     public Player(float x, float y, float width, float height){
         super(x, y, width, height, Color.BLACK);
 
-
-
         //TODO: Replace ShapeRendering with Animation
         forceFieldType = ForceFieldType.BUBBLE;
-        //fields = new Array<ForceFieldType>();
         fields = new Array<ForceField>();
     }
 
@@ -46,7 +40,7 @@ public class Player extends GenericGroup {
             fields.removeIndex(0);
         }
 
-        float radius = 160f;
+        float radius = getWidth();
         float x = getX()-getWidth()/2;
         ForceField field = new ForceField(x, getY(), radius, ff);
 
@@ -60,16 +54,11 @@ public class Player extends GenericGroup {
 
     public void addField(ForceFieldType ff, int index){
 
-        float radius = getWidth() * (index + 1);
-        ForceField field = new ForceField(getOriginX(), getOriginY(), radius, ff);
-
-        //Remove the overriding forcefield
-        if(fields.size > index){
-            ForceField f = fields.get(index);
-            if(f != null){
-                this.removeActor(f);
-            }
-        }
+        float adjust = fields.size > 0 ? FIELD_ADJUST *fields.size - 1 : 0;
+        float radius = getWidth() + adjust;
+        float x = getX() - (getWidth()/2) - adjust;
+        float y = getY() - adjust;
+        ForceField field = new ForceField(x, y, radius, ff);
         this.addActor(field);
         fields.insert(index, field);
     }
@@ -88,6 +77,12 @@ public class Player extends GenericGroup {
             this.removeActor(f);
             fields.removeIndex(removeIndex);
         }
+
+        //When we remove a forcefield, we need to readjust all of the remaining
+        //  fields into the proper positions.
+        for(int i=0;i<fields.size;i++){
+            fields.get(i).targetRadius = getWidth() + (FIELD_ADJUST * (fields.size-i-1));
+        }
     }
 
     public void clearFields(){
@@ -96,10 +91,6 @@ public class Player extends GenericGroup {
             this.removeActor(f);
         }
         fields.clear();
-    }
-
-    public int getFieldsSize(){
-        return fields.size;
     }
 
     public ForceFieldType getOuterForceField(){
@@ -111,37 +102,17 @@ public class Player extends GenericGroup {
         return ff;
     }
 
-    public float getOuterForceFieldPosition(){
-        float collidingPosition = getOriginX();
+    public Rectangle getOuterForceFieldCollider(){
+        Rectangle collider = null;
         if(fields.size > 0){
-            collidingPosition += forceFieldColliders[3-fields.size];
+            collider = fields.get(0).collider;
         }
 
-        return collidingPosition;
+        return collider;
     }
 
     @Override
     public void drawFull(Batch batch, float parentAlpha) {
-//        super.draw(batch, parentAlpha);
-
-//        batch.end();
-//        batch.begin();
-//        Gdx.gl20.glLineWidth(5f);
-//        debugRenderer.setProjectionMatrix(getStage().getCamera().combined);
-//        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
-//
-//        //float radius = 160f;
-//        for(int i = fields.size -1; i>=0;i--){
-//            debugRenderer.setColor(getColor());
-//            debugRenderer.setColor(ForceFieldColorUtil.getColor(fields.get(i).forceFieldType));
-//            debugRenderer.circle(getOriginX(), getOriginY(), forceFieldColliders[i]);
-//            debugRenderer.setColor(Color.WHITE);
-//            debugRenderer.rect(getOuterForceFieldPosition(), getOuterForceFieldPosition() + 5f, 5f, 5f);
-//            //radius += 20f;
-//        }
-//        debugRenderer.end();
-//        batch.end();
-//        batch.begin();
-
+        //This is where we'll draw our animation of the player running
     }
 }

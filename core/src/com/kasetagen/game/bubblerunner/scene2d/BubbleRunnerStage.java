@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -173,12 +174,12 @@ public class BubbleRunnerStage extends Stage {
         for(Wall w:walls){
             //Check for Collisions and apply player/wall information
 
-            float ffPos = player.getOuterForceFieldPosition();
+            Rectangle ffPos = player.getOuterForceFieldCollider();
             float wallX = w.collider.getX();
             float wallY = w.collider.getY();
 
             //Gdx.app.log("RUNNER GAME", "Forcefield POS: " + ffPos + ", Wall X: " + wallX + ", WallY: " + wallY);
-            if(player.getOuterForceFieldPosition() >= w.collider.getX() && player.getOuterForceFieldPosition() <= w.collider.getY()){
+            if(player.getOuterForceFieldCollider() != null && w.collider.overlaps(player.getOuterForceFieldCollider())){
                  Gdx.app.log("RUNNER GAME", "Outer Forcefield is Colliding!");
 
                 if(w.forceFieldType == player.getOuterForceField()){
