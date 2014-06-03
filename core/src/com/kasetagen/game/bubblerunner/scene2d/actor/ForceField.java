@@ -22,7 +22,7 @@ public class ForceField extends GenericActor {
         super(x, y, radius*2, radius*2, ForceFieldColorUtil.getColor(ff));
 
         forceFieldType = ff;
-        targetRadius = x;
+        targetRadius = radius;
         this.radius = radius;
     }
 

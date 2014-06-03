@@ -54,7 +54,7 @@ public class Player extends GenericGroup {
         fields.add(field);
 
         for(int i=fields.size-1;i>=0;i--){
-            fields.get(i).targetRadius = fields.get(i).radius + (FIELD_ADJUST);
+            fields.get(i).targetRadius = fields.get(i).targetRadius + (FIELD_ADJUST);
         }
     }
 
