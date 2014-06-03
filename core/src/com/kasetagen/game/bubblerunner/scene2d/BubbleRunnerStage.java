@@ -177,7 +177,7 @@ public class BubbleRunnerStage extends Stage {
             float wallX = w.collider.getX();
             float wallY = w.collider.getY();
 
-            Gdx.app.log("RUNNER GAME", "Forcefield POS: " + ffPos + ", Wall X: " + wallX + ", WallY: " + wallY);
+            //Gdx.app.log("RUNNER GAME", "Forcefield POS: " + ffPos + ", Wall X: " + wallX + ", WallY: " + wallY);
             if(player.getOuterForceFieldPosition() >= w.collider.getX() && player.getOuterForceFieldPosition() <= w.collider.getY()){
                  Gdx.app.log("RUNNER GAME", "Outer Forcefield is Colliding!");
 

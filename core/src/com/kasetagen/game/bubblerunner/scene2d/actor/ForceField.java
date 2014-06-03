@@ -1,7 +1,6 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.kasetagen.game.bubblerunner.util.ForceFieldColorUtil;
@@ -16,17 +15,30 @@ import com.kasetagen.game.bubblerunner.util.ForceFieldColorUtil;
 public class ForceField extends GenericActor {
 
     public ForceFieldType forceFieldType;
-    public float targetXPosition;
+    public float targetRadius;
     public float radius;
 
     public ForceField(float x, float y, float radius, ForceFieldType ff){
         super(x, y, radius*2, radius*2, ForceFieldColorUtil.getColor(ff));
 
         forceFieldType = ff;
-        targetXPosition = x;
+        targetRadius = x;
         this.radius = radius;
     }
 
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        //Manually "Tween" our position
+        if(targetRadius > radius){
+            radius++;
+            setX(getX() - 1);
+            setY(getY() -1);
+            setWidth(radius*2);
+            setHeight(radius*2);
+        }
+    }
 
     @Override
     public void drawFull(Batch batch, float parentAlpha) {

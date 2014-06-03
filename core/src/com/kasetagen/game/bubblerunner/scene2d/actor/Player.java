@@ -1,12 +1,8 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import com.kasetagen.game.bubblerunner.util.ForceFieldColorUtil;
 
 
 /**
@@ -18,6 +14,8 @@ import com.kasetagen.game.bubblerunner.util.ForceFieldColorUtil;
  */
 
 public class Player extends GenericGroup {
+
+    private static final float FIELD_ADJUST = 20f;
 
     //set them in reverse order so they match with the order of the
     //  forcefields being added.
@@ -48,17 +46,22 @@ public class Player extends GenericGroup {
             fields.removeIndex(0);
         }
 
-        float radius = getWidth()*(fields.size + 1);
-        ForceField field = new ForceField(getX(), getY(), radius, ff);
+        float radius = 160f;
+        float x = getX()-getWidth()/2;
+        ForceField field = new ForceField(x, getY(), radius, ff);
 
         this.addActor(field);
         fields.add(field);
+
+        for(int i=fields.size-1;i>=0;i--){
+            fields.get(i).targetRadius = fields.get(i).radius + (FIELD_ADJUST);
+        }
     }
 
     public void addField(ForceFieldType ff, int index){
 
         float radius = getWidth() * (index + 1);
-        ForceField field = new ForceField(getX(), getY(), radius, ff);
+        ForceField field = new ForceField(getOriginX(), getOriginY(), radius, ff);
 
         //Remove the overriding forcefield
         if(fields.size > index){
