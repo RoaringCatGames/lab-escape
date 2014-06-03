@@ -4,24 +4,21 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
-import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenActor;
+import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenGroup;
 
 /**
  * Created with IntelliJ IDEA.
  * User: barry
- * Date: 5/27/14
- * Time: 10:23 PM
+ * Date: 6/2/14
+ * Time: 9:56 PM
  * To change this template use File | Settings | File Templates.
  */
-public class GenericActor extends KasetagenActor {
-
+public class GenericGroup extends KasetagenGroup {
     protected TextureRegion textureRegion;
     public Rectangle collider;
-
-    public GenericActor(float x, float y, float width, float height, TextureRegion textureRegion, Color color){
+    
+    public GenericGroup(float x, float y, float width, float height, TextureRegion textureRegion, Color color){
         super();
         setPosition(x, y);
         setBounds(x, y, width, height);
@@ -29,10 +26,11 @@ public class GenericActor extends KasetagenActor {
         setHeight(height);
         setOrigin(x + width/2, y + height/2);
         setColor(color);
+        this.textureRegion = textureRegion;
         collider = new Rectangle(x, y, width, height);
     }
-    
-    public GenericActor(float x, float y, float width, float height, Color color){
+
+    public GenericGroup(float x, float y, float width, float height, Color color){
         super();
         setPosition(x, y);
         setBounds(x, y, width, height);
@@ -54,7 +52,7 @@ public class GenericActor extends KasetagenActor {
         super.act(delta);
         adjustCollidingBox(delta);
     }
-    
+
 	@Override
 	protected void drawFull(Batch batch, float parentAlpha) {
 		if(textureRegion != null){

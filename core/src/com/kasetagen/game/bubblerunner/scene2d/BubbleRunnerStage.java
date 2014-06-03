@@ -3,6 +3,7 @@ package com.kasetagen.game.bubblerunner.scene2d;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -28,15 +29,19 @@ import com.kasetagen.game.bubblerunner.util.AssetsUtil;
  * To change this template use File | Settings | File Templates.
  */
 public class BubbleRunnerStage extends Stage {
-	
+
+    private static final float FLOOR_HEIGHT = 40f;
+
 	private IGameProcessor gameProcessor;
 	private AssetManager assetManager;
 
+
     //Order of values:  xPos, yPos, width, height
-    private float[] playerDimensions = new float[] { 200f, 20f, 160f, Gdx.graphics.getHeight()/2 };
-    private float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), 20f };
-    private float[] wallDimensions = new float[] {Gdx.graphics.getWidth()-20f,
-                                                  20f, 40f, Gdx.graphics.getHeight()-20f };
+    private float[] playerDimensions = new float[] { 200f, FLOOR_HEIGHT, 160f, Gdx.graphics.getHeight()/2 };
+    private float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), FLOOR_HEIGHT };
+    private float[] wallDimensions = new float[] {Gdx.graphics.getWidth()-FLOOR_HEIGHT,
+                                                  FLOOR_HEIGHT, 40f, Gdx.graphics.getHeight()-FLOOR_HEIGHT };
+    
     private ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.BUBBLE, ForceFieldType.ELECTRIC, ForceFieldType.ION };
 
     private Array<Wall> wallsToRemove;
@@ -58,7 +63,8 @@ public class BubbleRunnerStage extends Stage {
     public Actor floor;
     public Array<Wall> walls;
     public Wall collidedWall = null;
-
+    
+    private Music music;
 
     public GameStats stats;
     
@@ -81,7 +87,8 @@ public class BubbleRunnerStage extends Stage {
         player = new Player(playerDimensions[0],
                             playerDimensions[1],
                             playerDimensions[2],
-                            playerDimensions[3]);
+                            playerDimensions[3],
+                            new TextureRegion(assetManager.get(AssetsUtil.PLAYER_IMG, AssetsUtil.TEXTURE)));
         addActor(player);
 //        player.addField(ForceFieldType.BUBBLE);
 //        player.addField(ForceFieldType.ELECTRIC);
@@ -155,6 +162,8 @@ public class BubbleRunnerStage extends Stage {
         //particleBubble.load(Gdx.files.internal("particles/bubble.p"), Gdx.files.internal("data/images/particles"));	
         particleBubble.start();
         particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
+        music = Gdx.audio.newMusic(Gdx.files.internal(AssetsUtil.BACKGROUND_SOUND));
+        music.play();
     }
 
     @Override
@@ -165,11 +174,27 @@ public class BubbleRunnerStage extends Stage {
         timePassed += delta*1000;
 
         //Move Walls Closer based on Speed
-        
+
+        ForceFieldType outerField = player.getOuterForceField();
         for(Wall w:walls){
             //Check for Collisions and apply player/wall information
-            if(player.collider.overlaps(w.collider)){
-                Gdx.app.log("RUNNER GAME", "colliding with Player");  
+
+            float ffPos = player.getOuterForceFieldPosition();
+            float wallX = w.collider.getX();
+            float wallY = w.collider.getY();
+
+            //Gdx.app.log("RUNNER GAME", "Forcefield POS: " + ffPos + ", Wall X: " + wallX + ", WallY: " + wallY);
+            if(player.getOuterForceFieldPosition() >= w.collider.getX() && player.getOuterForceFieldPosition() <= w.collider.getY()){
+                 Gdx.app.log("RUNNER GAME", "Outer Forcefield is Colliding!");
+
+                if(w.forceFieldType == player.getOuterForceField()){
+                    Gdx.app.log("RUNNER GAME", "Forcefield matches wall! destroy both");
+                }else{
+                    Gdx.app.log("RUNNER GAME", "Forcefield FAILED! Destroy Forcfield!");
+                }
+
+            }else if(player.collider.overlaps(w.collider)){
+                //Gdx.app.log("RUNNER GAME", "colliding with Player");
 
                 //Checking so we only sound once for now
                 //TODO: remove the wall on destruction or end the game if forcefield is wrong
@@ -209,17 +234,17 @@ public class BubbleRunnerStage extends Stage {
         }
 
 		particleBubble.update(delta);
-		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 2);
+		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 4);
 		//particleBubble.setPosition(player.getX(), player.getY());
         //Update GameStats
     }
 
     @Override
-    public void draw() {
-        super.draw();
+    public void draw() {     
         batch.begin();
         particleBubble.draw(batch);
         batch.end();
+        super.draw();
     }
 
 

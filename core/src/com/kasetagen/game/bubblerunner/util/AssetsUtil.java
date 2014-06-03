@@ -32,6 +32,7 @@ public class AssetsUtil {
 
     //Audio Paths
     public static final String ZAP_SOUND = "audio/zap.ogg";
+    public static final String BACKGROUND_SOUND = "audio/bkmusic.ogg";
     
     //Particle Paths
     public static final String BUBBLE_PARTICLE = "particles/bubbleflame_right.p";

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.delegate.IStageManager;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerMenu;
@@ -37,6 +38,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         if(assetManager.update()){
 
             if(!isInitialized){
+                KasetagenStateUtil.setDebugMode(true);
                 changeToScreen(MENU);
                 isInitialized = true;
             }
