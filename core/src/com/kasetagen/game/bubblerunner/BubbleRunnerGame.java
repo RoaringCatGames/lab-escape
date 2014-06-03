@@ -54,6 +54,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
         assetManager.load(AssetsUtil.BUBBLE_PARTICLE_IMG, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.PLAYER_IMG, AssetsUtil.TEXTURE);
     }
 
  //IGameProcessor

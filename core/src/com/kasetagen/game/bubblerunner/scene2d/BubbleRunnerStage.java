@@ -2,11 +2,11 @@ package com.kasetagen.game.bubblerunner.scene2d;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -33,7 +33,7 @@ public class BubbleRunnerStage extends Stage {
 	private AssetManager assetManager;
 
     //Order of values:  xPos, yPos, width, height
-    private float[] playerDimensions = new float[] { 20f, 20f, 160f, Gdx.graphics.getHeight()/2 };
+    private float[] playerDimensions = new float[] { 200f, 20f, 160f, Gdx.graphics.getHeight()/2 };
     private float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), 20f };
     private float[] wallDimensions = new float[] {Gdx.graphics.getWidth()-20f,
                                                   20f, 40f, Gdx.graphics.getHeight()-20f };
@@ -210,7 +210,7 @@ public class BubbleRunnerStage extends Stage {
 
 		particleBubble.update(delta);
 		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 2);
-		
+		//particleBubble.setPosition(player.getX(), player.getY());
         //Update GameStats
     }
 

@@ -22,6 +22,7 @@ public class AssetsUtil {
     //Images
     public static final String BLG_LOGO = "badlogic.jpg";
     public static final String BUBBLE_PARTICLE_IMG = "particles/bubble.jpg";
+    public static final String PLAYER_IMG = "images/player.png";
     
     //Font Paths
     public static final String COURIER_FONT_12 = "fonts/courier-new-bold-12.fnt";
@@ -33,6 +34,6 @@ public class AssetsUtil {
     public static final String ZAP_SOUND = "audio/zap.ogg";
     
     //Particle Paths
-    public static final String BUBBLE_PARTICLE = "particles/bubble.p";
+    public static final String BUBBLE_PARTICLE = "particles/bubbleflame_right.p";
 
 }
