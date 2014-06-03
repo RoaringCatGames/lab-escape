@@ -18,13 +18,19 @@ import com.kasetagen.game.bubblerunner.util.ForceFieldColorUtil;
 
 public class Player extends GenericActor {
 
+    //set them in reverse order so they match with the order of the
+    //  forcefields being added.
+    private float[] forceFieldColliders = new float[] { 200f, 180f, 160f };
     public ForceFieldType forceFieldType;
+
 
     public int maxFields = 3;
     private Array<ForceFieldType> fields;
 
     public Player(float x, float y, float width, float height){
         super(x, y, width, height, Color.BLACK);
+
+
 
         //TODO: Replace ShapeRendering with Animation
         forceFieldType = ForceFieldType.BUBBLE;
@@ -74,6 +80,15 @@ public class Player extends GenericActor {
         return ff;
     }
 
+    public float getOuterForceFieldPosition(){
+        float collidingPosition = getOriginX();
+        if(fields.size > 0){
+            collidingPosition += forceFieldColliders[3-fields.size];
+        }
+
+        return collidingPosition;
+    }
+
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
@@ -81,16 +96,19 @@ public class Player extends GenericActor {
         batch.end();
         batch.begin();
         Gdx.gl20.glLineWidth(5f);
-        shaper.setProjectionMatrix(getStage().getCamera().combined);
-        shaper.begin(ShapeRenderer.ShapeType.Line);
-        float radius = 160f;
+        debugRenderer.setProjectionMatrix(getStage().getCamera().combined);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
+
+        //float radius = 160f;
         for(int i = fields.size -1; i>=0;i--){
-            shaper.setColor(getColor());
-            shaper.setColor(ForceFieldColorUtil.getColor(fields.get(i)));
-            shaper.circle(getOriginX(), getOriginY(), radius);
-            radius += 20f;
+            debugRenderer.setColor(getColor());
+            debugRenderer.setColor(ForceFieldColorUtil.getColor(fields.get(i)));
+            debugRenderer.circle(getOriginX(), getOriginY(), forceFieldColliders[i]);
+            debugRenderer.setColor(Color.WHITE);
+            debugRenderer.rect(getOuterForceFieldPosition(), getOuterForceFieldPosition() + 5f, 5f, 5f);
+            //radius += 20f;
         }
-        shaper.end();
+        debugRenderer.end();
         batch.end();
         batch.begin();
 
