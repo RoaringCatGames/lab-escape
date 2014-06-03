@@ -21,6 +21,17 @@ public class GenericActor extends KasetagenActor {
     protected TextureRegion textureRegion;
     public Rectangle collider;
 
+    public GenericActor(float x, float y, float width, float height, TextureRegion textureRegion, Color color){
+        super();
+        setPosition(x, y);
+        setBounds(x, y, width, height);
+        setWidth(width);
+        setHeight(height);
+        setOrigin(x + width/2, y + height/2);
+        setColor(color);
+        collider = new Rectangle(x, y, width, height);
+    }
+    
     public GenericActor(float x, float y, float width, float height, Color color){
         super();
         setPosition(x, y);

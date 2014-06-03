@@ -3,6 +3,7 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 
 
@@ -24,8 +25,9 @@ public class Player extends GenericGroup {
     public int maxFields = 3;
     private Array<ForceField> fields;
 
-    public Player(float x, float y, float width, float height){
-        super(x, y, width, height, Color.BLACK);
+
+    public Player(float x, float y, float width, float height, TextureRegion textureRegion){
+        super(x, y, width, height, textureRegion, Color.BLACK);
 
         //TODO: Replace ShapeRendering with Animation
         forceFieldType = ForceFieldType.BUBBLE;

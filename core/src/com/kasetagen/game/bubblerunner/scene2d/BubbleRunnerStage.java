@@ -2,12 +2,13 @@ package com.kasetagen.game.bubblerunner.scene2d;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -37,10 +38,11 @@ public class BubbleRunnerStage extends Stage {
 
 
     //Order of values:  xPos, yPos, width, height
-    private float[] playerDimensions = new float[] { 20f, FLOOR_HEIGHT, 160f, Gdx.graphics.getHeight()/2 };
+    private float[] playerDimensions = new float[] { 200f, FLOOR_HEIGHT, 160f, Gdx.graphics.getHeight()/2 };
     private float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), FLOOR_HEIGHT };
     private float[] wallDimensions = new float[] {Gdx.graphics.getWidth()-FLOOR_HEIGHT,
                                                   FLOOR_HEIGHT, 40f, Gdx.graphics.getHeight()-FLOOR_HEIGHT };
+    
     private ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.BUBBLE, ForceFieldType.ELECTRIC, ForceFieldType.ION };
 
     private Array<Wall> wallsToRemove;
@@ -62,7 +64,8 @@ public class BubbleRunnerStage extends Stage {
     public Actor floor;
     public Array<Wall> walls;
     public Wall collidedWall = null;
-
+    
+    private Music music;
 
     public GameStats stats;
     
@@ -85,7 +88,8 @@ public class BubbleRunnerStage extends Stage {
         player = new Player(playerDimensions[0],
                             playerDimensions[1],
                             playerDimensions[2],
-                            playerDimensions[3]);
+                            playerDimensions[3],
+                            new TextureRegion(assetManager.get(AssetsUtil.PLAYER_IMG, AssetsUtil.TEXTURE)));
         addActor(player);
 //        player.addField(ForceFieldType.BUBBLE);
 //        player.addField(ForceFieldType.ELECTRIC);
@@ -159,6 +163,8 @@ public class BubbleRunnerStage extends Stage {
         //particleBubble.load(Gdx.files.internal("particles/bubble.p"), Gdx.files.internal("data/images/particles"));	
         particleBubble.start();
         particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
+        music = Gdx.audio.newMusic(Gdx.files.internal(AssetsUtil.BACKGROUND_SOUND));
+        music.play();
     }
 
     @Override
@@ -229,17 +235,17 @@ public class BubbleRunnerStage extends Stage {
         }
 
 		particleBubble.update(delta);
-		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 2);
-		
+		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 4);
+		//particleBubble.setPosition(player.getX(), player.getY());
         //Update GameStats
     }
 
     @Override
-    public void draw() {
-        super.draw();
+    public void draw() {     
         batch.begin();
         particleBubble.draw(batch);
         batch.end();
+        super.draw();
     }
 
 
