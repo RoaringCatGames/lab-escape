@@ -9,4 +9,7 @@ package com.kasetagen.game.bubblerunner.data;
  */
 public class GameStats {
     //TODO: Implement GameStats
+
+    public int score = 0;
+    public int maxFields = 3;
 }

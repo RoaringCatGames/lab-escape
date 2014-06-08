@@ -1,5 +1,6 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
@@ -44,14 +45,16 @@ public class Player extends GenericGroup {
 
         float radius = getWidth();
         float x = getX()-getWidth()/2;
-        ForceField field = new ForceField(x, getY(), radius, ff);
-
-        this.addActor(field);
-        fields.add(field);
+        float y = getY();
+        ForceField field = new ForceField(x, y, radius, ff);
 
         for(int i=fields.size-1;i>=0;i--){
             fields.get(i).targetRadius = fields.get(i).targetRadius + (FIELD_ADJUST);
+            Gdx.app.log("PLAYER", "TargetRadius(" + i + "): " + fields.get(i).targetRadius);
         }
+
+        this.addActor(field);
+        fields.add(field);
     }
 
     public void addField(ForceFieldType ff, int index){
@@ -63,6 +66,16 @@ public class Player extends GenericGroup {
         ForceField field = new ForceField(x, y, radius, ff);
         this.addActor(field);
         fields.insert(index, field);
+    }
+
+    public void removeField(ForceField ff){
+        this.removeActor(ff);
+        fields.removeValue(ff, true);
+        Gdx.app.log("PLAYER", "Fields Size: " + fields.size);
+
+        for(int i=0;i<fields.size;i++){
+            fields.get(i).targetRadius = getWidth() + (FIELD_ADJUST * (fields.size-i-1));
+        }
     }
 
     public void removeField(ForceFieldType ff){
@@ -95,13 +108,18 @@ public class Player extends GenericGroup {
         fields.clear();
     }
 
-    public ForceFieldType getOuterForceField(){
-        ForceFieldType ff = null;
+    public ForceField getOuterForceField(){
+        ForceField ff = null;
         if(fields.size > 0){
-            ff = fields.get(0).forceFieldType;
+            ff = fields.get(0);
         }
-
         return ff;
+//        ForceFieldType ff = null;
+//        if(fields.size > 0){
+//            ff = fields.get(0).forceFieldType;
+//        }
+//
+//        return ff;
     }
 
     public Rectangle getOuterForceFieldCollider(){

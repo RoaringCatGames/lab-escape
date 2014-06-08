@@ -4,22 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
-import com.kasetagen.game.bubblerunner.scene2d.actor.Floor;
-import com.kasetagen.game.bubblerunner.scene2d.actor.ForceFieldType;
-import com.kasetagen.game.bubblerunner.scene2d.actor.Player;
-import com.kasetagen.game.bubblerunner.scene2d.actor.Wall;
+import com.kasetagen.game.bubblerunner.scene2d.actor.*;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
 /**
@@ -31,6 +25,7 @@ import com.kasetagen.game.bubblerunner.util.AssetsUtil;
  */
 public class BubbleRunnerStage extends Stage {
 
+    private static final float HUD_HEIGHT = 40f;
     private static final float FLOOR_HEIGHT = 40f;
 
 	private IGameProcessor gameProcessor;
@@ -64,15 +59,18 @@ public class BubbleRunnerStage extends Stage {
     public Actor floor;
     public Array<Wall> walls;
     public Wall collidedWall = null;
+    public GameInfo info;
     
     private Music music;
-
-    public GameStats stats;
     
     
     public BubbleRunnerStage(IGameProcessor gameProcessor){
-    	assetManager = gameProcessor.getAssetManager();
+        this.gameProcessor = gameProcessor;
+    	assetManager = this.gameProcessor.getAssetManager();
     	batch = this.getBatch();
+
+        //Initialize Stats
+        info = new GameInfo(0f, Gdx.graphics.getHeight() - HUD_HEIGHT, getWidth(), HUD_HEIGHT, assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT));
 
         //Initialize Privates
         wallsToRemove = new Array<Wall>();
@@ -90,17 +88,116 @@ public class BubbleRunnerStage extends Stage {
                             playerDimensions[2],
                             playerDimensions[3],
                             new TextureRegion(assetManager.get(AssetsUtil.PLAYER_IMG, AssetsUtil.TEXTURE)));
+        player.maxFields = info.maxFields;
         addActor(player);
-//        player.addField(ForceFieldType.BUBBLE);
-//        player.addField(ForceFieldType.ELECTRIC);
-//        player.addField(ForceFieldType.ION);
+
+        addActor(info);
 
         //Initialize Walls
         walls = new Array<Wall>();
 
-        //Initialize Stats
-        stats = new GameStats();
+        initializeInputListeners();
+        
+        particleBubble = assetManager.get(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
+        //particleBubble.load(Gdx.files.internal("particles/bubble.p"), Gdx.files.internal("data/images/particles"));	
+        particleBubble.start();
+        particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
+        music = Gdx.audio.newMusic(Gdx.files.internal(AssetsUtil.BACKGROUND_SOUND));
+        music.play();
+    }
 
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        //Calculate timestep
+        timePassed += delta*1000;
+
+        //Move Walls Closer based on Speed
+        ForceField outerField = player.getOuterForceField();
+        for(Wall w:walls){
+
+            //Check for Collisions and apply player/wall information
+            if(outerField != null && w.collider.overlaps(outerField.collider)){
+
+                if(w.forceFieldType == outerField.forceFieldType){
+                    wallsToRemove.add(w);
+                    info.score += 1;
+                }
+
+                //Destroy the forcefield if it collides with a wall
+                player.removeField(outerField);
+
+            }else if(player.collider.overlaps(w.collider)){
+
+                //Checking so we only sound once for now
+                //TODO: remove the wall on destruction or end the game if forcefield is wrong
+                if(!w.equals(collidedWall)){
+                	assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND).play(1.0f);
+                	collidedWall = w;
+                }        
+            }
+
+            if(w.getX() <= (0f-w.getWidth()/2)){
+                wallsToRemove.add(w);
+            }else{
+                w.setX(w.getX() - wallAdjustment);
+            }
+        }
+
+        //Remove Old Walls for now
+        //TODO: We'll want to remove them on player destruction
+        //      of the walls.
+        for(Wall w:wallsToRemove){
+            walls.removeValue(w, true);
+            w.remove();
+        }
+        wallsToRemove.clear();
+
+        //Add New Wall(s) based on time
+        if(timePassed >= nextGeneration){
+            Wall w = new Wall(wallDimensions[0],
+                              wallDimensions[1],
+                              wallDimensions[2],
+                              wallDimensions[3],
+                              wallTypes[walls.size % 3]);
+            walls.add(w);
+            addActor(w);
+            w.setZIndex(0);
+            lastWallTime = System.currentTimeMillis();
+            nextGeneration += timeBetweenWalls;
+        }
+
+		particleBubble.update(delta);
+		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 4);
+        //Update GameStats
+    }
+
+    @Override
+    public void draw() {     
+        batch.begin();
+        particleBubble.draw(batch);
+        batch.end();
+        super.draw();
+    }
+
+    public void toggleListener(){
+
+        player.clearFields();
+        if(currentListener == createAndLeaveListener){
+            this.removeListener(createAndLeaveListener);
+            this.addListener(keysReleasedListener);
+            currentListener = keysReleasedListener;
+        }else{
+            this.removeListener(keysReleasedListener);
+            this.addListener(createAndLeaveListener);
+            currentListener = createAndLeaveListener;
+        }
+    }
+
+
+    private void initializeInputListeners() {
         createAndLeaveListener = new InputListener(){
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
@@ -158,108 +255,6 @@ public class BubbleRunnerStage extends Stage {
 
         this.addListener(createAndLeaveListener);
         currentListener = createAndLeaveListener;
-        
-        particleBubble = assetManager.get(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
-        //particleBubble.load(Gdx.files.internal("particles/bubble.p"), Gdx.files.internal("data/images/particles"));	
-        particleBubble.start();
-        particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
-        music = Gdx.audio.newMusic(Gdx.files.internal(AssetsUtil.BACKGROUND_SOUND));
-        music.play();
     }
 
-    @Override
-    public void act(float delta) {
-        super.act(delta);
-
-        //Calculate timestep
-        timePassed += delta*1000;
-
-        //Move Walls Closer based on Speed
-
-        ForceFieldType outerField = player.getOuterForceField();
-        for(Wall w:walls){
-            //Check for Collisions and apply player/wall information
-
-            Rectangle ffPos = player.getOuterForceFieldCollider();
-            float wallX = w.collider.getX();
-            float wallY = w.collider.getY();
-
-            //Gdx.app.log("RUNNER GAME", "Forcefield POS: " + ffPos + ", Wall X: " + wallX + ", WallY: " + wallY);
-            if(player.getOuterForceFieldCollider() != null && w.collider.overlaps(player.getOuterForceFieldCollider())){
-                 Gdx.app.log("RUNNER GAME", "Outer Forcefield is Colliding!");
-
-                if(w.forceFieldType == player.getOuterForceField()){
-                    Gdx.app.log("RUNNER GAME", "Forcefield matches wall! destroy both");
-                }else{
-                    Gdx.app.log("RUNNER GAME", "Forcefield FAILED! Destroy Forcfield!");
-                }
-
-            }else if(player.collider.overlaps(w.collider)){
-                //Gdx.app.log("RUNNER GAME", "colliding with Player");
-
-                //Checking so we only sound once for now
-                //TODO: remove the wall on destruction or end the game if forcefield is wrong
-                if(!w.equals(collidedWall)){
-                	assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND).play(1.0f);
-                	collidedWall = w;
-                }        
-            }
-
-            if(w.getX() <= (0f-w.getWidth()/2)){
-                wallsToRemove.add(w);
-            }else{
-                w.setX(w.getX() - wallAdjustment);
-            }
-        }
-
-        //Remove Old Walls for now
-        //TODO: We'll want to remove them on player destruction
-        //      of the walls.
-        for(Wall w:wallsToRemove){
-            w.remove();
-        }
-        wallsToRemove.clear();
-
-        //Add New Wall(s) based on time
-        if(timePassed >= nextGeneration){
-            Wall w = new Wall(wallDimensions[0],
-                              wallDimensions[1],
-                              wallDimensions[2],
-                              wallDimensions[3],
-                              wallTypes[walls.size % 3]);
-            walls.add(w);
-            addActor(w);
-            w.setZIndex(0);
-            lastWallTime = System.currentTimeMillis();
-            nextGeneration += timeBetweenWalls;
-        }
-
-		particleBubble.update(delta);
-		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 4);
-		//particleBubble.setPosition(player.getX(), player.getY());
-        //Update GameStats
-    }
-
-    @Override
-    public void draw() {     
-        batch.begin();
-        particleBubble.draw(batch);
-        batch.end();
-        super.draw();
-    }
-
-
-    public void toggleListener(){
-
-        player.clearFields();
-        if(currentListener == createAndLeaveListener){
-            this.removeListener(createAndLeaveListener);
-            this.addListener(keysReleasedListener);
-            currentListener = keysReleasedListener;
-        }else{
-            this.removeListener(keysReleasedListener);
-            this.addListener(createAndLeaveListener);
-            currentListener = createAndLeaveListener;
-        }
-    }
 }
