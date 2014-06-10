@@ -16,6 +16,8 @@ import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
+import java.util.Random;
+
 /**
  * Created with IntelliJ IDEA.
  * User: barry
@@ -30,7 +32,8 @@ public class BubbleRunnerStage extends Stage {
 
 	private IGameProcessor gameProcessor;
 	private AssetManager assetManager;
-
+    private int highScore = 0;
+    private boolean isDead = false;
 
     //Order of values:  xPos, yPos, width, height
     private float[] playerDimensions = new float[] { 200f, FLOOR_HEIGHT, 160f, Gdx.graphics.getHeight()/2 };
@@ -111,67 +114,76 @@ public class BubbleRunnerStage extends Stage {
     public void act(float delta) {
         super.act(delta);
 
-        //Calculate timestep
-        timePassed += delta*1000;
+        if(isDead){
+            //Show Data
+            //Wait for tap to restart
+            if(info.score > highScore){
+                highScore = info.score;
+            }
 
-        //Move Walls Closer based on Speed
-        ForceField outerField = player.getOuterForceField();
-        for(Wall w:walls){
 
-            //Check for Collisions and apply player/wall information
-            if(outerField != null && w.collider.overlaps(outerField.collider)){
+        }else{
+            //Calculate timestep
+            timePassed += delta*1000;
 
-                if(w.forceFieldType == outerField.forceFieldType){
-                    wallsToRemove.add(w);
-                    info.score += 1;
+            //Move Walls Closer based on Speed
+            ForceField outerField = player.getOuterForceField();
+            for(Wall w:walls){
+
+                //Check for Collisions and apply player/wall information
+                if(outerField != null && w.collider.overlaps(outerField.collider)){
+
+                    if(w.forceFieldType == outerField.forceFieldType){
+                        wallsToRemove.add(w);
+                        info.score += 1;
+                    }
+
+                    //Destroy the forcefield if it collides with a wall
+                    player.removeField(outerField);
+
+                }else if(player.collider.overlaps(w.collider)){
+                    processDeath(w);
                 }
 
-                //Destroy the forcefield if it collides with a wall
-                player.removeField(outerField);
-
-            }else if(player.collider.overlaps(w.collider)){
-
-                //Checking so we only sound once for now
-                //TODO: remove the wall on destruction or end the game if forcefield is wrong
-                if(!w.equals(collidedWall)){
-                	assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND).play(1.0f);
-                	collidedWall = w;
-                }        
+                if(w.getX() <= (0f-w.getWidth()/2)){
+                    wallsToRemove.add(w);
+                }else{
+                    w.setX(w.getX() - wallAdjustment);
+                }
             }
 
-            if(w.getX() <= (0f-w.getWidth()/2)){
-                wallsToRemove.add(w);
-            }else{
-                w.setX(w.getX() - wallAdjustment);
+            //Remove Old Walls for now
+            //TODO: We'll want to remove them on player destruction
+            //      of the walls.
+            for(Wall w:wallsToRemove){
+                walls.removeValue(w, true);
+                w.remove();
             }
-        }
+            wallsToRemove.clear();
 
-        //Remove Old Walls for now
-        //TODO: We'll want to remove them on player destruction
-        //      of the walls.
-        for(Wall w:wallsToRemove){
-            walls.removeValue(w, true);
-            w.remove();
-        }
-        wallsToRemove.clear();
+            //Add New Wall(s) based on time
+            generateWall();
 
-        //Add New Wall(s) based on time
+        }
+		particleBubble.update(delta);
+		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 4);
+        //Update GameStats
+    }
+
+    private void generateWall() {
+        Random r = new Random(System.currentTimeMillis());
         if(timePassed >= nextGeneration){
             Wall w = new Wall(wallDimensions[0],
                               wallDimensions[1],
                               wallDimensions[2],
                               wallDimensions[3],
-                              wallTypes[walls.size % 3]);
+                              wallTypes[r.nextInt(3)]);
             walls.add(w);
             addActor(w);
             w.setZIndex(0);
             lastWallTime = System.currentTimeMillis();
             nextGeneration += timeBetweenWalls;
         }
-
-		particleBubble.update(delta);
-		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 4);
-        //Update GameStats
     }
 
     @Override
@@ -209,6 +221,8 @@ public class BubbleRunnerStage extends Stage {
                     player.addField(ForceFieldType.ION);
                 }else if(Input.Keys.TAB == keycode){
                     toggleListener();
+                }else if(Input.Keys.SPACE == keycode){
+                    resetGame();
                 }
                 return super.keyDown(event, keycode);
             }
@@ -233,6 +247,8 @@ public class BubbleRunnerStage extends Stage {
                     isDDown = true;
                 }else if(Input.Keys.TAB == keycode){
                     toggleListener();
+                }else if(Input.Keys.SPACE == keycode){
+                    resetGame();
                 }
                 return super.keyDown(event, keycode);
             }
@@ -255,6 +271,27 @@ public class BubbleRunnerStage extends Stage {
 
         this.addListener(createAndLeaveListener);
         currentListener = createAndLeaveListener;
+    }
+
+    private void processDeath(Wall w) {
+        //Checking so we only sound once for now
+        if(!w.equals(collidedWall)){
+            wallsToRemove.add(w);
+            assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND).play(1.0f);
+            isDead = true;
+            collidedWall = w;
+            music.stop();
+        }
+    }
+
+    private void resetGame() {
+        if(isDead){
+            info.reset();
+            walls.clear();
+            player.clearFields();
+            isDead = false;
+            music.play();
+        }
     }
 
 }

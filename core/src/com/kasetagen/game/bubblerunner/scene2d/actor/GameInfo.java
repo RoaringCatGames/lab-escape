@@ -16,12 +16,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 public class GameInfo extends GenericGroup {
 
     private static final int TEXT_PADDING = 60;
+    private static final int DEFAULT_MAX_FIELDS = 3;
     private static final String SCORE_PREFIX = "Score: ";
     private static final String FIELD_PREFIX = "Max Fields: ";
     private Label scoreLabel;
     private Label maxFieldsLabel;
     public int score = 0;
-    public int maxFields = 3;
+    public int maxFields = DEFAULT_MAX_FIELDS;
 
     public GameInfo(float x, float y, float width, float height, BitmapFont font) {
         super(x, y, width, height, null, Color.WHITE);
@@ -51,5 +52,10 @@ public class GameInfo extends GenericGroup {
     protected void drawFull(Batch batch, float parentAlpha) {
         super.drawFull(batch, parentAlpha);
 
+    }
+
+    public void reset(){
+        score = 0;
+        maxFields = DEFAULT_MAX_FIELDS;
     }
 }
