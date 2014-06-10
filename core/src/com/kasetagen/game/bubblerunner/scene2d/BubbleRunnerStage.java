@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -63,6 +65,7 @@ public class BubbleRunnerStage extends Stage {
     public Array<Wall> walls;
     public Wall collidedWall = null;
     public GameInfo info;
+    public Overlay deathOverlay;
     
     private Music music;
     
@@ -107,6 +110,12 @@ public class BubbleRunnerStage extends Stage {
         particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
         music = Gdx.audio.newMusic(Gdx.files.internal(AssetsUtil.BACKGROUND_SOUND));
         music.play();
+
+        BitmapFont mainFont = assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
+        BitmapFont subFont = assetManager.get(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
+        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.DARK_GRAY, Color.BLUE, mainFont, subFont, "You Died!", "Score: 0\nBest Score: 0");
+        deathOverlay.setVisible(false);
+        addActor(deathOverlay);
     }
 
 
@@ -115,12 +124,6 @@ public class BubbleRunnerStage extends Stage {
         super.act(delta);
 
         if(isDead){
-            //Show Data
-            //Wait for tap to restart
-            if(info.score > highScore){
-                highScore = info.score;
-            }
-
 
         }else{
             //Calculate timestep
@@ -274,7 +277,10 @@ public class BubbleRunnerStage extends Stage {
     }
 
     private void processDeath(Wall w) {
+
+
         //Checking so we only sound once for now
+
         if(!w.equals(collidedWall)){
             wallsToRemove.add(w);
             assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND).play(1.0f);
@@ -282,10 +288,19 @@ public class BubbleRunnerStage extends Stage {
             collidedWall = w;
             music.stop();
         }
+        //Show Data
+        //Wait for tap to restart
+        if(info.score > highScore){
+            highScore = info.score;
+        }
+
+        deathOverlay.setSubText("Score: " + info.score + "\nBest Score: " + highScore);
+        deathOverlay.setVisible(true);
     }
 
     private void resetGame() {
         if(isDead){
+            deathOverlay.setVisible(false);
             info.reset();
             walls.clear();
             player.clearFields();

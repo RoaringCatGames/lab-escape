@@ -53,6 +53,8 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
     public void loadAssets(){
         assetManager.load(AssetsUtil.BLG_LOGO, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
+        assetManager.load(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
+        assetManager.load(AssetsUtil.COURIER_FONT_12, AssetsUtil.BITMAP_FONT);
         assetManager.load(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
         assetManager.load(AssetsUtil.BUBBLE_PARTICLE_IMG, AssetsUtil.TEXTURE);
