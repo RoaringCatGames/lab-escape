@@ -8,7 +8,7 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
  * To change this template use File | Settings | File Templates.
  */
 public enum ForceFieldType {
-    BUBBLE,
-    ELECTRIC,
-    ION
+    LIGHTNING,
+    PLASMA,
+    LASER
 }

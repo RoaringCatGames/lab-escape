@@ -23,7 +23,7 @@ public class Player extends GenericGroup {
     public ForceFieldType forceFieldType;
 
 
-    public int maxFields = 3;
+    public int maxFields = 1;
     private Array<ForceField> fields;
 
 
@@ -31,7 +31,7 @@ public class Player extends GenericGroup {
         super(x, y, width, height, textureRegion, Color.BLACK);
 
         //TODO: Replace ShapeRendering with Animation
-        forceFieldType = ForceFieldType.BUBBLE;
+        forceFieldType = ForceFieldType.LIGHTNING;
         fields = new Array<ForceField>();
     }
 
@@ -50,7 +50,7 @@ public class Player extends GenericGroup {
 
         for(int i=fields.size-1;i>=0;i--){
             fields.get(i).targetRadius = fields.get(i).targetRadius + (FIELD_ADJUST);
-            Gdx.app.log("PLAYER", "TargetRadius(" + i + "): " + fields.get(i).targetRadius);
+            //Gdx.app.log("PLAYER", "TargetRadius(" + i + "): " + fields.get(i).targetRadius);
         }
 
         this.addActor(field);
@@ -71,7 +71,7 @@ public class Player extends GenericGroup {
     public void removeField(ForceField ff){
         this.removeActor(ff);
         fields.removeValue(ff, true);
-        Gdx.app.log("PLAYER", "Fields Size: " + fields.size);
+        //Gdx.app.log("PLAYER", "Fields Size: " + fields.size);
 
         for(int i=0;i<fields.size;i++){
             fields.get(i).targetRadius = getWidth() + (FIELD_ADJUST * (fields.size-i-1));
@@ -114,12 +114,6 @@ public class Player extends GenericGroup {
             ff = fields.get(0);
         }
         return ff;
-//        ForceFieldType ff = null;
-//        if(fields.size > 0){
-//            ff = fields.get(0).forceFieldType;
-//        }
-//
-//        return ff;
     }
 
     public Rectangle getOuterForceFieldCollider(){

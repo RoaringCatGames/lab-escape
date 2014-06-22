@@ -15,13 +15,13 @@ public class ForceFieldColorUtil {
     public static Color getColor(ForceFieldType ff){
         Color result;
         switch(ff){
-            case BUBBLE:
+            case LIGHTNING:
                 result = Color.BLUE;
                 break;
-            case ELECTRIC:
+            case PLASMA:
                 result = Color.YELLOW;
                 break;
-            case ION:
+            case LASER:
                 result =Color.GREEN;
                 break;
             default:

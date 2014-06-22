@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -32,8 +31,15 @@ import java.util.Random;
  */
 public class BubbleRunnerStage extends Stage {
 
+
     private static final float HUD_HEIGHT = 40f;
     private static final float FLOOR_HEIGHT = 160f;
+
+    private static final long BASE_TIME_BETWEEN_WALLS = 2000L;
+    private static final int SECONDS_BETWEEN_ADJUSTS = 5;
+    private static final float TIME_DECREASE = 100f;
+    private static final float MIN_TIME_BETWEEN_WALLS = 300f;
+
 
 	private IGameProcessor gameProcessor;
 	private AssetManager assetManager;
@@ -46,13 +52,13 @@ public class BubbleRunnerStage extends Stage {
     private float[] wallDimensions = new float[] {Gdx.graphics.getWidth()-FLOOR_HEIGHT,
                                                   FLOOR_HEIGHT, 40f, Gdx.graphics.getHeight()-FLOOR_HEIGHT };
     
-    private ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.BUBBLE, ForceFieldType.ELECTRIC, ForceFieldType.ION };
+    private ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.LIGHTNING, ForceFieldType.PLASMA, ForceFieldType.LASER};
 
     private Array<Wall> wallsToRemove;
-    private long lastWallTime = 0L;
+    private int lastWallAdjustTime = 0;
     private long nextGeneration = 1000L;
     private float timePassed = 0f;
-    private long timeBetweenWalls = 2000L;
+    private long timeBetweenWalls = BASE_TIME_BETWEEN_WALLS;
     private float wallAdjustment = 10f;
     
     private ParticleEffect particleBubble;
@@ -171,6 +177,7 @@ public class BubbleRunnerStage extends Stage {
 
             //Add New Wall(s) based on time
             generateWall();
+            adjustWallSpeed();
 
         }
 		particleBubble.update(delta);
@@ -189,8 +196,18 @@ public class BubbleRunnerStage extends Stage {
             walls.add(w);
             addActor(w);
             w.setZIndex(0);
-            lastWallTime = System.currentTimeMillis();
             nextGeneration += timeBetweenWalls;
+        }
+    }
+
+    private void adjustWallSpeed(){
+        int secondsPassedInt  = (int)Math.floor(timePassed/1000);
+        if(secondsPassedInt > 0 && secondsPassedInt != lastWallAdjustTime && secondsPassedInt%SECONDS_BETWEEN_ADJUSTS == 0){
+            if(timeBetweenWalls > MIN_TIME_BETWEEN_WALLS){
+                Gdx.app.log("RUNNER", "Wall Decreasing");
+                timeBetweenWalls -= TIME_DECREASE;
+                lastWallAdjustTime = secondsPassedInt;
+            }
         }
     }
 
@@ -220,16 +237,16 @@ public class BubbleRunnerStage extends Stage {
         player.addField(fft);
     }
 
-    private void addAField(){
-        player.addField(ForceFieldType.BUBBLE);
+    private void addLightningField(){
+        player.addField(ForceFieldType.LIGHTNING);
     }
 
-    private void addSField(){
-        player.addField(ForceFieldType.ELECTRIC);
+    private void addPlasmaField(){
+        player.addField(ForceFieldType.PLASMA);
     }
 
-    private void addDField(){
-        player.addField(ForceFieldType.ION);
+    private void addLaserField(){
+        player.addField(ForceFieldType.LASER);
     }
 
     private void initializeInputListeners() {
@@ -237,11 +254,11 @@ public class BubbleRunnerStage extends Stage {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if(Input.Keys.A == keycode){
-                    addAField();
+                    addLightningField();
                 }else if(Input.Keys.S == keycode){
-                    addSField();
+                    addPlasmaField();
                 }else if(Input.Keys.D == keycode){
-                    addDField();
+                    addLaserField();
                 }else if(Input.Keys.TAB == keycode){
                     toggleListener();
                 }else if(Input.Keys.SPACE == keycode){
@@ -273,13 +290,13 @@ public class BubbleRunnerStage extends Stage {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if(Input.Keys.A == keycode && !isADown){
-                    player.addField(ForceFieldType.BUBBLE, 0);
+                    player.addField(ForceFieldType.LIGHTNING, 0);
                     isADown = true;
                 }else if(Input.Keys.S == keycode && !isSDown){
-                    player.addField(ForceFieldType.ELECTRIC, 0);
+                    player.addField(ForceFieldType.PLASMA, 0);
                     isSDown = true;
                 }else if(Input.Keys.D == keycode & !isDDown){
-                    player.addField(ForceFieldType.ION, 0);
+                    player.addField(ForceFieldType.LASER, 0);
                     isDDown = true;
                 }else if(Input.Keys.TAB == keycode){
                     toggleListener();
@@ -292,13 +309,13 @@ public class BubbleRunnerStage extends Stage {
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
                 if(Input.Keys.A == keycode && isADown){
-                    player.removeField(ForceFieldType.BUBBLE);
+                    player.removeField(ForceFieldType.LIGHTNING);
                     isADown = false;
                 }else if(Input.Keys.S == keycode && isSDown){
-                    player.removeField(ForceFieldType.ELECTRIC);
+                    player.removeField(ForceFieldType.PLASMA);
                     isSDown = false;
                 }else if(Input.Keys.D == keycode & isDDown){
-                    player.removeField(ForceFieldType.ION);
+                    player.removeField(ForceFieldType.LASER);
                     isDDown = false;
                 }
                 return super.keyDown(event, keycode);
@@ -319,23 +336,23 @@ public class BubbleRunnerStage extends Stage {
                 sUp, sDown, sChecked,
                 dUp, dDown, dChecked;
 
-        aUp = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.A_UP, AssetsUtil.TEXTURE)));
-        aDown = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.A_DOWN, AssetsUtil.TEXTURE)));
-        aChecked = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.A_CHECKED, AssetsUtil.TEXTURE)));
+        aUp = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.LIGHT_UP, AssetsUtil.TEXTURE)));
+        aDown = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.LIGHT_DOWN, AssetsUtil.TEXTURE)));
+        aChecked = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.LIGHT_CHECKED, AssetsUtil.TEXTURE)));
 
-        sUp = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.S_UP, AssetsUtil.TEXTURE)));
-        sDown = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.S_DOWN, AssetsUtil.TEXTURE)));
-        sChecked = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.S_CHECKED, AssetsUtil.TEXTURE)));
+        sUp = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.PLASMA_UP, AssetsUtil.TEXTURE)));
+        sDown = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.PLASMA_DOWN, AssetsUtil.TEXTURE)));
+        sChecked = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.PLASMA_CHECKED, AssetsUtil.TEXTURE)));
 
-        dUp = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.D_UP, AssetsUtil.TEXTURE)));
-        dDown = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.D_DOWN, AssetsUtil.TEXTURE)));
-        dChecked = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.D_CHECKED, AssetsUtil.TEXTURE)));
+        dUp = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.LASER_UP, AssetsUtil.TEXTURE)));
+        dDown = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.LASER_DOWN, AssetsUtil.TEXTURE)));
+        dChecked = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.LASER_CHECKED, AssetsUtil.TEXTURE)));
 
         controls.addButton(aUp, aDown, aChecked, new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                addAField();
+                addLightningField();
             }
         }, true);
 
@@ -343,7 +360,7 @@ public class BubbleRunnerStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                addSField();
+                addPlasmaField();
             }
         }, true);
 
@@ -351,7 +368,7 @@ public class BubbleRunnerStage extends Stage {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                addDField();
+                addLaserField();
             }
         }, true);
 
@@ -389,7 +406,9 @@ public class BubbleRunnerStage extends Stage {
             }
             walls.clear();
             player.clearFields();
+            timeBetweenWalls = BASE_TIME_BETWEEN_WALLS;
             isDead = false;
+
             music.play();
         }
     }

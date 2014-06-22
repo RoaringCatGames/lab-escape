@@ -2,12 +2,10 @@ package com.kasetagen.game.bubblerunner;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
-import com.kasetagen.game.bubblerunner.delegate.IStageManager;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerMenu;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerScreen;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
@@ -60,15 +58,15 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.BUBBLE_PARTICLE_IMG, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.PLAYER_IMG, AssetsUtil.TEXTURE);
 
-        assetManager.load(AssetsUtil.A_UP, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.A_DOWN, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.A_CHECKED, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.S_UP, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.S_DOWN, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.S_CHECKED, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.D_UP, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.D_DOWN, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.D_CHECKED, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.LIGHT_UP, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.LIGHT_DOWN, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.LIGHT_CHECKED, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.PLASMA_UP, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.PLASMA_DOWN, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.PLASMA_CHECKED, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.LASER_UP, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.LASER_DOWN, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.LASER_CHECKED, AssetsUtil.TEXTURE);
 
     }
 
