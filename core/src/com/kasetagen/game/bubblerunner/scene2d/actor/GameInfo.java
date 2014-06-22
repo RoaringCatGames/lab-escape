@@ -16,7 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 public class GameInfo extends GenericGroup {
 
     private static final int TEXT_PADDING = 60;
-    private static final int DEFAULT_MAX_FIELDS = 1;
+    private static final int DEFAULT_MAX_FIELDS = 3;
     private static final String SCORE_PREFIX = "Score: ";
     private static final String FIELD_PREFIX = "Max Fields: ";
     private Label scoreLabel;
