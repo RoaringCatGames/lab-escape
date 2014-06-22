@@ -249,6 +249,19 @@ public class BubbleRunnerStage extends Stage {
                 }
                 return super.keyDown(event, keycode);
             }
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+
+                if(isDead){
+                    Actor a = hit(x, y, true);
+                    if(a != null && a instanceof Overlay){
+                        resetGame();
+                    }
+                }
+
+                return super.touchDown(event, x, y, pointer, button);
+            }
         };
 
         keysReleasedListener = new InputListener(){
@@ -371,6 +384,9 @@ public class BubbleRunnerStage extends Stage {
         if(isDead){
             deathOverlay.setVisible(false);
             info.reset();
+            for(Wall w: walls){
+                w.remove();
+            }
             walls.clear();
             player.clearFields();
             isDead = false;
