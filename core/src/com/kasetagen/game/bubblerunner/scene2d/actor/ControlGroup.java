@@ -14,9 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
  */
 public class ControlGroup extends GenericGroup{
 
-    private static final float BUTTON_WIDTH = 50f;
-    private static final float BUTTON_HEIGHT = 50f;
-    private static final float BUTTON_PADDING = 5f;
+    private static final float BUTTON_WIDTH = 150f;
+    private static final float BUTTON_HEIGHT = 150f;
+    private static final float BUTTON_PADDING = 10f;
 
     private int buttonCount = 0;
 

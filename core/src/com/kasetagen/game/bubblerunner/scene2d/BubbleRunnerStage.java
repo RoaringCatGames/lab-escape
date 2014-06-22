@@ -33,7 +33,7 @@ import java.util.Random;
 public class BubbleRunnerStage extends Stage {
 
     private static final float HUD_HEIGHT = 40f;
-    private static final float FLOOR_HEIGHT = 80f;
+    private static final float FLOOR_HEIGHT = 160f;
 
 	private IGameProcessor gameProcessor;
 	private AssetManager assetManager;

@@ -25,9 +25,9 @@ public class AssetsUtil {
     public static final String PLAYER_IMG = "images/player.png";
 
     //Images -- Buttons
-    public static final String A_UP = "images/buttons/a-up.png";
-    public static final String A_DOWN = "images/buttons/a-down.png";
-    public static final String A_CHECKED = "images/buttons/a-checked.png";
+    public static final String A_UP = "images/buttons/light-up.png";
+    public static final String A_DOWN = "images/buttons/light-down.png";
+    public static final String A_CHECKED = "images/buttons/light-down.png";
     public static final String S_UP = "images/buttons/s-up.png";
     public static final String S_DOWN = "images/buttons/s-down.png";
     public static final String S_CHECKED = "images/buttons/s-checked.png";
