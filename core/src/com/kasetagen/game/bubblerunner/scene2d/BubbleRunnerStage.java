@@ -13,6 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
@@ -30,7 +33,7 @@ import java.util.Random;
 public class BubbleRunnerStage extends Stage {
 
     private static final float HUD_HEIGHT = 40f;
-    private static final float FLOOR_HEIGHT = 40f;
+    private static final float FLOOR_HEIGHT = 80f;
 
 	private IGameProcessor gameProcessor;
 	private AssetManager assetManager;
@@ -116,6 +119,8 @@ public class BubbleRunnerStage extends Stage {
         deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.DARK_GRAY, Color.BLUE, mainFont, subFont, "You Died!", "Score: 0\nBest Score: 0");
         deathOverlay.setVisible(false);
         addActor(deathOverlay);
+
+        setupButtonControls();
     }
 
 
@@ -211,17 +216,32 @@ public class BubbleRunnerStage extends Stage {
         }
     }
 
+    private void addField(ForceFieldType fft){
+        player.addField(fft);
+    }
+
+    private void addAField(){
+        player.addField(ForceFieldType.BUBBLE);
+    }
+
+    private void addSField(){
+        player.addField(ForceFieldType.ELECTRIC);
+    }
+
+    private void addDField(){
+        player.addField(ForceFieldType.ION);
+    }
 
     private void initializeInputListeners() {
         createAndLeaveListener = new InputListener(){
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
                 if(Input.Keys.A == keycode){
-                    player.addField(ForceFieldType.BUBBLE);
+                    addAField();
                 }else if(Input.Keys.S == keycode){
-                    player.addField(ForceFieldType.ELECTRIC);
+                    addSField();
                 }else if(Input.Keys.D == keycode){
-                    player.addField(ForceFieldType.ION);
+                    addDField();
                 }else if(Input.Keys.TAB == keycode){
                     toggleListener();
                 }else if(Input.Keys.SPACE == keycode){
@@ -274,6 +294,55 @@ public class BubbleRunnerStage extends Stage {
 
         this.addListener(createAndLeaveListener);
         currentListener = createAndLeaveListener;
+    }
+
+
+    private void setupButtonControls(){
+
+        ControlGroup controls = new ControlGroup(0, 0, getWidth(), 60f, Color.CYAN);
+
+
+        TextureRegionDrawable aUp, aDown, aChecked,
+                sUp, sDown, sChecked,
+                dUp, dDown, dChecked;
+
+        aUp = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.A_UP, AssetsUtil.TEXTURE)));
+        aDown = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.A_DOWN, AssetsUtil.TEXTURE)));
+        aChecked = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.A_CHECKED, AssetsUtil.TEXTURE)));
+
+        sUp = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.S_UP, AssetsUtil.TEXTURE)));
+        sDown = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.S_DOWN, AssetsUtil.TEXTURE)));
+        sChecked = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.S_CHECKED, AssetsUtil.TEXTURE)));
+
+        dUp = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.D_UP, AssetsUtil.TEXTURE)));
+        dDown = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.D_DOWN, AssetsUtil.TEXTURE)));
+        dChecked = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.D_CHECKED, AssetsUtil.TEXTURE)));
+
+        controls.addButton(aUp, aDown, aChecked, new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                addAField();
+            }
+        }, true);
+
+        controls.addButton(sUp, sDown, sChecked, new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                addSField();
+            }
+        }, true);
+
+        controls.addButton(dUp, dDown, dChecked, new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                addDField();
+            }
+        }, true);
+
+        addActor(controls);
     }
 
     private void processDeath(Wall w) {
