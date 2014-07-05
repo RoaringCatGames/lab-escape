@@ -115,15 +115,6 @@ public class Player extends GenericGroup {
         return ff;
     }
 
-    public Rectangle getOuterForceFieldCollider(){
-        Rectangle collider = null;
-        if(fields.size > 0){
-            collider = fields.get(0).collider;
-        }
-
-        return collider;
-    }
-
     @Override
     public void drawFull(Batch batch, float parentAlpha) {
         //This is where we'll draw our animation of the player running

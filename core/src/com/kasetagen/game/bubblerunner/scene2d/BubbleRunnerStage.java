@@ -36,6 +36,7 @@ public class BubbleRunnerStage extends Stage {
     private static final float HUD_HEIGHT = 40f;
     private static final float FLOOR_HEIGHT = 160f;
 
+    private static final int SECONDS_BETWEEN_DIFF_SHIFT = 30;
     private static final long BASE_TIME_BETWEEN_WALLS = 2000L;
     private static final int SECONDS_BETWEEN_ADJUSTS = 5;
     private static final float TIME_DECREASE = 100f;
@@ -60,11 +61,14 @@ public class BubbleRunnerStage extends Stage {
     private boolean isDead = false;
 
     //Obstacle Generation Values
+    /**
+     * Time Passed is in Seconds
+     */
+    private float secondsPassed = 0f;
     private Array<Wall> wallsToRemove;
     private int lastWallAdjustTime = 0;
     private long nextGeneration = 1000L;
-    private float timePassed = 0f;
-    private long timeBetweenWalls = BASE_TIME_BETWEEN_WALLS;
+    private long millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
     private float wallAdjustment = 10f;
 
     //Input Listeners
@@ -101,7 +105,7 @@ public class BubbleRunnerStage extends Stage {
         initializeFloor();
 
         //Add Player
-        initializePlayer();
+        initializePlayer(info.maxFields);
 
         //Initialize Walls
         walls = new Array<Wall>();
@@ -130,32 +134,28 @@ public class BubbleRunnerStage extends Stage {
 
         }else{
             //Calculate timestep
-            timePassed += delta*1000;
+            secondsPassed += delta*1000;
 
             //Move Walls Closer based on Speed
             processWallCollisions();
 
             //Any walls marked for removal need to be
             //  dropped and disposed of
-            for(Wall w:wallsToRemove){
-                walls.removeValue(w, true);
-                w.remove();
-            }
-            wallsToRemove.clear();
+            processDestroyedWalls();
 
             //Add New Wall(s) based on time
             generateObstacles();
 
-            //Increment our
-            adjustWallSpeed();
+            //Increment our obstacle speed
+            adjustDifficulty();
+
+            //Adjust Resource Levels
 
         }
 		particleBubble.update(delta);
 		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 4);
         //Update GameStats
     }
-
-
 
     @Override
     public void draw() {     
@@ -177,6 +177,10 @@ public class BubbleRunnerStage extends Stage {
                 if(w.forceFieldType == outerField.forceFieldType){
                     wallsToRemove.add(w);
                     info.score += 1;
+                }else{
+                    //If we hit a bad wall, we reduce your score
+                    //  This will discourage jamming out fields like crazy
+                    info.score -= 1;
                 }
 
                 //Destroy the forcefield if it collides with a wall
@@ -195,13 +199,20 @@ public class BubbleRunnerStage extends Stage {
         }
     }
 
+    private void processDestroyedWalls() {
+        for(Wall w:wallsToRemove){
+            walls.removeValue(w, true);
+            w.remove();
+        }
+        wallsToRemove.clear();
+    }
+
     private void generateObstacles() {
-        Random r = new Random(System.currentTimeMillis());
-        if(timePassed >= nextGeneration){
+        if(secondsPassed >= nextGeneration){
             WallPattern wp = getRandomWallPattern();
             for(int i=0;i<wp.wallCount;i++){
-                //xPos = startX + (N * (wallWidth + wallPadding)
-                //Where N = NumberOfWalls-1
+                //FORMULA:  xPos = startX + (N * (wallWidth + wallPadding)
+                //          - Where N = NumberOfWalls-1
                 Wall w = new Wall(wallDimensions[0] + (i*(wallDimensions[2] + wp.wallPadding)),
                         wallDimensions[1],
                         wallDimensions[2],
@@ -212,7 +223,7 @@ public class BubbleRunnerStage extends Stage {
                 w.setZIndex(0);
             }
 
-            nextGeneration += timeBetweenWalls;
+            nextGeneration += millisBetweenWalls;
         }
     }
 
@@ -230,18 +241,24 @@ public class BubbleRunnerStage extends Stage {
         return p;
     }
 
-    private void adjustWallSpeed(){
-        int secondsPassedInt  = (int)Math.floor(timePassed/1000);
-        if(secondsPassedInt > 0 && secondsPassedInt != lastWallAdjustTime && secondsPassedInt%SECONDS_BETWEEN_ADJUSTS == 0){
-            if(timeBetweenWalls > MIN_TIME_BETWEEN_WALLS){
-                Gdx.app.log("RUNNER", "Wall Decreasing");
-                timeBetweenWalls -= TIME_DECREASE;
-                lastWallAdjustTime = secondsPassedInt;
+    private void adjustDifficulty(){
+        int secondsPassedInt  = (int)Math.floor(secondsPassed /1000);
+        if(secondsPassedInt > 0 && secondsPassedInt != lastWallAdjustTime){
+            if(secondsPassedInt%SECONDS_BETWEEN_ADJUSTS == 0){
+                if(millisBetweenWalls > MIN_TIME_BETWEEN_WALLS){
+                    Gdx.app.log("RUNNER", "Wall Decreasing");
+                    millisBetweenWalls -= TIME_DECREASE;
+                    lastWallAdjustTime = secondsPassedInt;
+                }
+            }
+
+            if(secondsPassedInt%SECONDS_BETWEEN_DIFF_SHIFT == 0){
+                incrementMaxFields();
             }
         }
+
+
     }
-
-
 
     private void processDeath(Wall w) {
         //Checking so we only sound once for now
@@ -272,11 +289,19 @@ public class BubbleRunnerStage extends Stage {
             }
             walls.clear();
             player.clearFields();
-            timeBetweenWalls = BASE_TIME_BETWEEN_WALLS;
+            millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
             isDead = false;
+
+            info.maxFields = 1;
+            player.maxFields = 1;
 
             music.play();
         }
+    }
+
+    private void incrementMaxFields(){
+        info.maxFields += 1;
+        player.maxFields = info.maxFields;
     }
 
     public void toggleListener(){
@@ -325,13 +350,13 @@ public class BubbleRunnerStage extends Stage {
         addActor(deathOverlay);
     }
 
-    private void initializePlayer() {
+    private void initializePlayer(int maxFields) {
         player = new Player(playerDimensions[0],
                 playerDimensions[1],
                 playerDimensions[2],
                 playerDimensions[3],
                 new TextureRegion(assetManager.get(AssetsUtil.PLAYER_IMG, AssetsUtil.TEXTURE)));
-        player.maxFields = info.maxFields;
+        player.maxFields = maxFields;
         addActor(player);
 
         //NOT SURE WHERE THIS GOES
@@ -354,6 +379,8 @@ public class BubbleRunnerStage extends Stage {
         float infoWidth = getWidth();
         float infoHeight = HUD_HEIGHT;
         info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT));
+        //Start with single max fields
+        info.maxFields = 1;
         addActor(info);
     }
 
