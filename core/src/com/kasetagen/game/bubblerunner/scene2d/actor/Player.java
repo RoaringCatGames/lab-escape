@@ -50,7 +50,6 @@ public class Player extends GenericGroup {
 
         for(int i=fields.size-1;i>=0;i--){
             fields.get(i).targetRadius = fields.get(i).targetRadius + (FIELD_ADJUST);
-            //Gdx.app.log("PLAYER", "TargetRadius(" + i + "): " + fields.get(i).targetRadius);
         }
 
         this.addActor(field);

@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.kasetagen.game.bubblerunner.data.WallPattern;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
@@ -41,93 +42,84 @@ public class BubbleRunnerStage extends Stage {
     private static final float MIN_TIME_BETWEEN_WALLS = 300f;
 
 
+    //Order of values:  xPos, yPos, width, height
+    private static float[] playerDimensions = new float[] { 200f, FLOOR_HEIGHT, 160f, Gdx.graphics.getHeight()/2 };
+    private static float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), FLOOR_HEIGHT };
+    private static float[] wallDimensions = new float[] {Gdx.graphics.getWidth()-FLOOR_HEIGHT,
+                                                         FLOOR_HEIGHT, 40f, Gdx.graphics.getHeight()-FLOOR_HEIGHT };
+
+    private static ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.LIGHTNING, ForceFieldType.PLASMA, ForceFieldType.LASER};
+
+    //Delegates
 	private IGameProcessor gameProcessor;
 	private AssetManager assetManager;
+    private Batch batch;
+
+    //State Values
     private int highScore = 0;
     private boolean isDead = false;
 
-    //Order of values:  xPos, yPos, width, height
-    private float[] playerDimensions = new float[] { 200f, FLOOR_HEIGHT, 160f, Gdx.graphics.getHeight()/2 };
-    private float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), FLOOR_HEIGHT };
-    private float[] wallDimensions = new float[] {Gdx.graphics.getWidth()-FLOOR_HEIGHT,
-                                                  FLOOR_HEIGHT, 40f, Gdx.graphics.getHeight()-FLOOR_HEIGHT };
-    
-    private ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.LIGHTNING, ForceFieldType.PLASMA, ForceFieldType.LASER};
-
+    //Obstacle Generation Values
     private Array<Wall> wallsToRemove;
     private int lastWallAdjustTime = 0;
     private long nextGeneration = 1000L;
     private float timePassed = 0f;
     private long timeBetweenWalls = BASE_TIME_BETWEEN_WALLS;
     private float wallAdjustment = 10f;
-    
-    private ParticleEffect particleBubble;
-    
-    private Batch batch;
 
+    //Input Listeners
     private InputListener createAndLeaveListener;
     private InputListener keysReleasedListener;
     private InputListener currentListener;
 
+    //Actors
     public Player player;
     public Actor floor;
     public Array<Wall> walls;
     public Wall collidedWall = null;
     public GameInfo info;
     public Overlay deathOverlay;
-    
+
+    //Ambience (Music and Effects
     private Music music;
-    
-    
+    //TODO: Move into Player?
+    private ParticleEffect particleBubble;
+
+
     public BubbleRunnerStage(IGameProcessor gameProcessor){
         this.gameProcessor = gameProcessor;
     	assetManager = this.gameProcessor.getAssetManager();
     	batch = this.getBatch();
 
-        //Initialize Stats
-        info = new GameInfo(0f, Gdx.graphics.getHeight() - HUD_HEIGHT, getWidth(), HUD_HEIGHT, assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT));
+        //Initialize HUD (Stats, and GameInfo)
+        initializeHUD();
 
         //Initialize Privates
         wallsToRemove = new Array<Wall>();
 
         //Add Floor
-        floor = new Floor(floorDimensions[0],
-                          floorDimensions[1],
-                          floorDimensions[2],
-                          floorDimensions[3]);
-        addActor(floor);
+        initializeFloor();
 
         //Add Player
-        player = new Player(playerDimensions[0],
-                            playerDimensions[1],
-                            playerDimensions[2],
-                            playerDimensions[3],
-                            new TextureRegion(assetManager.get(AssetsUtil.PLAYER_IMG, AssetsUtil.TEXTURE)));
-        player.maxFields = info.maxFields;
-        addActor(player);
-
-        addActor(info);
+        initializePlayer();
 
         //Initialize Walls
         walls = new Array<Wall>();
 
+        //Setup our InputListeners
         initializeInputListeners();
         
-        particleBubble = assetManager.get(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
-        //particleBubble.load(Gdx.files.internal("particles/bubble.p"), Gdx.files.internal("data/images/particles"));	
-        particleBubble.start();
-        particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
-        music = Gdx.audio.newMusic(Gdx.files.internal(AssetsUtil.BACKGROUND_SOUND));
-        music.play();
+        //Setup Background Music
+        initializeBackgroundMusic();
 
-        BitmapFont mainFont = assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
-        BitmapFont subFont = assetManager.get(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
-        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.DARK_GRAY, Color.BLUE, mainFont, subFont, "You Died!", "Score: 0\nBest Score: 0");
-        deathOverlay.setVisible(false);
-        addActor(deathOverlay);
+        //Setup Death Overlay
+        initializeDeathOverlay();
 
-        setupButtonControls();
+        //Add and Wire-up Button Controls
+        initializeButtonControls();
     }
+
+
 
 
     @Override
@@ -141,34 +133,10 @@ public class BubbleRunnerStage extends Stage {
             timePassed += delta*1000;
 
             //Move Walls Closer based on Speed
-            ForceField outerField = player.getOuterForceField();
-            for(Wall w:walls){
+            processWallCollisions();
 
-                //Check for Collisions and apply player/wall information
-                if(outerField != null && w.collider.overlaps(outerField.collider)){
-
-                    if(w.forceFieldType == outerField.forceFieldType){
-                        wallsToRemove.add(w);
-                        info.score += 1;
-                    }
-
-                    //Destroy the forcefield if it collides with a wall
-                    player.removeField(outerField);
-
-                }else if(player.collider.overlaps(w.collider)){
-                    processDeath(w);
-                }
-
-                if(w.getX() <= (0f-w.getWidth()/2)){
-                    wallsToRemove.add(w);
-                }else{
-                    w.setX(w.getX() - wallAdjustment);
-                }
-            }
-
-            //Remove Old Walls for now
-            //TODO: We'll want to remove them on player destruction
-            //      of the walls.
+            //Any walls marked for removal need to be
+            //  dropped and disposed of
             for(Wall w:wallsToRemove){
                 walls.removeValue(w, true);
                 w.remove();
@@ -176,7 +144,9 @@ public class BubbleRunnerStage extends Stage {
             wallsToRemove.clear();
 
             //Add New Wall(s) based on time
-            generateWall();
+            generateObstacles();
+
+            //Increment our
             adjustWallSpeed();
 
         }
@@ -185,19 +155,79 @@ public class BubbleRunnerStage extends Stage {
         //Update GameStats
     }
 
-    private void generateWall() {
+
+
+    @Override
+    public void draw() {     
+        batch.begin();
+        particleBubble.draw(batch);
+        batch.end();
+        super.draw();
+    }
+
+    private void processWallCollisions() {
+        ForceField outerField = player.getOuterForceField();
+        for(Wall w:walls){
+
+            //Check for Collisions and apply player/wall information
+            if(outerField != null && w.collider.overlaps(outerField.collider)){
+
+                //WHEN OUTERFIELD == WALL we Destroy Both
+                //  and increment the score
+                if(w.forceFieldType == outerField.forceFieldType){
+                    wallsToRemove.add(w);
+                    info.score += 1;
+                }
+
+                //Destroy the forcefield if it collides with a wall
+                //  The point and wall descrution is calculated above
+                player.removeField(outerField);
+
+            }else if(player.collider.overlaps(w.collider)){
+                processDeath(w);
+            }
+
+            if(w.getX() <= (0f-w.getWidth()/2)){
+                wallsToRemove.add(w);
+            }else{
+                w.setX(w.getX() - wallAdjustment);
+            }
+        }
+    }
+
+    private void generateObstacles() {
         Random r = new Random(System.currentTimeMillis());
         if(timePassed >= nextGeneration){
-            Wall w = new Wall(wallDimensions[0],
-                              wallDimensions[1],
-                              wallDimensions[2],
-                              wallDimensions[3],
-                              wallTypes[r.nextInt(3)]);
-            walls.add(w);
-            addActor(w);
-            w.setZIndex(0);
+            WallPattern wp = getRandomWallPattern();
+            for(int i=0;i<wp.wallCount;i++){
+                //xPos = startX + (N * (wallWidth + wallPadding)
+                //Where N = NumberOfWalls-1
+                Wall w = new Wall(wallDimensions[0] + (i*(wallDimensions[2] + wp.wallPadding)),
+                        wallDimensions[1],
+                        wallDimensions[2],
+                        wallDimensions[3],
+                        wp.forceFields.get(i));
+                walls.add(w);
+                addActor(w);
+                w.setZIndex(0);
+            }
+
             nextGeneration += timeBetweenWalls;
         }
+    }
+
+    private WallPattern getRandomWallPattern(){
+        WallPattern p = new WallPattern(20f);
+        Random r = new Random(System.currentTimeMillis());
+        //Based on the Max Fields, we generated a new pattern
+        int numFields = r.nextInt(info.maxFields) + 1;
+        while(numFields > 0){
+            ForceFieldType fft = wallTypes[r.nextInt(wallTypes.length)];
+            p.addWall(fft);
+            numFields--;
+        }
+
+        return p;
     }
 
     private void adjustWallSpeed(){
@@ -211,12 +241,42 @@ public class BubbleRunnerStage extends Stage {
         }
     }
 
-    @Override
-    public void draw() {     
-        batch.begin();
-        particleBubble.draw(batch);
-        batch.end();
-        super.draw();
+
+
+    private void processDeath(Wall w) {
+        //Checking so we only sound once for now
+
+        if(!w.equals(collidedWall)){
+            wallsToRemove.add(w);
+            assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND).play(1.0f);
+            isDead = true;
+            collidedWall = w;
+            music.stop();
+        }
+        //Show Data
+        //Wait for tap to restart
+        if(info.score > highScore){
+            highScore = info.score;
+        }
+
+        deathOverlay.setSubText("Score: " + info.score + "\nBest Score: " + highScore);
+        deathOverlay.setVisible(true);
+    }
+
+    private void resetGame() {
+        if(isDead){
+            deathOverlay.setVisible(false);
+            info.reset();
+            for(Wall w: walls){
+                w.remove();
+            }
+            walls.clear();
+            player.clearFields();
+            timeBetweenWalls = BASE_TIME_BETWEEN_WALLS;
+            isDead = false;
+
+            music.play();
+        }
     }
 
     public void toggleListener(){
@@ -248,6 +308,55 @@ public class BubbleRunnerStage extends Stage {
     private void addLaserField(){
         player.addField(ForceFieldType.LASER);
     }
+
+////
+///INITIALIZERS
+//--------------
+    private void initializeBackgroundMusic() {
+        music = Gdx.audio.newMusic(Gdx.files.internal(AssetsUtil.BACKGROUND_SOUND));
+        music.play();
+    }
+
+    private void initializeDeathOverlay() {
+        BitmapFont mainFont = assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
+        BitmapFont subFont = assetManager.get(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
+        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.DARK_GRAY, Color.BLUE, mainFont, subFont, "You Died!", "Score: 0\nBest Score: 0");
+        deathOverlay.setVisible(false);
+        addActor(deathOverlay);
+    }
+
+    private void initializePlayer() {
+        player = new Player(playerDimensions[0],
+                playerDimensions[1],
+                playerDimensions[2],
+                playerDimensions[3],
+                new TextureRegion(assetManager.get(AssetsUtil.PLAYER_IMG, AssetsUtil.TEXTURE)));
+        player.maxFields = info.maxFields;
+        addActor(player);
+
+        //NOT SURE WHERE THIS GOES
+        particleBubble = assetManager.get(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
+        particleBubble.start();
+        particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
+    }
+
+    private void initializeFloor() {
+        floor = new Floor(floorDimensions[0],
+                floorDimensions[1],
+                floorDimensions[2],
+                floorDimensions[3]);
+        addActor(floor);
+    }
+
+    private void initializeHUD() {
+        float infoX = 0f;
+        float infoY = Gdx.graphics.getHeight() - HUD_HEIGHT;
+        float infoWidth = getWidth();
+        float infoHeight = HUD_HEIGHT;
+        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT));
+        addActor(info);
+    }
+
 
     private void initializeInputListeners() {
         createAndLeaveListener = new InputListener(){
@@ -327,7 +436,7 @@ public class BubbleRunnerStage extends Stage {
     }
 
 
-    private void setupButtonControls(){
+    private void initializeButtonControls(){
 
         ControlGroup controls = new ControlGroup(0, 0, getWidth(), 60f, Color.CYAN);
 
@@ -375,42 +484,6 @@ public class BubbleRunnerStage extends Stage {
         addActor(controls);
     }
 
-    private void processDeath(Wall w) {
 
-
-        //Checking so we only sound once for now
-
-        if(!w.equals(collidedWall)){
-            wallsToRemove.add(w);
-            assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND).play(1.0f);
-            isDead = true;
-            collidedWall = w;
-            music.stop();
-        }
-        //Show Data
-        //Wait for tap to restart
-        if(info.score > highScore){
-            highScore = info.score;
-        }
-
-        deathOverlay.setSubText("Score: " + info.score + "\nBest Score: " + highScore);
-        deathOverlay.setVisible(true);
-    }
-
-    private void resetGame() {
-        if(isDead){
-            deathOverlay.setVisible(false);
-            info.reset();
-            for(Wall w: walls){
-                w.remove();
-            }
-            walls.clear();
-            player.clearFields();
-            timeBetweenWalls = BASE_TIME_BETWEEN_WALLS;
-            isDead = false;
-
-            music.play();
-        }
-    }
 
 }
