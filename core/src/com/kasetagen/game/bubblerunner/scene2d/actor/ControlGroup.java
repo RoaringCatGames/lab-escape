@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.ObjectMap;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,6 +19,9 @@ public class ControlGroup extends GenericGroup{
     private static final float BUTTON_HEIGHT = 150f;
     private static final float BUTTON_PADDING = 10f;
 
+    private static int RESOURCE_MAX = 20;
+
+    public ObjectMap<ForceFieldType, Integer> resourceLevels;
     private int buttonCount = 0;
 
     private float getButtonX(int buttonPos){
@@ -26,6 +30,11 @@ public class ControlGroup extends GenericGroup{
 
     public ControlGroup(float x, float y, float width, float height, Color color){
         super(x, y, width, height, color);
+
+        resourceLevels = new ObjectMap<ForceFieldType, Integer>();
+        resourceLevels.put(ForceFieldType.LASER, RESOURCE_MAX);
+        resourceLevels.put(ForceFieldType.LIGHTNING, RESOURCE_MAX);
+        resourceLevels.put(ForceFieldType.PLASMA, RESOURCE_MAX);
     }
 
     public void addButton(Drawable up, Drawable down, Drawable over, EventListener listener, boolean isVisible){
@@ -43,6 +52,19 @@ public class ControlGroup extends GenericGroup{
         addActor(button);
 
         buttonCount++;
+    }
+
+    public int getResourceLevel(ForceFieldType fft){
+        return resourceLevels.get(fft);
+    }
+
+    public void updateResource(ForceFieldType fft, int increment){
+        int val = resourceLevels.get(fft);
+        if(val < RESOURCE_MAX || (increment < 0 && val >= increment)){
+            val += increment;
+            int newVal = val <= RESOURCE_MAX ? val : RESOURCE_MAX;
+            resourceLevels.put(fft, newVal);
+        }
     }
 
 }

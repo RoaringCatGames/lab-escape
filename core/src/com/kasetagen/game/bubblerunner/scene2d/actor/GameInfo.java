@@ -21,11 +21,17 @@ public class GameInfo extends GenericGroup {
     private static final String FIELD_PREFIX = "Max Fields: ";
     private Label scoreLabel;
     private Label maxFieldsLabel;
+    private Label resourceLabel;
+
     public int score = 0;
     public int maxFields = DEFAULT_MAX_FIELDS;
 
-    public GameInfo(float x, float y, float width, float height, BitmapFont font) {
+    private ControlGroup controls;
+
+    public GameInfo(float x, float y, float width, float height, BitmapFont font, ControlGroup player) {
         super(x, y, width, height, null, Color.WHITE);
+
+        controls = player;
 
         LabelStyle style = new LabelStyle(font, getColor());
 
@@ -37,6 +43,11 @@ public class GameInfo extends GenericGroup {
         maxFieldsLabel = new Label(FIELD_PREFIX + maxFields, style);
         maxFieldsLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING, 0);
         addActor(maxFieldsLabel);
+
+        resourceLabel = new Label(getResourceLevelString(), style);
+        resourceLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING +
+                                  maxFieldsLabel.getWidth() + TEXT_PADDING, 0);
+        addActor(resourceLabel);
     }
 
 
@@ -46,12 +57,19 @@ public class GameInfo extends GenericGroup {
 
         scoreLabel.setText(SCORE_PREFIX + score);
         maxFieldsLabel.setText(FIELD_PREFIX + maxFields);
+        resourceLabel.setText(getResourceLevelString());
     }
 
     @Override
     protected void drawFull(Batch batch, float parentAlpha) {
         super.drawFull(batch, parentAlpha);
 
+    }
+
+    public String getResourceLevelString(){
+        return  "Lightning: " + controls.getResourceLevel(ForceFieldType.LIGHTNING) +
+                " Laser: " + controls.getResourceLevel(ForceFieldType.LASER) +
+                " Plasma: " + controls.getResourceLevel(ForceFieldType.PLASMA);
     }
 
     public void reset(){

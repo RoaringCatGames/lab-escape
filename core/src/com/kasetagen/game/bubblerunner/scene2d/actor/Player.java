@@ -3,9 +3,11 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 
 
 /**
@@ -22,8 +24,9 @@ public class Player extends GenericGroup {
 
     public ForceFieldType forceFieldType;
 
-
     public int maxFields = 1;
+    public int resourceUsage = 1;
+
     private Array<ForceField> fields;
 
 
@@ -36,6 +39,11 @@ public class Player extends GenericGroup {
     }
 
     public void addField(ForceFieldType ff){
+//        int availableLevel = resourceLevels.get(ff);
+//        if(availableLevel < RESOURCE_USAGE){
+//            return false;
+//        }
+
         if(fields.size == maxFields){
             //Remove the forcefield
             ForceField f = fields.get(0);
@@ -54,6 +62,10 @@ public class Player extends GenericGroup {
 
         this.addActor(field);
         fields.add(field);
+
+//        resourceLevels.put(ff, availableLevel - RESOURCE_USAGE);
+
+//        return true;
     }
 
     public void addField(ForceFieldType ff, int index){

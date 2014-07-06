@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -42,6 +43,8 @@ public class BubbleRunnerStage extends Stage {
     private static final float TIME_DECREASE = 100f;
     private static final float MIN_TIME_BETWEEN_WALLS = 300f;
 
+    private static final int SECONDS_PER_RESOURCE_REGEN = 2;
+
 
     //Order of values:  xPos, yPos, width, height
     private static float[] playerDimensions = new float[] { 200f, FLOOR_HEIGHT, 160f, Gdx.graphics.getHeight()/2 };
@@ -64,12 +67,14 @@ public class BubbleRunnerStage extends Stage {
     /**
      * Time Passed is in Seconds
      */
-    private float secondsPassed = 0f;
+    private float millisecondsPassed = 0f;
     private Array<Wall> wallsToRemove;
     private int lastWallAdjustTime = 0;
     private long nextGeneration = 1000L;
     private long millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
     private float wallAdjustment = 10f;
+
+    private float secondsSinceResourceRegen = 0f;
 
     //Input Listeners
     private InputListener createAndLeaveListener;
@@ -83,9 +88,11 @@ public class BubbleRunnerStage extends Stage {
     public Wall collidedWall = null;
     public GameInfo info;
     public Overlay deathOverlay;
+    public ControlGroup controls;
 
     //Ambience (Music and Effects
     private Music music;
+    private Sound zapSound;
     //TODO: Move into Player?
     private ParticleEffect particleBubble;
 
@@ -95,17 +102,14 @@ public class BubbleRunnerStage extends Stage {
     	assetManager = this.gameProcessor.getAssetManager();
     	batch = this.getBatch();
 
-        //Initialize HUD (Stats, and GameInfo)
-        initializeHUD();
-
         //Initialize Privates
         wallsToRemove = new Array<Wall>();
 
+        //Add Player
+        initializePlayer(1);
+
         //Add Floor
         initializeFloor();
-
-        //Add Player
-        initializePlayer(info.maxFields);
 
         //Initialize Walls
         walls = new Array<Wall>();
@@ -114,13 +118,17 @@ public class BubbleRunnerStage extends Stage {
         initializeInputListeners();
         
         //Setup Background Music
-        initializeBackgroundMusic();
+        initializeAmbience();
 
         //Setup Death Overlay
         initializeDeathOverlay();
 
         //Add and Wire-up Button Controls
         initializeButtonControls();
+
+        //Initialize HUD (Stats, and GameInfo)
+        initializeHUD();
+
     }
 
 
@@ -134,7 +142,11 @@ public class BubbleRunnerStage extends Stage {
 
         }else{
             //Calculate timestep
-            secondsPassed += delta*1000;
+            millisecondsPassed += delta*1000;
+            secondsSinceResourceRegen += delta;
+
+            //processResourceRegens
+            processResources();
 
             //Move Walls Closer based on Speed
             processWallCollisions();
@@ -163,6 +175,15 @@ public class BubbleRunnerStage extends Stage {
         particleBubble.draw(batch);
         batch.end();
         super.draw();
+    }
+
+    private void processResources(){
+        Gdx.app.log("RESOURCE", "Resource Time: " + secondsSinceResourceRegen);
+        if(secondsSinceResourceRegen >= SECONDS_PER_RESOURCE_REGEN){
+            regenResources(1);
+            //We want to keep any "left-over" time so that we don't get weird timing differences
+            secondsSinceResourceRegen = secondsSinceResourceRegen - SECONDS_PER_RESOURCE_REGEN;
+        }
     }
 
     private void processWallCollisions() {
@@ -208,7 +229,7 @@ public class BubbleRunnerStage extends Stage {
     }
 
     private void generateObstacles() {
-        if(secondsPassed >= nextGeneration){
+        if(millisecondsPassed >= nextGeneration){
             WallPattern wp = getRandomWallPattern();
             for(int i=0;i<wp.wallCount;i++){
                 //FORMULA:  xPos = startX + (N * (wallWidth + wallPadding)
@@ -242,7 +263,7 @@ public class BubbleRunnerStage extends Stage {
     }
 
     private void adjustDifficulty(){
-        int secondsPassedInt  = (int)Math.floor(secondsPassed /1000);
+        int secondsPassedInt  = (int)Math.floor(millisecondsPassed /1000);
         if(secondsPassedInt > 0 && secondsPassedInt != lastWallAdjustTime){
             if(secondsPassedInt%SECONDS_BETWEEN_ADJUSTS == 0){
                 if(millisBetweenWalls > MIN_TIME_BETWEEN_WALLS){
@@ -265,7 +286,7 @@ public class BubbleRunnerStage extends Stage {
 
         if(!w.equals(collidedWall)){
             wallsToRemove.add(w);
-            assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND).play(1.0f);
+            zapSound.play(0.8f);
             isDead = true;
             collidedWall = w;
             music.stop();
@@ -319,27 +340,53 @@ public class BubbleRunnerStage extends Stage {
     }
 
     private void addField(ForceFieldType fft){
-        player.addField(fft);
+        boolean wasAdded = false;
+        int resLevel = controls.getResourceLevel(fft);
+        if(resLevel >= player.resourceUsage){
+            //Yuck, I don't like this, but I can't come up with an
+            //  argument for not doing this. The Stage manages the
+            //  state and performs the corresponding actions.
+            player.addField(fft);
+            controls.updateResource(fft, -player.resourceUsage);
+            wasAdded = true;
+        }
+        if(wasAdded){
+            //TODO: Play Forcefield SoundFX
+
+        }else{
+            //TODO: Play Resources Limited SoundFX
+            zapSound.play(0.8f);
+        }
+
     }
 
     private void addLightningField(){
-        player.addField(ForceFieldType.LIGHTNING);
+        addField(ForceFieldType.LIGHTNING);
     }
 
     private void addPlasmaField(){
-        player.addField(ForceFieldType.PLASMA);
+        addField(ForceFieldType.PLASMA);
     }
 
     private void addLaserField(){
-        player.addField(ForceFieldType.LASER);
+        addField(ForceFieldType.LASER);
+    }
+
+
+    public void regenResources(int increment){
+        controls.updateResource(ForceFieldType.LASER, increment);
+        controls.updateResource(ForceFieldType.LIGHTNING, increment);
+        controls.updateResource(ForceFieldType.PLASMA, increment);
     }
 
 ////
 ///INITIALIZERS
 //--------------
-    private void initializeBackgroundMusic() {
+    private void initializeAmbience() {
         music = Gdx.audio.newMusic(Gdx.files.internal(AssetsUtil.BACKGROUND_SOUND));
         music.play();
+
+        zapSound = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
     }
 
     private void initializeDeathOverlay() {
@@ -378,7 +425,7 @@ public class BubbleRunnerStage extends Stage {
         float infoY = Gdx.graphics.getHeight() - HUD_HEIGHT;
         float infoWidth = getWidth();
         float infoHeight = HUD_HEIGHT;
-        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT));
+        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT), controls);
         //Start with single max fields
         info.maxFields = 1;
         addActor(info);
@@ -465,7 +512,7 @@ public class BubbleRunnerStage extends Stage {
 
     private void initializeButtonControls(){
 
-        ControlGroup controls = new ControlGroup(0, 0, getWidth(), 60f, Color.CYAN);
+        controls = new ControlGroup(0, 0, getWidth(), 60f, Color.CYAN);
 
 
         TextureRegionDrawable aUp, aDown, aChecked,
