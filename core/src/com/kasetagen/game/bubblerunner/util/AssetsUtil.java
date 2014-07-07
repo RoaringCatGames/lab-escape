@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,7 +19,12 @@ public class AssetsUtil {
     public static Class<BitmapFont> BITMAP_FONT = BitmapFont.class;
     public static Class<Texture> TEXTURE = Texture.class;
     public static Class<Sound> SOUND = Sound.class;
+    public static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
     public static Class<ParticleEffect> PARTICLE = ParticleEffect.class;
+
+    //TextureAtlases
+    public static final String ANIMATION_ATLAS = "animations/animations.atlas";
+
     //Images
     public static final String BLG_LOGO = "badlogic.jpg";
     public static final String BUBBLE_PARTICLE_IMG = "particles/bubble.jpg";

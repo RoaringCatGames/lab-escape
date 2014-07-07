@@ -1,0 +1,16 @@
+apply plugin: "java"
+
+sourceCompatibility = 1.6
+sourceSets.main.java.srcDirs = [ "src/" ]
+
+project.ext.mainClassName = "BubbleTexturePacker";
+
+task run(dependsOn: classes, type: JavaExec){
+    main = project.mainClassName
+    classpath = sourceSets.main.runtimeClasspath
+    standardInput = System.in
+}
+
+eclipse.project {
+    name = appName + "-texture-packer"
+}

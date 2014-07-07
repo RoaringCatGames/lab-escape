@@ -402,7 +402,7 @@ public class BubbleRunnerStage extends Stage {
                 playerDimensions[1],
                 playerDimensions[2],
                 playerDimensions[3],
-                new TextureRegion(assetManager.get(AssetsUtil.PLAYER_IMG, AssetsUtil.TEXTURE)));
+                assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS));
         player.maxFields = maxFields;
         addActor(player);
 

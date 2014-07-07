@@ -2,7 +2,9 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,6 +22,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class Player extends GenericGroup {
 
+    private static final float ANIMATION_CYCLE_RATE = 1f/3f;
+
     private static final float FIELD_ADJUST = 20f;
 
     public ForceFieldType forceFieldType;
@@ -29,13 +33,25 @@ public class Player extends GenericGroup {
 
     private Array<ForceField> fields;
 
+    private float keyFrameTime = 0f;
+    private Animation animation;
 
-    public Player(float x, float y, float width, float height, TextureRegion textureRegion){
-        super(x, y, width, height, textureRegion, Color.BLACK);
 
+    public Player(float x, float y, float width, float height, TextureAtlas atlas){
+        super(x, y, width, height, null, Color.BLACK);
+
+        animation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("player"));
+        textureRegion = animation.getKeyFrame(keyFrameTime);
         //TODO: Replace ShapeRendering with Animation
         forceFieldType = ForceFieldType.LIGHTNING;
         fields = new Array<ForceField>();
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        keyFrameTime += delta;
+        textureRegion = animation.getKeyFrame(keyFrameTime, true);
     }
 
     public void addField(ForceFieldType ff){
@@ -129,6 +145,6 @@ public class Player extends GenericGroup {
 
     @Override
     public void drawFull(Batch batch, float parentAlpha) {
-        //This is where we'll draw our animation of the player running
+        super.drawFull(batch, parentAlpha);
     }
 }

@@ -1,0 +1,27 @@
+
+animations.png
+size: 906,502
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+player
+  rotate: false
+  xy: 0, 0
+  size: 300, 500
+  orig: 300, 500
+  offset: 0, 0
+  index: 1
+player
+  rotate: false
+  xy: 302, 0
+  size: 300, 500
+  orig: 300, 500
+  offset: 0, 0
+  index: 2
+player
+  rotate: false
+  xy: 604, 0
+  size: 300, 500
+  orig: 300, 500
+  offset: 0, 0
+  index: 3
