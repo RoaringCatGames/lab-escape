@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class Player extends GenericGroup {
 
-    private static final float ANIMATION_CYCLE_RATE = 1f/3f;
+    private static final float ANIMATION_CYCLE_RATE = 1f/6f;
 
     private static final float FIELD_ADJUST = 20f;
 

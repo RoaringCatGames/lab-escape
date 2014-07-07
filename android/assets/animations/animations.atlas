@@ -20,6 +20,13 @@ player
   index: 2
 player
   rotate: false
+  xy: 302, 0
+  size: 300, 500
+  orig: 300, 500
+  offset: 0, 0
+  index: 4
+player
+  rotate: false
   xy: 604, 0
   size: 300, 500
   orig: 300, 500
