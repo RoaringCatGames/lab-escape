@@ -2,6 +2,7 @@ package com.kasetagen.game.bubblerunner.scene2d;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -17,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.kasetagen.game.bubblerunner.data.GameStats;
+import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.data.WallPattern;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
@@ -61,6 +64,7 @@ public class BubbleRunnerStage extends Stage {
 
     //State Values
     private int highScore = 0;
+    private int mostMisses = 0;
     private boolean isDead = false;
 
     //Obstacle Generation Values
@@ -104,6 +108,9 @@ public class BubbleRunnerStage extends Stage {
 
         //Initialize Privates
         wallsToRemove = new Array<Wall>();
+
+        highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
+        mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
 
         //Add Player
         initializePlayer(1);
@@ -202,6 +209,7 @@ public class BubbleRunnerStage extends Stage {
                     //If we hit a bad wall, we reduce your score
                     //  This will discourage jamming out fields like crazy
                     info.score -= 1;
+                    info.misses += 1;
                 }
 
                 //Destroy the forcefield if it collides with a wall
@@ -291,14 +299,41 @@ public class BubbleRunnerStage extends Stage {
             collidedWall = w;
             music.stop();
         }
+
+        boolean needsSave = false;
+        if(info.misses > mostMisses){
+            mostMisses = info.misses;
+            needsSave = true;
+        }
         //Show Data
         //Wait for tap to restart
         if(info.score > highScore){
             highScore = info.score;
+            needsSave = true;
         }
 
-        deathOverlay.setSubText("Score: " + info.score + "\nBest Score: " + highScore);
+        if(needsSave){
+            saveCurrentStats();
+        }
+        deathOverlay.setSubText("Score: " + info.score + "\t Misses: " + info.misses + "\nBest Score: " + highScore + "\t Most Misses: " + mostMisses);
         deathOverlay.setVisible(true);
+    }
+
+    private void saveCurrentStats(){
+        gameProcessor.saveGameData(new IDataSaver() {
+            @Override
+            public void updatePreferences(Preferences prefs) {
+                int currentHighScore = prefs.getInteger(GameStats.HIGH_SCORE_KEY);
+                if(highScore > currentHighScore){
+                    prefs.putInteger(GameStats.HIGH_SCORE_KEY, highScore);
+                }
+
+                int currentMostMisses = prefs.getInteger(GameStats.MOST_MISSES_KEY);
+                if(mostMisses > currentMostMisses){
+                    prefs.putInteger(GameStats.MOST_MISSES_KEY, mostMisses);
+                }
+            }
+        });
     }
 
     private void resetGame() {
@@ -313,8 +348,7 @@ public class BubbleRunnerStage extends Stage {
             millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
             isDead = false;
 
-            info.maxFields = 1;
-            player.maxFields = 1;
+            player.maxFields = info.maxFields;
 
             music.play();
         }
@@ -392,7 +426,7 @@ public class BubbleRunnerStage extends Stage {
     private void initializeDeathOverlay() {
         BitmapFont mainFont = assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
         BitmapFont subFont = assetManager.get(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
-        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.DARK_GRAY, Color.BLUE, mainFont, subFont, "You Died!", "Score: 0\nBest Score: 0");
+        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.DARK_GRAY, Color.WHITE, mainFont, subFont, "You Died!", "Score: 0\nBest Score: 0");
         deathOverlay.setVisible(false);
         addActor(deathOverlay);
     }
@@ -425,7 +459,7 @@ public class BubbleRunnerStage extends Stage {
         float infoY = Gdx.graphics.getHeight() - HUD_HEIGHT;
         float infoWidth = getWidth();
         float infoHeight = HUD_HEIGHT;
-        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT), controls);
+        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT), controls);
         //Start with single max fields
         info.maxFields = 1;
         addActor(info);

@@ -39,7 +39,7 @@ public class Overlay extends GenericGroup {
         addActor(mainLabel);
 
         float subX = getWidth()/2 - subLabel.getWidth()/2;
-        float subY = (getHeight()/4) - subLabel.getHeight()/2;
+        float subY = (getHeight()/3) - subLabel.getHeight()/2;
         subLabel.setPosition(subX, subY);
         addActor(subLabel);
     }

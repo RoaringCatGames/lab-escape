@@ -1,7 +1,8 @@
 package com.kasetagen.game.bubblerunner.delegate;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.kasetagen.game.bubblerunner.data.GameStats;
+import com.kasetagen.game.bubblerunner.data.IDataSaver;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,4 +15,8 @@ public interface IGameProcessor {
 
     public AssetManager getAssetManager();
     public void changeToScreen(String screenName);
+    public String getStoredString(String key);
+    public int getStoredInt(String key);
+
+    public void saveGameData(IDataSaver saver);
 }

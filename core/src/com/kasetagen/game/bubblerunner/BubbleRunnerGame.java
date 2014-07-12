@@ -2,18 +2,26 @@ package com.kasetagen.game.bubblerunner;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
+import com.kasetagen.game.bubblerunner.data.GameStats;
+import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerMenu;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerScreen;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class BubbleRunnerGame extends Game implements IGameProcessor {
 
     private static final String MENU = "menu";
     private static final String RUNNER = "runner";
+    public static final String BUBBLE_RUNNER_DATA_NAME = "BubbleRunnerData";
 
     BubbleRunnerMenu menu;
     BubbleRunnerScreen runnerScreen;
@@ -21,8 +29,6 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
     boolean isInitialized = false;
 
     protected AssetManager assetManager;
-
-
 
 	@Override
 	public void create () {
@@ -32,6 +38,8 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
 
 	@Override
 	public void render () {
+
+
 
         if(assetManager.update()){
 
@@ -99,5 +107,30 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
 
     }
 
+    @Override
+    public String getStoredString(String key) {
+        Preferences preferences = Gdx.app.getPreferences(BUBBLE_RUNNER_DATA_NAME);
+        String value = "";
+        if(preferences.contains(key)){
+            value = preferences.getString(key);
+        }
+        return value;
+    }
 
+    @Override
+    public int getStoredInt(String key) {
+        Preferences preferences = Gdx.app.getPreferences(BUBBLE_RUNNER_DATA_NAME);
+        int value = -1;
+        if(preferences.contains(key)){
+            value = preferences.getInteger(key);
+        }
+        return value;
+    }
+
+    @Override
+    public void saveGameData(IDataSaver saver) {
+        Preferences preferences = Gdx.app.getPreferences(BUBBLE_RUNNER_DATA_NAME);
+        saver.updatePreferences(preferences);
+        preferences.flush();
+    }
 }

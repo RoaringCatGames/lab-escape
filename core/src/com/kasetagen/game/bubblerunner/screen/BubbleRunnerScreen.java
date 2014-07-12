@@ -16,9 +16,9 @@ import com.kasetagen.game.bubblerunner.scene2d.BubbleRunnerStage;
  */
 public class BubbleRunnerScreen extends ApplicationAdapter implements Screen, InputProcessor, IStageManager {
 
-    private float bgMin = 0.2f;
-    private float bgMax = 0.5f;
-    private float bgShift = 0.005f;
+    private float bgMin = 0.3f;
+    private float bgMax = 0.4f;
+    private float bgShift = 0.001f;
     private float bgCurrent = bgMin;
     private boolean isBgIncreasing = true;
 

@@ -15,15 +15,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
  */
 public class GameInfo extends GenericGroup {
 
-    private static final int TEXT_PADDING = 60;
-    private static final int DEFAULT_MAX_FIELDS = 3;
+    private static final int TEXT_PADDING = 20;
+    private static final int DEFAULT_MAX_FIELDS = 1;
     private static final String SCORE_PREFIX = "Score: ";
     private static final String FIELD_PREFIX = "Max Fields: ";
+    private static final String MISSES_PREFIX = "Misses: ";
     private Label scoreLabel;
+    private Label missesLabel;
     private Label maxFieldsLabel;
     private Label resourceLabel;
 
     public int score = 0;
+    public int misses = 0;
     public int maxFields = DEFAULT_MAX_FIELDS;
 
     private ControlGroup controls;
@@ -39,14 +42,19 @@ public class GameInfo extends GenericGroup {
         scoreLabel.setPosition(0, 0);
         addActor(scoreLabel);
 
+        missesLabel = new Label(MISSES_PREFIX + misses, style);
+        missesLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING, 0);
+        addActor(missesLabel);
 
         maxFieldsLabel = new Label(FIELD_PREFIX + maxFields, style);
-        maxFieldsLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING, 0);
+        maxFieldsLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING +
+                                   maxFieldsLabel.getWidth() + TEXT_PADDING, 0);
         addActor(maxFieldsLabel);
 
         resourceLabel = new Label(getResourceLevelString(), style);
         resourceLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING +
-                                  maxFieldsLabel.getWidth() + TEXT_PADDING, 0);
+                                  maxFieldsLabel.getWidth() + TEXT_PADDING +
+                                  missesLabel.getWidth() + TEXT_PADDING, 0);
         addActor(resourceLabel);
     }
 
@@ -56,6 +64,7 @@ public class GameInfo extends GenericGroup {
         super.act(delta);
 
         scoreLabel.setText(SCORE_PREFIX + score);
+        missesLabel.setText(MISSES_PREFIX + misses);
         maxFieldsLabel.setText(FIELD_PREFIX + maxFields);
         resourceLabel.setText(getResourceLevelString());
     }
@@ -74,6 +83,7 @@ public class GameInfo extends GenericGroup {
 
     public void reset(){
         score = 0;
+        misses = 0;
         maxFields = DEFAULT_MAX_FIELDS;
     }
 }
