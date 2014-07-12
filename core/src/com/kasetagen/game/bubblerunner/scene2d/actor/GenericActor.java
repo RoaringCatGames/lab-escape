@@ -29,6 +29,7 @@ public class GenericActor extends KasetagenActor {
         setHeight(height);
         setOrigin(x + width/2, y + height/2);
         setColor(color);
+        this.textureRegion = textureRegion;
         collider = new Rectangle(x, y, width, height);
     }
     

@@ -15,7 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
  */
 public class GameInfo extends GenericGroup {
 
-    private static final int TEXT_PADDING = 20;
+    private static final int TEXT_PADDING = 21;
     private static final int DEFAULT_MAX_FIELDS = 1;
     private static final String SCORE_PREFIX = "Score: ";
     private static final String FIELD_PREFIX = "Max Fields: ";
@@ -48,7 +48,7 @@ public class GameInfo extends GenericGroup {
 
         maxFieldsLabel = new Label(FIELD_PREFIX + maxFields, style);
         maxFieldsLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING +
-                                   maxFieldsLabel.getWidth() + TEXT_PADDING, 0);
+                                   missesLabel.getWidth() + TEXT_PADDING, 0);
         addActor(maxFieldsLabel);
 
         resourceLabel = new Label(getResourceLevelString(), style);

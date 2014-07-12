@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -127,11 +128,11 @@ public class BubbleRunnerStage extends Stage {
         //Setup Background Music
         initializeAmbience();
 
-        //Setup Death Overlay
-        initializeDeathOverlay();
-
         //Add and Wire-up Button Controls
         initializeButtonControls();
+
+        //Setup Death Overlay
+        initializeDeathOverlay();
 
         //Initialize HUD (Stats, and GameInfo)
         initializeHUD();
@@ -240,13 +241,15 @@ public class BubbleRunnerStage extends Stage {
         if(millisecondsPassed >= nextGeneration){
             WallPattern wp = getRandomWallPattern();
             for(int i=0;i<wp.wallCount;i++){
+                ForceFieldType fft = wp.forceFields.get(i);
                 //FORMULA:  xPos = startX + (N * (wallWidth + wallPadding)
                 //          - Where N = NumberOfWalls-1
                 Wall w = new Wall(wallDimensions[0] + (i*(wallDimensions[2] + wp.wallPadding)),
                         wallDimensions[1],
                         wallDimensions[2],
                         wallDimensions[3],
-                        wp.forceFields.get(i));
+                        fft,
+                        getTextureRegionForForceFieldType(fft));
                 walls.add(w);
                 addActor(w);
                 w.setZIndex(0);
@@ -254,6 +257,26 @@ public class BubbleRunnerStage extends Stage {
 
             nextGeneration += millisBetweenWalls;
         }
+    }
+
+    private TextureRegion getTextureRegionForForceFieldType(ForceFieldType fft) {
+        Texture texture = null;
+        switch(fft){
+            case LIGHTNING:
+                texture = assetManager.get(AssetsUtil.LIGHTNING_WALL, AssetsUtil.TEXTURE);
+                break;
+            case PLASMA:
+                texture = assetManager.get(AssetsUtil.PLASMA_WALL, AssetsUtil.TEXTURE);
+                break;
+            case LASER:
+                texture = assetManager.get(AssetsUtil.LASER_WALL, AssetsUtil.TEXTURE);
+                break;
+            default:
+                texture = assetManager.get(AssetsUtil.LIGHTNING_WALL, AssetsUtil.TEXTURE);
+                break;
+        }
+
+        return new TextureRegion(texture);
     }
 
     private WallPattern getRandomWallPattern(){
@@ -426,9 +449,10 @@ public class BubbleRunnerStage extends Stage {
     private void initializeDeathOverlay() {
         BitmapFont mainFont = assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
         BitmapFont subFont = assetManager.get(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
-        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.DARK_GRAY, Color.WHITE, mainFont, subFont, "You Died!", "Score: 0\nBest Score: 0");
+        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.PURPLE, Color.WHITE, mainFont, subFont, "You Died!", "Score: 0\nBest Score: 0");
         deathOverlay.setVisible(false);
         addActor(deathOverlay);
+        deathOverlay.setZIndex(getActors().size - 1);
     }
 
     private void initializePlayer(int maxFields) {
@@ -459,7 +483,7 @@ public class BubbleRunnerStage extends Stage {
         float infoY = Gdx.graphics.getHeight() - HUD_HEIGHT;
         float infoWidth = getWidth();
         float infoHeight = HUD_HEIGHT;
-        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT), controls);
+        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT), controls);
         //Start with single max fields
         info.maxFields = 1;
         addActor(info);
