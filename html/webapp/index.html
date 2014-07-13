@@ -4,12 +4,58 @@
               <title>bubblerunner</title>
               <meta http-equiv="content-type" content="text/html; charset=UTF-8">
               <link href="styles.css" rel="stylesheet" type="text/css">
-              <script src="soundmanager2-setup.js"></script>  
+              <style type="text/css">
+                   body{
+                       background: #EFEFEF;
+                       color: #272523;
+                       font-family: "Courier New", Courier, monospace;
+                   }
+                   p{ margin: 0; padding: 0; }
+                   ul, li{
+                       list-style: none;
+                       margin: 0;
+                       padding: 0;
+                   }
+                   #controls .controls-sublist{
+                        padding: 0 0 2px 5px;
+                   }
+                   div a, div a:visited{
+                       color: #272523;
+                       margin: 0 5px;
+                       text-decoration: none;
+                   }
+                   div a:hover{
+                       color: #A0A0A0;
+                       cursor: pointer;
+                   }
+              </style>
+              <script src="soundmanager2-setup.js"></script>
   			  <script src="soundmanager2-jsmin.js"></script> 
        </head>
        
-       <body>              
-              <a class="superdev" href="javascript:%7B%20window.__gwt_bookmarklet_params%20%3D%20%7B'server_url'%3A'http%3A%2F%2Flocalhost%3A9876%2F'%7D%3B%20var%20s%20%3D%20document.createElement('script')%3B%20s.src%20%3D%20'http%3A%2F%2Flocalhost%3A9876%2Fdev_mode_on.js'%3B%20void(document.getElementsByTagName('head')%5B0%5D.appendChild(s))%3B%7D">SuperDev Refresh</a>
+       <body>
+               <div style="float: left; margin: 20px; max-width: 250px;">
+                   <h2 align="center">code name: Bubble Runner</h2>
+                   <h5 align="center">An infinite runner where you're running to [escape/break into] a laboratory. You are running as fast as you can, and more and more obstacles are appearing in your path. You must engage the appropriate force fields to break through the walls. If you engage the wrong force field, you will crash into the wall, and your [escape/break-in attempt] is over.</h5>
+                   <hr align="center" width="90%" />
+                   <p align="center"><strong>controls:</strong></p>
+                   <ul id="controls">
+                       <li>Engage Forcefields:
+                           <ul class="controls-sublist">
+                               <li>A - Lightning (blue)</li>
+                               <li>S - Laser (yellow)</li>
+                               <li>D - Plasma (green)</li>
+                               <li>You can also click/tap the buttons on the bottom</li>
+                           </ul>
+                       </li>
+                       <li>Restart On Death - Space</li>
+                   </ul>
+                   <hr align="center" width="90%" />
+                   <div align="center"><a href="http://kasetagen.com">Kasetagen</a><a href="http://gamedevlou.org">GameDevLou</a></div>
+                   <div align="center"><a href="http://twitter.com/mjrevel">@mjrevel</a></div>
+                   <div align="center"><a href="http://twitter.com/barryrowe">@barryrowe</a></div>
+                   <div align="center"><a href="http://twitter.com/@GameDevLou">@GameDevLou</a></div>
+               </div>
               <div align="center" id="embed-html"></div>
               <script type="text/javascript" src="html/html.nocache.js"></script>
        </body>
@@ -28,5 +74,15 @@
               }
               document.getElementById('embed-html').addEventListener('mousedown', handleMouseDown, false);
               document.getElementById('embed-html').addEventListener('mouseup', handleMouseUp, false);
+       </script>
+
+       <script>
+           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+           ga('create', 'UA-51511895-1', 'pineapplepiranha.com');
+           ga('send', 'pageview');
        </script>
 </html>

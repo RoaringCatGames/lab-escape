@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.data.WallPattern;
@@ -51,7 +52,7 @@ public class BubbleRunnerStage extends Stage {
 
 
     //Order of values:  xPos, yPos, width, height
-    private static float[] playerDimensions = new float[] { 200f, FLOOR_HEIGHT, 160f, Gdx.graphics.getHeight()/2 };
+    private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, Gdx.graphics.getWidth()/8, Gdx.graphics.getHeight()/2 }; //old width 160f
     private static float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), FLOOR_HEIGHT };
     private static float[] wallDimensions = new float[] {Gdx.graphics.getWidth()-FLOOR_HEIGHT,
                                                          FLOOR_HEIGHT, 40f, Gdx.graphics.getHeight()-FLOOR_HEIGHT };
@@ -501,7 +502,8 @@ public class BubbleRunnerStage extends Stage {
                 }else if(Input.Keys.D == keycode){
                     addLaserField();
                 }else if(Input.Keys.TAB == keycode){
-                    toggleListener();
+                    //toggleListener();
+                    KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
                 }else if(Input.Keys.SPACE == keycode){
                     resetGame();
                 }
@@ -540,7 +542,8 @@ public class BubbleRunnerStage extends Stage {
                     player.addField(ForceFieldType.LASER, 0);
                     isDDown = true;
                 }else if(Input.Keys.TAB == keycode){
-                    toggleListener();
+                    //toggleListener();
+                    KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
                 }else if(Input.Keys.SPACE == keycode){
                     resetGame();
                 }

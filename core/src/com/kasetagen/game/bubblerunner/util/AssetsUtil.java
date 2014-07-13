@@ -27,6 +27,7 @@ public class AssetsUtil {
 
     //Images
     public static final String BLG_LOGO = "badlogic.jpg";
+    public static final String TITLE_SCREEN = "images/title-screen.png";
     public static final String BUBBLE_PARTICLE_IMG = "particles/bubble.jpg";
     public static final String PLAYER_IMG = "images/player.png";
     public static final String LIGHTNING_WALL = "images/walls/blue_wall.png";

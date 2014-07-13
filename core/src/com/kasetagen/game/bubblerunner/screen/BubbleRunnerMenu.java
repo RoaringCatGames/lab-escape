@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.delegate.IStageManager;
+import com.kasetagen.game.bubblerunner.scene2d.actor.GenericActor;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
 /**
@@ -28,6 +30,7 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
 
     private Stage stage;
     private TextButton startGameButton;
+    private TextureRegion bgTextureRegion;
 
 
     public BubbleRunnerMenu(IGameProcessor delegate){
@@ -53,21 +56,20 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
             }
         };
 
-//        TextureRegion tr = new TextureRegion(assetManager.get(Assets.TITLE_SCREEN, Assets.TEXTURE));
-//        stage.addActor(new GenericActor(tr, stage.getWidth(),
-//                stage.getHeight(), 0, 0));
+        bgTextureRegion = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.TITLE_SCREEN, AssetsUtil.TEXTURE));
+        stage.addActor(new GenericActor(0, 0, stage.getWidth(), stage.getHeight(), bgTextureRegion, Color.DARK_GRAY));
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = gameProcessor.getAssetManager().get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
-        style.fontColor =  Color.WHITE;
-        style.overFontColor = Color.GRAY;
-        style.downFontColor = Color.RED;
-        float fontScale = 1f;
+        style.fontColor =  Color.CYAN;
+        style.overFontColor = Color.RED;
+        style.downFontColor = Color.GRAY;
+        float fontScale = 2f;
         style.font.setScale(fontScale);
 
-        startGameButton = new TextButton("start game", style);
+        startGameButton = new TextButton("Play Game", style);
         startGameButton.addListener(listener);
-        startGameButton.setPosition(stage.getWidth()/2 - startGameButton.getWidth()/2, stage.getHeight()/2);
+        startGameButton.setPosition(((stage.getWidth()/4) * 3) - startGameButton.getWidth()/2, (stage.getHeight()/4));
 
         stage.addActor(startGameButton);
     }
