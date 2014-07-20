@@ -415,6 +415,7 @@ public class BubbleRunnerStage extends Stage {
         }
         if(wasAdded){
             //TODO: Play Forcefield SoundFX
+            controls.incrementHeat(player.resourceUsage);
 
         }else{
             //TODO: Play Resources Limited SoundFX

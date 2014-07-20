@@ -23,10 +23,16 @@ public class ControlGroup extends GenericGroup{
     private static final float BUTTON_HEIGHT = 150f;
     private static final float BUTTON_PADDING = 10f;
 
+    private static final float BAR_START = BUTTON_WIDTH * 3.5f;
+
     private static int RESOURCE_MAX = 20;
+    private static int OVERHEAT_POINT = 40;
 
     public ObjectMap<ForceFieldType, Integer> resourceLevels;
     private int buttonCount = 0;
+
+    private int heatScore = 0;
+
 
     private Array<ForceFieldImageButton> buttons;
 
@@ -77,6 +83,10 @@ public class ControlGroup extends GenericGroup{
         }
     }
 
+    public void incrementHeat(int increment){
+        heatScore += increment;
+    }
+
     public void restoreAllResourceLevels(){
         updateResource(ForceFieldType.LIGHTNING, RESOURCE_MAX);
         updateResource(ForceFieldType.LASER, RESOURCE_MAX);
@@ -101,6 +111,13 @@ public class ControlGroup extends GenericGroup{
             Gdx.app.log("CONTROLS", "Current Resource: " + currentResource + " Height: " + height);
             debugRenderer.rect(b.getX()+(b.getWidth()/4), b.getY(), b.getWidth()/2, height);
         }
+
+        float barTotalLength = getWidth() - BAR_START;
+        float barLength = barTotalLength*(heatScore/barTotalLength);
+        Gdx.app.log("CONTROLS", "Bar Total: " + barTotalLength + " Bar Length: " + barLength);
+
+        setColor(Color.RED);
+        debugRenderer.rect(BAR_START, getY(), barLength, getHeight());
         //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
         // coming in.
         debugRenderer.end();
