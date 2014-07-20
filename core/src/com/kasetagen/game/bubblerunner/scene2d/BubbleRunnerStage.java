@@ -115,7 +115,7 @@ public class BubbleRunnerStage extends Stage {
         mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
 
         //Add Player
-        initializePlayer(1);
+        initializePlayer(GameInfo.DEFAULT_MAX_FIELDS);
 
         //Add Floor
         initializeFloor();
@@ -490,8 +490,6 @@ public class BubbleRunnerStage extends Stage {
         float infoWidth = getWidth();
         float infoHeight = HUD_HEIGHT;
         info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT), controls);
-        //Start with single max fields
-        info.maxFields = 1;
         addActor(info);
     }
 

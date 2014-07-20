@@ -15,26 +15,27 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
  */
 public class GameInfo extends GenericGroup {
 
-    private static final int TEXT_PADDING = 21;
-    private static final int DEFAULT_MAX_FIELDS = 1;
+    public static final int DEFAULT_MAX_FIELDS = 2;
+
+    private static final int TEXT_PADDING = 60;
     private static final String SCORE_PREFIX = "Score: ";
     private static final String FIELD_PREFIX = "Max Fields: ";
     private static final String MISSES_PREFIX = "Misses: ";
     private Label scoreLabel;
     private Label missesLabel;
     private Label maxFieldsLabel;
-    private Label resourceLabel;
+    //private Label resourceLabel;
 
     public int score = 0;
     public int misses = 0;
     public int maxFields = DEFAULT_MAX_FIELDS;
 
-    private ControlGroup controls;
+    //private ControlGroup controls;
 
     public GameInfo(float x, float y, float width, float height, BitmapFont font, ControlGroup player) {
         super(x, y, width, height, null, Color.WHITE);
 
-        controls = player;
+        //controls = player;
 
         LabelStyle style = new LabelStyle(font, getColor());
         style.font.setScale(1f);
@@ -51,11 +52,11 @@ public class GameInfo extends GenericGroup {
                                    missesLabel.getWidth() + TEXT_PADDING, 0);
         addActor(maxFieldsLabel);
 
-        resourceLabel = new Label(getResourceLevelString(), style);
-        resourceLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING +
-                                  maxFieldsLabel.getWidth() + TEXT_PADDING +
-                                  missesLabel.getWidth() + TEXT_PADDING, 0);
-        addActor(resourceLabel);
+//        resourceLabel = new Label(getResourceLevelString(), style);
+//        resourceLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING +
+//                                  maxFieldsLabel.getWidth() + TEXT_PADDING +
+//                                  missesLabel.getWidth() + TEXT_PADDING, 0);
+//        addActor(resourceLabel);
     }
 
 
@@ -66,7 +67,7 @@ public class GameInfo extends GenericGroup {
         scoreLabel.setText(SCORE_PREFIX + score);
         missesLabel.setText(MISSES_PREFIX + misses);
         maxFieldsLabel.setText(FIELD_PREFIX + maxFields);
-        resourceLabel.setText(getResourceLevelString());
+        //resourceLabel.setText(getResourceLevelString());
     }
 
     @Override
@@ -75,11 +76,11 @@ public class GameInfo extends GenericGroup {
 
     }
 
-    public String getResourceLevelString(){
-        return  "Lightning: " + controls.getResourceLevel(ForceFieldType.LIGHTNING) +
-                " Laser: " + controls.getResourceLevel(ForceFieldType.LASER) +
-                " Plasma: " + controls.getResourceLevel(ForceFieldType.PLASMA);
-    }
+//    public String getResourceLevelString(){
+//        return  "Lightning: " + controls.getResourceLevel(ForceFieldType.LIGHTNING) +
+//                " Laser: " + controls.getResourceLevel(ForceFieldType.LASER) +
+//                " Plasma: " + controls.getResourceLevel(ForceFieldType.PLASMA);
+//    }
 
     public void reset(){
         score = 0;
