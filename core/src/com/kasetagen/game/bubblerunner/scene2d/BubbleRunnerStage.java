@@ -374,6 +374,7 @@ public class BubbleRunnerStage extends Stage {
 
             player.maxFields = info.maxFields;
 
+            controls.restoreAllResourceLevels();
             music.play();
         }
     }
@@ -398,6 +399,10 @@ public class BubbleRunnerStage extends Stage {
     }
 
     private void addField(ForceFieldType fft){
+        if(isDead){
+            return;
+        }
+
         boolean wasAdded = false;
         int resLevel = controls.getResourceLevel(fft);
         if(resLevel >= player.resourceUsage){
@@ -598,7 +603,7 @@ public class BubbleRunnerStage extends Stage {
                 super.clicked(event, x, y);
                 addLightningField();
             }
-        }, true);
+        }, true, ForceFieldType.LIGHTNING);
 
         controls.addButton(sUp, sDown, sChecked, new ClickListener(){
             @Override
@@ -606,7 +611,7 @@ public class BubbleRunnerStage extends Stage {
                 super.clicked(event, x, y);
                 addPlasmaField();
             }
-        }, true);
+        }, true, ForceFieldType.PLASMA);
 
         controls.addButton(dUp, dDown, dChecked, new ClickListener(){
             @Override
@@ -614,7 +619,7 @@ public class BubbleRunnerStage extends Stage {
                 super.clicked(event, x, y);
                 addLaserField();
             }
-        }, true);
+        }, true, ForceFieldType.LASER);
 
         addActor(controls);
     }

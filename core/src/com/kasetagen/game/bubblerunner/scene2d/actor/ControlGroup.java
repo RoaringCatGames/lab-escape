@@ -1,9 +1,13 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 
 /**
@@ -24,6 +28,8 @@ public class ControlGroup extends GenericGroup{
     public ObjectMap<ForceFieldType, Integer> resourceLevels;
     private int buttonCount = 0;
 
+    private Array<ForceFieldImageButton> buttons;
+
     private float getButtonX(int buttonPos){
         return (BUTTON_WIDTH + BUTTON_PADDING) * buttonPos;
     }
@@ -35,21 +41,25 @@ public class ControlGroup extends GenericGroup{
         resourceLevels.put(ForceFieldType.LASER, RESOURCE_MAX);
         resourceLevels.put(ForceFieldType.LIGHTNING, RESOURCE_MAX);
         resourceLevels.put(ForceFieldType.PLASMA, RESOURCE_MAX);
+
+        buttons = new Array<ForceFieldImageButton>();
     }
 
-    public void addButton(Drawable up, Drawable down, Drawable over, EventListener listener, boolean isVisible){
+    public void addButton(Drawable up, Drawable down, Drawable over, EventListener listener, boolean isVisible, ForceFieldType fft){
         ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
         buttonStyle.imageUp = up;
         buttonStyle.imageDown = down;
         buttonStyle.imageOver = over;
 
-        ImageButton button = new ImageButton(buttonStyle);
+        ForceFieldImageButton button = new ForceFieldImageButton(buttonStyle, fft);
         button.setPosition(getButtonX(buttonCount), 0);
         button.setWidth(BUTTON_WIDTH);
         button.setHeight(BUTTON_HEIGHT);
         button.addListener(listener);
         button.setVisible(isVisible);
         addActor(button);
+
+        buttons.add(button);
 
         buttonCount++;
     }
@@ -67,4 +77,35 @@ public class ControlGroup extends GenericGroup{
         }
     }
 
+    public void restoreAllResourceLevels(){
+        updateResource(ForceFieldType.LIGHTNING, RESOURCE_MAX);
+        updateResource(ForceFieldType.LASER, RESOURCE_MAX);
+        updateResource(ForceFieldType.PLASMA, RESOURCE_MAX);
+    }
+
+    @Override
+    protected void drawAfter(Batch batch, float parentAlpha) {
+        super.drawAfter(batch, parentAlpha);
+        batch.end();
+        batch.begin();
+        Gdx.gl20.glLineWidth(1f);
+        //Set the projection matrix, and line shape
+        //debugRenderer.setProjectionMatrix(getStage().getCamera().combined);
+        debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        //Draw the bounds of the actor as a box
+        Color c = getColor() != null ? getColor() : Color.WHITE;
+        debugRenderer.setColor(c);
+        for(ForceFieldImageButton b:buttons){
+            float currentResource = resourceLevels.get(b.forceFieldType);
+            float height = b.getHeight() * (currentResource/RESOURCE_MAX);
+            Gdx.app.log("CONTROLS", "Current Resource: " + currentResource + " Height: " + height);
+            debugRenderer.rect(b.getX()+(b.getWidth()/4), b.getY(), b.getWidth()/2, height);
+        }
+        //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
+        // coming in.
+        debugRenderer.end();
+        batch.end();
+        batch.begin();
+
+    }
 }
