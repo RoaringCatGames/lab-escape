@@ -99,6 +99,8 @@ public class BubbleRunnerStage extends Stage {
     //Ambience (Music and Effects
     private Music music;
     private Sound zapSound;
+    private Sound powerOnSound;
+    private Sound explosionSound;
     //TODO: Move into Player?
     private ParticleEffect particleBubble;
 
@@ -207,6 +209,7 @@ public class BubbleRunnerStage extends Stage {
                 if(w.forceFieldType == outerField.forceFieldType){
                     wallsToRemove.add(w);
                     info.score += 1;
+                    explosionSound.play(0.8f);
                 }else{
                     //If we hit a bad wall, we reduce your score
                     //  This will discourage jamming out fields like crazy
@@ -415,6 +418,7 @@ public class BubbleRunnerStage extends Stage {
         }
         if(wasAdded){
             //TODO: Play Forcefield SoundFX
+            powerOnSound.play(0.8f);
             controls.incrementHeat(player.resourceUsage);
 
         }else{
@@ -447,10 +451,13 @@ public class BubbleRunnerStage extends Stage {
 ///INITIALIZERS
 //--------------
     private void initializeAmbience() {
-        music = Gdx.audio.newMusic(Gdx.files.internal(AssetsUtil.BACKGROUND_SOUND));
+        music = assetManager.get(AssetsUtil.BACKGROUND_SOUND, AssetsUtil.MUSIC);//Gdx.audio.newMusic(Gdx.files.internal(AssetsUtil.BACKGROUND_SOUND));
+        music.setVolume(0.2f);
         music.play();
 
         zapSound = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+        powerOnSound = assetManager.get(AssetsUtil.POWER_ON_SOUND, AssetsUtil.SOUND);
+        explosionSound = assetManager.get(AssetsUtil.EXPLOSION_SOUND, AssetsUtil.SOUND);
     }
 
     private void initializeDeathOverlay() {

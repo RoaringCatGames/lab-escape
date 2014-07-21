@@ -1,5 +1,6 @@
 package com.kasetagen.game.bubblerunner.util;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
@@ -19,6 +20,7 @@ public class AssetsUtil {
     public static Class<BitmapFont> BITMAP_FONT = BitmapFont.class;
     public static Class<Texture> TEXTURE = Texture.class;
     public static Class<Sound> SOUND = Sound.class;
+    public static Class<Music> MUSIC = Music.class;
     public static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
     public static Class<ParticleEffect> PARTICLE = ParticleEffect.class;
 
@@ -54,6 +56,8 @@ public class AssetsUtil {
     //Audio Paths
     public static final String ZAP_SOUND = "audio/zap.ogg";
     public static final String BACKGROUND_SOUND = "audio/bkmusic.ogg";
+    public static final String EXPLOSION_SOUND = "audio/explosion.ogg";
+    public static final String POWER_ON_SOUND = "audio/power-on.ogg";
     
     //Particle Paths
     public static final String BUBBLE_PARTICLE = "particles/bubbleflame_right.p";
