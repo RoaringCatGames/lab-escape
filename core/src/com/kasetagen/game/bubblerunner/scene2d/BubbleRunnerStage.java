@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
+import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.data.WallPattern;
@@ -103,6 +104,9 @@ public class BubbleRunnerStage extends Stage {
     private Sound explosionSound;
     //TODO: Move into Player?
     private ParticleEffect particleBubble;
+
+    private float bgVolume;
+    private float sfxVolume;
 
 
     public BubbleRunnerStage(IGameProcessor gameProcessor){
@@ -209,7 +213,7 @@ public class BubbleRunnerStage extends Stage {
                 if(w.forceFieldType == outerField.forceFieldType){
                     wallsToRemove.add(w);
                     info.score += 1;
-                    explosionSound.play(0.8f);
+                    explosionSound.play(sfxVolume);
                 }else{
                     //If we hit a bad wall, we reduce your score
                     //  This will discourage jamming out fields like crazy
@@ -321,7 +325,7 @@ public class BubbleRunnerStage extends Stage {
 
         if(!w.equals(collidedWall)){
             wallsToRemove.add(w);
-            zapSound.play(0.8f);
+            zapSound.play(sfxVolume);
             isDead = true;
             collidedWall = w;
             music.stop();
@@ -418,12 +422,12 @@ public class BubbleRunnerStage extends Stage {
         }
         if(wasAdded){
             //TODO: Play Forcefield SoundFX
-            powerOnSound.play(0.8f);
+            powerOnSound.play(sfxVolume);
             controls.incrementHeat(player.resourceUsage);
 
         }else{
             //TODO: Play Resources Limited SoundFX
-            zapSound.play(0.8f);
+            zapSound.play(sfxVolume);
         }
 
     }
@@ -451,10 +455,12 @@ public class BubbleRunnerStage extends Stage {
 ///INITIALIZERS
 //--------------
     private void initializeAmbience() {
+        bgVolume = gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
         music = assetManager.get(AssetsUtil.BACKGROUND_SOUND, AssetsUtil.MUSIC);//Gdx.audio.newMusic(Gdx.files.internal(AssetsUtil.BACKGROUND_SOUND));
-        music.setVolume(0.2f);
+        music.setVolume(bgVolume);
         music.play();
 
+        sfxVolume = gameProcessor.getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY);
         zapSound = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         powerOnSound = assetManager.get(AssetsUtil.POWER_ON_SOUND, AssetsUtil.SOUND);
         explosionSound = assetManager.get(AssetsUtil.EXPLOSION_SOUND, AssetsUtil.SOUND);

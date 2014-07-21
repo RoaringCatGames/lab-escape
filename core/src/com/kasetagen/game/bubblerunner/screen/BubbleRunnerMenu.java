@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.delegate.IStageManager;
 import com.kasetagen.game.bubblerunner.scene2d.actor.GenericActor;
@@ -30,6 +31,7 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
 
     private Stage stage;
     private TextButton startGameButton;
+    private TextButton optionsButton;
     private TextureRegion bgTextureRegion;
 
 
@@ -45,12 +47,12 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
             {
                 Actor btn = event.getListenerActor();
                 if(btn == startGameButton){
-                    gameProcessor.changeToScreen("runner");
+                    gameProcessor.changeToScreen(BubbleRunnerGame.RUNNER);
 
                 }
-//                else if (btn == viewCreditsButton){
-//                    game.setToStage(4);
-//                }
+                else if (btn == optionsButton){
+                    gameProcessor.changeToScreen(BubbleRunnerGame.OPTIONS);
+                }
 
                 Gdx.app.log("Menu Item Clicked", "Clicked");
             }
@@ -72,6 +74,13 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
         startGameButton.setPosition(((stage.getWidth()/4) * 3) - startGameButton.getWidth()/2, (stage.getHeight()/4));
 
         stage.addActor(startGameButton);
+
+        optionsButton = new TextButton("Options", style);
+        optionsButton.setPosition(((stage.getWidth()/4) * 3) - startGameButton.getWidth()/2, (stage.getHeight()/8));
+        optionsButton.addListener(listener);
+
+        stage.addActor(optionsButton);
+
     }
 
     @Override

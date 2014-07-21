@@ -17,6 +17,7 @@ public interface IGameProcessor {
     public void changeToScreen(String screenName);
     public String getStoredString(String key);
     public int getStoredInt(String key);
+    public float getStoredFloat(String key);
 
     public void saveGameData(IDataSaver saver);
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,9 +24,13 @@ public class AssetsUtil {
     public static Class<Music> MUSIC = Music.class;
     public static Class<TextureAtlas> TEXTURE_ATLAS = TextureAtlas.class;
     public static Class<ParticleEffect> PARTICLE = ParticleEffect.class;
+    public static Class<Skin> SKIN = Skin.class;
 
     //TextureAtlases
     public static final String ANIMATION_ATLAS = "animations/animations.atlas";
+
+    //Skin
+    public static final String DEFAULT_SKIN = "uiskin.json";
 
     //Images
     public static final String BLG_LOGO = "badlogic.jpg";

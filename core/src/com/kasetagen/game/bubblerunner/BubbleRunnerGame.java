@@ -11,6 +11,7 @@ import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerMenu;
+import com.kasetagen.game.bubblerunner.screen.BubbleRunnerOptionsMenu;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerScreen;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
@@ -19,10 +20,13 @@ import java.util.Map;
 
 public class BubbleRunnerGame extends Game implements IGameProcessor {
 
-    private static final String MENU = "menu";
-    private static final String RUNNER = "runner";
+    public static final String OPTIONS = "options";
+    public static final String MENU = "menu";
+    public static final String RUNNER = "runner";
+
     public static final String BUBBLE_RUNNER_DATA_NAME = "BubbleRunnerData";
 
+    BubbleRunnerOptionsMenu options;
     BubbleRunnerMenu menu;
     BubbleRunnerScreen runnerScreen;
 
@@ -38,9 +42,6 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
 
 	@Override
 	public void render () {
-
-
-
         if(assetManager.update()){
 
             if(!isInitialized){
@@ -58,6 +59,9 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
 
     public void loadAssets(){
         assetManager.load(AssetsUtil.TITLE_SCREEN, AssetsUtil.TEXTURE);
+
+        assetManager.load(AssetsUtil.DEFAULT_SKIN, AssetsUtil.SKIN);
+
         assetManager.load(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
         assetManager.load(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
         assetManager.load(AssetsUtil.COURIER_FONT_12, AssetsUtil.BITMAP_FONT);
@@ -96,7 +100,16 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
 
     @Override
     public void changeToScreen(String screenName) {
-        if(MENU.equalsIgnoreCase(screenName)){
+        if(OPTIONS.equalsIgnoreCase(screenName)){
+
+            if(options == null){
+                options = new BubbleRunnerOptionsMenu(this);
+            }
+
+            setScreen(options);
+            Gdx.input.setInputProcessor(options.getStage());
+
+        }else if(MENU.equalsIgnoreCase(screenName)){
             if(menu == null){
                 menu = new BubbleRunnerMenu(this);
             }
@@ -113,7 +126,6 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
             setScreen(runnerScreen);
             Gdx.input.setInputProcessor(runnerScreen.getStage());
         }
-
     }
 
     @Override
@@ -132,6 +144,16 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         int value = -1;
         if(preferences.contains(key)){
             value = preferences.getInteger(key);
+        }
+        return value;
+    }
+
+    @Override
+    public float getStoredFloat(String key) {
+        Preferences preferences = Gdx.app.getPreferences(BUBBLE_RUNNER_DATA_NAME);
+        float value = -1f;
+        if(preferences.contains(key)){
+            value = preferences.getFloat(key);
         }
         return value;
     }
