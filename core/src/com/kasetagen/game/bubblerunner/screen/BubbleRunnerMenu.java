@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
+import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.delegate.IStageManager;
 import com.kasetagen.game.bubblerunner.scene2d.actor.GenericActor;
@@ -35,9 +37,13 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
     private TextureRegion bgTextureRegion;
 
 
+    private Music bgMusic;
     public BubbleRunnerMenu(IGameProcessor delegate){
         this.gameProcessor = delegate;
         stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        bgMusic = delegate.getAssetManager().get(AssetsUtil.BACKGROUND_SOUND, AssetsUtil.MUSIC);
+        bgMusic.setVolume(delegate.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY));
+        bgMusic.play();
 
 
         ClickListener listener = new ClickListener()
@@ -45,7 +51,9 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                bgMusic.stop();;
                 Actor btn = event.getListenerActor();
+
                 if(btn == startGameButton){
                     gameProcessor.changeToScreen(BubbleRunnerGame.RUNNER);
 
@@ -76,7 +84,7 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
         stage.addActor(startGameButton);
 
         optionsButton = new TextButton("Options", style);
-        optionsButton.setPosition(((stage.getWidth()/4) * 3) - startGameButton.getWidth()/2, (stage.getHeight()/8));
+        optionsButton.setPosition(((stage.getWidth() / 4) * 3) - startGameButton.getWidth() / 2, (stage.getHeight() / 8));
         optionsButton.addListener(listener);
 
         stage.addActor(optionsButton);

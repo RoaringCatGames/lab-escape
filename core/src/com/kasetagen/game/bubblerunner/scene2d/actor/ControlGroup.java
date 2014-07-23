@@ -108,13 +108,13 @@ public class ControlGroup extends GenericGroup{
         for(ForceFieldImageButton b:buttons){
             float currentResource = resourceLevels.get(b.forceFieldType);
             float height = b.getHeight() * (currentResource/RESOURCE_MAX);
-            Gdx.app.log("CONTROLS", "Current Resource: " + currentResource + " Height: " + height);
+
             debugRenderer.rect(b.getX()+(b.getWidth()/4), b.getY(), b.getWidth()/2, height);
         }
 
         float barTotalLength = getWidth() - BAR_START;
         float barLength = barTotalLength*(heatScore/barTotalLength);
-        Gdx.app.log("CONTROLS", "Bar Total: " + barTotalLength + " Bar Length: " + barLength);
+
 
         setColor(Color.RED);
         debugRenderer.rect(BAR_START, getY(), barLength, getHeight());

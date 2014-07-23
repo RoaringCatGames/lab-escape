@@ -59,6 +59,7 @@ public class AssetsUtil {
     public static final String COURIER_FONT_IMG = "fonts/courier-new-bold.png";
 
     //Audio Paths
+    public static final String ALT_BG_MUSIC = "audio/NeverStopRunning.mp3";
     public static final String ZAP_SOUND = "audio/zap.ogg";
     public static final String BACKGROUND_SOUND = "audio/bkmusic.ogg";
     public static final String EXPLOSION_SOUND = "audio/explosion.ogg";

@@ -66,6 +66,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
         assetManager.load(AssetsUtil.COURIER_FONT_12, AssetsUtil.BITMAP_FONT);
 
+        assetManager.load(AssetsUtil.ALT_BG_MUSIC, AssetsUtil.MUSIC);
         assetManager.load(AssetsUtil.BACKGROUND_SOUND, AssetsUtil.MUSIC);
         assetManager.load(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.EXPLOSION_SOUND, AssetsUtil.SOUND);

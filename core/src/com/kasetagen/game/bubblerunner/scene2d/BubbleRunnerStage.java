@@ -55,7 +55,7 @@ public class BubbleRunnerStage extends Stage {
     //Order of values:  xPos, yPos, width, height
     private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, Gdx.graphics.getWidth()/8, Gdx.graphics.getHeight()/2 }; //old width 160f
     private static float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), FLOOR_HEIGHT };
-    private static float[] wallDimensions = new float[] {Gdx.graphics.getWidth()-FLOOR_HEIGHT,
+    private static float[] wallDimensions = new float[] {Gdx.graphics.getWidth()+FLOOR_HEIGHT,
                                                          FLOOR_HEIGHT, 40f, Gdx.graphics.getHeight()-FLOOR_HEIGHT };
 
     private static ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.LIGHTNING, ForceFieldType.PLASMA, ForceFieldType.LASER};
@@ -79,7 +79,7 @@ public class BubbleRunnerStage extends Stage {
     private int lastWallAdjustTime = 0;
     private long nextGeneration = 1000L;
     private long millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
-    private float wallAdjustment = 10f;
+    private float wallVelocity = -300f;
 
     private float secondsSinceResourceRegen = 0f;
 
@@ -153,9 +153,7 @@ public class BubbleRunnerStage extends Stage {
     public void act(float delta) {
         super.act(delta);
 
-        if(isDead){
-
-        }else{
+        if (!isDead) {
             //Calculate timestep
             millisecondsPassed += delta*1000;
             secondsSinceResourceRegen += delta;
@@ -164,6 +162,9 @@ public class BubbleRunnerStage extends Stage {
             processResources();
 
             //Move Walls Closer based on Speed
+            processObstacleMovements(delta);
+
+            //Process wall collision events
             processWallCollisions();
 
             //Any walls marked for removal need to be
@@ -179,7 +180,7 @@ public class BubbleRunnerStage extends Stage {
             //Adjust Resource Levels
 
         }
-		particleBubble.update(delta);
+        particleBubble.update(delta);
 		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 4);
         //Update GameStats
     }
@@ -193,11 +194,16 @@ public class BubbleRunnerStage extends Stage {
     }
 
     private void processResources(){
-        Gdx.app.log("RESOURCE", "Resource Time: " + secondsSinceResourceRegen);
         if(secondsSinceResourceRegen >= SECONDS_PER_RESOURCE_REGEN){
             regenResources(1);
             //We want to keep any "left-over" time so that we don't get weird timing differences
             secondsSinceResourceRegen = secondsSinceResourceRegen - SECONDS_PER_RESOURCE_REGEN;
+        }
+    }
+
+    private void processObstacleMovements(float delta){
+        for(Wall w:walls){
+            w.setX(w.getX() + (w.velocity.x * delta));
         }
     }
 
@@ -231,8 +237,6 @@ public class BubbleRunnerStage extends Stage {
 
             if(w.getX() <= (0f-w.getWidth()/2)){
                 wallsToRemove.add(w);
-            }else{
-                w.setX(w.getX() - wallAdjustment);
             }
         }
     }
@@ -258,6 +262,7 @@ public class BubbleRunnerStage extends Stage {
                         wallDimensions[3],
                         fft,
                         getTextureRegionForForceFieldType(fft));
+                w.setXVelocity(wallVelocity);
                 walls.add(w);
                 addActor(w);
                 w.setZIndex(0);
@@ -268,7 +273,7 @@ public class BubbleRunnerStage extends Stage {
     }
 
     private TextureRegion getTextureRegionForForceFieldType(ForceFieldType fft) {
-        Texture texture = null;
+        Texture texture;
         switch(fft){
             case LIGHTNING:
                 texture = assetManager.get(AssetsUtil.LIGHTNING_WALL, AssetsUtil.TEXTURE);
@@ -456,7 +461,7 @@ public class BubbleRunnerStage extends Stage {
 //--------------
     private void initializeAmbience() {
         bgVolume = gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
-        music = assetManager.get(AssetsUtil.BACKGROUND_SOUND, AssetsUtil.MUSIC);//Gdx.audio.newMusic(Gdx.files.internal(AssetsUtil.BACKGROUND_SOUND));
+        music = assetManager.get(AssetsUtil.ALT_BG_MUSIC, AssetsUtil.MUSIC);
         music.setVolume(bgVolume);
         music.play();
 
@@ -469,7 +474,7 @@ public class BubbleRunnerStage extends Stage {
     private void initializeDeathOverlay() {
         BitmapFont mainFont = assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
         BitmapFont subFont = assetManager.get(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
-        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.PURPLE, Color.WHITE, mainFont, subFont, "You Died!", "Score: 0\nBest Score: 0");
+        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.PURPLE, Color.WHITE, mainFont, subFont, "You Failed to Escape!", "Score: 0\nBest Score: 0");
         deathOverlay.setVisible(false);
         addActor(deathOverlay);
         deathOverlay.setZIndex(getActors().size - 1);

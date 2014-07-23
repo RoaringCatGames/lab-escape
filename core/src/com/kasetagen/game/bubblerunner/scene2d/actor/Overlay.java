@@ -37,6 +37,7 @@ public class Overlay extends GenericGroup {
 
         Label.LabelStyle mainStyle = new Label.LabelStyle(mainFont, textColor);
         mainLabel = new Label(mainText, mainStyle);
+        mainLabel.setAlignment(Align.center);
 
         Label.LabelStyle subStyle = new Label.LabelStyle(subFont, textColor);
         subLabel = new Label(subText, subStyle);
@@ -48,7 +49,7 @@ public class Overlay extends GenericGroup {
         addActor(mainLabel);
 
         float subX = getWidth()/2 - subLabel.getWidth()/2;
-        float subY = mainLabel.getY() - (mainLabel.getHeight()/2) - VERTICAL_PADDING;//((getHeight()/4)*2) - subLabel.getHeight()/2;
+        float subY = mainLabel.getY() - (mainLabel.getHeight()/2) - VERTICAL_PADDING;
         subLabel.setPosition(subX, subY);
         addActor(subLabel);
     }
