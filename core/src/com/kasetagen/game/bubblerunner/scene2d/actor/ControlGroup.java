@@ -79,25 +79,12 @@ public class ControlGroup extends GenericGroup{
         return OVERHEAT_POINT;
     }
 
-//    public void updateResource(ForceFieldType fft, int increment){
-//        int val = resourceLevels.get(fft);
-//        if(val < RESOURCE_MAX || (increment < 0 && val >= increment)){
-//            val += increment;
-//            int newVal = val <= RESOURCE_MAX ? val : RESOURCE_MAX;
-//            resourceLevels.put(fft, newVal);
-//        }
-//    }
-
     public void incrementHeat(int increment){
         heatScore += increment;
     }
 
     public void restoreAllResourceLevels(){
         heatScore = 0;
-
-//        updateResource(ForceFieldType.LIGHTNING, RESOURCE_MAX);
-//        updateResource(ForceFieldType.LASER, RESOURCE_MAX);
-//        updateResource(ForceFieldType.PLASMA, RESOURCE_MAX);
     }
 
     @Override
@@ -105,25 +92,11 @@ public class ControlGroup extends GenericGroup{
         super.drawAfter(batch, parentAlpha);
         batch.end();
         batch.begin();
-        Gdx.gl20.glLineWidth(1f);
-        //Set the projection matrix, and line shape
-        //debugRenderer.setProjectionMatrix(getStage().getCamera().combined);
         debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        //Draw the bounds of the actor as a box
-//        Color c = getColor() != null ? getColor() : Color.WHITE;
-//        debugRenderer.setColor(c);
-//        for(ForceFieldImageButton b:buttons){
-//            float currentResource = resourceLevels.get(b.forceFieldType);
-//            float height = b.getHeight() * (currentResource/RESOURCE_MAX);
-//
-//            debugRenderer.rect(b.getX()+(b.getWidth()/4), b.getY(), b.getWidth()/2, height);
-//        }
-
         float barTotalLength = getWidth() - BAR_START;
-        float barLength = barTotalLength*(heatScore/barTotalLength);
-
-
-        setColor(Color.RED);
+        float barLength = barTotalLength*((float)heatScore/(float)OVERHEAT_POINT);
+        Color c = heatScore >= OVERHEAT_POINT ? Color.RED : Color.ORANGE;
+        debugRenderer.setColor(c);
         debugRenderer.rect(BAR_START, getY(), barLength, getHeight());
         //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
         // coming in.

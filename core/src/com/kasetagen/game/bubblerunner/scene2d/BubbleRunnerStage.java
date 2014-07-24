@@ -79,7 +79,7 @@ public class BubbleRunnerStage extends Stage {
     private int lastWallAdjustTime = 0;
     private long nextGeneration = 1000L;
     private long millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
-    private float wallVelocity = -1f;
+    private float wallVelocity;
 
     private float secondsSinceResourceRegen = 0f;
 
@@ -120,7 +120,8 @@ public class BubbleRunnerStage extends Stage {
         highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
         mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
 
-        wallVelocity = -1f*(getWidth());
+        //SET WALL VELOCITY
+        wallVelocity = -1f*(getWidth()/2);
         //Add Player
         initializePlayer(GameInfo.DEFAULT_MAX_FIELDS);
 
@@ -262,7 +263,8 @@ public class BubbleRunnerStage extends Stage {
                         wallDimensions[2],
                         wallDimensions[3],
                         fft,
-                        getTextureRegionForForceFieldType(fft));
+                        assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS),
+                        getAnimationNameForForceFieldType(fft));
                 w.setXVelocity(wallVelocity);
                 walls.add(w);
                 addActor(w);
@@ -273,25 +275,45 @@ public class BubbleRunnerStage extends Stage {
         }
     }
 
-    private TextureRegion getTextureRegionForForceFieldType(ForceFieldType fft) {
-        Texture texture;
+    private String getAnimationNameForForceFieldType(ForceFieldType fft){
+        String name;
         switch(fft){
             case LIGHTNING:
-                texture = assetManager.get(AssetsUtil.LIGHTNING_WALL, AssetsUtil.TEXTURE);
+                name = "walls/light-wall";
                 break;
             case PLASMA:
-                texture = assetManager.get(AssetsUtil.PLASMA_WALL, AssetsUtil.TEXTURE);
+                name = "walls/plasma-wall";
                 break;
             case LASER:
-                texture = assetManager.get(AssetsUtil.LASER_WALL, AssetsUtil.TEXTURE);
+                name = "walls/discharge-wall";
                 break;
             default:
-                texture = assetManager.get(AssetsUtil.LIGHTNING_WALL, AssetsUtil.TEXTURE);
+                name = "walls/light-wall";
                 break;
         }
 
-        return new TextureRegion(texture);
+        return name;
     }
+
+//    private TextureRegion getTextureRegionForForceFieldType(ForceFieldType fft) {
+//        Texture texture;
+//        switch(fft){
+//            case LIGHTNING:
+//                texture = assetManager.get(AssetsUtil.LIGHTNING_WALL, AssetsUtil.TEXTURE);
+//                break;
+//            case PLASMA:
+//                texture = assetManager.get(AssetsUtil.PLASMA_WALL, AssetsUtil.TEXTURE);
+//                break;
+//            case LASER:
+//                texture = assetManager.get(AssetsUtil.LASER_WALL, AssetsUtil.TEXTURE);
+//                break;
+//            default:
+//                texture = assetManager.get(AssetsUtil.LIGHTNING_WALL, AssetsUtil.TEXTURE);
+//                break;
+//        }
+//
+//        return new TextureRegion(texture);
+//    }
 
     private WallPattern getRandomWallPattern(){
         WallPattern p = new WallPattern(20f);
@@ -312,7 +334,6 @@ public class BubbleRunnerStage extends Stage {
         if(secondsPassedInt > 0 && secondsPassedInt != lastWallAdjustTime){
             if(secondsPassedInt%SECONDS_BETWEEN_ADJUSTS == 0){
                 if(millisBetweenWalls > MIN_TIME_BETWEEN_WALLS){
-                    Gdx.app.log("RUNNER", "Wall Decreasing");
                     millisBetweenWalls -= TIME_DECREASE;
                     lastWallAdjustTime = secondsPassedInt;
                 }
@@ -427,7 +448,6 @@ public class BubbleRunnerStage extends Stage {
             //  state and performs the corresponding actions.
             player.addField(fft);
             controls.incrementHeat(player.resourceUsage);
-            //controls.updateResource(fft, -player.resourceUsage);
             wasAdded = true;
         }
         if(wasAdded){
@@ -456,10 +476,7 @@ public class BubbleRunnerStage extends Stage {
 
 
     public void regenResources(int increment){
-        controls.incrementHeat(increment);
-//        controls.updateResource(ForceFieldType.LASER, increment);
-//        controls.updateResource(ForceFieldType.LIGHTNING, increment);
-//        controls.updateResource(ForceFieldType.PLASMA, increment);
+        controls.incrementHeat(-increment);
     }
 
 ////

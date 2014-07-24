@@ -1,6 +1,8 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.kasetagen.game.bubblerunner.util.ForceFieldColorUtil;
@@ -14,13 +16,26 @@ import com.kasetagen.game.bubblerunner.util.ForceFieldColorUtil;
  */
 public class Wall extends GenericActor {
 
+    private static final float WALL_CYCLE_RATE = 1f/8f;
+
     public ForceFieldType forceFieldType;
     public Vector2 velocity;
+    private Animation animation;
+    private float keyFrameTime = 0f;
 
-    public Wall(float x, float y, float width, float height, ForceFieldType ff, TextureRegion textureRegion){
-        super(x, y, width, height, textureRegion, ForceFieldColorUtil.getColor(ff));
+    public Wall(float x, float y, float width, float height, ForceFieldType ff, TextureAtlas atlas, String animName){
+        super(x, y, width, height, null, ForceFieldColorUtil.getColor(ff));
+
+        animation = new Animation(WALL_CYCLE_RATE, atlas.findRegions(animName));
         this.forceFieldType = ff;
         this.velocity = new Vector2(1f, 1f);
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        keyFrameTime += delta;
+        textureRegion = animation.getKeyFrame(keyFrameTime, true);
     }
 
     public void setXVelocity(float x){

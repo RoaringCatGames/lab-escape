@@ -1,55 +1,97 @@
 
 animations.png
-size: 1166,502
+size: 916,1004
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 explosion/explosion
   rotate: false
-  xy: 906, 372
+  xy: 302, 372
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 1
 explosion/explosion
   rotate: false
-  xy: 906, 242
+  xy: 302, 242
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 2
 explosion/explosion
   rotate: false
-  xy: 1036, 372
+  xy: 432, 372
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 3
+stickman/player
+  rotate: false
+  xy: 0, 502
+  size: 300, 500
+  orig: 300, 500
+  offset: 0, 0
+  index: 1
 stickman/player
   rotate: false
   xy: 0, 0
   size: 300, 500
   orig: 300, 500
   offset: 0, 0
-  index: 1
-stickman/player
-  rotate: false
-  xy: 302, 0
-  size: 300, 500
-  orig: 300, 500
-  offset: 0, 0
   index: 2
 stickman/player
   rotate: false
-  xy: 302, 0
+  xy: 0, 0
   size: 300, 500
   orig: 300, 500
   offset: 0, 0
   index: 4
 stickman/player
   rotate: false
-  xy: 604, 0
+  xy: 302, 502
   size: 300, 500
   orig: 300, 500
   offset: 0, 0
   index: 3
+walls/discharge-wall
+  rotate: false
+  xy: 604, 402
+  size: 50, 600
+  orig: 50, 600
+  offset: 0, 0
+  index: 1
+walls/discharge-wall
+  rotate: false
+  xy: 656, 402
+  size: 50, 600
+  orig: 50, 600
+  offset: 0, 0
+  index: 2
+walls/light-wall
+  rotate: false
+  xy: 708, 402
+  size: 50, 600
+  orig: 50, 600
+  offset: 0, 0
+  index: 1
+walls/light-wall
+  rotate: false
+  xy: 760, 402
+  size: 50, 600
+  orig: 50, 600
+  offset: 0, 0
+  index: 2
+walls/plasma-wall
+  rotate: false
+  xy: 812, 402
+  size: 50, 600
+  orig: 50, 600
+  offset: 0, 0
+  index: 1
+walls/plasma-wall
+  rotate: false
+  xy: 864, 402
+  size: 50, 600
+  orig: 50, 600
+  offset: 0, 0
+  index: 2

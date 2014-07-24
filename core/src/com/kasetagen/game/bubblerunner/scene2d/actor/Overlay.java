@@ -82,8 +82,8 @@ public class Overlay extends GenericGroup {
         debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
         //Draw the red origin marker
         debugRenderer.setColor(getColor());
-        Color c = getColor();
-        debugRenderer.setColor(c.r, c.g, c.b, 0.4f);
+        Color c = Color.WHITE;//getColor();
+        debugRenderer.setColor(c.r, c.g, c.b, 0.1f);
         debugRenderer.rect(getX(), getY(), getWidth(), getHeight(), getOriginX(), getOriginY(), getRotation());
         //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
         // coming in.

@@ -42,15 +42,15 @@ public class AssetsUtil {
     public static final String LASER_WALL = "images/walls/green_wall.png";
 
     //Images -- Buttons
-    public static final String LIGHT_UP = "images/buttons/light-up.png";
-    public static final String LIGHT_DOWN = "images/buttons/light-down.png";
-    public static final String LIGHT_CHECKED = "images/buttons/light-down.png";
-    public static final String PLASMA_UP = "images/buttons/s-up.png";
-    public static final String PLASMA_DOWN = "images/buttons/s-down.png";
-    public static final String PLASMA_CHECKED = "images/buttons/s-checked.png";
-    public static final String LASER_UP = "images/buttons/d-up.png";
-    public static final String LASER_DOWN = "images/buttons/d-down.png";
-    public static final String LASER_CHECKED = "images/buttons/d-checked.png";
+    public static final String LIGHT_UP = "images/buttons/button_light_off.png";
+    public static final String LIGHT_DOWN = "images/buttons/button_light_on.png";
+    public static final String LIGHT_CHECKED = "images/buttons/button_light_off.png";
+    public static final String PLASMA_UP = "images/buttons/button_plasma_on.png";
+    public static final String PLASMA_DOWN = "images/buttons/button_plasma_off.png";
+    public static final String PLASMA_CHECKED = "images/buttons/button_plasma_off.png";
+    public static final String LASER_UP = "images/buttons/button_discharge_on.png";
+    public static final String LASER_DOWN = "images/buttons/button_discharge_off.png";
+    public static final String LASER_CHECKED = "images/buttons/button_discharge_off.png";
 
     //Font Paths
     public static final String COURIER_FONT_12 = "fonts/courier-new-bold-12.fnt";

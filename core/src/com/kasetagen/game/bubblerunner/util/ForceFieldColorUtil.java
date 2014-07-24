@@ -19,10 +19,10 @@ public class ForceFieldColorUtil {
                 result = Color.BLUE;
                 break;
             case PLASMA:
-                result = Color.YELLOW;
+                result = Color.GREEN;
                 break;
             case LASER:
-                result =Color.GREEN;
+                result =Color.RED;
                 break;
             default:
                 result = Color.ORANGE;
