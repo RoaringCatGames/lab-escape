@@ -58,3 +58,7 @@ nb-configuration.xml
 
 .gradle
 build/
+
+##Mac OS
+
+**/*.DS_Store
