@@ -1,31 +1,52 @@
 
 animations.png
-size: 906,502
+size: 1166,502
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-player
+explosion/explosion
+  rotate: false
+  xy: 906, 372
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 1
+explosion/explosion
+  rotate: false
+  xy: 906, 242
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 2
+explosion/explosion
+  rotate: false
+  xy: 1036, 372
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 3
+stickman/player
   rotate: false
   xy: 0, 0
   size: 300, 500
   orig: 300, 500
   offset: 0, 0
   index: 1
-player
+stickman/player
   rotate: false
   xy: 302, 0
   size: 300, 500
   orig: 300, 500
   offset: 0, 0
   index: 2
-player
+stickman/player
   rotate: false
   xy: 302, 0
   size: 300, 500
   orig: 300, 500
   offset: 0, 0
   index: 4
-player
+stickman/player
   rotate: false
   xy: 604, 0
   size: 300, 500

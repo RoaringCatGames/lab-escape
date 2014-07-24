@@ -79,7 +79,7 @@ public class BubbleRunnerStage extends Stage {
     private int lastWallAdjustTime = 0;
     private long nextGeneration = 1000L;
     private long millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
-    private float wallVelocity = -300f;
+    private float wallVelocity = -1f;
 
     private float secondsSinceResourceRegen = 0f;
 
@@ -120,6 +120,7 @@ public class BubbleRunnerStage extends Stage {
         highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
         mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
 
+        wallVelocity = -1f*(getWidth());
         //Add Player
         initializePlayer(GameInfo.DEFAULT_MAX_FIELDS);
 
@@ -328,6 +329,8 @@ public class BubbleRunnerStage extends Stage {
     private void processDeath(Wall w) {
         //Checking so we only sound once for now
 
+        player.setIsDead(true);
+
         if(!w.equals(collidedWall)){
             wallsToRemove.add(w);
             zapSound.play(sfxVolume);
@@ -374,6 +377,7 @@ public class BubbleRunnerStage extends Stage {
 
     private void resetGame() {
         if(isDead){
+            player.setIsDead(false);
             deathOverlay.setVisible(false);
             info.reset();
             for(Wall w: walls){
@@ -417,18 +421,19 @@ public class BubbleRunnerStage extends Stage {
 
         boolean wasAdded = false;
         int resLevel = controls.getResourceLevel(fft);
-        if(resLevel >= player.resourceUsage){
+        if((controls.getHeatMax() - resLevel) >= player.resourceUsage){
             //Yuck, I don't like this, but I can't come up with an
             //  argument for not doing this. The Stage manages the
             //  state and performs the corresponding actions.
             player.addField(fft);
-            controls.updateResource(fft, -player.resourceUsage);
+            controls.incrementHeat(player.resourceUsage);
+            //controls.updateResource(fft, -player.resourceUsage);
             wasAdded = true;
         }
         if(wasAdded){
             //TODO: Play Forcefield SoundFX
             powerOnSound.play(sfxVolume);
-            controls.incrementHeat(player.resourceUsage);
+
 
         }else{
             //TODO: Play Resources Limited SoundFX
@@ -451,9 +456,10 @@ public class BubbleRunnerStage extends Stage {
 
 
     public void regenResources(int increment){
-        controls.updateResource(ForceFieldType.LASER, increment);
-        controls.updateResource(ForceFieldType.LIGHTNING, increment);
-        controls.updateResource(ForceFieldType.PLASMA, increment);
+        controls.incrementHeat(increment);
+//        controls.updateResource(ForceFieldType.LASER, increment);
+//        controls.updateResource(ForceFieldType.LIGHTNING, increment);
+//        controls.updateResource(ForceFieldType.PLASMA, increment);
     }
 
 ////

@@ -35,12 +35,14 @@ public class Player extends GenericGroup {
 
     private float keyFrameTime = 0f;
     private Animation animation;
-
+    private Animation deathAnimation;
+    private boolean isDead = false;
 
     public Player(float x, float y, float width, float height, TextureAtlas atlas){
         super(x, y, width, height, null, Color.BLACK);
 
-        animation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("player"));
+        animation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("stickman/player"));
+        deathAnimation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("explosion/explosion"));
         textureRegion = animation.getKeyFrame(keyFrameTime);
         //TODO: Replace ShapeRendering with Animation
         forceFieldType = ForceFieldType.LIGHTNING;
@@ -51,7 +53,18 @@ public class Player extends GenericGroup {
     public void act(float delta) {
         super.act(delta);
         keyFrameTime += delta;
-        textureRegion = animation.getKeyFrame(keyFrameTime, true);
+        if(!isDead){
+            textureRegion = animation.getKeyFrame(keyFrameTime, true);
+        }else{
+            textureRegion = deathAnimation.getKeyFrame(keyFrameTime, false);
+        }
+    }
+
+    public void setIsDead(boolean isDying){
+        if(isDying){
+            keyFrameTime = 0f;
+        }
+        isDead = isDying;
     }
 
     public void addField(ForceFieldType ff){
@@ -145,6 +158,10 @@ public class Player extends GenericGroup {
 
     @Override
     public void drawFull(Batch batch, float parentAlpha) {
+        if(!isDead){
         super.drawFull(batch, parentAlpha);
+        }else{
+            batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(), getWidth()*2, getHeight()*1.5f, getScaleX()*2, getScaleY()*1.5f, getRotation());
+        }
     }
 }

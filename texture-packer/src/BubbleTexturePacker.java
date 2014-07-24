@@ -3,7 +3,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 
 public class BubbleTexturePacker {
     //private static final String INPUT_DIR = Gdx.files.internal("assets/data/animations").toString();
-    private static final String INPUT_DIR = "../android/assets/images/stickman/";
+    private static final String INPUT_DIR = "../android/assets/images/animations/";
     private static final String OUTPUT_DIR = "../android/assets/animations/";
     private static final String PACK_FILE = "animations";
 
@@ -19,7 +19,7 @@ public class BubbleTexturePacker {
         // set the maximum dimension of each image atlas
         settings.maxWidth = 2048;
         settings.maxHeight = 2048;
-
+        settings.combineSubdirectories = true;
 
         // pack the images
         TexturePacker.process(settings, INPUT_DIR, OUTPUT_DIR, PACK_FILE);

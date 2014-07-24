@@ -28,7 +28,7 @@ public class ControlGroup extends GenericGroup{
     private static int RESOURCE_MAX = 20;
     private static int OVERHEAT_POINT = 40;
 
-    public ObjectMap<ForceFieldType, Integer> resourceLevels;
+    //public ObjectMap<ForceFieldType, Integer> resourceLevels;
     private int buttonCount = 0;
 
     private int heatScore = 0;
@@ -43,10 +43,10 @@ public class ControlGroup extends GenericGroup{
     public ControlGroup(float x, float y, float width, float height, Color color){
         super(x, y, width, height, color);
 
-        resourceLevels = new ObjectMap<ForceFieldType, Integer>();
-        resourceLevels.put(ForceFieldType.LASER, RESOURCE_MAX);
-        resourceLevels.put(ForceFieldType.LIGHTNING, RESOURCE_MAX);
-        resourceLevels.put(ForceFieldType.PLASMA, RESOURCE_MAX);
+//        resourceLevels = new ObjectMap<ForceFieldType, Integer>();
+//        resourceLevels.put(ForceFieldType.LASER, RESOURCE_MAX);
+//        resourceLevels.put(ForceFieldType.LIGHTNING, RESOURCE_MAX);
+//        resourceLevels.put(ForceFieldType.PLASMA, RESOURCE_MAX);
 
         buttons = new Array<ForceFieldImageButton>();
     }
@@ -71,26 +71,33 @@ public class ControlGroup extends GenericGroup{
     }
 
     public int getResourceLevel(ForceFieldType fft){
-        return resourceLevels.get(fft);
+        return heatScore;
+        //return resourceLevels.get(fft);
     }
 
-    public void updateResource(ForceFieldType fft, int increment){
-        int val = resourceLevels.get(fft);
-        if(val < RESOURCE_MAX || (increment < 0 && val >= increment)){
-            val += increment;
-            int newVal = val <= RESOURCE_MAX ? val : RESOURCE_MAX;
-            resourceLevels.put(fft, newVal);
-        }
+    public int getHeatMax(){
+        return OVERHEAT_POINT;
     }
+
+//    public void updateResource(ForceFieldType fft, int increment){
+//        int val = resourceLevels.get(fft);
+//        if(val < RESOURCE_MAX || (increment < 0 && val >= increment)){
+//            val += increment;
+//            int newVal = val <= RESOURCE_MAX ? val : RESOURCE_MAX;
+//            resourceLevels.put(fft, newVal);
+//        }
+//    }
 
     public void incrementHeat(int increment){
         heatScore += increment;
     }
 
     public void restoreAllResourceLevels(){
-        updateResource(ForceFieldType.LIGHTNING, RESOURCE_MAX);
-        updateResource(ForceFieldType.LASER, RESOURCE_MAX);
-        updateResource(ForceFieldType.PLASMA, RESOURCE_MAX);
+        heatScore = 0;
+
+//        updateResource(ForceFieldType.LIGHTNING, RESOURCE_MAX);
+//        updateResource(ForceFieldType.LASER, RESOURCE_MAX);
+//        updateResource(ForceFieldType.PLASMA, RESOURCE_MAX);
     }
 
     @Override
@@ -103,14 +110,14 @@ public class ControlGroup extends GenericGroup{
         //debugRenderer.setProjectionMatrix(getStage().getCamera().combined);
         debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
         //Draw the bounds of the actor as a box
-        Color c = getColor() != null ? getColor() : Color.WHITE;
-        debugRenderer.setColor(c);
-        for(ForceFieldImageButton b:buttons){
-            float currentResource = resourceLevels.get(b.forceFieldType);
-            float height = b.getHeight() * (currentResource/RESOURCE_MAX);
-
-            debugRenderer.rect(b.getX()+(b.getWidth()/4), b.getY(), b.getWidth()/2, height);
-        }
+//        Color c = getColor() != null ? getColor() : Color.WHITE;
+//        debugRenderer.setColor(c);
+//        for(ForceFieldImageButton b:buttons){
+//            float currentResource = resourceLevels.get(b.forceFieldType);
+//            float height = b.getHeight() * (currentResource/RESOURCE_MAX);
+//
+//            debugRenderer.rect(b.getX()+(b.getWidth()/4), b.getY(), b.getWidth()/2, height);
+//        }
 
         float barTotalLength = getWidth() - BAR_START;
         float barLength = barTotalLength*(heatScore/barTotalLength);
