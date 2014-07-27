@@ -86,17 +86,17 @@ public class BubbleRunnerScreen extends ApplicationAdapter implements Screen, In
         Gdx.gl.glClearColor(bgCurrent, bgCurrent, bgCurrent, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if(isBgIncreasing){
-            bgCurrent += bgShift;
-        }else{
-            bgCurrent -= bgShift;
-        }
-
-        if(isBgIncreasing && bgCurrent >= bgMax){
-            isBgIncreasing = false;
-        }else if(!isBgIncreasing && bgCurrent <= bgMin){
-            isBgIncreasing = true;
-        }
+//        if(isBgIncreasing){
+//            bgCurrent += bgShift;
+//        }else{
+//            bgCurrent -= bgShift;
+//        }
+//
+//        if(isBgIncreasing && bgCurrent >= bgMax){
+//            isBgIncreasing = false;
+//        }else if(!isBgIncreasing && bgCurrent <= bgMin){
+//            isBgIncreasing = true;
+//        }
 
         stage.act(delta);
         stage.draw();

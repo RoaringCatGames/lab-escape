@@ -33,13 +33,13 @@ public class AssetsUtil {
     public static final String DEFAULT_SKIN = "uiskin.json";
 
     //Images
-    public static final String BLG_LOGO = "badlogic.jpg";
     public static final String TITLE_SCREEN = "images/title-screen.png";
     public static final String BUBBLE_PARTICLE_IMG = "particles/bubble.jpg";
     public static final String PLAYER_IMG = "images/player.png";
     public static final String LIGHTNING_WALL = "images/walls/blue_wall.png";
     public static final String PLASMA_WALL = "images/walls/yellow_wall.png";
     public static final String LASER_WALL = "images/walls/green_wall.png";
+    public static final String INDICATOR_SHEET = "images/warning-indicator.png";
 
     //Images -- Buttons
     public static final String LIGHT_UP = "images/buttons/button_light_off.png";

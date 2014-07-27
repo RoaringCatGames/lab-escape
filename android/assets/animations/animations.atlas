@@ -1,97 +1,124 @@
 
 animations.png
-size: 916,1004
+size: 3978,3636
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 explosion/explosion
   rotate: false
-  xy: 302, 372
+  xy: 0, 0
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 1
 explosion/explosion
   rotate: false
-  xy: 302, 242
+  xy: 302, 402
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 2
 explosion/explosion
   rotate: false
-  xy: 432, 372
+  xy: 3780, 3004
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 3
 stickman/player
   rotate: false
-  xy: 0, 502
+  xy: 0, 632
   size: 300, 500
   orig: 300, 500
   offset: 0, 0
   index: 1
 stickman/player
   rotate: false
-  xy: 0, 0
+  xy: 3676, 3134
   size: 300, 500
   orig: 300, 500
   offset: 0, 0
   index: 2
 stickman/player
   rotate: false
-  xy: 0, 0
+  xy: 3676, 3134
   size: 300, 500
   orig: 300, 500
   offset: 0, 0
   index: 4
 stickman/player
   rotate: false
-  xy: 302, 502
+  xy: 0, 130
   size: 300, 500
   orig: 300, 500
   offset: 0, 0
   index: 3
 walls/discharge-wall
   rotate: false
-  xy: 604, 402
+  xy: 302, 532
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 1
 walls/discharge-wall
   rotate: false
-  xy: 656, 402
+  xy: 3676, 2532
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 2
 walls/light-wall
   rotate: false
-  xy: 708, 402
+  xy: 354, 532
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 1
 walls/light-wall
   rotate: false
-  xy: 760, 402
+  xy: 3676, 1930
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 2
 walls/plasma-wall
   rotate: false
-  xy: 812, 402
+  xy: 3728, 2532
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 1
 walls/plasma-wall
   rotate: false
-  xy: 864, 402
+  xy: 406, 532
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 2
+yarn-man/yarn-man
+  rotate: false
+  xy: 0, 1134
+  size: 1836, 2500
+  orig: 1836, 2500
+  offset: 0, 0
+  index: 1
+yarn-man/yarn-man
+  rotate: false
+  xy: 1838, 1134
+  size: 1836, 2500
+  orig: 1836, 2500
+  offset: 0, 0
+  index: 2
+
+animations2.png
+size: 1838,2502
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+yarn-man/yarn-man
+  rotate: false
+  xy: 0, 0
+  size: 1836, 2500
+  orig: 1836, 2500
+  offset: 0, 0
+  index: 3

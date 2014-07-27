@@ -44,7 +44,7 @@ public class BubbleRunnerStage extends Stage {
     private static final float FLOOR_HEIGHT = 160f;
 
     private static final int SECONDS_BETWEEN_DIFF_SHIFT = 30;
-    private static final long BASE_TIME_BETWEEN_WALLS = 2000L;
+    private static final long BASE_TIME_BETWEEN_WALLS = 4000L;
     private static final int SECONDS_BETWEEN_ADJUSTS = 5;
     private static final float TIME_DECREASE = 100f;
     private static final float MIN_TIME_BETWEEN_WALLS = 300f;
@@ -53,10 +53,15 @@ public class BubbleRunnerStage extends Stage {
 
 
     //Order of values:  xPos, yPos, width, height
-    private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, Gdx.graphics.getWidth()/8, Gdx.graphics.getHeight()/2 }; //old width 160f
+    private static final float INDICATOR_WIDTH = Gdx.graphics.getWidth()/4;
+    private static final float INDICATOR_HEIGHT = Gdx.graphics.getHeight()/4;
+
+    private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, Gdx.graphics.getWidth()/4, (Gdx.graphics.getHeight()/3)*2 }; //old width 160f
     private static float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), FLOOR_HEIGHT };
     private static float[] wallDimensions = new float[] {Gdx.graphics.getWidth()+FLOOR_HEIGHT,
                                                          FLOOR_HEIGHT, 40f, Gdx.graphics.getHeight()-FLOOR_HEIGHT };
+    private static float[] warningIndicatorDimensions = new float[] {Gdx.graphics.getWidth()/2 - (INDICATOR_WIDTH/2), Gdx.graphics.getHeight()/2-(INDICATOR_HEIGHT/2),
+                                                                     INDICATOR_WIDTH, INDICATOR_HEIGHT};
 
     private static ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.LIGHTNING, ForceFieldType.PLASMA, ForceFieldType.LASER};
 
@@ -98,6 +103,7 @@ public class BubbleRunnerStage extends Stage {
     public ControlGroup controls;
 
     //Ambience (Music and Effects
+    private WarningIndicator warningIndicator;
     private Music music;
     private Sound zapSound;
     private Sound powerOnSound;
@@ -190,7 +196,7 @@ public class BubbleRunnerStage extends Stage {
     @Override
     public void draw() {     
         batch.begin();
-        particleBubble.draw(batch);
+        //particleBubble.draw(batch);
         batch.end();
         super.draw();
     }
@@ -254,6 +260,20 @@ public class BubbleRunnerStage extends Stage {
     private void generateObstacles() {
         if(millisecondsPassed >= nextGeneration){
             WallPattern wp = getRandomWallPattern();
+            boolean addAfter = warningIndicator == null;
+            if(warningIndicator != null){
+                warningIndicator.remove();
+            }
+            warningIndicator = new WarningIndicator(warningIndicatorDimensions[0]+ 10f*walls.size,
+                                                       warningIndicatorDimensions[1],
+                                                       warningIndicatorDimensions[2],
+                                                       warningIndicatorDimensions[3],
+                                                       wp,
+                                                       Color.RED,
+                                                       assetManager.get(AssetsUtil.INDICATOR_SHEET, AssetsUtil.TEXTURE));
+
+            addActor(warningIndicator);
+
             for(int i=0;i<wp.wallCount;i++){
                 ForceFieldType fft = wp.forceFields.get(i);
                 //FORMULA:  xPos = startX + (N * (wallWidth + wallPadding)
@@ -351,6 +371,9 @@ public class BubbleRunnerStage extends Stage {
         //Checking so we only sound once for now
 
         player.setIsDead(true);
+
+        warningIndicator.remove();
+        warningIndicator = null;
 
         if(!w.equals(collidedWall)){
             wallsToRemove.add(w);

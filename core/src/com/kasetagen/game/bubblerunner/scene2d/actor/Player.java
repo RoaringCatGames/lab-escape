@@ -41,7 +41,7 @@ public class Player extends GenericGroup {
     public Player(float x, float y, float width, float height, TextureAtlas atlas){
         super(x, y, width, height, null, Color.BLACK);
 
-        animation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("stickman/player"));
+        animation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("yarn-man/yarn-man"));
         deathAnimation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("explosion/explosion"));
         textureRegion = animation.getKeyFrame(keyFrameTime);
         //TODO: Replace ShapeRendering with Animation
