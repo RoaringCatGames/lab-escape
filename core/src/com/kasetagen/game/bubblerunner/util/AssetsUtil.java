@@ -42,6 +42,7 @@ public class AssetsUtil {
     public static final String INDICATOR_SHEET = "images/warning-indicator.png";
     public static final String FLOOR_CONC = "images/floor/floor_conc.png";
     public static final String FLOOR_PILLAR = "images/floor/floor_pillar.png";
+    public static final String ENERGY_BAR = "images/energy_bar.png";
     
     //Images -- Buttons
     public static final String LIGHT_UP = "images/buttons/button_light_off.png";
