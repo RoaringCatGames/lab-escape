@@ -196,7 +196,7 @@ public class BubbleRunnerStage extends Stage {
 
         }
         particleBubble.update(delta);
-		particleBubble.setPosition(player.getX() + player.getWidth()/2, player.getY() + player.getHeight() / 4);
+		particleBubble.setPosition(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 4);
         //Update GameStats
     }
 
@@ -586,6 +586,13 @@ public class BubbleRunnerStage extends Stage {
         BitmapFont subFont = assetManager.get(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
         deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.PURPLE, Color.WHITE, mainFont, subFont, "You Failed to Escape!", "Score: 0\nBest Score: 0");
         deathOverlay.setVisible(false);
+
+        deathOverlay.setDismissButtonEvent(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                resetGame();
+            }
+        });
         addActor(deathOverlay);
         deathOverlay.setZIndex(getActors().size - 1);
     }
@@ -637,12 +644,12 @@ public class BubbleRunnerStage extends Stage {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
 
-                if(isDead){
-                    Actor a = hit(x, y, true);
-                    if(a != null && a instanceof Overlay){
-                        resetGame();
-                    }
-                }
+//                if(isDead){
+//                    Actor a = hit(x, y, true);
+//                    if(a != null && a instanceof Overlay){
+//                        resetGame();
+//                    }
+//                }
 
                 return super.touchDown(event, x, y, pointer, button);
             }

@@ -7,8 +7,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
 /**
@@ -27,6 +30,8 @@ public class Overlay extends GenericGroup {
 
     private Label mainLabel;
     private Label subLabel;
+
+    private TextButton dismissButton;
 
     public Overlay(float x, float y, float width, float height, Color bgColor,
                    Color textColor, BitmapFont mainFont, BitmapFont subFont, String mainText, String subText) {
@@ -52,6 +57,19 @@ public class Overlay extends GenericGroup {
         float subY = mainLabel.getY() - (mainLabel.getHeight()/2) - VERTICAL_PADDING;
         subLabel.setPosition(subX, subY);
         addActor(subLabel);
+
+        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+        style.font = subFont;
+        style.fontColor =  Color.CYAN;
+        style.overFontColor = Color.RED;
+        style.downFontColor = Color.GRAY;
+        float fontScale = 1f;
+        style.font.setScale(fontScale);
+
+        dismissButton = new TextButton("Replay", style);
+        dismissButton.setPosition(getWidth()/2 - dismissButton.getWidth()/2,
+                                  subLabel.getY() - (dismissButton.getHeight()/2) - VERTICAL_PADDING);
+        addActor(dismissButton);
     }
 
     public void setMainText(String text){
@@ -92,5 +110,9 @@ public class Overlay extends GenericGroup {
         batch.begin();
 
         super.drawBefore(batch, parentAlpha);    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    public void setDismissButtonEvent(ClickListener listener){
+        dismissButton.addListener(listener);
     }
 }
