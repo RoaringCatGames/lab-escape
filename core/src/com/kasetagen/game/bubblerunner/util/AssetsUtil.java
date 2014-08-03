@@ -40,7 +40,9 @@ public class AssetsUtil {
     public static final String PLASMA_WALL = "images/walls/yellow_wall.png";
     public static final String LASER_WALL = "images/walls/green_wall.png";
     public static final String INDICATOR_SHEET = "images/warning-indicator.png";
-
+    public static final String FLOOR_CONC = "images/floor/floor_conc.png";
+    public static final String FLOOR_PILLAR = "images/floor/floor_pillar.png";
+    
     //Images -- Buttons
     public static final String LIGHT_UP = "images/buttons/button_light_off.png";
     public static final String LIGHT_DOWN = "images/buttons/button_light_on.png";
