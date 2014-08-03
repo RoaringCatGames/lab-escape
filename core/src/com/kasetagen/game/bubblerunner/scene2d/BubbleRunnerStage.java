@@ -202,10 +202,11 @@ public class BubbleRunnerStage extends Stage {
     }
 
     private void processResources(){
-        if(secondsSinceResourceRegen >= SECONDS_PER_RESOURCE_REGEN){
+        float secondsBetweenResourceRegen = (millisBetweenWalls/1000)/2;
+        if(secondsSinceResourceRegen >= secondsBetweenResourceRegen){//SECONDS_PER_RESOURCE_REGEN){
             regenResources(1);
             //We want to keep any "left-over" time so that we don't get weird timing differences
-            secondsSinceResourceRegen = secondsSinceResourceRegen - SECONDS_PER_RESOURCE_REGEN;
+            secondsSinceResourceRegen = secondsSinceResourceRegen - secondsBetweenResourceRegen;//SECONDS_PER_RESOURCE_REGEN;
         }
     }
 
@@ -271,7 +272,7 @@ public class BubbleRunnerStage extends Stage {
                                                        wp,
                                                        Color.RED,
                                                        assetManager.get(AssetsUtil.INDICATOR_SHEET, AssetsUtil.TEXTURE));
-
+            //warningIndicator.lifetime = (millisBetweenWalls/1000)/2;
             addActor(warningIndicator);
 
             for(int i=0;i<wp.wallCount;i++){

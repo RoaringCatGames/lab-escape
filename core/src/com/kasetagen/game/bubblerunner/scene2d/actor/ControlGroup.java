@@ -81,6 +81,9 @@ public class ControlGroup extends GenericGroup{
 
     public void incrementHeat(int increment){
         heatScore += increment;
+        if(heatScore < 0){
+            heatScore = 0;
+        }
     }
 
     public void restoreAllResourceLevels(){

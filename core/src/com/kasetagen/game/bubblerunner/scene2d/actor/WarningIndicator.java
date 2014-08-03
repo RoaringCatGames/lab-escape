@@ -27,6 +27,9 @@ public class WarningIndicator extends GenericActor {
     private boolean isDecreasing = true;
     private Texture texture;
     private Array<TextureRegion> indicatorRegions;
+    private float timeAlive = 0f;
+
+    public float lifetime = 0f;
 
     public WarningIndicator(float x, float y, float width, float height, WallPattern pattern, Color color, Texture texture){
         super(x, y, width, height, color);
@@ -53,6 +56,9 @@ public class WarningIndicator extends GenericActor {
             }
 
             indicatorRegions.add(r);
+
+            //We want the lifetime to be one fade out length.
+            lifetime = (MAX_ALPHA/SHIFT_PER_SECOND);
         }
     }
 
@@ -60,42 +66,63 @@ public class WarningIndicator extends GenericActor {
     public void act(float delta) {
         super.act(delta);
 
-        float changeInAlpha = delta*SHIFT_PER_SECOND;
+        timeAlive += delta;
+        if(isAlive()){
+            float changeInAlpha = delta*SHIFT_PER_SECOND;
 
-        if(isDecreasing){
-            changeInAlpha *= -1;
+            if(isDecreasing){
+                changeInAlpha *= -1;
+            }
+
+            alpha += changeInAlpha;
+            alpha = alpha > MAX_ALPHA ? MAX_ALPHA : alpha < MIN_ALPHA ? MIN_ALPHA : alpha;
+
+            if(alpha >= MAX_ALPHA && !isDecreasing){
+                isDecreasing = true;
+            }else if(alpha <= MIN_ALPHA && isDecreasing){
+                isDecreasing = false;
+            }
+            //Gdx.app.log("INDICATOR!!", "Alpha: " + alpha);
         }
-
-        alpha += changeInAlpha;
-        alpha = alpha > MAX_ALPHA ? MAX_ALPHA : alpha < MIN_ALPHA ? MIN_ALPHA : alpha;
-
-        if(alpha >= MAX_ALPHA && !isDecreasing){
-            isDecreasing = true;
-        }else if(alpha <= MIN_ALPHA && isDecreasing){
-            isDecreasing = false;
-        }
-        Gdx.app.log("INDICATOR!!", "Alpha: " + alpha);
     }
+
+    //TODO: Allow base class to handle an "isDrawing" variable
 
     @Override
     protected void drawBefore(Batch batch, float parentAlpha) {
-        super.drawBefore(batch, parentAlpha);
-        Color c = batch.getColor();
-        batch.setColor(c.r, c.g, c.b, alpha);
+        if(isAlive()){
+            super.drawBefore(batch, parentAlpha);
+            Color c = batch.getColor();
+            batch.setColor(c.r, c.g, c.b, alpha);
+        }
     }
 
     @Override
     protected void drawFull(Batch batch, float parentAlpha) {
-        super.drawFull(batch, parentAlpha);
-        for(int i=0;i<indicatorRegions.size;i++){
-            batch.draw(indicatorRegions.get(i), getX() + (getWidth()/3)*i, getY(), getWidth()/3, getHeight()/2);
+        if(isAlive()){
+            super.drawFull(batch, parentAlpha);
+
+            float indicatorSideSize = indicatorRegions.size <= 3 ? getWidth()/3 : getWidth()/indicatorRegions.size;
+            for(int i=0;i<indicatorRegions.size;i++){
+                batch.draw(indicatorRegions.get(i),
+                           getX() + (indicatorSideSize*i),
+                           getY(),
+                           indicatorSideSize,
+                           indicatorSideSize);
+            }
         }
     }
 
     @Override
     protected void drawAfter(Batch batch, float parentAlpha) {
-        super.drawAfter(batch, parentAlpha);
-        Color c = batch.getColor();
-        batch.setColor(c.r, c.g, c.b, parentAlpha);
+        if(isAlive()){
+            super.drawAfter(batch, parentAlpha);
+            Color c = batch.getColor();
+            batch.setColor(c.r, c.g, c.b, parentAlpha);
+        }
+    }
+
+    private boolean isAlive(){
+        return timeAlive <= lifetime;
     }
 }
