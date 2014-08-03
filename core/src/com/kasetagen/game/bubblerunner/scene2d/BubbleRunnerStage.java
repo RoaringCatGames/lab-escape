@@ -56,7 +56,7 @@ public class BubbleRunnerStage extends Stage {
     private static final float INDICATOR_WIDTH = Gdx.graphics.getWidth()/4;
     private static final float INDICATOR_HEIGHT = Gdx.graphics.getHeight()/4;
 
-    private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, Gdx.graphics.getWidth()/4, (Gdx.graphics.getHeight()/3)*2 }; //old width 160f
+    private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, Gdx.graphics.getWidth()/8, (Gdx.graphics.getHeight()/3) }; //old width 160f
     private static float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), FLOOR_HEIGHT };
     private static float[] wallDimensions = new float[] {Gdx.graphics.getWidth()+FLOOR_HEIGHT,
                                                          FLOOR_HEIGHT, 40f, Gdx.graphics.getHeight()-FLOOR_HEIGHT };
@@ -80,11 +80,12 @@ public class BubbleRunnerStage extends Stage {
      * Time Passed is in Seconds
      */
     private float millisecondsPassed = 0f;
+    private Array<Environment> floorsToRemove;
     private Array<Wall> wallsToRemove;
     private int lastWallAdjustTime = 0;
     private long nextGeneration = 1000L;
     private long millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
-    private float wallVelocity;
+    private float wallAndFloorVelocity;
 
     private float secondsSinceResourceRegen = 0f;
 
@@ -95,8 +96,8 @@ public class BubbleRunnerStage extends Stage {
 
     //Actors
     public Player player;
-    public Actor floor;
     public Array<Wall> walls;
+    public Array<Environment> environmentObjects;
     public Wall collidedWall = null;
     public GameInfo info;
     public Overlay deathOverlay;
@@ -122,20 +123,19 @@ public class BubbleRunnerStage extends Stage {
 
         //Initialize Privates
         wallsToRemove = new Array<Wall>();
+        floorsToRemove = new Array<Environment>();
 
         highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
         mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
 
         //SET WALL VELOCITY
-        wallVelocity = -1f*(getWidth()/2);
+        wallAndFloorVelocity = -1f*(getWidth()/2);
         //Add Player
         initializePlayer(GameInfo.DEFAULT_MAX_FIELDS);
 
-        //Add Floor
-        initializeFloor();
-
         //Initialize Walls
         walls = new Array<Wall>();
+        environmentObjects = new Array<Environment>();
 
         //Setup our InputListeners
         initializeInputListeners();
@@ -151,7 +151,6 @@ public class BubbleRunnerStage extends Stage {
 
         //Initialize HUD (Stats, and GameInfo)
         initializeHUD();
-
     }
 
 
@@ -168,7 +167,13 @@ public class BubbleRunnerStage extends Stage {
 
             //processResourceRegens
             processResources();
-
+            
+            proccessEnvironmentMovement(delta);
+            
+            proccessDestroyedEnvironment();
+            
+            generateEnvironment();
+            
             //Move Walls Closer based on Speed
             processObstacleMovements(delta);
 
@@ -178,7 +183,7 @@ public class BubbleRunnerStage extends Stage {
             //Any walls marked for removal need to be
             //  dropped and disposed of
             processDestroyedWalls();
-
+            
             //Add New Wall(s) based on time
             generateObstacles();
 
@@ -186,6 +191,8 @@ public class BubbleRunnerStage extends Stage {
             adjustDifficulty();
 
             //Adjust Resource Levels
+            
+            player.setZIndex(getActors().size - 1);
 
         }
         particleBubble.update(delta);
@@ -208,10 +215,10 @@ public class BubbleRunnerStage extends Stage {
             secondsSinceResourceRegen = secondsSinceResourceRegen - SECONDS_PER_RESOURCE_REGEN;
         }
     }
-
-    private void processObstacleMovements(float delta){
-        for(Wall w:walls){
-            w.setX(w.getX() + (w.velocity.x * delta));
+    
+    private void proccessEnvironmentMovement(float delta){
+        for(Environment f:environmentObjects){
+            f.setX(f.getX() + (f.velocity.x * delta));
         }
     }
 
@@ -246,6 +253,62 @@ public class BubbleRunnerStage extends Stage {
             if(w.getX() <= (0f-w.getWidth()/2)){
                 wallsToRemove.add(w);
             }
+        }
+    }
+    
+    private void generateEnvironment() {
+    	Environment prevFloor = null;
+    	
+    	if(environmentObjects.size != 0)
+    		prevFloor = environmentObjects.get(environmentObjects.size - 1);
+    		
+    	if(prevFloor != null){
+	    	float prevFloorRightXpos = prevFloor.getX()+prevFloor.getWidth()/2;
+	    	
+	    	if(prevFloorRightXpos < Gdx.graphics.getWidth() + prevFloor.getWidth()){
+		    	Environment floor = new Environment(prevFloorRightXpos, 10, 759, 208, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+		    	
+		    	environmentObjects.add(floor);
+		    	floor.setXVelocity(wallAndFloorVelocity);
+		    	
+		    	addActor(floor);
+		    	floor.setZIndex(0);
+	    	}	
+    	}
+    	
+    	// Add first floor
+    	if(prevFloor == null){
+	    	Environment floor = new Environment(Gdx.graphics.getWidth(), 10, 759, 208, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+	    	
+	    	environmentObjects.add(floor);
+	    	floor.setXVelocity(wallAndFloorVelocity);
+	    	
+	    	addActor(floor);
+	    	floor.setZIndex(0);
+    	}
+    	
+    	if(millisecondsPassed >= nextGeneration){
+	    	Environment pillar = new Environment(Gdx.graphics.getWidth(), 190, 473, 559, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_PILLAR, AssetsUtil.TEXTURE)), Color.GRAY);
+	    	
+	    	environmentObjects.add(pillar);
+	    	pillar.setXVelocity(wallAndFloorVelocity);
+	    	
+	    	addActor(pillar);
+    	}
+    }
+    
+    private void proccessDestroyedEnvironment(){
+        for(Environment f:environmentObjects){
+        	if(f.getOriginX()+f.getWidth()/2 < 0){
+        		environmentObjects.removeValue(f, true);
+        		f.remove();
+        	}
+        }
+    }
+    
+    private void processObstacleMovements(float delta){
+        for(Wall w:walls){
+            w.setX(w.getX() + (w.velocity.x * delta));
         }
     }
 
@@ -285,7 +348,7 @@ public class BubbleRunnerStage extends Stage {
                         fft,
                         assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS),
                         getAnimationNameForForceFieldType(fft));
-                w.setXVelocity(wallVelocity);
+                w.setXVelocity(wallAndFloorVelocity);
                 walls.add(w);
                 addActor(w);
                 w.setZIndex(0);
@@ -539,14 +602,6 @@ public class BubbleRunnerStage extends Stage {
         particleBubble = assetManager.get(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
         particleBubble.start();
         particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
-    }
-
-    private void initializeFloor() {
-        floor = new Floor(floorDimensions[0],
-                floorDimensions[1],
-                floorDimensions[2],
-                floorDimensions[3]);
-        addActor(floor);
     }
 
     private void initializeHUD() {
