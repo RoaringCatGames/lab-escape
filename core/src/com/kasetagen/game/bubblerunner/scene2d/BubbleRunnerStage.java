@@ -191,9 +191,9 @@ public class BubbleRunnerStage extends BaseStage {
             adjustDifficulty();
 
             //Adjust Resource Levels
-            
-            player.setZIndex(getActors().size - 1);
 
+            info.setZIndex(getActors().size - 1);
+            player.setZIndex(getActors().size - 2);
         }
         particleBubble.update(delta);
 		particleBubble.setPosition(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 4);
