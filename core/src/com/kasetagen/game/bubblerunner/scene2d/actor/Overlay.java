@@ -59,7 +59,7 @@ public class Overlay extends GenericGroup {
         addActor(subLabel);
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = subFont;
+        style.font = mainFont;
         style.fontColor =  Color.CYAN;
         style.overFontColor = Color.RED;
         style.downFontColor = Color.GRAY;

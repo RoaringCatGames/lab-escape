@@ -13,12 +13,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.delegate.IStageManager;
+import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
 import com.kasetagen.game.bubblerunner.scene2d.actor.GenericActor;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
+import com.kasetagen.game.bubblerunner.util.ViewportUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,7 +44,8 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
     private Music bgMusic;
     public BubbleRunnerMenu(IGameProcessor delegate){
         this.gameProcessor = delegate;
-        stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        stage = new BaseStage();
+
         bgMusic = delegate.getAssetManager().get(AssetsUtil.BACKGROUND_SOUND, AssetsUtil.MUSIC);
         bgMusic.setVolume(delegate.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY));
         bgMusic.play();

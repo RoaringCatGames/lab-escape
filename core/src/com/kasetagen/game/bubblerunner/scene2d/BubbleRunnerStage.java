@@ -1,24 +1,23 @@
 package com.kasetagen.game.bubblerunner.scene2d;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.FillViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.data.GameStats;
@@ -27,6 +26,7 @@ import com.kasetagen.game.bubblerunner.data.WallPattern;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
+import com.kasetagen.game.bubblerunner.util.ViewportUtil;
 
 import java.util.Random;
 
@@ -35,9 +35,9 @@ import java.util.Random;
  * User: barry
  * Date: 5/27/14
  * Time: 7:37 PM
- * To change this template use File | Settings | File Templates.
+ * This is our main game processing class.
  */
-public class BubbleRunnerStage extends Stage {
+public class BubbleRunnerStage extends BaseStage {
 
 
     private static final float HUD_HEIGHT = 40f;
@@ -49,18 +49,18 @@ public class BubbleRunnerStage extends Stage {
     private static final float TIME_DECREASE = 100f;
     private static final float MIN_TIME_BETWEEN_WALLS = 300f;
 
-    private static final int SECONDS_PER_RESOURCE_REGEN = 2;
+    //private static final int SECONDS_PER_RESOURCE_REGEN = 2;
 
 
     //Order of values:  xPos, yPos, width, height
-    private static final float INDICATOR_WIDTH = Gdx.graphics.getWidth()/4;
-    private static final float INDICATOR_HEIGHT = Gdx.graphics.getHeight()/4;
+    private static final float INDICATOR_WIDTH = ViewportUtil.VP_WIDTH/4;
+    private static final float INDICATOR_HEIGHT = ViewportUtil.VP_HEIGHT/4;
 
-    private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, Gdx.graphics.getWidth()/8, (Gdx.graphics.getHeight()/3) }; //old width 160f
-    private static float[] floorDimensions = new float[] { 0f, 0f, Gdx.graphics.getWidth(), FLOOR_HEIGHT };
-    private static float[] wallDimensions = new float[] {Gdx.graphics.getWidth()+FLOOR_HEIGHT,
-                                                         FLOOR_HEIGHT, 40f, Gdx.graphics.getHeight()-FLOOR_HEIGHT };
-    private static float[] warningIndicatorDimensions = new float[] {Gdx.graphics.getWidth()/2 - (INDICATOR_WIDTH/2), Gdx.graphics.getHeight()/2-(INDICATOR_HEIGHT/2),
+    private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, ViewportUtil.VP_WIDTH/8, (ViewportUtil.VP_HEIGHT/3) }; //old width 160f
+    //private static float[] floorDimensions = new float[] { 0f, 0f, ViewportUtil.VP_WIDTH, FLOOR_HEIGHT };
+    private static float[] wallDimensions = new float[] {ViewportUtil.VP_WIDTH+FLOOR_HEIGHT,
+                                                         FLOOR_HEIGHT, 40f, ViewportUtil.VP_HEIGHT-FLOOR_HEIGHT };
+    private static float[] warningIndicatorDimensions = new float[] {ViewportUtil.VP_WIDTH/2 - (INDICATOR_WIDTH/2), ViewportUtil.VP_HEIGHT/2-(INDICATOR_HEIGHT/2),
                                                                      INDICATOR_WIDTH, INDICATOR_HEIGHT};
 
     private static ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.LIGHTNING, ForceFieldType.PLASMA, ForceFieldType.LASER};
@@ -80,7 +80,7 @@ public class BubbleRunnerStage extends Stage {
      * Time Passed is in Seconds
      */
     private float millisecondsPassed = 0f;
-    private Array<Environment> floorsToRemove;
+    //private Array<Environment> floorsToRemove;
     private Array<Wall> wallsToRemove;
     private int lastWallAdjustTime = 0;
     private long nextGeneration = 1000L;
@@ -103,7 +103,7 @@ public class BubbleRunnerStage extends Stage {
     public Overlay deathOverlay;
     public ControlGroup controls;
 
-    //Ambience (Music and Effects
+    //Ambiance (Music and Effects
     private WarningIndicator warningIndicator;
     private Music music;
     private Sound zapSound;
@@ -112,18 +112,18 @@ public class BubbleRunnerStage extends Stage {
     //TODO: Move into Player?
     private ParticleEffect particleBubble;
 
-    private float bgVolume;
     private float sfxVolume;
 
 
     public BubbleRunnerStage(IGameProcessor gameProcessor){
+        super();
         this.gameProcessor = gameProcessor;
     	assetManager = this.gameProcessor.getAssetManager();
     	batch = this.getBatch();
 
         //Initialize Privates
         wallsToRemove = new Array<Wall>();
-        floorsToRemove = new Array<Environment>();
+        //floorsToRemove = new Array<Environment>();
 
         highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
         mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
@@ -265,8 +265,9 @@ public class BubbleRunnerStage extends Stage {
     		
     	if(prevFloor != null){
 	    	float prevFloorRightXpos = prevFloor.getX()+prevFloor.getWidth()/2;
-	    	
-	    	if(prevFloorRightXpos < Gdx.graphics.getWidth() + prevFloor.getWidth()){
+
+
+	    	if(prevFloorRightXpos < ViewportUtil.VP_WIDTH + prevFloor.getWidth()){
 		    	Environment floor = new Environment(prevFloorRightXpos, 10, 759, 208, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
 		    	
 		    	environmentObjects.add(floor);
@@ -279,7 +280,7 @@ public class BubbleRunnerStage extends Stage {
     	
     	// Add first floor
     	if(prevFloor == null){
-	    	Environment floor = new Environment(Gdx.graphics.getWidth(), 10, 759, 208, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+	    	Environment floor = new Environment(ViewportUtil.VP_WIDTH, 10, 759, 208, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
 	    	
 	    	environmentObjects.add(floor);
 	    	floor.setXVelocity(wallAndFloorVelocity);
@@ -289,7 +290,7 @@ public class BubbleRunnerStage extends Stage {
     	}
     	
     	if(millisecondsPassed >= nextGeneration){
-	    	Environment pillar = new Environment(Gdx.graphics.getWidth(), 190, 473, 559, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_PILLAR, AssetsUtil.TEXTURE)), Color.GRAY);
+	    	Environment pillar = new Environment(ViewportUtil.VP_WIDTH, 190, 473, 559, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_PILLAR, AssetsUtil.TEXTURE)), Color.GRAY);
 	    	
 	    	environmentObjects.add(pillar);
 	    	pillar.setXVelocity(wallAndFloorVelocity);
@@ -324,7 +325,7 @@ public class BubbleRunnerStage extends Stage {
     private void generateObstacles() {
         if(millisecondsPassed >= nextGeneration){
             WallPattern wp = getRandomWallPattern();
-            boolean addAfter = warningIndicator == null;
+            //boolean addAfter = warningIndicator == null;
             if(warningIndicator != null){
                 warningIndicator.remove();
             }
@@ -570,7 +571,7 @@ public class BubbleRunnerStage extends Stage {
 ///INITIALIZERS
 //--------------
     private void initializeAmbience() {
-        bgVolume = gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
+        float bgVolume = gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
         music = assetManager.get(AssetsUtil.ALT_BG_MUSIC, AssetsUtil.MUSIC);
         music.setVolume(bgVolume);
         music.play();
@@ -614,7 +615,7 @@ public class BubbleRunnerStage extends Stage {
 
     private void initializeHUD() {
         float infoX = 0f;
-        float infoY = Gdx.graphics.getHeight() - HUD_HEIGHT;
+        float infoY = ViewportUtil.VP_HEIGHT - HUD_HEIGHT;
         float infoWidth = getWidth();
         float infoHeight = HUD_HEIGHT;
         info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT), controls);
@@ -639,19 +640,6 @@ public class BubbleRunnerStage extends Stage {
                     resetGame();
                 }
                 return super.keyDown(event, keycode);
-            }
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-
-//                if(isDead){
-//                    Actor a = hit(x, y, true);
-//                    if(a != null && a instanceof Overlay){
-//                        resetGame();
-//                    }
-//                }
-
-                return super.touchDown(event, x, y, pointer, button);
             }
         };
 

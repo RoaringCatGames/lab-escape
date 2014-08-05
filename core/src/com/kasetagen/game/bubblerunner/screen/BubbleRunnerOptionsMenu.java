@@ -15,7 +15,9 @@ import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
+import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
+import com.kasetagen.game.bubblerunner.util.ViewportUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,12 +36,12 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
     public BubbleRunnerOptionsMenu(IGameProcessor delegate){
         super(delegate);
 
-        stage = new Stage(new ExtendViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
+        stage = new BaseStage();
 
         Skin skin = gameProcessor.getAssetManager().get(AssetsUtil.DEFAULT_SKIN, AssetsUtil.SKIN);
 
         bgVolumeSet = new Slider(0f, 1f, 0.1f, false, skin); //new Slider(0f, 1f, 0.1f, false, sliderStyle);
-        bgVolumeSet.setPosition(Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight()*(5f/8f));
+        bgVolumeSet.setPosition(ViewportUtil.VP_WIDTH / 3, ViewportUtil.VP_HEIGHT*(5f/8f));
         bgVolumeSet.setValue(delegate.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY));
 
         bgDataSaver = new IDataSaver() {
@@ -61,7 +63,7 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
 
 
         sfxVolumeSet = new Slider(0f, 1f, 0.1f, false, skin); //new Slider(0f, 1f, 0.1f, false, sliderStyle);
-        sfxVolumeSet.setPosition(Gdx.graphics.getWidth() / 3, Gdx.graphics.getHeight()*(3f/8f));
+        sfxVolumeSet.setPosition(ViewportUtil.VP_WIDTH / 3, ViewportUtil.VP_HEIGHT*(3f/8f));
         sfxVolumeSet.setValue(delegate.getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY));
 
         sfxDataSaver = new IDataSaver() {
