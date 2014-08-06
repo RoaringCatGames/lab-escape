@@ -308,7 +308,7 @@ public class BubbleRunnerStage extends BaseStage {
 
 	    	if(prevFloorRightXpos < ViewportUtil.VP_WIDTH + prevFloor2.getWidth()){
 		    	Environment floor = new Environment(prevFloorRightXpos, 210, 759, 100, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
-		    	floor.setXVelocity(wallAndFloorVelocity);
+		    	floor.setXVelocity(wallAndFloorVelocity - 100);
 		    	
 		    	EnvironmentManager.addActor(floor, true, EnvironmentType.BACKFLOOR.toString());
 	    	}	
@@ -317,7 +317,7 @@ public class BubbleRunnerStage extends BaseStage {
     	// Add first floor
     	if(prevFloor2 == null){
 	    	Environment floor = new Environment(ViewportUtil.VP_WIDTH, 210, 759, 100, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
-	    	floor.setXVelocity(wallAndFloorVelocity);
+	    	floor.setXVelocity(wallAndFloorVelocity - 100);
 	    	
 	    	EnvironmentManager.addActor(floor, false, EnvironmentType.BACKFLOOR.toString());
     	}
