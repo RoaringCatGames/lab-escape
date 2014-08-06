@@ -8,19 +8,11 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
  * To change this template use File | Settings | File Templates.
  */
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.kasetagen.game.bubblerunner.util.ForceFieldColorUtil;
 
 public class Environment extends GenericActor {
-	private static final float WALL_CYCLE_RATE = 1f/8f;
-
-    public ForceFieldType forceFieldType;
     public Vector2 velocity;
-    private Animation animation;
-    private float keyFrameTime = 0f;
     
     public Environment(float x, float y, float width, float height,
 			TextureRegion textureRegion, Color color) {
