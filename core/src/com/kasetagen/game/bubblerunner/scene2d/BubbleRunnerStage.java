@@ -1,5 +1,6 @@
 package com.kasetagen.game.bubblerunner.scene2d;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
@@ -20,6 +21,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
+import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.data.IDataSaver;
@@ -111,6 +113,7 @@ public class BubbleRunnerStage extends BaseStage {
     //TODO: Move into Player?
     private ParticleEffect particleBubble;
 
+    private float bgVolume;
     private float sfxVolume;
     
     private enum EnvironmentType {BACKFLOOR, FLOOR, PILLAR, PLAYER};
@@ -589,13 +592,18 @@ public class BubbleRunnerStage extends BaseStage {
 ////
 ///INITIALIZERS
 //--------------
+    private void initializeVolumes(){
+        bgVolume = gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
+        sfxVolume = gameProcessor.getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY);
+    }
+
     private void initializeAmbience() {
-        float bgVolume = gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
+
+        initializeVolumes();
         music = assetManager.get(AssetsUtil.ALT_BG_MUSIC, AssetsUtil.MUSIC);
         music.setVolume(bgVolume);
         music.play();
 
-        sfxVolume = gameProcessor.getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY);
         zapSound = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         powerOnSound = assetManager.get(AssetsUtil.POWER_ON_SOUND, AssetsUtil.SOUND);
         explosionSound = assetManager.get(AssetsUtil.EXPLOSION_SOUND, AssetsUtil.SOUND);
@@ -662,6 +670,8 @@ public class BubbleRunnerStage extends BaseStage {
                     KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
                 }else if(Input.Keys.SPACE == keycode){
                     resetGame();
+                }else if(Input.Keys.ESCAPE == keycode){
+                    gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
                 }
                 return super.keyDown(event, keycode);
             }
@@ -762,5 +772,10 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
 
+    public void resume(){
+        Gdx.app.log("RESUMING", "APPLICATION RESUMING");
+        initializeVolumes();
+        music.setVolume(bgVolume);
+    }
 
 }

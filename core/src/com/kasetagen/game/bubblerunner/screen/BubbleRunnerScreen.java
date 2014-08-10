@@ -104,7 +104,7 @@ public class BubbleRunnerScreen extends ApplicationAdapter implements Screen, In
 
     @Override
     public void show() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        stage.resume();
     }
 
     @Override

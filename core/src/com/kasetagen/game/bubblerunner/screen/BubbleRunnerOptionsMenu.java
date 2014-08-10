@@ -35,7 +35,7 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
 
 
     private String getFloatStringVal(float val){
-        return Integer.toString((int)Math.floor(val * 10));
+        return Integer.toString((int) Math.floor(val * 10));
     }
 
     private IDataSaver bgDataSaver, sfxDataSaver;
@@ -92,13 +92,13 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         });
 
 
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = gameProcessor.getAssetManager().get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
-        style.fontColor =  Color.CYAN;
-        style.overFontColor = Color.RED;
-        style.downFontColor = Color.GRAY;
-        float fontScale = 2f;
-        style.font.setScale(fontScale);
+//        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+//        style.font = gameProcessor.getAssetManager().get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
+//        style.fontColor =  Color.CYAN;
+//        style.overFontColor = Color.RED;
+//        style.downFontColor = Color.GRAY;
+//        float fontScale = 2f;
+//        style.font.setScale(fontScale);
 
         backToMainMenuButton = new TextButton("Back to Main Menu", skin);
         backToMainMenuButton.addListener(new ClickListener(){
@@ -108,37 +108,32 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
             }
         });
 
-        int colWidth = 100;
+        float colWidth = stage.getWidth()/3;
+        float colHeight = stage.getHeight()/5;
         Table table = new Table(skin);
         table.setFillParent(true);
         stage.addActor(table);
+        table.columnDefaults(0).right();
+        table.columnDefaults(1).center().width(colWidth).height(colHeight);
+        table.columnDefaults(2).expandX().left().padLeft(50);
 
-        table.add().expandX();
-        table.add(bgVolLbl).width(colWidth);
-        table.add(bgVolumeSet).width(colWidth);
-        table.add(bgValue).width(colWidth);
-        table.add().expandX();
-        table.row();
-
-        table.add().expandX();
-        table.add(sfxVolLbl).width(colWidth);
-        table.add(sfxVolumeSet).width(colWidth);
-        table.add(sfxValue).width(colWidth);
-        table.add().expandX();
+        table.add(bgVolLbl).right();
+        table.add(bgVolumeSet);
+        table.add(bgValue);
 
         table.row();
-        table.add().expandX();
-        table.add().expandX();
-        table.add(backToMainMenuButton);
-        table.add().expandX();
-        table.add().expandX();
-        table.debug();
+        table.add(sfxVolLbl).right();
+        table.add(sfxVolumeSet);
+        table.add(sfxValue);
+
+        table.row();
+        table.add();
+        table.add(backToMainMenuButton).height(colHeight/2);
+        table.add();
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
     }
-
-
 }
