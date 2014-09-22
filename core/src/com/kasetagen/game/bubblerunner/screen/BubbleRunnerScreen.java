@@ -1,11 +1,15 @@
 package com.kasetagen.game.bubblerunner.screen;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.delegate.IStageManager;
 import com.kasetagen.game.bubblerunner.scene2d.BubbleRunnerStage;
+import com.kasetagen.game.bubblerunner.scene2d.actor.GenericActor;
+import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
 /**
  * Created with IntelliJ IDEA.

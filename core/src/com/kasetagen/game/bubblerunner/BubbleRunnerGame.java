@@ -95,6 +95,8 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         
         assetManager.load(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.FLOOR_PILLAR, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.WALL, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.BACKGROUND, AssetsUtil.TEXTURE);
         
         assetManager.load(AssetsUtil.ENERGY_BAR, AssetsUtil.TEXTURE);
 
