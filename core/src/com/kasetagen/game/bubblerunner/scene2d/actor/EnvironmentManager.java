@@ -25,7 +25,7 @@ public class EnvironmentManager {
     	}
     }
     
-    public static void addActor(Environment env, boolean isAscending, String key){
+    public static void addActor(Environment env, boolean isAscendingOrder, String key){
     	EnvironmentGroup envGroup = null;
     	
     	// Add envGroup if missing;
@@ -33,7 +33,7 @@ public class EnvironmentManager {
     	
     	envGroup = envGroupMap.get(key);
     	
-    	if(isAscending || envGroup.getChildren().size == 0)
+    	if(isAscendingOrder || envGroup.getChildren().size == 0)
     		envGroup.addActor(env);
     	else{
     		envGroup.addActor(env);
