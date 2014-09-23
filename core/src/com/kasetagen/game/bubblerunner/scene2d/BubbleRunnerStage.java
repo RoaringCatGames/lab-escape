@@ -116,7 +116,7 @@ public class BubbleRunnerStage extends BaseStage {
     private float bgVolume;
     private float sfxVolume;
     
-    private enum EnvironmentType {WALL, FLOOR, PILLAR, PLAYER, BACKFLOOR};
+    private enum EnvironmentType {WALL, FLOOR, PILLAR, PLAYER, BACKFLOOR, OBSTACLES};
     
     public BubbleRunnerStage(IGameProcessor gameProcessor){
         super();
@@ -142,6 +142,8 @@ public class BubbleRunnerStage extends BaseStage {
         initializePlayer(GameInfo.DEFAULT_MAX_FIELDS);
         
         initializeEnvironmentGroups();
+        
+        initializeStartingScene();
 
         //Initialize Walls
         walls = new Array<Wall>();
@@ -161,9 +163,6 @@ public class BubbleRunnerStage extends BaseStage {
         //Initialize HUD (Stats, and GameInfo)
         initializeHUD();
     }
-
-
-
 
     @Override
     public void act(float delta) {
@@ -230,6 +229,7 @@ public class BubbleRunnerStage extends BaseStage {
     private void proccessEnvironmentMovement(float delta){
     	// temp parameters
     	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.FLOOR.toString());
+    	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.OBSTACLES.toString());
     	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.PILLAR.toString());
     	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.BACKFLOOR.toString());
     	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.WALL.toString());
@@ -673,6 +673,20 @@ public class BubbleRunnerStage extends BaseStage {
     	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACKFLOOR.toString()));
     	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()));
     	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.PILLAR.toString()));
+    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.OBSTACLES.toString()));
+    }
+    
+    private void initializeStartingScene(){
+
+    	if(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()) != null){
+	    	Environment floor = new Environment(-378, 10, 757, 208, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+	    	floor.setXVelocity(wallAndFloorVelocity);
+	    	EnvironmentManager.addActor(floor, false, EnvironmentType.FLOOR.toString());
+	    	
+	    	Environment floor2 = new Environment(-378, 210, 757, 100, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+	    	floor2.setXVelocity(wallAndFloorVelocity + 50);
+	    	EnvironmentManager.addActor(floor2, false, EnvironmentType.BACKFLOOR.toString());	
+    	}
     }
 
     private void initializeHUD() {
@@ -752,7 +766,6 @@ public class BubbleRunnerStage extends BaseStage {
         currentListener = createAndLeaveListener;
     }
 
-
     private void initializeButtonControls(){
 
         controls = new ControlGroup(0, 0, getWidth(), 60f, Color.CYAN);
@@ -799,7 +812,6 @@ public class BubbleRunnerStage extends BaseStage {
 
         addActor(controls);
     }
-
 
     public void resume(){
         Gdx.app.log("RESUMING", "APPLICATION RESUMING");
