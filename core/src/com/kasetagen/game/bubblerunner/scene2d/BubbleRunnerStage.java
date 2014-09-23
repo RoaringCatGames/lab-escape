@@ -768,6 +768,7 @@ public class BubbleRunnerStage extends BaseStage {
             }
         }, true, ForceFieldType.LASER);
 
+        controls.setEnergyBar(assetManager.get(AssetsUtil.ENERGY_BAR, AssetsUtil.TEXTURE));
         addActor(controls);
     }
 

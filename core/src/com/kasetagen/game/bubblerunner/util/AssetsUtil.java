@@ -63,10 +63,10 @@ public class AssetsUtil {
 
     //Audio Paths
     public static final String ALT_BG_MUSIC = "audio/NeverStopRunning.mp3";
-    public static final String ZAP_SOUND = "audio/zap.ogg";
-    public static final String BACKGROUND_SOUND = "audio/bkmusic.ogg";
-    public static final String EXPLOSION_SOUND = "audio/explosion.ogg";
-    public static final String POWER_ON_SOUND = "audio/power-on.ogg";
+    public static final String ZAP_SOUND = "audio/zap.mp3";
+    public static final String BACKGROUND_SOUND = "audio/bkmusic.mp3";
+    public static final String EXPLOSION_SOUND = "audio/explosion.mp3";
+    public static final String POWER_ON_SOUND = "audio/power-on.mp3";
     
     //Particle Paths
     public static final String BUBBLE_PARTICLE = "particles/bubbleflame_right.p";

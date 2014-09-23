@@ -2,6 +2,7 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
@@ -23,7 +24,7 @@ public class ControlGroup extends GenericGroup{
     private static final float BUTTON_HEIGHT = 150f;
     private static final float BUTTON_PADDING = 10f;
 
-    private static final float BAR_START = BUTTON_WIDTH * 3.5f;
+    private static final float BAR_START = BUTTON_WIDTH * 4f;
 
     private static int RESOURCE_MAX = 20;
     private static int OVERHEAT_POINT = 40;
@@ -33,6 +34,7 @@ public class ControlGroup extends GenericGroup{
 
     private int heatScore = 0;
 
+    private Texture energyBar = null;
 
     private Array<ForceFieldImageButton> buttons;
 
@@ -42,12 +44,6 @@ public class ControlGroup extends GenericGroup{
 
     public ControlGroup(float x, float y, float width, float height, Color color){
         super(x, y, width, height, color);
-
-//        resourceLevels = new ObjectMap<ForceFieldType, Integer>();
-//        resourceLevels.put(ForceFieldType.LASER, RESOURCE_MAX);
-//        resourceLevels.put(ForceFieldType.LIGHTNING, RESOURCE_MAX);
-//        resourceLevels.put(ForceFieldType.PLASMA, RESOURCE_MAX);
-
         buttons = new Array<ForceFieldImageButton>();
     }
 
@@ -70,6 +66,11 @@ public class ControlGroup extends GenericGroup{
         buttonCount++;
     }
 
+    public void setEnergyBar(Texture barTexture){
+        energyBar = barTexture;
+    }
+
+
     public int getResourceLevel(ForceFieldType fft){
         return heatScore;
         //return resourceLevels.get(fft);
@@ -91,8 +92,8 @@ public class ControlGroup extends GenericGroup{
     }
 
     @Override
-    protected void drawAfter(Batch batch, float parentAlpha) {
-        super.drawAfter(batch, parentAlpha);
+    protected void drawBefore(Batch batch, float parentAlpha) {
+        super.drawBefore(batch, parentAlpha);
         batch.end();
         batch.begin();
         debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -100,12 +101,21 @@ public class ControlGroup extends GenericGroup{
         float barLength = barTotalLength*((float)heatScore/(float)OVERHEAT_POINT);
         Color c = heatScore >= OVERHEAT_POINT ? Color.RED : Color.ORANGE;
         debugRenderer.setColor(c);
-        debugRenderer.rect(BAR_START, getY(), barLength, getHeight());
+        debugRenderer.rect(BAR_START, getY()+(getHeight()/4)+4, barLength, (getHeight()/2)-6);
         //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
         // coming in.
         debugRenderer.end();
         batch.end();
         batch.begin();
 
+    }
+
+    @Override
+    protected void drawAfter(Batch batch, float parentAlpha) {
+        super.drawAfter(batch, parentAlpha);
+
+        if(energyBar != null){
+            batch.draw(energyBar, BAR_START, getY()+(getHeight()/4), getWidth()-BAR_START, getHeight()/2);
+        }
     }
 }
