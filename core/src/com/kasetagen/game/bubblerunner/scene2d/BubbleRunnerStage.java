@@ -200,8 +200,12 @@ public class BubbleRunnerStage extends BaseStage {
 
             //Adjust Resource Levels
 
-            info.setZIndex(getActors().size - 1);
-            player.setZIndex(getActors().size - 2);
+            int index = getActors().size - 1;
+            info.setZIndex(index--);
+            player.setZIndex(index--);
+            for(Wall w:walls){
+                w.setZIndex(index--);
+            }
         }
         particleBubble.update(delta);
 		particleBubble.setPosition(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 4);
@@ -213,7 +217,7 @@ public class BubbleRunnerStage extends BaseStage {
         super.draw();
         
         batch.begin();
-        particleBubble.draw(batch);
+        //particleBubble.draw(batch);
         batch.end();
     }
 
@@ -403,7 +407,6 @@ public class BubbleRunnerStage extends BaseStage {
                 w.setXVelocity(wallAndFloorVelocity);
                 walls.add(w);
                 addActor(w);
-                w.setZIndex(0);
             }
 
             nextGeneration += millisBetweenWalls;
