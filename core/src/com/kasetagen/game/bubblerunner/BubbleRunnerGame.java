@@ -2,6 +2,7 @@ package com.kasetagen.game.bubblerunner;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
@@ -36,6 +37,12 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
 
 	@Override
 	public void create () {
+
+//        Graphics.DisplayMode dm = Gdx.graphics.getDesktopDisplayMode();
+//        Gdx.app.log("DISPLAY", "W: " + dm.width + " H: " + dm.height + " X: " + dm.bitsPerPixel);
+//        Gdx.graphics.setDisplayMode(dm.width, dm.height, true);
+//        Gdx.graphics.setVSync(true);
+//        Gdx.input.setCursorCatched(true);
         assetManager = new AssetManager();
         loadAssets();
 	}
@@ -126,7 +133,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
             }
 
             setScreen(menu);
-            Gdx.input.setInputProcessor(menu.getStage());
+            Gdx.input.setInputProcessor(menu);
 
         }else if(RUNNER.equalsIgnoreCase(screenName)){
             //Load the Game Screen!!

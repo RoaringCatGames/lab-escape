@@ -111,13 +111,34 @@ yarn-man/yarn-man
   index: 2
 
 animations2.png
-size: 1838,2502
+size: 3520,4040
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+newwall/obstacle_blue
+  rotate: false
+  xy: 1838, 2020
+  size: 839, 2018
+  orig: 839, 2018
+  offset: 0, 0
+  index: -1
+newwall/obstacle_green
+  rotate: false
+  xy: 2679, 2020
+  size: 839, 2018
+  orig: 839, 2018
+  offset: 0, 0
+  index: -1
+newwall/obstacle_red
+  rotate: false
+  xy: 1838, 0
+  size: 839, 2018
+  orig: 839, 2018
+  offset: 0, 0
+  index: -1
 yarn-man/yarn-man
   rotate: false
-  xy: 0, 0
+  xy: 0, 1538
   size: 1836, 2500
   orig: 1836, 2500
   offset: 0, 0

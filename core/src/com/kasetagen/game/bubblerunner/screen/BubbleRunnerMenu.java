@@ -1,9 +1,6 @@
 package com.kasetagen.game.bubblerunner.screen;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -93,7 +90,6 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
         optionsButton.addListener(listener);
 
         stage.addActor(optionsButton);
-
     }
 
     @Override
@@ -138,8 +134,13 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
 //
     @Override
     public boolean keyDown(int keycode) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        if(keycode == Input.Keys.SPACE){
+            gameProcessor.changeToScreen(BubbleRunnerGame.RUNNER);
+        }
+
+        return false;
     }
+
 
     @Override
     public boolean keyUp(int keycode) {

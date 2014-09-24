@@ -417,13 +417,13 @@ public class BubbleRunnerStage extends BaseStage {
         String name;
         switch(fft){
             case LIGHTNING:
-                name = "walls/light-wall";
+                name = "newwall/obstacle_blue";//"walls/light-wall";
                 break;
             case PLASMA:
-                name = "walls/plasma-wall";
+                name = "newwall/obstacle_green";//"walls/plasma-wall";
                 break;
             case LASER:
-                name = "walls/discharge-wall";
+                name = "newwall/obstacle_red";//"walls/discharge-wall";
                 break;
             default:
                 name = "walls/light-wall";
