@@ -705,11 +705,11 @@ public class BubbleRunnerStage extends BaseStage {
         createAndLeaveListener = new InputListener(){
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if(Input.Keys.A == keycode){
+                if(Input.Keys.A == keycode || Input.Keys.LEFT == keycode){  //Or Left
                     addLightningField();
-                }else if(Input.Keys.S == keycode){
+                }else if(Input.Keys.S == keycode || Input.Keys.DOWN == keycode){ //Or Down
                     addPlasmaField();
-                }else if(Input.Keys.D == keycode){
+                }else if(Input.Keys.D == keycode || Input.Keys.RIGHT == keycode){  //Or Right
                     addLaserField();
                 }else if(Input.Keys.TAB == keycode){
                     //toggleListener();

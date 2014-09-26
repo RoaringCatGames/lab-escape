@@ -102,7 +102,7 @@ public class Overlay extends GenericGroup {
         debugRenderer.setColor(getColor());
         Color c = Color.WHITE;//getColor();
         debugRenderer.setColor(c.r, c.g, c.b, 0.1f);
-        debugRenderer.rect(getX(), getY(), getWidth(), getHeight(), getOriginX(), getOriginY(), getRotation());
+        debugRenderer.rect(getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
         // coming in.
         debugRenderer.end();
