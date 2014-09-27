@@ -66,7 +66,7 @@ public class Overlay extends GenericGroup {
         float fontScale = 1f;
         style.font.setScale(fontScale);
 
-        dismissButton = new TextButton("Replay", style);
+        dismissButton = new TextButton("Press A to Replay", style);
         dismissButton.setPosition(getWidth()/2 - dismissButton.getWidth()/2,
                                   subLabel.getY() - (dismissButton.getHeight()/2) - VERTICAL_PADDING);
         addActor(dismissButton);
@@ -102,7 +102,7 @@ public class Overlay extends GenericGroup {
         debugRenderer.setColor(getColor());
         Color c = Color.WHITE;//getColor();
         debugRenderer.setColor(c.r, c.g, c.b, 0.1f);
-        debugRenderer.rect(getX(), getY(), getWidth(), getHeight(), getOriginX(), getOriginY(), getRotation());
+        debugRenderer.rect(getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
         // coming in.
         debugRenderer.end();

@@ -1,11 +1,9 @@
 package com.kasetagen.game.bubblerunner.screen;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -15,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
@@ -56,7 +55,7 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                bgMusic.stop();;
+                bgMusic.stop();
                 Actor btn = event.getListenerActor();
 
                 if(btn == startGameButton){
@@ -82,54 +81,59 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
         float fontScale = 2f;
         style.font.setScale(fontScale);
 
-        startGameButton = new TextButton("Play Game", style);
+        startGameButton = new TextButton("Press A to Start", style);
         startGameButton.addListener(listener);
         startGameButton.setPosition(((stage.getWidth()/4) * 3) - startGameButton.getWidth()/2, (stage.getHeight()/4));
 
         stage.addActor(startGameButton);
 
-        optionsButton = new TextButton("Options", style);
+        optionsButton = new TextButton("", style);
         optionsButton.setPosition(((stage.getWidth() / 4) * 3) - startGameButton.getWidth() / 2, (stage.getHeight() / 8));
         optionsButton.addListener(listener);
 
         stage.addActor(optionsButton);
-
     }
 
     @Override
     public void render(float delta) {
         stage.act(delta);
+
+        Viewport vp = stage.getViewport();
+        int screenW = vp.getScreenWidth();
+        int screenH = vp.getScreenHeight();
+        int leftCrop = vp.getLeftGutterWidth();
+        int bottomCrop = vp.getBottomGutterHeight();
+        int xPos = leftCrop;
+        int yPos = bottomCrop;
+
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
         stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        stage.getViewport().update(width, height);
     }
 
     @Override
     public void show() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void hide() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void pause() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void resume() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void dispose() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
 
@@ -138,8 +142,14 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
 //
     @Override
     public boolean keyDown(int keycode) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        if(keycode == Input.Keys.SPACE){
+            bgMusic.stop();
+            gameProcessor.changeToScreen(BubbleRunnerGame.RUNNER);
+        }
+
+        return false;
     }
+
 
     @Override
     public boolean keyUp(int keycode) {

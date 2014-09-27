@@ -135,5 +135,5 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
     @Override
     public void render(float delta) {
         super.render(delta);
-    }
+}
 }

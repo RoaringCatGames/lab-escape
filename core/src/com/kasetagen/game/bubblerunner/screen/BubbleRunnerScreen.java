@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.delegate.IStageManager;
 import com.kasetagen.game.bubblerunner.scene2d.BubbleRunnerStage;
@@ -87,6 +88,15 @@ public class BubbleRunnerScreen extends ApplicationAdapter implements Screen, In
     //Screen
     @Override
     public void render(float delta) {
+        Viewport vp = stage.getViewport();
+        int screenW = vp.getScreenWidth();
+        int screenH = vp.getScreenHeight();
+        int leftCrop = vp.getLeftGutterWidth();
+        int bottomCrop = vp.getBottomGutterHeight();
+        int xPos = leftCrop;
+        int yPos = bottomCrop;
+
+        Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
         Gdx.gl.glClearColor(bgCurrent, bgCurrent, bgCurrent, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -114,5 +124,11 @@ public class BubbleRunnerScreen extends ApplicationAdapter implements Screen, In
     @Override
     public void hide() {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        stage.getViewport().update(width, height);
     }
 }

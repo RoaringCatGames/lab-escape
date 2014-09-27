@@ -116,6 +116,8 @@ public class BubbleRunnerStage extends BaseStage {
 
     private float bgVolume;
     private float sfxVolume;
+
+    private GenericActor instructions;
     
     private enum EnvironmentType {WALL, FLOOR, PILLAR, PLAYER, BACKFLOOR, OBSTACLES};
     
@@ -163,13 +165,19 @@ public class BubbleRunnerStage extends BaseStage {
 
         //Initialize HUD (Stats, and GameInfo)
         initializeHUD();
+
+        TextureRegion instructionsRegion = new TextureRegion(assetManager.get(AssetsUtil.CONTROLS, AssetsUtil.TEXTURE));
+        instructions = new GenericActor(0f, 0f, instructionsRegion.getRegionWidth(), instructionsRegion.getRegionHeight(), instructionsRegion, Color.CYAN);
+        addActor(instructions);
     }
 
     @Override
     public void act(float delta) {
         super.act(delta);
 
-        if (!isDead) {
+        if(instructions.isVisible()){
+
+        }else if (!isDead) {
             //Calculate timestep
             millisecondsPassed += delta*1000;
             secondsSinceResourceRegen += delta;
@@ -201,11 +209,18 @@ public class BubbleRunnerStage extends BaseStage {
 
             //Adjust Resource Levels
 
-            info.setZIndex(getActors().size - 1);
-            player.setZIndex(getActors().size - 2);
+            int index = getActors().size - 1;
+            instructions.setZIndex(index--);
+            info.setZIndex(index--);
+            player.setZIndex(index--);
+            for(Wall w:walls){
+                w.setZIndex(index--);
+            }
+
+            particleBubble.update(delta);
+            particleBubble.setPosition(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 4);
         }
-        particleBubble.update(delta);
-		particleBubble.setPosition(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 4);
+
         //Update GameStats
     }
 
@@ -214,7 +229,7 @@ public class BubbleRunnerStage extends BaseStage {
         super.draw();
         
         batch.begin();
-        particleBubble.draw(batch);
+        //particleBubble.draw(batch);
         batch.end();
     }
 
@@ -404,7 +419,6 @@ public class BubbleRunnerStage extends BaseStage {
                 w.setXVelocity(wallAndFloorVelocity);
                 walls.add(w);
                 addActor(w);
-                w.setZIndex(0);
             }
 
             nextGeneration += millisBetweenWalls;
@@ -415,13 +429,13 @@ public class BubbleRunnerStage extends BaseStage {
         String name;
         switch(fft){
             case LIGHTNING:
-                name = "walls/light-wall";
+                name = "newwall/obstacle_blue";//"walls/light-wall";
                 break;
             case PLASMA:
-                name = "walls/plasma-wall";
+                name = "newwall/obstacle_green";//"walls/plasma-wall";
                 break;
             case LASER:
-                name = "walls/discharge-wall";
+                name = "newwall/obstacle_red";//"walls/discharge-wall";
                 break;
             default:
                 name = "walls/light-wall";
@@ -551,6 +565,7 @@ public class BubbleRunnerStage extends BaseStage {
             player.maxFields = info.maxFields;
 
             controls.restoreAllResourceLevels();
+            instructions.setVisible(true);
             music.play();
         }
     }
@@ -703,16 +718,19 @@ public class BubbleRunnerStage extends BaseStage {
         createAndLeaveListener = new InputListener(){
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if(Input.Keys.A == keycode){
+                if(Input.Keys.A == keycode || Input.Keys.LEFT == keycode){  //Or Left
                     addLightningField();
-                }else if(Input.Keys.S == keycode){
+                }else if(Input.Keys.S == keycode || Input.Keys.DOWN == keycode){ //Or Down
                     addPlasmaField();
-                }else if(Input.Keys.D == keycode){
+                }else if(Input.Keys.D == keycode || Input.Keys.RIGHT == keycode){  //Or Right
                     addLaserField();
                 }else if(Input.Keys.TAB == keycode){
                     //toggleListener();
                     KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
                 }else if(Input.Keys.SPACE == keycode){
+                    if(instructions.isVisible()){
+                        instructions.setVisible(false);
+                    }
                     resetGame();
                 }else if(Input.Keys.ESCAPE == keycode){
                     gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
@@ -811,6 +829,7 @@ public class BubbleRunnerStage extends BaseStage {
             }
         }, true, ForceFieldType.LASER);
 
+        controls.setEnergyBar(assetManager.get(AssetsUtil.ENERGY_BAR, AssetsUtil.TEXTURE));
         addActor(controls);
         
         Rectangle rec = new Rectangle(0, 0, 50, 50);

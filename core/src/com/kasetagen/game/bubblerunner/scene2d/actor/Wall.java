@@ -46,5 +46,17 @@ public class Wall extends GenericActor {
         velocity.y = y;
     }
 
+    @Override
+    protected void drawFull(Batch batch, float parentAlpha) {
+        //super.drawFull(batch, parentAlpha);
+        if(textureRegion != null){
+            float regionW = textureRegion.getRegionWidth()/2;
+            float regionH = textureRegion.getRegionHeight()/2;
 
+            float midPoint = getX() + getWidth()/2;
+            float regionX = midPoint - (regionW/2);
+
+            batch.draw(textureRegion, regionX, 0f, regionW, regionH);
+        }
+    }
 }
