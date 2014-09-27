@@ -45,6 +45,7 @@ public class AssetsUtil {
     public static final String WALL = "images/floor/wall.png";
     public static final String ENERGY_BAR = "images/energy_bar.png";
     public static final String BACKGROUND = "images/bubblerun_bk.png";
+    public static final String CONTROLS = "images/controls-screen.png";
     
     //Images -- Buttons
     public static final String LIGHT_UP = "images/buttons/button_light_off.png";
