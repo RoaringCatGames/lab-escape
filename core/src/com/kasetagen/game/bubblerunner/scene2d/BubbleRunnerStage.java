@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -811,6 +812,8 @@ public class BubbleRunnerStage extends BaseStage {
         }, true, ForceFieldType.LASER);
 
         addActor(controls);
+        
+        Rectangle rec = new Rectangle(0, 0, 50, 50);
     }
 
     public void resume(){
