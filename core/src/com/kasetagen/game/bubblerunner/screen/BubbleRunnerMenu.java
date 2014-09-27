@@ -81,13 +81,13 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
         float fontScale = 2f;
         style.font.setScale(fontScale);
 
-        startGameButton = new TextButton("Play Game", style);
+        startGameButton = new TextButton("Press A to Start", style);
         startGameButton.addListener(listener);
         startGameButton.setPosition(((stage.getWidth()/4) * 3) - startGameButton.getWidth()/2, (stage.getHeight()/4));
 
         stage.addActor(startGameButton);
 
-        optionsButton = new TextButton("Options", style);
+        optionsButton = new TextButton("", style);
         optionsButton.setPosition(((stage.getWidth() / 4) * 3) - startGameButton.getWidth() / 2, (stage.getHeight() / 8));
         optionsButton.addListener(listener);
 

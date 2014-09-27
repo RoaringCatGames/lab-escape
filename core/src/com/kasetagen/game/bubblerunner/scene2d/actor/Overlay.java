@@ -66,7 +66,7 @@ public class Overlay extends GenericGroup {
         float fontScale = 1f;
         style.font.setScale(fontScale);
 
-        dismissButton = new TextButton("Replay", style);
+        dismissButton = new TextButton("Press A to Replay", style);
         dismissButton.setPosition(getWidth()/2 - dismissButton.getWidth()/2,
                                   subLabel.getY() - (dismissButton.getHeight()/2) - VERTICAL_PADDING);
         addActor(dismissButton);
