@@ -35,14 +35,22 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
 
     protected AssetManager assetManager;
 
+    boolean isControllerEnabled = false;
+    public BubbleRunnerGame(boolean isControllerEnabled){
+        this.isControllerEnabled = isControllerEnabled;
+    }
+
+
 	@Override
 	public void create () {
 
-        Graphics.DisplayMode dm = Gdx.graphics.getDesktopDisplayMode();
-        Gdx.app.log("DISPLAY", "W: " + dm.width + " H: " + dm.height + " X: " + dm.bitsPerPixel);
-        Gdx.graphics.setDisplayMode(dm.width, dm.height, true);
-        Gdx.graphics.setVSync(true);
-        Gdx.input.setCursorCatched(true);
+        if(isControllerEnabled){
+            Graphics.DisplayMode dm = Gdx.graphics.getDesktopDisplayMode();
+            Gdx.app.log("DISPLAY", " Using Controller Mode. W: " + dm.width + " H: " + dm.height + " X: " + dm.bitsPerPixel);
+            Gdx.graphics.setDisplayMode(dm.width, dm.height, true);
+            Gdx.graphics.setVSync(true);
+            Gdx.input.setCursorCatched(true);
+        }
         assetManager = new AssetManager();
         loadAssets();
 	}
@@ -134,7 +142,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
             }
 
             setScreen(menu);
-            Gdx.input.setInputProcessor(menu);
+            Gdx.input.setInputProcessor(menu.getStage());
 
         }else if(RUNNER.equalsIgnoreCase(screenName)){
             //Load the Game Screen!!

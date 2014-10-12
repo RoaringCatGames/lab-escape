@@ -92,29 +92,28 @@ public class ControlGroup extends GenericGroup{
     }
 
     @Override
-    protected void drawBefore(Batch batch, float parentAlpha) {
-        super.drawBefore(batch, parentAlpha);
-        batch.end();
-        batch.begin();
-        debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        float barTotalLength = getWidth() - BAR_START;
-        float barLength = barTotalLength*((float)heatScore/(float)OVERHEAT_POINT);
-        Color c = heatScore >= OVERHEAT_POINT ? Color.RED : Color.ORANGE;
-        debugRenderer.setColor(c);
-        debugRenderer.rect(BAR_START, getY()+(getHeight()/4)+4, barLength, (getHeight()/2)-6);
-        //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
-        // coming in.
-        debugRenderer.end();
-        batch.end();
-        batch.begin();
-
-    }
-
-    @Override
     protected void drawAfter(Batch batch, float parentAlpha) {
         super.drawAfter(batch, parentAlpha);
 
         if(energyBar != null){
+            float barTotalLength = getWidth() - BAR_START;
+            float barLength = barTotalLength*((float)heatScore/(float)OVERHEAT_POINT);
+            float yPos = getY()+(getHeight()/4)+4;
+            float height = (getHeight()/2)-6;
+            Color c = heatScore >= OVERHEAT_POINT ? Color.RED : Color.ORANGE;
+
+
+            batch.end();
+            batch.begin();
+            debugRenderer.setProjectionMatrix(getStage().getCamera().combined);
+            debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            debugRenderer.setColor(c);
+            debugRenderer.rect(BAR_START, yPos, barLength, height);
+            //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
+            // coming in.
+            debugRenderer.end();
+            batch.end();
+            batch.begin();
             batch.draw(energyBar, BAR_START, getY()+(getHeight()/4), getWidth()-BAR_START, getHeight()/2);
         }
     }

@@ -17,4 +17,6 @@ public class BaseStage extends Stage {
     public BaseStage(){
         super(new StretchViewport(ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT));
     }
+
+
 }

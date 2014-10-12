@@ -71,7 +71,7 @@ public class BubbleRunnerStage extends BaseStage {
     //Delegates
 	private IGameProcessor gameProcessor;
 	private AssetManager assetManager;
-    private Batch batch;
+    //private Batch batch;
 
     //State Values
     private int highScore = 0;
@@ -124,8 +124,7 @@ public class BubbleRunnerStage extends BaseStage {
         super();
         this.gameProcessor = gameProcessor;
     	assetManager = this.gameProcessor.getAssetManager();
-    	batch = this.getBatch();
-
+    	//batch = this.getBatch();
     	EnvironmentManager.initialize(this);
     	
         //Initialize Privates
@@ -224,12 +223,13 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     @Override
-    public void draw() {     
+    public void draw() {
+        //batch.setProjectionMatrix(getViewport().getCamera().combined);
         super.draw();
-        
-        batch.begin();
+
+        //batch.begin();
         //particleBubble.draw(batch);
-        batch.end();
+        //batch.end();
     }
 
     private void processResources(){
@@ -574,19 +574,19 @@ public class BubbleRunnerStage extends BaseStage {
         player.maxFields = info.maxFields;
     }
 
-    public void toggleListener(){
-
-        player.clearFields();
-        if(currentListener == createAndLeaveListener){
-            this.removeListener(createAndLeaveListener);
-            this.addListener(keysReleasedListener);
-            currentListener = keysReleasedListener;
-        }else{
-            this.removeListener(keysReleasedListener);
-            this.addListener(createAndLeaveListener);
-            currentListener = createAndLeaveListener;
-        }
-    }
+//    public void toggleListener(){
+//
+//        player.clearFields();
+//        if(currentListener == createAndLeaveListener){
+//            this.removeListener(createAndLeaveListener);
+//            this.addListener(keysReleasedListener);
+//            currentListener = keysReleasedListener;
+//        }else{
+//            this.removeListener(keysReleasedListener);
+//            this.addListener(createAndLeaveListener);
+//            currentListener = createAndLeaveListener;
+//        }
+//    }
 
     private void addField(ForceFieldType fft){
         if(isDead){
@@ -724,64 +724,73 @@ public class BubbleRunnerStage extends BaseStage {
                 }else if(Input.Keys.D == keycode || Input.Keys.RIGHT == keycode){  //Or Right
                     addLaserField();
                 }else if(Input.Keys.TAB == keycode){
-                    //toggleListener();
                     KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
                 }else if(Input.Keys.SPACE == keycode){
-                    if(instructions.isVisible()){
-                        instructions.setVisible(false);
-                    }
+                    toggleInstructionsScreen();
                     resetGame();
                 }else if(Input.Keys.ESCAPE == keycode){
                     gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
                 }
                 return super.keyDown(event, keycode);
             }
-        };
-
-        keysReleasedListener = new InputListener(){
-
-            boolean isADown = false;
-            boolean isSDown = false;
-            boolean isDDown = false;
 
             @Override
-            public boolean keyDown(InputEvent event, int keycode) {
-                if(Input.Keys.A == keycode && !isADown){
-                    player.addField(ForceFieldType.LIGHTNING, 0);
-                    isADown = true;
-                }else if(Input.Keys.S == keycode && !isSDown){
-                    player.addField(ForceFieldType.PLASMA, 0);
-                    isSDown = true;
-                }else if(Input.Keys.D == keycode & !isDDown){
-                    player.addField(ForceFieldType.LASER, 0);
-                    isDDown = true;
-                }else if(Input.Keys.TAB == keycode){
-                    //toggleListener();
-                    KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
-                }else if(Input.Keys.SPACE == keycode){
-                    resetGame();
-                }
-                return super.keyDown(event, keycode);
-            }
-
-            @Override
-            public boolean keyUp(InputEvent event, int keycode) {
-                if(Input.Keys.A == keycode && isADown){
-                    player.removeField(ForceFieldType.LIGHTNING);
-                    isADown = false;
-                }else if(Input.Keys.S == keycode && isSDown){
-                    player.removeField(ForceFieldType.PLASMA);
-                    isSDown = false;
-                }else if(Input.Keys.D == keycode & isDDown){
-                    player.removeField(ForceFieldType.LASER);
-                    isDDown = false;
-                }
-                return super.keyDown(event, keycode);
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                toggleInstructionsScreen();
+                return super.touchDown(event, x, y, pointer, button);
             }
         };
+
+//        keysReleasedListener = new InputListener(){
+//
+//            boolean isADown = false;
+//            boolean isSDown = false;
+//            boolean isDDown = false;
+//
+//            @Override
+//            public boolean keyDown(InputEvent event, int keycode) {
+//                if(Input.Keys.A == keycode && !isADown){
+//                    player.addField(ForceFieldType.LIGHTNING, 0);
+//                    isADown = true;
+//                }else if(Input.Keys.S == keycode && !isSDown){
+//                    player.addField(ForceFieldType.PLASMA, 0);
+//                    isSDown = true;
+//                }else if(Input.Keys.D == keycode & !isDDown){
+//                    player.addField(ForceFieldType.LASER, 0);
+//                    isDDown = true;
+//                }else if(Input.Keys.TAB == keycode){
+//                    //toggleListener();
+//                    KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
+//                }else if(Input.Keys.SPACE == keycode){
+//                    resetGame();
+//                }
+//                return super.keyDown(event, keycode);
+//            }
+//
+//            @Override
+//            public boolean keyUp(InputEvent event, int keycode) {
+//                if(Input.Keys.A == keycode && isADown){
+//                    player.removeField(ForceFieldType.LIGHTNING);
+//                    isADown = false;
+//                }else if(Input.Keys.S == keycode && isSDown){
+//                    player.removeField(ForceFieldType.PLASMA);
+//                    isSDown = false;
+//                }else if(Input.Keys.D == keycode & isDDown){
+//                    player.removeField(ForceFieldType.LASER);
+//                    isDDown = false;
+//                }
+//                return super.keyDown(event, keycode);
+//            }
+//        };
 
         this.addListener(createAndLeaveListener);
         currentListener = createAndLeaveListener;
+    }
+
+    private void toggleInstructionsScreen() {
+        if(instructions.isVisible()){
+            instructions.setVisible(false);
+        }
     }
 
     private void initializeButtonControls(){
