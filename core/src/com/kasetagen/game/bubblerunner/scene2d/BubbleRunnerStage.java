@@ -78,6 +78,10 @@ public class BubbleRunnerStage extends BaseStage {
     private int mostMisses = 0;
     private boolean isDead = false;
 
+    private int currentCombo = 0;
+    private int highestRunCombo = 0;
+    private int highestCombo = 0;
+
     //Obstacle Generation Values
     /**
      * Time Passed is in Seconds
@@ -133,6 +137,7 @@ public class BubbleRunnerStage extends BaseStage {
 
         highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
         mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
+        highestCombo = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
 
         //SET WALL VELOCITY
         wallAndFloorVelocity = -1f*(getWidth()/2);
@@ -208,6 +213,7 @@ public class BubbleRunnerStage extends BaseStage {
             //Adjust Resource Levels
 
             int index = getActors().size - 1;
+            deathOverlay.setZIndex(index--);
             instructions.setZIndex(index--);
             info.setZIndex(index--);
             player.setZIndex(index--);
@@ -265,11 +271,20 @@ public class BubbleRunnerStage extends BaseStage {
                     wallsToRemove.add(w);
                     info.score += 1;
                     explosionSound.play(sfxVolume);
+
+                    //Increment our Combo counter
+                    currentCombo += 1;
+                    if(highestRunCombo < currentCombo){
+                        highestRunCombo = currentCombo;
+                    }
                 }else{
                     //If we hit a bad wall, we reduce your score
                     //  This will discourage jamming out fields like crazy
                     info.score -= 1;
                     info.misses += 1;
+
+                    //Clear our combo
+                    currentCombo = 0;
                 }
 
                 //Destroy the forcefield if it collides with a wall
@@ -428,13 +443,13 @@ public class BubbleRunnerStage extends BaseStage {
         String name;
         switch(fft){
             case LIGHTNING:
-                name = "newwall/obstacle_blue";//"walls/light-wall";
+                name = "newwall/obstacle_blue";
                 break;
             case PLASMA:
-                name = "newwall/obstacle_green";//"walls/plasma-wall";
+                name = "newwall/obstacle_green";
                 break;
             case LASER:
-                name = "newwall/obstacle_red";//"walls/discharge-wall";
+                name = "newwall/obstacle_red";
                 break;
             default:
                 name = "walls/light-wall";
@@ -443,26 +458,6 @@ public class BubbleRunnerStage extends BaseStage {
 
         return name;
     }
-
-//    private TextureRegion getTextureRegionForForceFieldType(ForceFieldType fft) {
-//        Texture texture;
-//        switch(fft){
-//            case LIGHTNING:
-//                texture = assetManager.get(AssetsUtil.LIGHTNING_WALL, AssetsUtil.TEXTURE);
-//                break;
-//            case PLASMA:
-//                texture = assetManager.get(AssetsUtil.PLASMA_WALL, AssetsUtil.TEXTURE);
-//                break;
-//            case LASER:
-//                texture = assetManager.get(AssetsUtil.LASER_WALL, AssetsUtil.TEXTURE);
-//                break;
-//            default:
-//                texture = assetManager.get(AssetsUtil.LIGHTNING_WALL, AssetsUtil.TEXTURE);
-//                break;
-//        }
-//
-//        return new TextureRegion(texture);
-//    }
 
     private WallPattern getRandomWallPattern(){
         WallPattern p = new WallPattern(20f);
@@ -524,10 +519,18 @@ public class BubbleRunnerStage extends BaseStage {
             needsSave = true;
         }
 
+        if(highestRunCombo > highestCombo){
+            highestCombo = highestRunCombo;
+            needsSave = true;
+        }
+
         if(needsSave){
             saveCurrentStats();
         }
-        deathOverlay.setSubText("Score: " + info.score + "\t Misses: " + info.misses + "\nBest Score: " + highScore + "\t Most Misses: " + mostMisses);
+
+        deathOverlay.setSubText("Score: " + info.score + "\t Best Score: " + highScore +
+                                "\nMisses: " + info.misses + "\t Most Misses: " + mostMisses +
+                                "\nRun Top Combo: " + highestRunCombo + "\t Highest Combo: " + highestCombo);
         deathOverlay.setVisible(true);
     }
 
@@ -543,6 +546,11 @@ public class BubbleRunnerStage extends BaseStage {
                 int currentMostMisses = prefs.getInteger(GameStats.MOST_MISSES_KEY);
                 if(mostMisses > currentMostMisses){
                     prefs.putInteger(GameStats.MOST_MISSES_KEY, mostMisses);
+                }
+
+                int currentHighestCombo = prefs.getInteger(GameStats.HIGH_COMBO_KEY);
+                if(highestCombo > currentHighestCombo){
+                    prefs.putInteger(GameStats.HIGH_COMBO_KEY, highestCombo);
                 }
             }
         });
@@ -653,9 +661,9 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private void initializeDeathOverlay() {
-        BitmapFont mainFont = assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
-        BitmapFont subFont = assetManager.get(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
-        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.PURPLE, Color.WHITE, mainFont, subFont, "You Failed to Escape!", "Score: 0\nBest Score: 0");
+        BitmapFont mainFont = assetManager.get(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT); //COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
+        BitmapFont subFont = assetManager.get(AssetsUtil.REXLIA_24, AssetsUtil.BITMAP_FONT); //COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
+        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.PURPLE, Color.DARK_GRAY, mainFont, subFont, "You Failed to Escape!", "Score: 0\nBest Score: 0");
         deathOverlay.setVisible(false);
 
         deathOverlay.setDismissButtonEvent(new ClickListener(){
@@ -709,7 +717,7 @@ public class BubbleRunnerStage extends BaseStage {
         float infoY = ViewportUtil.VP_HEIGHT - HUD_HEIGHT;
         float infoWidth = getWidth();
         float infoHeight = HUD_HEIGHT;
-        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT), controls);
+        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT), controls); //COURIER_FONT_32, AssetsUtil.BITMAP_FONT), controls);
         addActor(info);
     }
     
