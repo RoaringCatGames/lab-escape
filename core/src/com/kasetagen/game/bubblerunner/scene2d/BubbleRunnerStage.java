@@ -661,8 +661,8 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private void initializeDeathOverlay() {
-        BitmapFont mainFont = assetManager.get(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT); //COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
-        BitmapFont subFont = assetManager.get(AssetsUtil.REXLIA_24, AssetsUtil.BITMAP_FONT); //COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
+        BitmapFont mainFont = assetManager.get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT);
+        BitmapFont subFont = assetManager.get(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT);
         deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.PURPLE, Color.DARK_GRAY, mainFont, subFont, "You Failed to Escape!", "Score: 0\nBest Score: 0");
         deathOverlay.setVisible(false);
 

@@ -74,12 +74,12 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{//ApplicationAdapte
         stage.addActor(new GenericActor(0, 0, stage.getWidth(), stage.getHeight(), bgTextureRegion, Color.DARK_GRAY));
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = gameProcessor.getAssetManager().get(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT); //COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
+        style.font = gameProcessor.getAssetManager().get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT);
         style.fontColor =  Color.CYAN;
         style.overFontColor = Color.RED;
         style.downFontColor = Color.GRAY;
-        float fontScale = 2f;
-        style.font.setScale(fontScale);
+//        float fontScale = 2f;
+//        style.font.setScale(fontScale);
 
         startGameButton = new TextButton("Touch to Start", style);
         startGameButton.addListener(listener);
