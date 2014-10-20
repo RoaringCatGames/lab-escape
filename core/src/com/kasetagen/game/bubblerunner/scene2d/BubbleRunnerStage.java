@@ -43,7 +43,7 @@ public class BubbleRunnerStage extends BaseStage {
         NONE, NOT_BAD, GREAT, AWESOME, AMAZING, BONKERS, RIDICULOUS, ATOMIC
     }
 
-    private static final int[] COMBO_THRESHOLDS = new int[] {5, 10, 12, 15, 18, 20, 21};//{10, 20, 30, 50, 70, 100, 150};
+    private static final int[] COMBO_THRESHOLDS = new int[] {10, 20, 30, 50, 70, 100, 150};//{5, 10, 12, 15, 18, 20, 21};
 
     private static final float HUD_HEIGHT = 40f;
     private static final float FLOOR_HEIGHT = 160f;
