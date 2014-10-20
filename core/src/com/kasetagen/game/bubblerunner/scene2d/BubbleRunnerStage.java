@@ -7,20 +7,16 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
@@ -43,11 +39,16 @@ import java.util.Random;
  */
 public class BubbleRunnerStage extends BaseStage {
 
+    private enum ComboLevels {
+        NONE, NOT_BAD, GREAT, AWESOME, AMAZING, BONKERS, RIDICULOUS, ATOMIC
+    }
+
+    private static final int[] COMBO_THRESHOLDS = new int[] {5, 10, 12, 15, 18, 20, 21};//{10, 20, 30, 50, 70, 100, 150};
 
     private static final float HUD_HEIGHT = 40f;
     private static final float FLOOR_HEIGHT = 160f;
 
-    private static final int SECONDS_BETWEEN_DIFF_SHIFT = 30;
+    private static final int SECONDS_BETWEEN_DIFF_SHIFT = 10;
     private static final long BASE_TIME_BETWEEN_WALLS = 4000L;
     private static final int SECONDS_BETWEEN_ADJUSTS = 5;
     private static final float TIME_DECREASE = 100f;
@@ -82,6 +83,7 @@ public class BubbleRunnerStage extends BaseStage {
     private int currentCombo = 0;
     private int highestRunCombo = 0;
     private int highestCombo = 0;
+    private ComboLevels currentComboLevel = ComboLevels.NONE;
     private Label comboLabel;
 
     //Obstacle Generation Values
@@ -118,6 +120,8 @@ public class BubbleRunnerStage extends BaseStage {
     private Sound explosionSound;
     //TODO: Move into Player?
     private ParticleEffect particleBubble;
+
+    private ObjectMap<ComboLevels, Sound> comboSfx;
 
     private float bgVolume;
     private float sfxVolume;
@@ -177,6 +181,16 @@ public class BubbleRunnerStage extends BaseStage {
         comboLabel.setVisible(false);
         addActor(comboLabel);
 
+
+        comboSfx = new ObjectMap<ComboLevels, Sound>();
+        comboSfx.put(ComboLevels.NOT_BAD, assetManager.get(AssetsUtil.NOT_BAD, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.GREAT, assetManager.get(AssetsUtil.GREAT, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.AWESOME, assetManager.get(AssetsUtil.AWESOME, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.AMAZING, assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.BONKERS, assetManager.get(AssetsUtil.BONKERS, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.RIDICULOUS, assetManager.get(AssetsUtil.RIDICULOUS, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.ATOMIC, assetManager.get(AssetsUtil.ATOMIC, AssetsUtil.SOUND));
+
         TextureRegion instructionsRegion = new TextureRegion(assetManager.get(AssetsUtil.CONTROLS, AssetsUtil.TEXTURE));
         instructions = new GenericActor(0f, 0f, instructionsRegion.getRegionWidth(), instructionsRegion.getRegionHeight(), instructionsRegion, Color.CYAN);
         addActor(instructions);
@@ -222,6 +236,7 @@ public class BubbleRunnerStage extends BaseStage {
 
             int index = getActors().size - 1;
             deathOverlay.setZIndex(index--);
+            comboLabel.setZIndex(index--);
             instructions.setZIndex(index--);
             info.setZIndex(index--);
             player.setZIndex(index--);
@@ -229,7 +244,7 @@ public class BubbleRunnerStage extends BaseStage {
                 w.setZIndex(index--);
             }
 
-            if(currentCombo > 8){
+            if(currentCombo >= COMBO_THRESHOLDS[0]){
                 comboLabel.setText(currentCombo + "x Combo!!");
                 comboLabel.setVisible(true);
             }else{
@@ -246,7 +261,6 @@ public class BubbleRunnerStage extends BaseStage {
 
     @Override
     public void draw() {
-        //batch.setProjectionMatrix(getViewport().getCamera().combined);
         super.draw();
 
         //batch.begin();
@@ -285,14 +299,21 @@ public class BubbleRunnerStage extends BaseStage {
                 //  and increment the score
                 if(w.forceFieldType == outerField.forceFieldType){
                     wallsToRemove.add(w);
-                    info.score += 1;
-                    explosionSound.play(sfxVolume);
+                    info.score += getWallPointValue(1);
 
                     //Increment our Combo counter
                     currentCombo += 1;
                     if(highestRunCombo < currentCombo){
                         highestRunCombo = currentCombo;
                     }
+
+                    float explosionVolume = sfxVolume;
+                    if(adjustComboLevel(currentCombo)){
+                        playComboSoundEffect();
+                        explosionVolume /= 2;
+                    }
+
+                    explosionSound.play(explosionVolume);
                 }else{
                     //If we hit a bad wall, we reduce your score
                     //  This will discourage jamming out fields like crazy
@@ -489,6 +510,56 @@ public class BubbleRunnerStage extends BaseStage {
         return p;
     }
 
+    private int getWallPointValue(int baseValue){
+
+        int result = baseValue;
+        for(int threshold:COMBO_THRESHOLDS){
+            if(currentCombo >= threshold){
+                result *= 2;
+            }else{
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    private boolean adjustComboLevel(int latestCombo){
+        boolean wasChanged = false;
+        if(latestCombo < COMBO_THRESHOLDS[0]){
+            currentComboLevel = ComboLevels.NONE;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[0]){
+            currentComboLevel = ComboLevels.NOT_BAD;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[1]){
+            currentComboLevel = ComboLevels.GREAT;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[2]){
+            currentComboLevel = ComboLevels.AWESOME;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[3]){
+            currentComboLevel = ComboLevels.AMAZING;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[4]){
+            currentComboLevel = ComboLevels.BONKERS;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[5]){
+            currentComboLevel = ComboLevels.RIDICULOUS;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[6]){
+            currentComboLevel = ComboLevels.ATOMIC;
+            wasChanged = true;
+        }
+        return wasChanged;
+    }
+
+    private void playComboSoundEffect(){
+        if(currentComboLevel != ComboLevels.NONE){
+            comboSfx.get(currentComboLevel).play(sfxVolume);
+        }
+    }
+
     private void adjustDifficulty(){
         int secondsPassedInt  = (int)Math.floor(millisecondsPassed /1000);
         if(secondsPassedInt > 0 && secondsPassedInt != lastWallAdjustTime){
@@ -598,20 +669,6 @@ public class BubbleRunnerStage extends BaseStage {
         player.maxFields = info.maxFields;
     }
 
-//    public void toggleListener(){
-//
-//        player.clearFields();
-//        if(currentListener == createAndLeaveListener){
-//            this.removeListener(createAndLeaveListener);
-//            this.addListener(keysReleasedListener);
-//            currentListener = keysReleasedListener;
-//        }else{
-//            this.removeListener(keysReleasedListener);
-//            this.addListener(createAndLeaveListener);
-//            currentListener = createAndLeaveListener;
-//        }
-//    }
-
     private void addField(ForceFieldType fft){
         if(isDead){
             return;
@@ -667,7 +724,7 @@ public class BubbleRunnerStage extends BaseStage {
     private void initializeAmbience() {
 
         initializeVolumes();
-        music = assetManager.get(AssetsUtil.ALT_BG_MUSIC, AssetsUtil.MUSIC);
+        music = assetManager.get(AssetsUtil.DISTORTION_BKG_MUSIC, AssetsUtil.MUSIC);
         music.setVolume(bgVolume);
         music.play();
 
@@ -764,48 +821,6 @@ public class BubbleRunnerStage extends BaseStage {
                 return super.touchDown(event, x, y, pointer, button);
             }
         };
-
-//        keysReleasedListener = new InputListener(){
-//
-//            boolean isADown = false;
-//            boolean isSDown = false;
-//            boolean isDDown = false;
-//
-//            @Override
-//            public boolean keyDown(InputEvent event, int keycode) {
-//                if(Input.Keys.A == keycode && !isADown){
-//                    player.addField(ForceFieldType.LIGHTNING, 0);
-//                    isADown = true;
-//                }else if(Input.Keys.S == keycode && !isSDown){
-//                    player.addField(ForceFieldType.PLASMA, 0);
-//                    isSDown = true;
-//                }else if(Input.Keys.D == keycode & !isDDown){
-//                    player.addField(ForceFieldType.LASER, 0);
-//                    isDDown = true;
-//                }else if(Input.Keys.TAB == keycode){
-//                    //toggleListener();
-//                    KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
-//                }else if(Input.Keys.SPACE == keycode){
-//                    resetGame();
-//                }
-//                return super.keyDown(event, keycode);
-//            }
-//
-//            @Override
-//            public boolean keyUp(InputEvent event, int keycode) {
-//                if(Input.Keys.A == keycode && isADown){
-//                    player.removeField(ForceFieldType.LIGHTNING);
-//                    isADown = false;
-//                }else if(Input.Keys.S == keycode && isSDown){
-//                    player.removeField(ForceFieldType.PLASMA);
-//                    isSDown = false;
-//                }else if(Input.Keys.D == keycode & isDDown){
-//                    player.removeField(ForceFieldType.LASER);
-//                    isDDown = false;
-//                }
-//                return super.keyDown(event, keycode);
-//            }
-//        };
 
         this.addListener(createAndLeaveListener);
         currentListener = createAndLeaveListener;
