@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -81,6 +82,7 @@ public class BubbleRunnerStage extends BaseStage {
     private int currentCombo = 0;
     private int highestRunCombo = 0;
     private int highestCombo = 0;
+    private Label comboLabel;
 
     //Obstacle Generation Values
     /**
@@ -169,6 +171,12 @@ public class BubbleRunnerStage extends BaseStage {
         //Initialize HUD (Stats, and GameInfo)
         initializeHUD();
 
+        Label.LabelStyle style = new Label.LabelStyle(assetManager.get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT), Color.ORANGE);
+        comboLabel = new Label(currentCombo + "x Combo!!", style);
+        comboLabel.setPosition(player.getX(), player.getTop());
+        comboLabel.setVisible(false);
+        addActor(comboLabel);
+
         TextureRegion instructionsRegion = new TextureRegion(assetManager.get(AssetsUtil.CONTROLS, AssetsUtil.TEXTURE));
         instructions = new GenericActor(0f, 0f, instructionsRegion.getRegionWidth(), instructionsRegion.getRegionHeight(), instructionsRegion, Color.CYAN);
         addActor(instructions);
@@ -220,6 +228,14 @@ public class BubbleRunnerStage extends BaseStage {
             for(Wall w:walls){
                 w.setZIndex(index--);
             }
+
+            if(currentCombo > 8){
+                comboLabel.setText(currentCombo + "x Combo!!");
+                comboLabel.setVisible(true);
+            }else{
+                comboLabel.setVisible(false);
+            }
+
 
             particleBubble.update(delta);
             particleBubble.setPosition(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 4);
