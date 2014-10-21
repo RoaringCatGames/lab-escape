@@ -745,6 +745,13 @@ public class BubbleRunnerStage extends BaseStage {
                 resetGame();
             }
         });
+
+        deathOverlay.setHomeButtonEvent(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
+            }
+        });
         addActor(deathOverlay);
         deathOverlay.setZIndex(getActors().size - 1);
     }

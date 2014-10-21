@@ -32,6 +32,7 @@ public class Overlay extends GenericGroup {
     private Label subLabel;
 
     private TextButton dismissButton;
+    private TextButton homeButton;
 
     public Overlay(float x, float y, float width, float height, Color bgColor,
                    Color textColor, BitmapFont mainFont, BitmapFont subFont, String mainText, String subText) {
@@ -63,13 +64,19 @@ public class Overlay extends GenericGroup {
         style.fontColor =  Color.CYAN;
         style.overFontColor = Color.RED;
         style.downFontColor = Color.GRAY;
-        float fontScale = 1f;
-        style.font.setScale(fontScale);
+//        float fontScale = 1f;
+//        style.font.setScale(fontScale);
 
         dismissButton = new TextButton("Replay", style);
         dismissButton.setPosition(getWidth()/2 - dismissButton.getWidth()/2,
                                   subLabel.getY() - (dismissButton.getHeight()/2) - VERTICAL_PADDING);
         addActor(dismissButton);
+
+        homeButton = new TextButton("Back to Menu", style);
+        homeButton.setPosition(getWidth()/2 - homeButton.getWidth()/2,
+                               dismissButton.getY() - dismissButton.getHeight() - VERTICAL_PADDING);
+        homeButton.setVisible(false);
+        addActor(homeButton);
     }
 
     public void setMainText(String text){
@@ -114,5 +121,12 @@ public class Overlay extends GenericGroup {
 
     public void setDismissButtonEvent(ClickListener listener){
         dismissButton.addListener(listener);
+    }
+
+    public void setHomeButtonEvent(ClickListener listener){
+        if(homeButton != null){
+            homeButton.addListener(listener);
+            homeButton.setVisible(true);
+        }
     }
 }

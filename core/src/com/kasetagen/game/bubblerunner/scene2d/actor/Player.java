@@ -41,7 +41,7 @@ public class Player extends GenericGroup {
     public Player(float x, float y, float width, float height, TextureAtlas atlas){
         super(x, y, width, height, null, Color.BLACK);
 
-        animation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("stickman/player"));
+        animation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("player/Male_Run"));
         deathAnimation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("explosion/explosion"));
         textureRegion = animation.getKeyFrame(keyFrameTime);
         //TODO: Replace ShapeRendering with Animation
@@ -55,6 +55,10 @@ public class Player extends GenericGroup {
         keyFrameTime += delta;
         if(!isDead){
             textureRegion = animation.getKeyFrame(keyFrameTime, true);
+            if(!textureRegion.isFlipX()){
+                textureRegion.flip(true, false);
+            }
+
         }else{
             textureRegion = deathAnimation.getKeyFrame(keyFrameTime, false);
         }
@@ -68,10 +72,6 @@ public class Player extends GenericGroup {
     }
 
     public void addField(ForceFieldType ff){
-//        int availableLevel = resourceLevels.get(ff);
-//        if(availableLevel < RESOURCE_USAGE){
-//            return false;
-//        }
 
         if(fields.size == maxFields){
             //Remove the forcefield
@@ -91,10 +91,6 @@ public class Player extends GenericGroup {
 
         this.addActor(field);
         fields.add(field);
-
-//        resourceLevels.put(ff, availableLevel - RESOURCE_USAGE);
-
-//        return true;
     }
 
     public void addField(ForceFieldType ff, int index){

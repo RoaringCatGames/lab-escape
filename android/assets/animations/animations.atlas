@@ -1,145 +1,174 @@
 
 animations.png
-size: 3978,3636
+size: 4082,4040
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 explosion/explosion
   rotate: false
-  xy: 0, 0
+  xy: 841, 446
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 1
 explosion/explosion
   rotate: false
-  xy: 302, 402
+  xy: 3952, 3910
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 2
 explosion/explosion
   rotate: false
-  xy: 3780, 3004
+  xy: 841, 316
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 3
-stickman/player
-  rotate: false
-  xy: 0, 632
-  size: 300, 500
-  orig: 300, 500
-  offset: 0, 0
-  index: 1
-stickman/player
-  rotate: false
-  xy: 3676, 3134
-  size: 300, 500
-  orig: 300, 500
-  offset: 0, 0
-  index: 2
-stickman/player
-  rotate: false
-  xy: 3676, 3134
-  size: 300, 500
-  orig: 300, 500
-  offset: 0, 0
-  index: 4
-stickman/player
-  rotate: false
-  xy: 0, 130
-  size: 300, 500
-  orig: 300, 500
-  offset: 0, 0
-  index: 3
-walls/discharge-wall
-  rotate: false
-  xy: 302, 532
-  size: 50, 600
-  orig: 50, 600
-  offset: 0, 0
-  index: 1
-walls/discharge-wall
-  rotate: false
-  xy: 3676, 2532
-  size: 50, 600
-  orig: 50, 600
-  offset: 0, 0
-  index: 2
-walls/light-wall
-  rotate: false
-  xy: 354, 532
-  size: 50, 600
-  orig: 50, 600
-  offset: 0, 0
-  index: 1
-walls/light-wall
-  rotate: false
-  xy: 3676, 1930
-  size: 50, 600
-  orig: 50, 600
-  offset: 0, 0
-  index: 2
-walls/plasma-wall
-  rotate: false
-  xy: 3728, 2532
-  size: 50, 600
-  orig: 50, 600
-  offset: 0, 0
-  index: 1
-walls/plasma-wall
-  rotate: false
-  xy: 406, 532
-  size: 50, 600
-  orig: 50, 600
-  offset: 0, 0
-  index: 2
-yarn-man/yarn-man
-  rotate: false
-  xy: 0, 1134
-  size: 1836, 2500
-  orig: 1836, 2500
-  offset: 0, 0
-  index: 1
-yarn-man/yarn-man
-  rotate: false
-  xy: 1838, 1134
-  size: 1836, 2500
-  orig: 1836, 2500
-  offset: 0, 0
-  index: 2
-
-animations2.png
-size: 3520,4040
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 newwall/obstacle_blue
   rotate: false
-  xy: 1838, 2020
+  xy: 0, 2020
   size: 839, 2018
   orig: 839, 2018
   offset: 0, 0
   index: -1
 newwall/obstacle_green
   rotate: false
-  xy: 2679, 2020
+  xy: 0, 0
   size: 839, 2018
   orig: 839, 2018
   offset: 0, 0
   index: -1
 newwall/obstacle_red
   rotate: false
-  xy: 1838, 0
+  xy: 841, 2020
   size: 839, 2018
   orig: 839, 2018
   offset: 0, 0
   index: -1
-yarn-man/yarn-man
+player/Female_Run
   rotate: false
-  xy: 0, 1538
-  size: 1836, 2500
-  orig: 1836, 2500
+  xy: 841, 1298
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 1
+player/Female_Run
+  rotate: false
+  xy: 1682, 3318
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 2
+player/Female_Run
+  rotate: false
+  xy: 841, 576
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 3
+player/Female_Run
+  rotate: false
+  xy: 1682, 2596
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 4
+player/Female_Run
+  rotate: false
+  xy: 2404, 3318
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 5
+player/Female_Run
+  rotate: false
+  xy: 2404, 2596
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 6
+player/Male_Run
+  rotate: false
+  xy: 3126, 3318
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 1
+player/Male_Run
+  rotate: false
+  xy: 3126, 3318
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 6
+player/Male_Run
+  rotate: false
+  xy: 3126, 2596
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 2
+player/Male_Run
+  rotate: false
+  xy: 1682, 1874
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 3
+player/Male_Run
+  rotate: false
+  xy: 2404, 1874
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 4
+player/Male_Run
+  rotate: false
+  xy: 3126, 1874
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 5
+walls/discharge-wall
+  rotate: false
+  xy: 3848, 3438
+  size: 50, 600
+  orig: 50, 600
+  offset: 0, 0
+  index: 1
+walls/discharge-wall
+  rotate: false
+  xy: 1563, 1418
+  size: 50, 600
+  orig: 50, 600
+  offset: 0, 0
+  index: 2
+walls/light-wall
+  rotate: false
+  xy: 3848, 2836
+  size: 50, 600
+  orig: 50, 600
+  offset: 0, 0
+  index: 1
+walls/light-wall
+  rotate: false
+  xy: 3900, 3438
+  size: 50, 600
+  orig: 50, 600
+  offset: 0, 0
+  index: 2
+walls/plasma-wall
+  rotate: false
+  xy: 1563, 816
+  size: 50, 600
+  orig: 50, 600
+  offset: 0, 0
+  index: 1
+walls/plasma-wall
+  rotate: false
+  xy: 1615, 1418
+  size: 50, 600
+  orig: 50, 600
+  offset: 0, 0
+  index: 2
