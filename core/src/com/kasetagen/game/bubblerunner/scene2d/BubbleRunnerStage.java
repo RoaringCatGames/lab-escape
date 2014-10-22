@@ -7,9 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -25,6 +23,7 @@ import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.data.WallPattern;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
+import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 import com.kasetagen.game.bubblerunner.util.ViewportUtil;
 
@@ -62,6 +61,7 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float INDICATOR_WIDTH = ViewportUtil.VP_WIDTH/4;
     private static final float INDICATOR_HEIGHT = ViewportUtil.VP_HEIGHT/4;
 
+    private static String characterSelected = "Woman";
     private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, 360f, 360f };//ViewportUtil.VP_WIDTH/8, (ViewportUtil.VP_HEIGHT/3) }; //old width 160f
     //private static float[] floorDimensions = new float[] { 0f, 0f, ViewportUtil.VP_WIDTH, FLOOR_HEIGHT };
     private static float[] wallDimensions = new float[] {ViewportUtil.VP_WIDTH+FLOOR_HEIGHT,
@@ -145,6 +145,7 @@ public class BubbleRunnerStage extends BaseStage {
         highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
         mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
         highestCombo = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
+        characterSelected = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY, "Woman");
 
         //SET WALL VELOCITY
         wallAndFloorVelocity = -1f*(getWidth()/2);
@@ -646,9 +647,26 @@ public class BubbleRunnerStage extends BaseStage {
 
     private void resetGame() {
         if(isDead){
+            bgVolume = gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
+            sfxVolume = gameProcessor.getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY);
+            String charSelect = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY);
+            if(!"".equals(charSelect) && !charSelect.equals(characterSelected)){
+                characterSelected = charSelect;
+                String aniName = getPlayerAnimationName();
+                TextureAtlas atlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
+
+                Animation ani = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(aniName));
+                player.resetAnimation(ani);
+            }
+
             player.setIsDead(false);
             deathOverlay.setVisible(false);
             info.reset();
+
+            currentComboLevel = ComboLevels.NONE;
+            currentCombo = 0;
+            highestRunCombo = 0;
+
             for(Wall w: walls){
                 w.remove();
             }
@@ -758,11 +776,14 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private void initializePlayer(int maxFields) {
+        String aniName = getPlayerAnimationName();
+
         player = new Player(playerDimensions[0],
                 playerDimensions[1],
                 playerDimensions[2],
                 playerDimensions[3],
-                assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS));
+                assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS),
+                aniName);
         player.maxFields = maxFields;
         addActor(player);
 
@@ -771,7 +792,11 @@ public class BubbleRunnerStage extends BaseStage {
         particleBubble.start();
         particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
     }
-    
+
+    private String getPlayerAnimationName() {
+        return characterSelected.equals("Woman") ? "player/Female_Run" : "player/Male_Run";
+    }
+
     private void initializeEnvironmentGroups(){
     	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.WALL.toString()));
     	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACKFLOOR.toString()));

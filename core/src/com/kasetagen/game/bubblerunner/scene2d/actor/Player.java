@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 
 
 /**
@@ -22,7 +23,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class Player extends GenericGroup {
 
-    private static final float ANIMATION_CYCLE_RATE = 1f/8f;
+    //private static final float ANIMATION_CYCLE_RATE = 1f/8f;
 
     private static final float FIELD_ADJUST = 20f;
 
@@ -38,15 +39,20 @@ public class Player extends GenericGroup {
     private Animation deathAnimation;
     private boolean isDead = false;
 
-    public Player(float x, float y, float width, float height, TextureAtlas atlas){
+    public Player(float x, float y, float width, float height, TextureAtlas atlas, String animationName){
         super(x, y, width, height, null, Color.BLACK);
 
-        animation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("player/Male_Run"));
-        deathAnimation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("explosion/explosion"));
+        animation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(animationName));
+        deathAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions("explosion/explosion"));
         textureRegion = animation.getKeyFrame(keyFrameTime);
         //TODO: Replace ShapeRendering with Animation
         forceFieldType = ForceFieldType.LIGHTNING;
         fields = new Array<ForceField>();
+    }
+
+    public void resetAnimation(Animation ani){
+        animation = ani;
+        keyFrameTime = 0f;
     }
 
     @Override

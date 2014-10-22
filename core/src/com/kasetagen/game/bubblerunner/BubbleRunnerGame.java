@@ -172,6 +172,15 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
     }
 
     @Override
+    public String getStoredString(String key, String defaultValue) {
+        String value = getStoredString(key);
+        if(value == null || "".equals(value.trim())){
+            value = defaultValue;
+        }
+        return value;
+    }
+
+    @Override
     public int getStoredInt(String key) {
         Preferences preferences = Gdx.app.getPreferences(BUBBLE_RUNNER_DATA_NAME);
         int value = -1;
