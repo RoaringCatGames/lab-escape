@@ -66,7 +66,7 @@ public class Player extends GenericGroup {
             }
 
         }else{
-            textureRegion = deathAnimation.getKeyFrame(keyFrameTime, false);
+            textureRegion = deathAnimation.getKeyFrame(keyFrameTime, true);
         }
     }
 
