@@ -13,14 +13,14 @@ explosion/explosion
   index: 1
 explosion/explosion
   rotate: false
-  xy: 3952, 3910
+  xy: 1563, 1022
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 2
 explosion/explosion
   rotate: false
-  xy: 841, 316
+  xy: 3952, 3910
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -97,13 +97,6 @@ player/Male_Run
   index: 1
 player/Male_Run
   rotate: false
-  xy: 3126, 3318
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 6
-player/Male_Run
-  rotate: false
   xy: 3126, 2596
   size: 720, 720
   orig: 720, 720
@@ -130,6 +123,13 @@ player/Male_Run
   orig: 720, 720
   offset: 0, 0
   index: 5
+player/Male_Run
+  rotate: false
+  xy: 1563, 1152
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 6
 walls/discharge-wall
   rotate: false
   xy: 3848, 3438
@@ -139,7 +139,7 @@ walls/discharge-wall
   index: 1
 walls/discharge-wall
   rotate: false
-  xy: 1563, 1418
+  xy: 2285, 1272
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
@@ -160,14 +160,14 @@ walls/light-wall
   index: 2
 walls/plasma-wall
   rotate: false
-  xy: 1563, 816
+  xy: 2337, 1272
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 1
 walls/plasma-wall
   rotate: false
-  xy: 1615, 1418
+  xy: 3848, 2234
   size: 50, 600
   orig: 50, 600
   offset: 0, 0

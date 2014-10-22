@@ -43,12 +43,13 @@ public class BubbleRunnerStage extends BaseStage {
         NONE, NOT_BAD, GREAT, AWESOME, AMAZING, BONKERS, RIDICULOUS, ATOMIC
     }
 
-    private static final int[] COMBO_THRESHOLDS = new int[] {10, 20, 30, 50, 70, 100, 150};//{5, 10, 12, 15, 18, 20, 21};
+    private static final int[] COMBO_THRESHOLDS = new int[] {10, 20, 30, 50, 70, 100, 150};
+//    private static final int[] COMBO_THRESHOLDS = new int[] {5, 10, 12, 15, 18, 20, 21};
 
     private static final float HUD_HEIGHT = 40f;
     private static final float FLOOR_HEIGHT = 160f;
 
-    private static final int SECONDS_BETWEEN_DIFF_SHIFT = 10;
+    private static final int SECONDS_BETWEEN_DIFF_SHIFT = 20;
     private static final long BASE_TIME_BETWEEN_WALLS = 4000L;
     private static final int SECONDS_BETWEEN_ADJUSTS = 5;
     private static final float TIME_DECREASE = 100f;
@@ -61,7 +62,7 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float INDICATOR_WIDTH = ViewportUtil.VP_WIDTH/4;
     private static final float INDICATOR_HEIGHT = ViewportUtil.VP_HEIGHT/4;
 
-    private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, ViewportUtil.VP_WIDTH/8, (ViewportUtil.VP_HEIGHT/3) }; //old width 160f
+    private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, 360f, 360f };//ViewportUtil.VP_WIDTH/8, (ViewportUtil.VP_HEIGHT/3) }; //old width 160f
     //private static float[] floorDimensions = new float[] { 0f, 0f, ViewportUtil.VP_WIDTH, FLOOR_HEIGHT };
     private static float[] wallDimensions = new float[] {ViewportUtil.VP_WIDTH+FLOOR_HEIGHT,
                                                          FLOOR_HEIGHT, 40f, ViewportUtil.VP_HEIGHT-FLOOR_HEIGHT };
