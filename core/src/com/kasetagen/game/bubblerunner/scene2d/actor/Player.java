@@ -1,15 +1,10 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.Map;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 
 
@@ -37,7 +32,10 @@ public class Player extends GenericGroup {
     private float keyFrameTime = 0f;
     private Animation animation;
     private Animation deathAnimation;
+    private Animation shieldAnimation;
     private boolean isDead = false;
+    private boolean isShielding = false;
+    private float shieldKeyFrameTime = 0f;
 
     public Player(float x, float y, float width, float height, TextureAtlas atlas, String animationName){
         super(x, y, width, height, null, Color.BLACK);
@@ -50,6 +48,16 @@ public class Player extends GenericGroup {
         fields = new Array<ForceField>();
     }
 
+    public void setShieldingAnimation(Animation ani){
+        shieldAnimation = ani;
+        shieldKeyFrameTime = 0f;
+    }
+
+    public void startShield(){
+        isShielding = true;
+        shieldKeyFrameTime = 0f;
+    }
+
     public void resetAnimation(Animation ani){
         animation = ani;
         keyFrameTime = 0f;
@@ -60,9 +68,22 @@ public class Player extends GenericGroup {
         super.act(delta);
         keyFrameTime += delta;
         if(!isDead){
-            textureRegion = animation.getKeyFrame(keyFrameTime, true);
-            if(!textureRegion.isFlipX()){
-                textureRegion.flip(true, false);
+            if(isShielding && shieldAnimation != null){
+                shieldKeyFrameTime += delta;
+                if(!shieldAnimation.isAnimationFinished(shieldKeyFrameTime)){
+                    textureRegion = shieldAnimation.getKeyFrame(shieldKeyFrameTime, false);
+                    if(!textureRegion.isFlipX()){
+                        textureRegion.flip(true, false);
+                    }
+                }else{
+                    shieldKeyFrameTime = 0;
+                    isShielding = false;
+                }
+            }else{
+                textureRegion = animation.getKeyFrame(keyFrameTime, true);
+                if(!textureRegion.isFlipX()){
+                    textureRegion.flip(true, false);
+                }
             }
 
         }else{

@@ -46,14 +46,14 @@ newwall/obstacle_red
   orig: 839, 2018
   offset: 0, 0
   index: -1
-player/Female_Run
+player/Female_Punch
   rotate: false
   xy: 841, 1298
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 1
-player/Female_Run
+player/Female_Punch
   rotate: false
   xy: 1682, 3318
   size: 720, 720
@@ -66,66 +66,80 @@ player/Female_Run
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 3
+  index: 1
 player/Female_Run
   rotate: false
   xy: 1682, 2596
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 4
+  index: 2
 player/Female_Run
   rotate: false
   xy: 2404, 3318
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
+  index: 3
 player/Female_Run
   rotate: false
   xy: 2404, 2596
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 6
-player/Male_Run
+  index: 4
+player/Female_Run
   rotate: false
   xy: 3126, 3318
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 1
-player/Male_Run
+  index: 5
+player/Female_Run
   rotate: false
   xy: 3126, 2596
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 2
+  index: 6
 player/Male_Run
   rotate: false
   xy: 1682, 1874
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 3
+  index: 1
 player/Male_Run
   rotate: false
   xy: 2404, 1874
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 4
+  index: 2
 player/Male_Run
   rotate: false
   xy: 3126, 1874
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
+  index: 3
 player/Male_Run
   rotate: false
   xy: 1563, 1152
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 4
+player/Male_Run
+  rotate: false
+  xy: 2285, 1152
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 5
+player/Male_Run
+  rotate: false
+  xy: 3007, 1152
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
@@ -139,7 +153,7 @@ walls/discharge-wall
   index: 1
 walls/discharge-wall
   rotate: false
-  xy: 2285, 1272
+  xy: 3729, 1272
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
@@ -160,7 +174,7 @@ walls/light-wall
   index: 2
 walls/plasma-wall
   rotate: false
-  xy: 2337, 1272
+  xy: 3781, 1272
   size: 50, 600
   orig: 50, 600
   offset: 0, 0

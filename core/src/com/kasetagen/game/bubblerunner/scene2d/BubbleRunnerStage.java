@@ -706,7 +706,7 @@ public class BubbleRunnerStage extends BaseStage {
         if(wasAdded){
             //TODO: Play Forcefield SoundFX
             powerOnSound.play(sfxVolume);
-
+            player.startShield();
 
         }else{
             //TODO: Play Resources Limited SoundFX
@@ -777,6 +777,8 @@ public class BubbleRunnerStage extends BaseStage {
 
     private void initializePlayer(int maxFields) {
         String aniName = getPlayerAnimationName();
+        String shieldAniName = getPlayerShieldingAnimationName();
+
 
         player = new Player(playerDimensions[0],
                 playerDimensions[1],
@@ -785,6 +787,9 @@ public class BubbleRunnerStage extends BaseStage {
                 assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS),
                 aniName);
         player.maxFields = maxFields;
+        TextureAtlas atlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
+        Animation shieldingAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(shieldAniName));
+        player.setShieldingAnimation(shieldingAnimation);
         addActor(player);
 
         //NOT SURE WHERE THIS GOES
@@ -795,6 +800,10 @@ public class BubbleRunnerStage extends BaseStage {
 
     private String getPlayerAnimationName() {
         return characterSelected.equals("Woman") ? "player/Female_Run" : "player/Male_Run";
+    }
+
+    private String getPlayerShieldingAnimationName(){
+        return characterSelected.equals("Woman") ? "player/Female_Punch" : "player/Male_Punch";
     }
 
     private void initializeEnvironmentGroups(){
