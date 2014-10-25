@@ -71,6 +71,10 @@ public class ControlGroup extends GenericGroup{
     }
 
 
+    public int getResourceLevel(){
+        return heatScore;
+    }
+
     public int getResourceLevel(ForceFieldType fft){
         return heatScore;
         //return resourceLevels.get(fft);

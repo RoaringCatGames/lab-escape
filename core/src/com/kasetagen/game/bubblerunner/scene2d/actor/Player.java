@@ -1,9 +1,11 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 
@@ -22,6 +24,8 @@ public class Player extends GenericGroup {
 
     private static final float FIELD_ADJUST = 20f;
 
+    private static final int NUM_SHIELD_FRAMES = 2;
+
     public ForceFieldType forceFieldType;
 
     public int maxFields = 1;
@@ -36,6 +40,7 @@ public class Player extends GenericGroup {
     private boolean isDead = false;
     private boolean isShielding = false;
     private float shieldKeyFrameTime = 0f;
+    private int shieldFramesRun = 0;
 
     public Player(float x, float y, float width, float height, TextureAtlas atlas, String animationName){
         super(x, y, width, height, null, Color.BLACK);
@@ -54,8 +59,10 @@ public class Player extends GenericGroup {
     }
 
     public void startShield(){
-        isShielding = true;
-        shieldKeyFrameTime = 0f;
+        if(!isShielding){
+            isShielding = true;
+            shieldKeyFrameTime = 0f;
+        }
     }
 
     public void resetAnimation(Animation ani){
@@ -66,18 +73,29 @@ public class Player extends GenericGroup {
     @Override
     public void act(float delta) {
         super.act(delta);
+        float prevKeyFrameTime = keyFrameTime;
+
         keyFrameTime += delta;
         if(!isDead){
             if(isShielding && shieldAnimation != null){
                 shieldKeyFrameTime += delta;
-                if(!shieldAnimation.isAnimationFinished(shieldKeyFrameTime)){
-                    textureRegion = shieldAnimation.getKeyFrame(shieldKeyFrameTime, false);
-                    if(!textureRegion.isFlipX()){
-                        textureRegion.flip(true, false);
-                    }
-                }else{
-                    shieldKeyFrameTime = 0;
+
+                //We only want to run 2 frames of the shielding Animation that matchup to
+                //  the running animations. So we keep track of the # of times we have swapped frames.
+                TextureRegion prevFrame = shieldAnimation.getKeyFrame(prevKeyFrameTime, true);
+                TextureRegion currentFrame = shieldAnimation.getKeyFrame(keyFrameTime, true);
+
+                if(prevFrame != currentFrame){
+                    shieldFramesRun++;
+                }
+
+                textureRegion = currentFrame;
+                if(!textureRegion.isFlipX()){
+                    textureRegion.flip(true, false);
+                }
+                if(shieldFramesRun >= NUM_SHIELD_FRAMES){
                     isShielding = false;
+                    shieldFramesRun = 0;
                 }
             }else{
                 textureRegion = animation.getKeyFrame(keyFrameTime, true);

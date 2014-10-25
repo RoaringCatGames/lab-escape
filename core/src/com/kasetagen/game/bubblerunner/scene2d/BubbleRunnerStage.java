@@ -313,6 +313,9 @@ public class BubbleRunnerStage extends BaseStage {
                     if(adjustComboLevel(currentCombo)){
                         playComboSoundEffect();
                         explosionVolume /= 2;
+                        //On going up a combo level, we will clear all resource usage
+                        regenResources(controls.getResourceLevel());
+
                     }
 
                     explosionSound.play(explosionVolume);
@@ -530,7 +533,7 @@ public class BubbleRunnerStage extends BaseStage {
         boolean wasChanged = false;
         if(latestCombo < COMBO_THRESHOLDS[0]){
             currentComboLevel = ComboLevels.NONE;
-            wasChanged = true;
+            wasChanged = false;
         }else if(latestCombo == COMBO_THRESHOLDS[0]){
             currentComboLevel = ComboLevels.NOT_BAD;
             wasChanged = true;
