@@ -10,18 +10,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
-import com.kasetagen.game.bubblerunner.delegate.IStageManager;
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
 import com.kasetagen.game.bubblerunner.scene2d.actor.GenericActor;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
-import com.kasetagen.game.bubblerunner.util.ViewportUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,11 +25,10 @@ import com.kasetagen.game.bubblerunner.util.ViewportUtil;
  * Time: 10:59 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, InputProcessor, IStageManager{
+public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{//ApplicationAdapter implements Screen, InputProcessor, IStageManager{
 
     protected IGameProcessor gameProcessor;
 
-    private Stage stage;
     private TextButton startGameButton;
     private TextButton optionsButton;
     private TextureRegion bgTextureRegion;
@@ -42,10 +36,11 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
 
     private Music bgMusic;
     public BubbleRunnerMenu(IGameProcessor delegate){
+        super(delegate);
         this.gameProcessor = delegate;
         stage = new BaseStage();
 
-        bgMusic = delegate.getAssetManager().get(AssetsUtil.BACKGROUND_SOUND, AssetsUtil.MUSIC);
+        bgMusic = delegate.getAssetManager().get(AssetsUtil.EIGHT_BIT_BKG_MUSIC, AssetsUtil.MUSIC);
         bgMusic.setVolume(delegate.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY));
         bgMusic.play();
 
@@ -74,20 +69,20 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
         stage.addActor(new GenericActor(0, 0, stage.getWidth(), stage.getHeight(), bgTextureRegion, Color.DARK_GRAY));
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = gameProcessor.getAssetManager().get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
+        style.font = gameProcessor.getAssetManager().get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT);
         style.fontColor =  Color.CYAN;
         style.overFontColor = Color.RED;
         style.downFontColor = Color.GRAY;
-        float fontScale = 2f;
-        style.font.setScale(fontScale);
+//        float fontScale = 2f;
+//        style.font.setScale(fontScale);
 
-        startGameButton = new TextButton("Press A to Start", style);
+        startGameButton = new TextButton("Touch to Start", style);
         startGameButton.addListener(listener);
         startGameButton.setPosition(((stage.getWidth()/4) * 3) - startGameButton.getWidth()/2, (stage.getHeight()/4));
 
         stage.addActor(startGameButton);
 
-        optionsButton = new TextButton("", style);
+        optionsButton = new TextButton("Options", style);
         optionsButton.setPosition(((stage.getWidth() / 4) * 3) - startGameButton.getWidth() / 2, (stage.getHeight() / 8));
         optionsButton.addListener(listener);
 
@@ -98,22 +93,19 @@ public class BubbleRunnerMenu extends ApplicationAdapter implements Screen, Inpu
     public void render(float delta) {
         stage.act(delta);
 
-        Viewport vp = stage.getViewport();
-        int screenW = vp.getScreenWidth();
-        int screenH = vp.getScreenHeight();
-        int leftCrop = vp.getLeftGutterWidth();
-        int bottomCrop = vp.getBottomGutterHeight();
-        int xPos = leftCrop;
-        int yPos = bottomCrop;
+        if(Gdx.graphics.isFullscreen()){
+            Viewport vp = stage.getViewport();
+            int screenW = vp.getScreenWidth();
+            int screenH = vp.getScreenHeight();
+            int leftCrop = vp.getLeftGutterWidth();
+            int bottomCrop = vp.getBottomGutterHeight();
+            int xPos = leftCrop;
+            int yPos = bottomCrop;
 
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
+        }
         stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height);
     }
 
     @Override

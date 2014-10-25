@@ -59,17 +59,26 @@ public class AssetsUtil {
     public static final String LASER_CHECKED = "images/buttons/button_discharge_off.png";
 
     //Font Paths
-    public static final String COURIER_FONT_12 = "fonts/courier-new-bold-12.fnt";
-    public static final String COURIER_FONT_18 = "fonts/courier-new-bold-18.fnt";
-    public static final String COURIER_FONT_32 = "fonts/courier-new-bold-32.fnt";
-    public static final String COURIER_FONT_IMG = "fonts/courier-new-bold.png";
+    public static final String REXLIA_64 = "fonts/rexlia-64.fnt";
+    public static final String REXLIA_48 = "fonts/rexlia-48.fnt";
+    public static final String REXLIA_32 = "fonts/rexlia-32.fnt";
+    public static final String REXLIA_24 = "fonts/rexlia-24.fnt";
+    public static final String REXLIA_16 = "fonts/rexlia-16.fnt";
 
     //Audio Paths
-    public static final String ALT_BG_MUSIC = "audio/NeverStopRunning.mp3";
+    public static final String EIGHT_BIT_BKG_MUSIC = "audio/NeverStopRunning.mp3";
+    public static final String DISTORTION_BKG_MUSIC = "audio/bkmusic.mp3";
     public static final String ZAP_SOUND = "audio/zap.mp3";
-    public static final String BACKGROUND_SOUND = "audio/bkmusic.mp3";
     public static final String EXPLOSION_SOUND = "audio/explosion.mp3";
     public static final String POWER_ON_SOUND = "audio/power-on.mp3";
+
+    public static final String NOT_BAD = "audio/sfx/not-bad_1.mp3";
+    public static final String GREAT = "audio/sfx/great_1.mp3";
+    public static final String AWESOME = "audio/sfx/awesome_1.mp3";
+    public static final String AMAZING = "audio/sfx/amazing_1.mp3";
+    public static final String BONKERS = "audio/sfx/bonkers.mp3";
+    public static final String RIDICULOUS = "audio/sfx/ridiculous_1.mp3";
+    public static final String ATOMIC = "audio/sfx/atomic.mp3";
     
     //Particle Paths
     public static final String BUBBLE_PARTICLE = "particles/bubbleflame_right.p";

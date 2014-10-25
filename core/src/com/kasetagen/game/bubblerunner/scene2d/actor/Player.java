@@ -5,11 +5,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.Map;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
+import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 
 
 /**
@@ -22,9 +20,11 @@ import com.badlogic.gdx.utils.ObjectMap;
 
 public class Player extends GenericGroup {
 
-    private static final float ANIMATION_CYCLE_RATE = 1f/6f;
+    //private static final float ANIMATION_CYCLE_RATE = 1f/8f;
 
     private static final float FIELD_ADJUST = 20f;
+
+    private static final int NUM_SHIELD_FRAMES = 2;
 
     public ForceFieldType forceFieldType;
 
@@ -36,27 +36,76 @@ public class Player extends GenericGroup {
     private float keyFrameTime = 0f;
     private Animation animation;
     private Animation deathAnimation;
+    private Animation shieldAnimation;
     private boolean isDead = false;
+    private boolean isShielding = false;
+    private float shieldKeyFrameTime = 0f;
+    private int shieldFramesRun = 0;
 
-    public Player(float x, float y, float width, float height, TextureAtlas atlas){
+    public Player(float x, float y, float width, float height, TextureAtlas atlas, String animationName){
         super(x, y, width, height, null, Color.BLACK);
 
-        animation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("stickman/player"));
-        deathAnimation = new Animation(ANIMATION_CYCLE_RATE, atlas.findRegions("explosion/explosion"));
+        animation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(animationName));
+        deathAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions("explosion/explosion"));
         textureRegion = animation.getKeyFrame(keyFrameTime);
         //TODO: Replace ShapeRendering with Animation
         forceFieldType = ForceFieldType.LIGHTNING;
         fields = new Array<ForceField>();
     }
 
+    public void setShieldingAnimation(Animation ani){
+        shieldAnimation = ani;
+        shieldKeyFrameTime = 0f;
+    }
+
+    public void startShield(){
+        if(!isShielding){
+            isShielding = true;
+            shieldKeyFrameTime = 0f;
+        }
+    }
+
+    public void resetAnimation(Animation ani){
+        animation = ani;
+        keyFrameTime = 0f;
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
+        float prevKeyFrameTime = keyFrameTime;
+
         keyFrameTime += delta;
         if(!isDead){
-            textureRegion = animation.getKeyFrame(keyFrameTime, true);
+            if(isShielding && shieldAnimation != null){
+                shieldKeyFrameTime += delta;
+
+                //We only want to run 2 frames of the shielding Animation that matchup to
+                //  the running animations. So we keep track of the # of times we have swapped frames.
+                TextureRegion prevFrame = shieldAnimation.getKeyFrame(prevKeyFrameTime, true);
+                TextureRegion currentFrame = shieldAnimation.getKeyFrame(keyFrameTime, true);
+
+                if(prevFrame != currentFrame){
+                    shieldFramesRun++;
+                }
+
+                textureRegion = currentFrame;
+                if(!textureRegion.isFlipX()){
+                    textureRegion.flip(true, false);
+                }
+                if(shieldFramesRun >= NUM_SHIELD_FRAMES){
+                    isShielding = false;
+                    shieldFramesRun = 0;
+                }
+            }else{
+                textureRegion = animation.getKeyFrame(keyFrameTime, true);
+                if(!textureRegion.isFlipX()){
+                    textureRegion.flip(true, false);
+                }
+            }
+
         }else{
-            textureRegion = deathAnimation.getKeyFrame(keyFrameTime, false);
+            textureRegion = deathAnimation.getKeyFrame(keyFrameTime, true);
         }
     }
 
@@ -68,10 +117,6 @@ public class Player extends GenericGroup {
     }
 
     public void addField(ForceFieldType ff){
-//        int availableLevel = resourceLevels.get(ff);
-//        if(availableLevel < RESOURCE_USAGE){
-//            return false;
-//        }
 
         if(fields.size == maxFields){
             //Remove the forcefield
@@ -91,10 +136,6 @@ public class Player extends GenericGroup {
 
         this.addActor(field);
         fields.add(field);
-
-//        resourceLevels.put(ff, availableLevel - RESOURCE_USAGE);
-
-//        return true;
     }
 
     public void addField(ForceFieldType ff, int index){

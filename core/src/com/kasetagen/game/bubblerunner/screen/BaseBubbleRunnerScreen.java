@@ -1,6 +1,7 @@
 package com.kasetagen.game.bubblerunner.screen;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -85,5 +86,12 @@ public class BaseBubbleRunnerScreen extends ApplicationAdapter implements Screen
     @Override
     public void hide() {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        Gdx.app.log("Screen Resizing", "Resizing: " + width + "x" + height);
+        stage.getViewport().update(width, height);
+        super.resize(width, height);
     }
 }

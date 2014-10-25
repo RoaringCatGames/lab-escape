@@ -5,19 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
-import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerMenu;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerOptionsMenu;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerScreen;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class BubbleRunnerGame extends Game implements IGameProcessor {
 
@@ -35,14 +30,22 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
 
     protected AssetManager assetManager;
 
+    boolean isControllerEnabled = false;
+    public BubbleRunnerGame(boolean isControllerEnabled){
+        this.isControllerEnabled = isControllerEnabled;
+    }
+
+
 	@Override
 	public void create () {
 
-        Graphics.DisplayMode dm = Gdx.graphics.getDesktopDisplayMode();
-        Gdx.app.log("DISPLAY", "W: " + dm.width + " H: " + dm.height + " X: " + dm.bitsPerPixel);
-        Gdx.graphics.setDisplayMode(dm.width, dm.height, true);
-        Gdx.graphics.setVSync(true);
-        Gdx.input.setCursorCatched(true);
+        if(isControllerEnabled){
+            Graphics.DisplayMode dm = Gdx.graphics.getDesktopDisplayMode();
+            Gdx.app.log("DISPLAY", " Using Controller Mode. W: " + dm.width + " H: " + dm.height + " X: " + dm.bitsPerPixel);
+            Gdx.graphics.setDisplayMode(dm.width, dm.height, true);
+            Gdx.graphics.setVSync(true);
+            Gdx.input.setCursorCatched(true);
+        }
         assetManager = new AssetManager();
         loadAssets();
 	}
@@ -68,16 +71,27 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.TITLE_SCREEN, AssetsUtil.TEXTURE);
         assetManager.load(AssetsUtil.CONTROLS, AssetsUtil.TEXTURE);
 
+        assetManager.load(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT);
+        assetManager.load(AssetsUtil.REXLIA_48, AssetsUtil.BITMAP_FONT);
+        assetManager.load(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT);
+        assetManager.load(AssetsUtil.REXLIA_24, AssetsUtil.BITMAP_FONT);
+        assetManager.load(AssetsUtil.REXLIA_16, AssetsUtil.BITMAP_FONT);
 
-        assetManager.load(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
-        assetManager.load(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
-        assetManager.load(AssetsUtil.COURIER_FONT_12, AssetsUtil.BITMAP_FONT);
 
-        assetManager.load(AssetsUtil.ALT_BG_MUSIC, AssetsUtil.MUSIC);
-        assetManager.load(AssetsUtil.BACKGROUND_SOUND, AssetsUtil.MUSIC);
+        assetManager.load(AssetsUtil.EIGHT_BIT_BKG_MUSIC, AssetsUtil.MUSIC);
+        assetManager.load(AssetsUtil.DISTORTION_BKG_MUSIC, AssetsUtil.MUSIC);
         assetManager.load(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.EXPLOSION_SOUND, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.POWER_ON_SOUND, AssetsUtil.SOUND);
+
+        assetManager.load(AssetsUtil.NOT_BAD, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.GREAT, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.AWESOME, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.BONKERS, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.RIDICULOUS, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.ATOMIC, AssetsUtil.SOUND);
+
 
         assetManager.load(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
         assetManager.load(AssetsUtil.BUBBLE_PARTICLE_IMG, AssetsUtil.TEXTURE);
@@ -134,7 +148,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
             }
 
             setScreen(menu);
-            Gdx.input.setInputProcessor(menu);
+            Gdx.input.setInputProcessor(menu.getStage());
 
         }else if(RUNNER.equalsIgnoreCase(screenName)){
             //Load the Game Screen!!
@@ -153,6 +167,15 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         String value = "";
         if(preferences.contains(key)){
             value = preferences.getString(key);
+        }
+        return value;
+    }
+
+    @Override
+    public String getStoredString(String key, String defaultValue) {
+        String value = getStoredString(key);
+        if(value == null || "".equals(value.trim())){
+            value = defaultValue;
         }
         return value;
     }

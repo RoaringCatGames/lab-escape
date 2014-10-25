@@ -14,6 +14,7 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new BubbleRunnerGame();
+                boolean useController = false;
+                return new BubbleRunnerGame(useController);
         }
 }

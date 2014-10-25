@@ -1,5 +1,7 @@
 package com.kasetagen.game.bubblerunner.scene2d;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
@@ -7,20 +9,19 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
@@ -28,11 +29,20 @@ import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.data.WallPattern;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
-import com.kasetagen.game.bubblerunner.scene2d.actor.*;
+import com.kasetagen.game.bubblerunner.scene2d.actor.ControlGroup;
+import com.kasetagen.game.bubblerunner.scene2d.actor.Environment;
+import com.kasetagen.game.bubblerunner.scene2d.actor.EnvironmentManager;
+import com.kasetagen.game.bubblerunner.scene2d.actor.ForceField;
+import com.kasetagen.game.bubblerunner.scene2d.actor.ForceFieldType;
+import com.kasetagen.game.bubblerunner.scene2d.actor.GameInfo;
+import com.kasetagen.game.bubblerunner.scene2d.actor.GenericActor;
+import com.kasetagen.game.bubblerunner.scene2d.actor.Overlay;
+import com.kasetagen.game.bubblerunner.scene2d.actor.Player;
+import com.kasetagen.game.bubblerunner.scene2d.actor.Wall;
+import com.kasetagen.game.bubblerunner.scene2d.actor.WarningIndicator;
+import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 import com.kasetagen.game.bubblerunner.util.ViewportUtil;
-
-import java.util.Random;
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,11 +53,17 @@ import java.util.Random;
  */
 public class BubbleRunnerStage extends BaseStage {
 
+    private enum ComboLevels {
+        NONE, NOT_BAD, GREAT, AWESOME, AMAZING, BONKERS, RIDICULOUS, ATOMIC
+    }
+
+    private static final int[] COMBO_THRESHOLDS = new int[] {10, 20, 30, 50, 70, 100, 150};
+//    private static final int[] COMBO_THRESHOLDS = new int[] {5, 10, 12, 15, 18, 20, 21};
 
     private static final float HUD_HEIGHT = 40f;
     private static final float FLOOR_HEIGHT = 160f;
 
-    private static final int SECONDS_BETWEEN_DIFF_SHIFT = 30;
+    private static final int SECONDS_BETWEEN_DIFF_SHIFT = 20;
     private static final long BASE_TIME_BETWEEN_WALLS = 4000L;
     private static final int SECONDS_BETWEEN_ADJUSTS = 5;
     private static final float TIME_DECREASE = 100f;
@@ -60,7 +76,8 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float INDICATOR_WIDTH = ViewportUtil.VP_WIDTH/4;
     private static final float INDICATOR_HEIGHT = ViewportUtil.VP_HEIGHT/4;
 
-    private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, ViewportUtil.VP_WIDTH/8, (ViewportUtil.VP_HEIGHT/3) }; //old width 160f
+    private static String characterSelected = "Woman";
+    private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, 360f, 360f };//ViewportUtil.VP_WIDTH/8, (ViewportUtil.VP_HEIGHT/3) }; //old width 160f
     //private static float[] floorDimensions = new float[] { 0f, 0f, ViewportUtil.VP_WIDTH, FLOOR_HEIGHT };
     private static float[] wallDimensions = new float[] {ViewportUtil.VP_WIDTH+FLOOR_HEIGHT,
                                                          FLOOR_HEIGHT, 40f, ViewportUtil.VP_HEIGHT-FLOOR_HEIGHT };
@@ -72,12 +89,18 @@ public class BubbleRunnerStage extends BaseStage {
     //Delegates
 	private IGameProcessor gameProcessor;
 	private AssetManager assetManager;
-    private Batch batch;
+    //private Batch batch;
 
     //State Values
     private int highScore = 0;
     private int mostMisses = 0;
     private boolean isDead = false;
+
+    private int currentCombo = 0;
+    private int highestRunCombo = 0;
+    private int highestCombo = 0;
+    private ComboLevels currentComboLevel = ComboLevels.NONE;
+    private Label comboLabel;
 
     //Obstacle Generation Values
     /**
@@ -114,6 +137,8 @@ public class BubbleRunnerStage extends BaseStage {
     //TODO: Move into Player?
     private ParticleEffect particleBubble;
 
+    private ObjectMap<ComboLevels, Sound> comboSfx;
+
     private float bgVolume;
     private float sfxVolume;
 
@@ -125,8 +150,7 @@ public class BubbleRunnerStage extends BaseStage {
         super();
         this.gameProcessor = gameProcessor;
     	assetManager = this.gameProcessor.getAssetManager();
-    	batch = this.getBatch();
-
+    	//batch = this.getBatch();
     	EnvironmentManager.initialize(this);
     	
         //Initialize Privates
@@ -135,6 +159,8 @@ public class BubbleRunnerStage extends BaseStage {
 
         highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
         mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
+        highestCombo = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
+        characterSelected = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY, "Woman");
 
         //SET WALL VELOCITY
         wallAndFloorVelocity = -1f*(getWidth()/2);
@@ -165,6 +191,22 @@ public class BubbleRunnerStage extends BaseStage {
 
         //Initialize HUD (Stats, and GameInfo)
         initializeHUD();
+
+        Label.LabelStyle style = new Label.LabelStyle(assetManager.get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT), Color.ORANGE);
+        comboLabel = new Label(currentCombo + "x Combo!!", style);
+        comboLabel.setPosition(player.getX(), player.getTop());
+        comboLabel.setVisible(false);
+        addActor(comboLabel);
+
+
+        comboSfx = new ObjectMap<ComboLevels, Sound>();
+        comboSfx.put(ComboLevels.NOT_BAD, assetManager.get(AssetsUtil.NOT_BAD, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.GREAT, assetManager.get(AssetsUtil.GREAT, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.AWESOME, assetManager.get(AssetsUtil.AWESOME, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.AMAZING, assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.BONKERS, assetManager.get(AssetsUtil.BONKERS, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.RIDICULOUS, assetManager.get(AssetsUtil.RIDICULOUS, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.ATOMIC, assetManager.get(AssetsUtil.ATOMIC, AssetsUtil.SOUND));
 
         TextureRegion instructionsRegion = new TextureRegion(assetManager.get(AssetsUtil.CONTROLS, AssetsUtil.TEXTURE));
         instructions = new GenericActor(0f, 0f, instructionsRegion.getRegionWidth(), instructionsRegion.getRegionHeight(), instructionsRegion, Color.CYAN);
@@ -210,12 +252,22 @@ public class BubbleRunnerStage extends BaseStage {
             //Adjust Resource Levels
 
             int index = getActors().size - 1;
+            deathOverlay.setZIndex(index--);
+            comboLabel.setZIndex(index--);
             instructions.setZIndex(index--);
             info.setZIndex(index--);
             player.setZIndex(index--);
             for(Wall w:walls){
                 w.setZIndex(index--);
             }
+
+            if(currentCombo >= COMBO_THRESHOLDS[0]){
+                comboLabel.setText(currentCombo + "x Combo!!");
+                comboLabel.setVisible(true);
+            }else{
+                comboLabel.setVisible(false);
+            }
+
 
             particleBubble.update(delta);
             particleBubble.setPosition(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 4);
@@ -225,12 +277,12 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     @Override
-    public void draw() {     
+    public void draw() {
         super.draw();
-        
-        batch.begin();
+
+        //batch.begin();
         //particleBubble.draw(batch);
-        batch.end();
+        //batch.end();
     }
 
     private void processResources(){
@@ -264,13 +316,32 @@ public class BubbleRunnerStage extends BaseStage {
                 //  and increment the score
                 if(w.forceFieldType == outerField.forceFieldType){
                     wallsToRemove.add(w);
-                    info.score += 1;
-                    explosionSound.play(sfxVolume);
+                    info.score += getWallPointValue(1);
+
+                    //Increment our Combo counter
+                    currentCombo += 1;
+                    if(highestRunCombo < currentCombo){
+                        highestRunCombo = currentCombo;
+                    }
+
+                    float explosionVolume = sfxVolume;
+                    if(adjustComboLevel(currentCombo)){
+                        playComboSoundEffect();
+                        explosionVolume /= 2;
+                        //On going up a combo level, we will clear all resource usage
+                        regenResources(controls.getResourceLevel());
+
+                    }
+
+                    explosionSound.play(explosionVolume);
                 }else{
                     //If we hit a bad wall, we reduce your score
                     //  This will discourage jamming out fields like crazy
                     info.score -= 1;
                     info.misses += 1;
+
+                    //Clear our combo
+                    currentCombo = 0;
                 }
 
                 //Destroy the forcefield if it collides with a wall
@@ -429,13 +500,13 @@ public class BubbleRunnerStage extends BaseStage {
         String name;
         switch(fft){
             case LIGHTNING:
-                name = "newwall/obstacle_blue";//"walls/light-wall";
+                name = "newwall/obstacle_blue";
                 break;
             case PLASMA:
-                name = "newwall/obstacle_green";//"walls/plasma-wall";
+                name = "newwall/obstacle_green";
                 break;
             case LASER:
-                name = "newwall/obstacle_red";//"walls/discharge-wall";
+                name = "newwall/obstacle_red";
                 break;
             default:
                 name = "walls/light-wall";
@@ -444,26 +515,6 @@ public class BubbleRunnerStage extends BaseStage {
 
         return name;
     }
-
-//    private TextureRegion getTextureRegionForForceFieldType(ForceFieldType fft) {
-//        Texture texture;
-//        switch(fft){
-//            case LIGHTNING:
-//                texture = assetManager.get(AssetsUtil.LIGHTNING_WALL, AssetsUtil.TEXTURE);
-//                break;
-//            case PLASMA:
-//                texture = assetManager.get(AssetsUtil.PLASMA_WALL, AssetsUtil.TEXTURE);
-//                break;
-//            case LASER:
-//                texture = assetManager.get(AssetsUtil.LASER_WALL, AssetsUtil.TEXTURE);
-//                break;
-//            default:
-//                texture = assetManager.get(AssetsUtil.LIGHTNING_WALL, AssetsUtil.TEXTURE);
-//                break;
-//        }
-//
-//        return new TextureRegion(texture);
-//    }
 
     private WallPattern getRandomWallPattern(){
         WallPattern p = new WallPattern(20f);
@@ -477,6 +528,56 @@ public class BubbleRunnerStage extends BaseStage {
         }
 
         return p;
+    }
+
+    private int getWallPointValue(int baseValue){
+
+        int result = baseValue;
+        for(int threshold:COMBO_THRESHOLDS){
+            if(currentCombo >= threshold){
+                result *= 2;
+            }else{
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    private boolean adjustComboLevel(int latestCombo){
+        boolean wasChanged = false;
+        if(latestCombo < COMBO_THRESHOLDS[0]){
+            currentComboLevel = ComboLevels.NONE;
+            wasChanged = false;
+        }else if(latestCombo == COMBO_THRESHOLDS[0]){
+            currentComboLevel = ComboLevels.NOT_BAD;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[1]){
+            currentComboLevel = ComboLevels.GREAT;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[2]){
+            currentComboLevel = ComboLevels.AWESOME;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[3]){
+            currentComboLevel = ComboLevels.AMAZING;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[4]){
+            currentComboLevel = ComboLevels.BONKERS;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[5]){
+            currentComboLevel = ComboLevels.RIDICULOUS;
+            wasChanged = true;
+        }else if(latestCombo == COMBO_THRESHOLDS[6]){
+            currentComboLevel = ComboLevels.ATOMIC;
+            wasChanged = true;
+        }
+        return wasChanged;
+    }
+
+    private void playComboSoundEffect(){
+        if(currentComboLevel != ComboLevels.NONE){
+            comboSfx.get(currentComboLevel).play(sfxVolume);
+        }
     }
 
     private void adjustDifficulty(){
@@ -525,10 +626,18 @@ public class BubbleRunnerStage extends BaseStage {
             needsSave = true;
         }
 
+        if(highestRunCombo > highestCombo){
+            highestCombo = highestRunCombo;
+            needsSave = true;
+        }
+
         if(needsSave){
             saveCurrentStats();
         }
-        deathOverlay.setSubText("Score: " + info.score + "\t Misses: " + info.misses + "\nBest Score: " + highScore + "\t Most Misses: " + mostMisses);
+
+        deathOverlay.setSubText("Score: " + info.score + "\t Best Score: " + highScore +
+                                "\nMisses: " + info.misses + "\t Most Misses: " + mostMisses +
+                                "\nRun Top Combo: " + highestRunCombo + "\t Highest Combo: " + highestCombo);
         deathOverlay.setVisible(true);
     }
 
@@ -545,15 +654,37 @@ public class BubbleRunnerStage extends BaseStage {
                 if(mostMisses > currentMostMisses){
                     prefs.putInteger(GameStats.MOST_MISSES_KEY, mostMisses);
                 }
+
+                int currentHighestCombo = prefs.getInteger(GameStats.HIGH_COMBO_KEY);
+                if(highestCombo > currentHighestCombo){
+                    prefs.putInteger(GameStats.HIGH_COMBO_KEY, highestCombo);
+                }
             }
         });
     }
 
     private void resetGame() {
         if(isDead){
+            bgVolume = gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
+            sfxVolume = gameProcessor.getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY);
+            String charSelect = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY);
+            if(!"".equals(charSelect) && !charSelect.equals(characterSelected)){
+                characterSelected = charSelect;
+                String aniName = getPlayerAnimationName();
+                TextureAtlas atlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
+
+                Animation ani = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(aniName));
+                player.resetAnimation(ani);
+            }
+
             player.setIsDead(false);
             deathOverlay.setVisible(false);
             info.reset();
+
+            currentComboLevel = ComboLevels.NONE;
+            currentCombo = 0;
+            highestRunCombo = 0;
+
             for(Wall w: walls){
                 w.remove();
             }
@@ -575,20 +706,6 @@ public class BubbleRunnerStage extends BaseStage {
         player.maxFields = info.maxFields;
     }
 
-    public void toggleListener(){
-
-        player.clearFields();
-        if(currentListener == createAndLeaveListener){
-            this.removeListener(createAndLeaveListener);
-            this.addListener(keysReleasedListener);
-            currentListener = keysReleasedListener;
-        }else{
-            this.removeListener(keysReleasedListener);
-            this.addListener(createAndLeaveListener);
-            currentListener = createAndLeaveListener;
-        }
-    }
-
     private void addField(ForceFieldType fft){
         if(isDead){
             return;
@@ -607,7 +724,7 @@ public class BubbleRunnerStage extends BaseStage {
         if(wasAdded){
             //TODO: Play Forcefield SoundFX
             powerOnSound.play(sfxVolume);
-
+            player.startShield();
 
         }else{
             //TODO: Play Resources Limited SoundFX
@@ -644,7 +761,7 @@ public class BubbleRunnerStage extends BaseStage {
     private void initializeAmbience() {
 
         initializeVolumes();
-        music = assetManager.get(AssetsUtil.ALT_BG_MUSIC, AssetsUtil.MUSIC);
+        music = assetManager.get(AssetsUtil.DISTORTION_BKG_MUSIC, AssetsUtil.MUSIC);
         music.setVolume(bgVolume);
         music.play();
 
@@ -654,9 +771,9 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private void initializeDeathOverlay() {
-        BitmapFont mainFont = assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT);
-        BitmapFont subFont = assetManager.get(AssetsUtil.COURIER_FONT_18, AssetsUtil.BITMAP_FONT);
-        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.PURPLE, Color.WHITE, mainFont, subFont, "You Failed to Escape!", "Score: 0\nBest Score: 0");
+        BitmapFont mainFont = assetManager.get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT);
+        BitmapFont subFont = assetManager.get(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT);
+        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.PURPLE, Color.DARK_GRAY, mainFont, subFont, "You Failed to Escape!", "Score: 0\nBest Score: 0");
         deathOverlay.setVisible(false);
 
         deathOverlay.setDismissButtonEvent(new ClickListener(){
@@ -665,17 +782,32 @@ public class BubbleRunnerStage extends BaseStage {
                 resetGame();
             }
         });
+
+        deathOverlay.setHomeButtonEvent(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
+            }
+        });
         addActor(deathOverlay);
         deathOverlay.setZIndex(getActors().size - 1);
     }
 
     private void initializePlayer(int maxFields) {
+        String aniName = getPlayerAnimationName();
+        String shieldAniName = getPlayerShieldingAnimationName();
+
+
         player = new Player(playerDimensions[0],
                 playerDimensions[1],
                 playerDimensions[2],
                 playerDimensions[3],
-                assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS));
+                assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS),
+                aniName);
         player.maxFields = maxFields;
+        TextureAtlas atlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
+        Animation shieldingAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(shieldAniName));
+        player.setShieldingAnimation(shieldingAnimation);
         addActor(player);
 
         //NOT SURE WHERE THIS GOES
@@ -683,7 +815,15 @@ public class BubbleRunnerStage extends BaseStage {
         particleBubble.start();
         particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
     }
-    
+
+    private String getPlayerAnimationName() {
+        return characterSelected.equals("Woman") ? "player/Female_Run" : "player/Male_Run";
+    }
+
+    private String getPlayerShieldingAnimationName(){
+        return characterSelected.equals("Woman") ? "player/Female_Punch" : "player/Male_Punch";
+    }
+
     private void initializeEnvironmentGroups(){
     	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.WALL.toString()));
     	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACKFLOOR.toString()));
@@ -710,7 +850,7 @@ public class BubbleRunnerStage extends BaseStage {
         float infoY = ViewportUtil.VP_HEIGHT - HUD_HEIGHT;
         float infoWidth = getWidth();
         float infoHeight = HUD_HEIGHT;
-        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.COURIER_FONT_32, AssetsUtil.BITMAP_FONT), controls);
+        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT), controls); //COURIER_FONT_32, AssetsUtil.BITMAP_FONT), controls);
         addActor(info);
     }
     
@@ -725,64 +865,31 @@ public class BubbleRunnerStage extends BaseStage {
                 }else if(Input.Keys.D == keycode || Input.Keys.RIGHT == keycode){  //Or Right
                     addLaserField();
                 }else if(Input.Keys.TAB == keycode){
-                    //toggleListener();
                     KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
                 }else if(Input.Keys.SPACE == keycode){
-                    if(instructions.isVisible()){
-                        instructions.setVisible(false);
-                    }
+                    toggleInstructionsScreen();
                     resetGame();
                 }else if(Input.Keys.ESCAPE == keycode){
                     gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
                 }
                 return super.keyDown(event, keycode);
             }
-        };
-
-        keysReleasedListener = new InputListener(){
-
-            boolean isADown = false;
-            boolean isSDown = false;
-            boolean isDDown = false;
 
             @Override
-            public boolean keyDown(InputEvent event, int keycode) {
-                if(Input.Keys.A == keycode && !isADown){
-                    player.addField(ForceFieldType.LIGHTNING, 0);
-                    isADown = true;
-                }else if(Input.Keys.S == keycode && !isSDown){
-                    player.addField(ForceFieldType.PLASMA, 0);
-                    isSDown = true;
-                }else if(Input.Keys.D == keycode & !isDDown){
-                    player.addField(ForceFieldType.LASER, 0);
-                    isDDown = true;
-                }else if(Input.Keys.TAB == keycode){
-                    //toggleListener();
-                    KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
-                }else if(Input.Keys.SPACE == keycode){
-                    resetGame();
-                }
-                return super.keyDown(event, keycode);
-            }
-
-            @Override
-            public boolean keyUp(InputEvent event, int keycode) {
-                if(Input.Keys.A == keycode && isADown){
-                    player.removeField(ForceFieldType.LIGHTNING);
-                    isADown = false;
-                }else if(Input.Keys.S == keycode && isSDown){
-                    player.removeField(ForceFieldType.PLASMA);
-                    isSDown = false;
-                }else if(Input.Keys.D == keycode & isDDown){
-                    player.removeField(ForceFieldType.LASER);
-                    isDDown = false;
-                }
-                return super.keyDown(event, keycode);
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                toggleInstructionsScreen();
+                return super.touchDown(event, x, y, pointer, button);
             }
         };
 
         this.addListener(createAndLeaveListener);
         currentListener = createAndLeaveListener;
+    }
+
+    private void toggleInstructionsScreen() {
+        if(instructions.isVisible()){
+            instructions.setVisible(false);
+        }
     }
 
     private void initializeButtonControls(){

@@ -3,7 +3,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 
 public class BubbleTexturePacker {
     //private static final String INPUT_DIR = Gdx.files.internal("assets/data/animations").toString();
-    private static final String INPUT_DIR = "../android/assets/images/animations/";
+    private static final String INPUT_DIR = "resources/";
     private static final String OUTPUT_DIR = "../android/assets/animations/";
     private static final String PACK_FILE = "animations";
 

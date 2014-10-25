@@ -12,7 +12,9 @@ public class IOSLauncher extends IOSApplication.Delegate {
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
         config.orientationLandscape = true;
-        return new IOSApplication(new BubbleRunnerGame(), config);
+
+        boolean useController = false;
+        return new IOSApplication(new BubbleRunnerGame(useController), config);
     }
 
     public static void main(String[] argv) {

@@ -16,6 +16,7 @@ public interface IGameProcessor {
     public AssetManager getAssetManager();
     public void changeToScreen(String screenName);
     public String getStoredString(String key);
+    public String getStoredString(String key, String defaultValue);
     public int getStoredInt(String key);
     public float getStoredFloat(String key);
 
