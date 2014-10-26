@@ -1,7 +1,6 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 /**
  * Created with IntelliJ IDEA.

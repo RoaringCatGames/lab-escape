@@ -1,7 +1,6 @@
 package com.kasetagen.game.bubblerunner.delegate;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.data.IDataSaver;
 
 /**

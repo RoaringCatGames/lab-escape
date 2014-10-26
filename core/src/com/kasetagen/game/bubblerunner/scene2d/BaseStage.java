@@ -1,7 +1,6 @@
 package com.kasetagen.game.bubblerunner.scene2d;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.kasetagen.game.bubblerunner.util.ViewportUtil;
 

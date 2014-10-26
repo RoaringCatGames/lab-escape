@@ -3,7 +3,6 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.kasetagen.engine.gdx.scenes.scene2d.actors.*;
 import com.kasetagen.game.bubblerunner.util.ForceFieldColorUtil;
 
 /**

@@ -1,7 +1,5 @@
 package com.kasetagen.game.bubblerunner.scene2d;
 
-import java.util.Random;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
@@ -9,11 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -30,19 +24,12 @@ import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.data.WallPattern;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
-import com.kasetagen.game.bubblerunner.scene2d.actor.ControlGroup;
-import com.kasetagen.game.bubblerunner.scene2d.actor.Environment;
-import com.kasetagen.game.bubblerunner.scene2d.actor.EnvironmentManager;
-import com.kasetagen.game.bubblerunner.scene2d.actor.ForceField;
-import com.kasetagen.game.bubblerunner.scene2d.actor.ForceFieldType;
-import com.kasetagen.game.bubblerunner.scene2d.actor.GameInfo;
-import com.kasetagen.game.bubblerunner.scene2d.actor.Overlay;
-import com.kasetagen.game.bubblerunner.scene2d.actor.Player;
-import com.kasetagen.game.bubblerunner.scene2d.actor.Wall;
-import com.kasetagen.game.bubblerunner.scene2d.actor.WarningIndicator;
+import com.kasetagen.game.bubblerunner.scene2d.actor.*;
 import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 import com.kasetagen.game.bubblerunner.util.ViewportUtil;
+
+import java.util.Random;
 
 /**
  * Created with IntelliJ IDEA.
