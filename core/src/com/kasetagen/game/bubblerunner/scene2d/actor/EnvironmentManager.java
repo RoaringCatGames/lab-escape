@@ -2,6 +2,7 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kasetagen.game.bubblerunner.scene2d.BubbleRunnerStage;
@@ -12,9 +13,9 @@ import com.kasetagen.game.bubblerunner.scene2d.BubbleRunnerStage;
 
 public class EnvironmentManager {
     private static ObjectMap<String, EnvironmentGroup> envGroupMap;
-    private static BubbleRunnerStage stage;
+    private static Stage stage;
     
-    public static void initialize(BubbleRunnerStage stage){
+    public static void initialize(Stage stage){
     	EnvironmentManager.stage = stage;
     	envGroupMap = new ObjectMap<String, EnvironmentGroup>();
     }
@@ -25,7 +26,7 @@ public class EnvironmentManager {
     	}
     }
     
-    public static void addActor(Environment env, boolean isAscendingOrder, String key){
+    public static void addActor(EnvironmentObj env, boolean isAscendingOrder, String key){
     	EnvironmentGroup envGroup = null;
     	
     	// Add envGroup if missing;
@@ -51,7 +52,7 @@ public class EnvironmentManager {
     	EnvironmentGroup envGroup = envGroupMap.get(key);
     	
     	for(Actor env:envGroup.getChildren()){
-    		((Environment)env).setXVelocity(vel);
+    		((EnvironmentObj)env).setXVelocity(vel);
     	}
     }
     
@@ -64,22 +65,22 @@ public class EnvironmentManager {
     		envGroup = envGroupMap.get(key);
     	
 	    	for(Actor env:envGroup.getChildren()){
-	    		((Environment)env).setX(env.getX() + (((Environment)env).velocity.x * delta));
+	    		((EnvironmentObj)env).setX(env.getX() + (((EnvironmentObj)env).velocity.x * delta));
 	    	}
     	}
     }
     
-    public static Environment getLastEnvironment(String key){
+    public static EnvironmentObj getLastEnvironment(String key){
     	addGroupIfMissing(key);
     	
     	EnvironmentGroup envGroup = null;
-    	Environment prevEnv = null;
+    	EnvironmentObj prevEnv = null;
     	
     	if(envGroupMap.containsKey(key)){
     		envGroup = envGroupMap.get(key);
 	
 	    	if(envGroup.getChildren().size != 0)
-	    		prevEnv = (Environment) envGroup.getChildren().get(envGroup.getChildren().size - 1);
+	    		prevEnv = (EnvironmentObj) envGroup.getChildren().get(envGroup.getChildren().size - 1);
     	}
 	    	
     	return prevEnv;

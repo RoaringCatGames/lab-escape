@@ -58,6 +58,10 @@ public class AssetsUtil {
     public static final String LASER_DOWN = "images/buttons/button_discharge_off.png";
     public static final String LASER_CHECKED = "images/buttons/button_discharge_off.png";
 
+    //Model Object Paths
+    public static final String MODELS_TEACUP = "models/teacup.g3db";
+    public static final String MODELS_LABWALL = "models/lab.g3dj";
+    
     //Font Paths
     public static final String REXLIA_64 = "fonts/rexlia-64.fnt";
     public static final String REXLIA_48 = "fonts/rexlia-48.fnt";

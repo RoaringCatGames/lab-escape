@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.delegate.IStageManager;
+import com.kasetagen.game.bubblerunner.scene2d.BubbleRunner3dStage;
 import com.kasetagen.game.bubblerunner.scene2d.BubbleRunnerStage;
 import com.kasetagen.game.bubblerunner.scene2d.actor.GenericActor;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
@@ -28,12 +29,12 @@ public class BubbleRunnerScreen extends ApplicationAdapter implements Screen, In
     private float bgCurrent = bgMin;
     private boolean isBgIncreasing = true;
 
-    BubbleRunnerStage stage;
+    BubbleRunner3dStage stage;
     IGameProcessor processor;
 
     public BubbleRunnerScreen(IGameProcessor gameProcessor){
         processor = gameProcessor;
-        stage = new BubbleRunnerStage(processor);
+        stage = new BubbleRunner3dStage(processor);
     }
 
     //IStageManager

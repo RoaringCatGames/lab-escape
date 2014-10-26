@@ -6,6 +6,7 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g3d.Model;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
@@ -123,6 +124,10 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.ENERGY_BAR, AssetsUtil.TEXTURE);
 
         assetManager.load(AssetsUtil.DEFAULT_SKIN, AssetsUtil.SKIN);
+        
+        //3d
+        assetManager.load(AssetsUtil.MODELS_LABWALL, Model.class);
+        //assetManager.load(AssetsUtil.MODELS_TEACUP, Model.class);
     }
 
  //IGameProcessor

@@ -11,10 +11,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-public class Environment extends GenericActor {
+public class EnvironmentObj extends GenericActor {
     public Vector2 velocity;
     
-    public Environment(float x, float y, float width, float height,
+    public EnvironmentObj(float x, float y, float width, float height,
 			TextureRegion textureRegion, Color color) {
 		super(x, y, width, height, textureRegion, color);
 		

@@ -30,7 +30,7 @@ import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.data.WallPattern;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.actor.ControlGroup;
-import com.kasetagen.game.bubblerunner.scene2d.actor.Environment;
+import com.kasetagen.game.bubblerunner.scene2d.actor.EnvironmentObj;
 import com.kasetagen.game.bubblerunner.scene2d.actor.EnvironmentManager;
 import com.kasetagen.game.bubblerunner.scene2d.actor.ForceField;
 import com.kasetagen.game.bubblerunner.scene2d.actor.ForceFieldType;
@@ -365,7 +365,7 @@ public class BubbleRunnerStage extends BaseStage {
     private void generateLabEnvironment(float delta){
     	// gen first environment
     	if(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()) != null){
-    		Environment prevEnv = EnvironmentManager.getLastEnvironment(EnvironmentType.FLOOR.toString());
+    		EnvironmentObj prevEnv = EnvironmentManager.getLastEnvironment(EnvironmentType.FLOOR.toString());
     		float nextEnvLoc = ViewportUtil.VP_WIDTH;
     		boolean createEnv = false;
     		
@@ -380,7 +380,7 @@ public class BubbleRunnerStage extends BaseStage {
 	    	}
 	    	
 	    	if(createEnv){
-		    	Environment floor = new Environment(nextEnvLoc, 10, 757, 208, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+		    	EnvironmentObj floor = new EnvironmentObj(nextEnvLoc, 10, 757, 208, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
 		    	floor.setXVelocity(wallAndFloorVelocity);
 		    	EnvironmentManager.addActor(floor, false, EnvironmentType.FLOOR.toString());
 	    	}
@@ -388,7 +388,7 @@ public class BubbleRunnerStage extends BaseStage {
     	
     	// Pillars  	
     	if(millisecondsPassed >= nextGeneration){
-	    	Environment pillar = new Environment(ViewportUtil.VP_WIDTH, 280, 473, 559, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_PILLAR, AssetsUtil.TEXTURE)), Color.GRAY);
+	    	EnvironmentObj pillar = new EnvironmentObj(ViewportUtil.VP_WIDTH, 280, 473, 559, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_PILLAR, AssetsUtil.TEXTURE)), Color.GRAY);
 	    	pillar.setXVelocity(wallAndFloorVelocity + 100);
 	    	
 	    	EnvironmentManager.addActor(pillar, false, EnvironmentType.PILLAR.toString());
@@ -396,7 +396,7 @@ public class BubbleRunnerStage extends BaseStage {
     	
     	//WALL
     	if(EnvironmentManager.getEnvironmentGroup(EnvironmentType.WALL.toString()) != null){
-    		Environment prevEnv = EnvironmentManager.getLastEnvironment(EnvironmentType.WALL.toString());
+    		EnvironmentObj prevEnv = EnvironmentManager.getLastEnvironment(EnvironmentType.WALL.toString());
     		float nextEnvLoc = ViewportUtil.VP_WIDTH;
     		boolean createEnv = false;
     		
@@ -411,7 +411,7 @@ public class BubbleRunnerStage extends BaseStage {
 	    	}
 	    	
 	    	if(createEnv){
-		    	Environment floor = new Environment(nextEnvLoc, 310, 473, 250, new TextureRegion(assetManager.get(AssetsUtil.WALL, AssetsUtil.TEXTURE)), Color.GRAY);
+		    	EnvironmentObj floor = new EnvironmentObj(nextEnvLoc, 310, 473, 250, new TextureRegion(assetManager.get(AssetsUtil.WALL, AssetsUtil.TEXTURE)), Color.GRAY);
 		    	floor.setXVelocity(wallAndFloorVelocity + 100);
 		    	EnvironmentManager.addActor(floor, false, EnvironmentType.WALL.toString());
 	    	}
@@ -419,7 +419,7 @@ public class BubbleRunnerStage extends BaseStage {
     	
     	//FLOOR1
     	if(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACKFLOOR.toString()) != null){
-    		Environment prevEnv = EnvironmentManager.getLastEnvironment(EnvironmentType.BACKFLOOR.toString());
+    		EnvironmentObj prevEnv = EnvironmentManager.getLastEnvironment(EnvironmentType.BACKFLOOR.toString());
     		float nextEnvLoc = ViewportUtil.VP_WIDTH;
     		boolean createEnv = false;
     		
@@ -434,7 +434,7 @@ public class BubbleRunnerStage extends BaseStage {
 	    	}
 	    	
 	    	if(createEnv){
-		    	Environment floor = new Environment(nextEnvLoc, 210, 757, 100, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+		    	EnvironmentObj floor = new EnvironmentObj(nextEnvLoc, 210, 757, 100, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
 		    	floor.setXVelocity(wallAndFloorVelocity + 50);
 		    	EnvironmentManager.addActor(floor, false, EnvironmentType.BACKFLOOR.toString());
 	    	}
@@ -835,11 +835,11 @@ public class BubbleRunnerStage extends BaseStage {
     private void initializeStartingScene(){
 
     	if(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()) != null){
-	    	Environment floor = new Environment(-378, 10, 757, 208, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+	    	EnvironmentObj floor = new EnvironmentObj(-378, 10, 757, 208, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
 	    	floor.setXVelocity(wallAndFloorVelocity);
 	    	EnvironmentManager.addActor(floor, false, EnvironmentType.FLOOR.toString());
 	    	
-	    	Environment floor2 = new Environment(-378, 210, 757, 100, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+	    	EnvironmentObj floor2 = new EnvironmentObj(-378, 210, 757, 100, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
 	    	floor2.setXVelocity(wallAndFloorVelocity + 50);
 	    	EnvironmentManager.addActor(floor2, false, EnvironmentType.BACKFLOOR.toString());	
     	}
