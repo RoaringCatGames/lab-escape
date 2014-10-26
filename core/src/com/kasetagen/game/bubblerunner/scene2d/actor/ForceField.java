@@ -3,6 +3,7 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.*;
 import com.kasetagen.game.bubblerunner.util.ForceFieldColorUtil;
 
 /**
@@ -12,14 +13,14 @@ import com.kasetagen.game.bubblerunner.util.ForceFieldColorUtil;
  * Time: 7:34 PM
  * To change this template use File | Settings | File Templates.
  */
-public class ForceField extends GenericActor {
+public class ForceField extends com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor {
 
     public ForceFieldType forceFieldType;
     public float targetRadius;
     public float radius;
 
     public ForceField(float x, float y, float radius, ForceFieldType ff){
-        super(x, y, radius*2, radius*2, ForceFieldColorUtil.getColor(ff));
+        super(x, y, radius*2, radius*2, null, ForceFieldColorUtil.getColor(ff));
 
         forceFieldType = ff;
         targetRadius = radius;

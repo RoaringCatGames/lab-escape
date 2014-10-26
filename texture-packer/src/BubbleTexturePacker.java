@@ -7,6 +7,11 @@ public class BubbleTexturePacker {
     private static final String OUTPUT_DIR = "../android/assets/animations/";
     private static final String PACK_FILE = "animations";
 
+    private static final String LOADING_INPUT_DIR = "loading/";
+    private static final String LOADING_OUTPUT_DIR = "../android/assets/animations/";
+    private static final String LOADING_PACK_FILE = "loading";
+
+
     public static void main(String[] args){
         // create the packing's settings
         Settings settings = new Settings();
@@ -23,6 +28,12 @@ public class BubbleTexturePacker {
 
         // pack the images
         TexturePacker.process(settings, INPUT_DIR, OUTPUT_DIR, PACK_FILE);
+
+        settings.maxWidth = 4096;
+        settings.maxHeight = 4096;
+        settings.combineSubdirectories = false;
+        TexturePacker.process(settings, LOADING_INPUT_DIR, LOADING_OUTPUT_DIR, LOADING_PACK_FILE);
+
     }
 }
 

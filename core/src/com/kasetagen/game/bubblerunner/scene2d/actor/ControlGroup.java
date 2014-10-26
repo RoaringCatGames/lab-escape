@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,7 +19,7 @@ import com.badlogic.gdx.utils.ObjectMap;
  * Time: 11:13 AM
  * To change this template use File | Settings | File Templates.
  */
-public class ControlGroup extends GenericGroup{
+public class ControlGroup extends GenericGroup {
 
     private static final float BUTTON_WIDTH = 150f;
     private static final float BUTTON_HEIGHT = 150f;
@@ -43,7 +44,7 @@ public class ControlGroup extends GenericGroup{
     }
 
     public ControlGroup(float x, float y, float width, float height, Color color){
-        super(x, y, width, height, color);
+        super(x, y, width, height, null, color);
         buttons = new Array<ForceFieldImageButton>();
     }
 

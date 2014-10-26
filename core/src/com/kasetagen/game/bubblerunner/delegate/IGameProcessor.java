@@ -13,6 +13,8 @@ import com.kasetagen.game.bubblerunner.data.IDataSaver;
  */
 public interface IGameProcessor {
 
+    public boolean isLoaded();
+    public float getLoadingProgress();
     public AssetManager getAssetManager();
     public void changeToScreen(String screenName);
     public String getStoredString(String key);

@@ -1,6 +1,6 @@
 
 animations.png
-size: 3889,4040
+size: 3752,4040
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -13,14 +13,14 @@ explosion/explosion
   index: 1
 explosion/explosion
   rotate: false
-  xy: 3446, 2706
+  xy: 3466, 2706
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 2
 explosion/explosion
   rotate: false
-  xy: 3602, 3910
+  xy: 3622, 3910
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -46,218 +46,267 @@ newwall/obstacle_red
   orig: 839, 2018
   offset: 0, 0
   index: -1
-player/Female_Death
+player/FIRE
   rotate: false
   xy: 1682, 3318
-  size: 880, 720
-  orig: 880, 720
+  size: 890, 720
+  orig: 890, 720
   offset: 0, 0
   index: 1
-player/Female_Death
+player/FIRE
   rotate: false
   xy: 1682, 2596
-  size: 880, 720
-  orig: 880, 720
+  size: 890, 720
+  orig: 890, 720
   offset: 0, 0
   index: 2
-player/Female_Death
+player/FIRE
   rotate: false
-  xy: 2564, 3318
-  size: 880, 720
-  orig: 880, 720
+  xy: 2574, 3318
+  size: 890, 720
+  orig: 890, 720
   offset: 0, 0
   index: 3
-player/Female_Death
+player/FIRE
   rotate: false
-  xy: 2564, 2596
-  size: 880, 720
-  orig: 880, 720
+  xy: 2574, 2596
+  size: 890, 720
+  orig: 890, 720
   offset: 0, 0
   index: 4
-player/Female_Death
+player/FIRE
   rotate: false
   xy: 841, 1298
-  size: 880, 720
-  orig: 880, 720
+  size: 890, 720
+  orig: 890, 720
   offset: 0, 0
   index: 5
-player/Female_Death
+player/FIRE
   rotate: false
   xy: 841, 576
+  size: 890, 720
+  orig: 890, 720
+  offset: 0, 0
+  index: 6
+player/FIRE
+  rotate: false
+  xy: 1733, 1874
+  size: 890, 720
+  orig: 890, 720
+  offset: 0, 0
+  index: 7
+player/Female_Death
+  rotate: false
+  xy: 1733, 1152
   size: 880, 720
   orig: 880, 720
   offset: 0, 0
-  index: 6
-player/Female_Punch
-  rotate: false
-  xy: 1723, 1874
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
   index: 1
-player/Female_Punch
+player/Female_Death
   rotate: false
-  xy: 1723, 1152
-  size: 720, 720
-  orig: 720, 720
+  xy: 2625, 1874
+  size: 880, 720
+  orig: 880, 720
   offset: 0, 0
   index: 2
-player/Female_Punch
+player/Female_Death
   rotate: false
-  xy: 2445, 1874
-  size: 720, 720
-  orig: 720, 720
+  xy: 2615, 1152
+  size: 880, 720
+  orig: 880, 720
   offset: 0, 0
   index: 3
-player/Female_Punch
+player/Female_Death
   rotate: false
-  xy: 2445, 1152
-  size: 720, 720
-  orig: 720, 720
+  xy: 1733, 430
+  size: 880, 720
+  orig: 880, 720
   offset: 0, 0
   index: 4
-player/Female_Punch
+player/Female_Death
   rotate: false
-  xy: 1723, 430
-  size: 720, 720
-  orig: 720, 720
+  xy: 2615, 430
+  size: 880, 720
+  orig: 880, 720
   offset: 0, 0
   index: 5
-player/Female_Punch
-  rotate: false
-  xy: 2445, 430
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 6
-player/Female_Run
-  rotate: false
-  xy: 3167, 1874
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 1
-player/Female_Run
-  rotate: false
-  xy: 3167, 1152
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 2
-player/Female_Run
-  rotate: false
-  xy: 3167, 430
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 3
 walls/discharge-wall
   rotate: false
-  xy: 3446, 3438
+  xy: 3466, 3438
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 1
 walls/discharge-wall
   rotate: false
-  xy: 3446, 2836
+  xy: 3466, 2836
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 2
 walls/light-wall
   rotate: false
-  xy: 3498, 3438
+  xy: 3518, 3438
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 1
 walls/light-wall
   rotate: false
-  xy: 3498, 2836
+  xy: 3518, 2836
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 2
 walls/plasma-wall
   rotate: false
-  xy: 3550, 3438
+  xy: 3570, 3438
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 1
 walls/plasma-wall
   rotate: false
-  xy: 3550, 2836
+  xy: 3570, 2836
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 2
 
 animations2.png
-size: 3610,1444
+size: 3770,3610
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-player/Female_Run
+player/Female_Death
+  rotate: false
+  xy: 0, 2888
+  size: 880, 720
+  orig: 880, 720
+  offset: 0, 0
+  index: 6
+player/Female_Punch
+  rotate: false
+  xy: 0, 2166
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 1
+player/Female_Punch
+  rotate: false
+  xy: 882, 2888
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 2
+player/Female_Punch
+  rotate: false
+  xy: 0, 1444
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 3
+player/Female_Punch
+  rotate: false
+  xy: 722, 2166
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 4
+player/Female_Punch
+  rotate: false
+  xy: 1604, 2888
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 5
+player/Female_Punch
   rotate: false
   xy: 0, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 4
+  index: 6
+player/Female_Run
+  rotate: false
+  xy: 722, 1444
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 1
+player/Female_Run
+  rotate: false
+  xy: 1444, 2166
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 2
+player/Female_Run
+  rotate: false
+  xy: 2326, 2888
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 3
 player/Female_Run
   rotate: false
   xy: 0, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
+  index: 4
 player/Female_Run
   rotate: false
   xy: 722, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
+  index: 5
+player/Female_Run
+  rotate: false
+  xy: 1444, 1444
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
   index: 6
 player/Male_Run
   rotate: false
-  xy: 722, 0
+  xy: 2166, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 1
 player/Male_Run
   rotate: false
-  xy: 1444, 722
+  xy: 3048, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 2
 player/Male_Run
   rotate: false
-  xy: 1444, 0
+  xy: 722, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 3
 player/Male_Run
   rotate: false
-  xy: 2166, 722
+  xy: 1444, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 4
 player/Male_Run
   rotate: false
-  xy: 2166, 0
+  xy: 2166, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 5
 player/Male_Run
   rotate: false
-  xy: 2888, 722
+  xy: 2888, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0

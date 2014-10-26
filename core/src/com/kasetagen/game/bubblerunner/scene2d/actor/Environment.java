@@ -10,6 +10,7 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
 
 public class Environment extends GenericActor {
     public Vector2 velocity;

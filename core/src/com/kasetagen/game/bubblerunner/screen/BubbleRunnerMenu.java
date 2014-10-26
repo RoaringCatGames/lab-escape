@@ -11,11 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
-import com.kasetagen.game.bubblerunner.scene2d.actor.GenericActor;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
 /**

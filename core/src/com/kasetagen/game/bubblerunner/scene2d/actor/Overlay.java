@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
 /**
@@ -36,7 +37,7 @@ public class Overlay extends GenericGroup {
 
     public Overlay(float x, float y, float width, float height, Color bgColor,
                    Color textColor, BitmapFont mainFont, BitmapFont subFont, String mainText, String subText) {
-        super(x, y, width, height, bgColor);
+        super(x, y, width, height, null, bgColor);
 
         this.mainText = mainText;
         this.subText = subText;
@@ -64,8 +65,6 @@ public class Overlay extends GenericGroup {
         style.fontColor =  Color.CYAN;
         style.overFontColor = Color.RED;
         style.downFontColor = Color.GRAY;
-//        float fontScale = 1f;
-//        style.font.setScale(fontScale);
 
         dismissButton = new TextButton("Replay", style);
         dismissButton.setPosition(getWidth()/2 - dismissButton.getWidth()/2,
@@ -116,7 +115,7 @@ public class Overlay extends GenericGroup {
         batch.end();
         batch.begin();
 
-        super.drawBefore(batch, parentAlpha);    //To change body of overridden methods use File | Settings | File Templates.
+        super.drawBefore(batch, parentAlpha);
     }
 
     public void setDismissButtonEvent(ClickListener listener){

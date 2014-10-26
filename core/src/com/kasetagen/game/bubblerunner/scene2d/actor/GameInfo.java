@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
+
 /**
  * Created with IntelliJ IDEA.
  * User: barry
@@ -24,7 +26,6 @@ public class GameInfo extends GenericGroup {
     private Label scoreLabel;
     private Label missesLabel;
     private Label maxFieldsLabel;
-    //private Label resourceLabel;
 
     public int score = 0;
     public int misses = 0;
@@ -51,12 +52,6 @@ public class GameInfo extends GenericGroup {
         maxFieldsLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING +
                                    missesLabel.getWidth() + TEXT_PADDING, 0);
         addActor(maxFieldsLabel);
-
-//        resourceLabel = new Label(getResourceLevelString(), style);
-//        resourceLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING +
-//                                  maxFieldsLabel.getWidth() + TEXT_PADDING +
-//                                  missesLabel.getWidth() + TEXT_PADDING, 0);
-//        addActor(resourceLabel);
     }
 
 
@@ -67,7 +62,6 @@ public class GameInfo extends GenericGroup {
         scoreLabel.setText(SCORE_PREFIX + score);
         missesLabel.setText(MISSES_PREFIX + misses);
         maxFieldsLabel.setText(FIELD_PREFIX + maxFields);
-        //resourceLabel.setText(getResourceLevelString());
     }
 
     @Override
@@ -75,12 +69,6 @@ public class GameInfo extends GenericGroup {
         super.drawFull(batch, parentAlpha);
 
     }
-
-//    public String getResourceLevelString(){
-//        return  "Lightning: " + controls.getResourceLevel(ForceFieldType.LIGHTNING) +
-//                " Laser: " + controls.getResourceLevel(ForceFieldType.LASER) +
-//                " Plasma: " + controls.getResourceLevel(ForceFieldType.PLASMA);
-//    }
 
     public void reset(){
         score = 0;

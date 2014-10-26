@@ -1,6 +1,5 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -18,7 +17,7 @@ import com.kasetagen.game.bubblerunner.util.AnimationUtil;
  * To change this template use File | Settings | File Templates.
  */
 
-public class Player extends GenericGroup {
+public class Player extends com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup {
 
     //private static final float ANIMATION_CYCLE_RATE = 1f/8f;
 
@@ -42,15 +41,31 @@ public class Player extends GenericGroup {
     private float shieldKeyFrameTime = 0f;
     private int shieldFramesRun = 0;
 
+    private float runningWidth;
+    private float dyingWidth;
+    private float runningX;
+    private float dyingX;
+
+    private boolean isDyingForward = false;
+    private float dyingVelocity = 30f;
+
     public Player(float x, float y, float width, float height, TextureAtlas atlas, String animationName){
         super(x, y, width, height, null, Color.BLACK);
 
         animation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(animationName));
-        deathAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions("explosion/explosion"));
+        deathAnimation = new Animation(AnimationUtil.RUNNER_FIRE_CYCLE_RATE, atlas.findRegions("player/Female_Death"));
         textureRegion = animation.getKeyFrame(keyFrameTime);
         //TODO: Replace ShapeRendering with Animation
         forceFieldType = ForceFieldType.LIGHTNING;
         fields = new Array<ForceField>();
+
+        //I don't want to do this if I can help it
+        runningWidth = width;
+        dyingWidth = 440f;
+
+        runningX = x;
+        dyingX = runningX - ((dyingWidth-runningWidth)/2);
+
     }
 
     public void setShieldingAnimation(Animation ani){
@@ -105,13 +120,22 @@ public class Player extends GenericGroup {
             }
 
         }else{
-            textureRegion = deathAnimation.getKeyFrame(keyFrameTime, true);
+            textureRegion = deathAnimation.getKeyFrame(keyFrameTime, false);
+            if(!textureRegion.isFlipX()){
+                textureRegion.flip(true, false);
+            }
         }
     }
 
     public void setIsDead(boolean isDying){
         if(isDying){
             keyFrameTime = 0f;
+            //THis gets ugly if we can prevent it we should
+            setSize(dyingWidth, getHeight());
+            setPosition(dyingX, getY());
+        }else{
+            setSize(runningWidth, getHeight());
+            setPosition(runningX, getY());
         }
         isDead = isDying;
     }
@@ -152,7 +176,6 @@ public class Player extends GenericGroup {
     public void removeField(ForceField ff){
         this.removeActor(ff);
         fields.removeValue(ff, true);
-        //Gdx.app.log("PLAYER", "Fields Size: " + fields.size);
 
         for(int i=0;i<fields.size;i++){
             fields.get(i).targetRadius = getWidth() + (FIELD_ADJUST * (fields.size-i-1));
@@ -199,10 +222,6 @@ public class Player extends GenericGroup {
 
     @Override
     public void drawFull(Batch batch, float parentAlpha) {
-        if(!isDead){
         super.drawFull(batch, parentAlpha);
-        }else{
-            batch.draw(textureRegion, getX(), getY(), getOriginX(), getOriginY(), getWidth()*2, getHeight()*1.5f, getScaleX()*2, getScaleY()*1.5f, getRotation());
-        }
     }
 }

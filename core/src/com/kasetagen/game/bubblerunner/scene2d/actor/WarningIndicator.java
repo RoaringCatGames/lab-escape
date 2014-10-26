@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
 import com.kasetagen.game.bubblerunner.data.WallPattern;
 
 /**
@@ -32,7 +33,7 @@ public class WarningIndicator extends GenericActor {
     public float lifetime = 0f;
 
     public WarningIndicator(float x, float y, float width, float height, WallPattern pattern, Color color, Texture texture){
-        super(x, y, width, height, color);
+        super(x, y, width, height, null, color);
         this.pattern = pattern;
         this.texture = texture;
         this.textureRegion = new TextureRegion(this.texture, texture.getWidth(), 180);
