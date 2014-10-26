@@ -23,6 +23,9 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.decals.CameraGroupStrategy;
+import com.badlogic.gdx.graphics.g3d.decals.DecalBatch;
+import com.badlogic.gdx.graphics.g3d.decals.GroupStrategy;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
@@ -52,6 +55,7 @@ import com.kasetagen.game.bubblerunner.scene2d.actor.GameInfo;
 import com.kasetagen.game.bubblerunner.scene2d.actor.GenericActor;
 import com.kasetagen.game.bubblerunner.scene2d.actor.Overlay;
 import com.kasetagen.game.bubblerunner.scene2d.actor.Player;
+import com.kasetagen.game.bubblerunner.scene2d.actor.Player3d;
 import com.kasetagen.game.bubblerunner.scene2d.actor.Wall;
 import com.kasetagen.game.bubblerunner.scene2d.actor.WarningIndicator;
 import com.kasetagen.game.bubblerunner.util.AnimationUtil;
@@ -168,7 +172,9 @@ public class BubbleRunner3dStage extends BaseStage {
 	public Array<ModelInstance> instances = new Array<ModelInstance>();
 	public boolean loading;
 	private Array<ModelInstance> labToRemove = new Array<ModelInstance>();
-    
+    private Player3d player3d;
+    private GroupStrategy groupStrategy;
+	
     public BubbleRunner3dStage(IGameProcessor gameProcessor){
         super();
         this.gameProcessor = gameProcessor;
@@ -190,6 +196,9 @@ public class BubbleRunner3dStage extends BaseStage {
     	cam.update();
     	camController = new CameraInputController(cam);
     	Gdx.input.setInputProcessor(camController);
+    	
+    	groupStrategy = new CameraGroupStrategy(cam);
+    	decalBatch = new DecalBatch(groupStrategy);
     	
         //Initialize Privates
         wallsToRemove = new Array<Wall>();
@@ -231,10 +240,10 @@ public class BubbleRunner3dStage extends BaseStage {
         initializeHUD();
 
         Label.LabelStyle style = new Label.LabelStyle(assetManager.get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT), Color.ORANGE);
-        comboLabel = new Label(currentCombo + "x Combo!!", style);
-        comboLabel.setPosition(player.getX(), player.getTop());
-        comboLabel.setVisible(false);
-        addActor(comboLabel);
+//        comboLabel = new Label(currentCombo + "x Combo!!", style);
+//        comboLabel.setPosition(player.getX(), player.getTop());
+//        comboLabel.setVisible(false);
+//        addActor(comboLabel);
 
 
         comboSfx = new ObjectMap<ComboLevels, Sound>();
@@ -287,6 +296,7 @@ public class BubbleRunner3dStage extends BaseStage {
         	}
         }
         
+        player3d.act(delta);
         
         for(ModelInstance lab:labToRemove){
         	instances.removeValue(lab, true);
@@ -308,8 +318,12 @@ public class BubbleRunner3dStage extends BaseStage {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
  
         modelBatch.begin(cam);
+        
         modelBatch.render(instances, environment);
+        player3d.draw();
+        
         modelBatch.end();
+        decalBatch.flush(); // Call last
         
         //batch.begin();
         //particleBubble.draw(batch);
@@ -354,58 +368,58 @@ public class BubbleRunner3dStage extends BaseStage {
     	//env.setX(env.getX() + (env.velocity.x * delta));
     }
 
-    private void processWallCollisions() {
-        ForceField outerField = player.getOuterForceField();
-        for(Wall w:walls){
-
-            //Check for Collisions and apply player/wall information
-            if(outerField != null && w.collider.overlaps(outerField.collider)){
-
-                //WHEN OUTERFIELD == WALL we Destroy Both
-                //  and increment the score
-                if(w.forceFieldType == outerField.forceFieldType){
-                    wallsToRemove.add(w);
-                    info.score += getWallPointValue(1);
-
-                    //Increment our Combo counter
-                    currentCombo += 1;
-                    if(highestRunCombo < currentCombo){
-                        highestRunCombo = currentCombo;
-                    }
-
-                    float explosionVolume = sfxVolume;
-                    if(adjustComboLevel(currentCombo)){
-                        playComboSoundEffect();
-                        explosionVolume /= 2;
-                        //On going up a combo level, we will clear all resource usage
-                        regenResources(controls.getResourceLevel());
-
-                    }
-
-                    explosionSound.play(explosionVolume);
-                }else{
-                    //If we hit a bad wall, we reduce your score
-                    //  This will discourage jamming out fields like crazy
-                    info.score -= 1;
-                    info.misses += 1;
-
-                    //Clear our combo
-                    currentCombo = 0;
-                }
-
-                //Destroy the forcefield if it collides with a wall
-                //  The point and wall descrution is calculated above
-                player.removeField(outerField);
-
-            }else if(player.collider.overlaps(w.collider)){
-                processDeath(w);
-            }
-
-            if(w.getX() <= (0f-w.getWidth()/2)){
-                wallsToRemove.add(w);
-            }
-        }
-    }
+//    private void processWallCollisions() {
+//        ForceField outerField = player.getOuterForceField();
+//        for(Wall w:walls){
+//
+//            //Check for Collisions and apply player/wall information
+//            if(outerField != null && w.collider.overlaps(outerField.collider)){
+//
+//                //WHEN OUTERFIELD == WALL we Destroy Both
+//                //  and increment the score
+//                if(w.forceFieldType == outerField.forceFieldType){
+//                    wallsToRemove.add(w);
+//                    info.score += getWallPointValue(1);
+//
+//                    //Increment our Combo counter
+//                    currentCombo += 1;
+//                    if(highestRunCombo < currentCombo){
+//                        highestRunCombo = currentCombo;
+//                    }
+//
+//                    float explosionVolume = sfxVolume;
+//                    if(adjustComboLevel(currentCombo)){
+//                        playComboSoundEffect();
+//                        explosionVolume /= 2;
+//                        //On going up a combo level, we will clear all resource usage
+//                        regenResources(controls.getResourceLevel());
+//
+//                    }
+//
+//                    explosionSound.play(explosionVolume);
+//                }else{
+//                    //If we hit a bad wall, we reduce your score
+//                    //  This will discourage jamming out fields like crazy
+//                    info.score -= 1;
+//                    info.misses += 1;
+//
+//                    //Clear our combo
+//                    currentCombo = 0;
+//                }
+//
+//                //Destroy the forcefield if it collides with a wall
+//                //  The point and wall descrution is calculated above
+//                player.removeField(outerField);
+//
+//            }else if(player.collider.overlaps(w.collider)){
+//                processDeath(w);
+//            }
+//
+//            if(w.getX() <= (0f-w.getWidth()/2)){
+//                wallsToRemove.add(w);
+//            }
+//        }
+//    }
     
     private void generateEnvironment(float delta){
     	generateLabEnvironment(delta);
@@ -847,22 +861,22 @@ public class BubbleRunner3dStage extends BaseStage {
         String shieldAniName = getPlayerShieldingAnimationName();
 
 
-        player = new Player(playerDimensions[0],
+        player3d = new Player3d(playerDimensions[0],
                 playerDimensions[1],
                 playerDimensions[2],
                 playerDimensions[3],
                 assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS),
-                aniName);
-        player.maxFields = maxFields;
+                aniName, this);
+        player3d.maxFields = maxFields;
         TextureAtlas atlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         Animation shieldingAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(shieldAniName));
-        player.setShieldingAnimation(shieldingAnimation);
-        addActor(player);
+        player3d.setShieldingAnimation(shieldingAnimation);
+        add3dActor(player3d);
 
         //NOT SURE WHERE THIS GOES
-        particleBubble = assetManager.get(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
-        particleBubble.start();
-        particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
+//        particleBubble = assetManager.get(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
+//        particleBubble.start();
+//        particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
     }
 
     private String getPlayerAnimationName() {
