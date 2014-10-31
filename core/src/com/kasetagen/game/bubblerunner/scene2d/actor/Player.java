@@ -1,9 +1,11 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor;
 import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 
 
@@ -15,24 +17,25 @@ import com.kasetagen.game.bubblerunner.util.AnimationUtil;
  * To change this template use File | Settings | File Templates.
  */
 
-public class Player extends com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor {
+public class Player extends AnimatedActor {
 
     private static final int NUM_SHIELD_FRAMES = 2;
 
     private float keyFrameTime = 0f;
-    private Animation animation;
     private Animation deathAnimation;
     private Animation shieldAnimation;
     private boolean isDead = false;
     private boolean isShielding = false;
     private int shieldFramesRun = 0;
 
-    public Player(float x, float y, float width, float height, TextureAtlas atlas, String animationName){
-        super(x, y, width, height, null, 0);
+    public Player(float x, float y, float width, float height, Animation defaultAnimation){
+        super(x, y, width, height, defaultAnimation, 0);
 
-        animation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(animationName));
-        deathAnimation = new Animation(AnimationUtil.RUNNER_FIRE_CYCLE_RATE, atlas.findRegions("player/Wall"));
+        //animation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(animationName));
+        //deathAnimation = new Animation(AnimationUtil.RUNNER_FIRE_CYCLE_RATE, atlas.findRegions("player/Wall"));
         textureRegion = animation.getKeyFrame(keyFrameTime);
+        collider.set(x + (width/4), y, width/2, height);
+        Gdx.app.log("PLAYER", "COllider (x, y, w, h): " + collider.x + ", " + collider.y + ", " + collider.width + ", " + collider.height);
     }
 
     public void setShieldingAnimation(Animation ani){
@@ -49,6 +52,11 @@ public class Player extends com.kasetagen.engine.gdx.scenes.scene2d.actors.Anima
         animation = ani;
         keyFrameTime = 0f;
     }
+
+//    @Override
+//    protected void adjustCollidingBox(float delta) {
+//        collider.set(getX() + (getWidth()/4), getY(), getWidth()/2, getHeight());
+//    }
 
     @Override
     public void act(float delta) {
@@ -78,7 +86,8 @@ public class Player extends com.kasetagen.engine.gdx.scenes.scene2d.actors.Anima
             }
 
         }else{
-            textureRegion = deathAnimation.getKeyFrame(keyFrameTime, false);
+            //textureRegion = deathAnimation.getKeyFrame(keyFrameTime, false);
+            textureRegion = animation.getKeyFrame(keyFrameTime, false);
         }
 
         if(!textureRegion.isFlipX()){

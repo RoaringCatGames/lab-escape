@@ -11,8 +11,6 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
-import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -29,6 +27,7 @@ import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
 import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
+import com.kasetagen.game.bubblerunner.util.PlayerStates;
 import com.kasetagen.game.bubblerunner.util.ViewportUtil;
 
 import java.util.Random;
@@ -66,7 +65,7 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float INDICATOR_HEIGHT = ViewportUtil.VP_HEIGHT/4;
 
     private static String characterSelected = "Woman";
-    private static float[] playerDimensions = new float[] { 100f, FLOOR_HEIGHT, 360f, 360f };//ViewportUtil.VP_WIDTH/8, (ViewportUtil.VP_HEIGHT/3) }; //old width 160f
+    private static float[] playerDimensions = new float[] { 100f, 120f, 360f, 360f };//ViewportUtil.VP_WIDTH/8, (ViewportUtil.VP_HEIGHT/3) }; //old width 160f
     //private static float[] floorDimensions = new float[] { 0f, 0f, ViewportUtil.VP_WIDTH, FLOOR_HEIGHT };
     private static float[] wallDimensions = new float[] {ViewportUtil.VP_WIDTH+FLOOR_HEIGHT,
                                                          FLOOR_HEIGHT, 40f, ViewportUtil.VP_HEIGHT-FLOOR_HEIGHT };
@@ -243,6 +242,7 @@ public class BubbleRunnerStage extends BaseStage {
 
             int index = getActors().size - 1;
             deathOverlay.setZIndex(index--);
+            controls.setZIndex(index--);
             comboLabel.setZIndex(index--);
             instructions.setZIndex(index--);
             info.setZIndex(index--);
@@ -591,13 +591,25 @@ public class BubbleRunnerStage extends BaseStage {
     private void processDeath(Wall w) {
         //Checking so we only sound once for now
 
+        switch(w.forceFieldType){
+            case LIGHTNING:
+                player.setState(PlayerStates.ELECTRO_DEATH, true);
+                break;
+            case LASER:
+                player.setState(PlayerStates.FIRE_DEATH, true);
+                break;
+            case PLASMA:
+                player.setState(PlayerStates.WALL_DEATH, true);
+                break;
+        }
+
         player.setIsDead(true);
 
         warningIndicator.remove();
         warningIndicator = null;
 
         if(!w.equals(collidedWall)){
-            wallsToRemove.add(w);
+            //wallsToRemove.add(w);
             zapSound.play(sfxVolume);
             isDead = true;
             collidedWall = w;
@@ -667,6 +679,7 @@ public class BubbleRunnerStage extends BaseStage {
                 player.resetAnimation(ani);
             }
 
+            player.setState(PlayerStates.DEFAULT);
             player.setIsDead(false);
             deathOverlay.setVisible(false);
             info.reset();
@@ -786,18 +799,25 @@ public class BubbleRunnerStage extends BaseStage {
     private void initializePlayer(int maxFields) {
         String aniName = getPlayerAnimationName();
         String shieldAniName = getPlayerShieldingAnimationName();
-
+        String electroName = getPlayerElectroAnimationName();
+        String wallName = getPlayerWallAnimationName();
+        TextureAtlas atlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
+        Animation defaultPlayerAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(aniName));
 
         player = new Player(playerDimensions[0],
                 playerDimensions[1],
                 playerDimensions[2],
                 playerDimensions[3],
-                assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS),
-                aniName);
+                defaultPlayerAnimation);
         //player.maxFields = maxFields;
-        TextureAtlas atlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         Animation shieldingAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(shieldAniName));
         player.setShieldingAnimation(shieldingAnimation);
+        Animation electroAni = new Animation(AnimationUtil.RUNNER_ELECTRO_CYCLE_RATE, atlas.findRegions(electroName));
+        player.addStateAnimation(PlayerStates.ELECTRO_DEATH, electroAni);
+        Animation fireAni = new Animation(AnimationUtil.RUNNER_FIRE_CYCLE_RATE, atlas.findRegions("player/FIRE"));
+        player.addStateAnimation(PlayerStates.FIRE_DEATH, fireAni);
+        Animation wallAni = new Animation(AnimationUtil.RUNNER_WALL_CYCLE_RATE, atlas.findRegions(wallName));
+        player.addStateAnimation(PlayerStates.WALL_DEATH, wallAni);
         addActor(player);
 
         shields = new ShieldGroup(playerDimensions[0],
@@ -819,6 +839,12 @@ public class BubbleRunnerStage extends BaseStage {
 
     private String getPlayerShieldingAnimationName(){
         return characterSelected.equals("Woman") ? "player/Female_Punch" : "player/Male_Punch";
+    }
+    private String getPlayerElectroAnimationName(){
+        return characterSelected.equals("Woman") ? "player/Shock" : "player/Shock";
+    }
+    private String getPlayerWallAnimationName(){
+        return characterSelected.equals("Woman") ? "player/Wall" : "player/Wall";
     }
 
     private void initializeEnvironmentGroups(){
