@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.RotateByAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -109,6 +111,7 @@ public class BubbleRunnerStage extends BaseStage {
 
     //Actors
     public Player player;
+    public ShieldGroup shields;
     public Array<Wall> walls;
     public Wall collidedWall = null;
     public GameInfo info;
@@ -181,7 +184,7 @@ public class BubbleRunnerStage extends BaseStage {
 
         Label.LabelStyle style = new Label.LabelStyle(assetManager.get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT), Color.ORANGE);
         comboLabel = new Label(currentCombo + "x Combo!!", style);
-        comboLabel.setPosition(player.getX(), player.getTop());
+        comboLabel.setPosition(player.getX(), player.getTop()+HUD_HEIGHT);
         comboLabel.setVisible(false);
         addActor(comboLabel);
 
@@ -243,6 +246,7 @@ public class BubbleRunnerStage extends BaseStage {
             comboLabel.setZIndex(index--);
             instructions.setZIndex(index--);
             info.setZIndex(index--);
+            shields.setZIndex(index--);
             player.setZIndex(index--);
             for(Wall w:walls){
                 w.setZIndex(index--);
@@ -293,7 +297,7 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private void processWallCollisions() {
-        ForceField outerField = player.getOuterForceField();
+        ForceField outerField = shields.getOuterForceField();
         for(Wall w:walls){
 
             //Check for Collisions and apply player/wall information
@@ -317,7 +321,6 @@ public class BubbleRunnerStage extends BaseStage {
                         explosionVolume /= 2;
                         //On going up a combo level, we will clear all resource usage
                         regenResources(controls.getResourceLevel());
-
                     }
 
                     explosionSound.play(explosionVolume);
@@ -333,7 +336,7 @@ public class BubbleRunnerStage extends BaseStage {
 
                 //Destroy the forcefield if it collides with a wall
                 //  The point and wall descrution is calculated above
-                player.removeField(outerField);
+                shields.removeField(outerField);
 
             }else if(player.collider.overlaps(w.collider)){
                 processDeath(w);
@@ -676,11 +679,11 @@ public class BubbleRunnerStage extends BaseStage {
                 w.remove();
             }
             walls.clear();
-            player.clearFields();
+            shields.clearFields();
             millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
             isDead = false;
 
-            player.maxFields = info.maxFields;
+            shields.maxFields = info.maxFields;
 
             controls.restoreAllResourceLevels();
             instructions.setVisible(true);
@@ -690,7 +693,7 @@ public class BubbleRunnerStage extends BaseStage {
 
     private void incrementMaxFields(){
         info.maxFields += 1;
-        player.maxFields = info.maxFields;
+        shields.maxFields = info.maxFields;
     }
 
     private void addField(ForceFieldType fft){
@@ -700,12 +703,12 @@ public class BubbleRunnerStage extends BaseStage {
 
         boolean wasAdded = false;
         int resLevel = controls.getResourceLevel(fft);
-        if((controls.getHeatMax() - resLevel) >= player.resourceUsage){
+        if((controls.getHeatMax() - resLevel) >= shields.resourceUsage){
             //Yuck, I don't like this, but I can't come up with an
             //  argument for not doing this. The Stage manages the
             //  state and performs the corresponding actions.
-            player.addField(fft);
-            controls.incrementHeat(player.resourceUsage);
+            shields.addField(fft);
+            controls.incrementHeat(shields.resourceUsage);
             wasAdded = true;
         }
         if(wasAdded){
@@ -791,11 +794,18 @@ public class BubbleRunnerStage extends BaseStage {
                 playerDimensions[3],
                 assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS),
                 aniName);
-        player.maxFields = maxFields;
+        //player.maxFields = maxFields;
         TextureAtlas atlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         Animation shieldingAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(shieldAniName));
         player.setShieldingAnimation(shieldingAnimation);
         addActor(player);
+
+        shields = new ShieldGroup(playerDimensions[0],
+                                  playerDimensions[1],
+                                  playerDimensions[2],
+                                  playerDimensions[3]);
+        shields.maxFields = maxFields;
+        addActor(shields);
 
         //NOT SURE WHERE THIS GOES
         particleBubble = assetManager.get(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);

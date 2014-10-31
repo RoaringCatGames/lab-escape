@@ -10,5 +10,5 @@ package com.kasetagen.game.bubblerunner.util;
 public class AnimationUtil {
 
     public static final float RUNNER_CYCLE_RATE = 1f/8f;
-    public static final float RUNNER_FIRE_CYCLE_RATE = 1f/3f;
+    public static final float RUNNER_FIRE_CYCLE_RATE = 1f/6f;
 }

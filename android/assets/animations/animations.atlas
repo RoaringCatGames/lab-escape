@@ -1,6 +1,6 @@
 
 animations.png
-size: 3752,4040
+size: 4082,4040
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -13,14 +13,14 @@ explosion/explosion
   index: 1
 explosion/explosion
   rotate: false
-  xy: 3466, 2706
+  xy: 3952, 3910
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: 2
 explosion/explosion
   rotate: false
-  xy: 3622, 3910
+  xy: 841, 316
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -48,266 +48,336 @@ newwall/obstacle_red
   index: -1
 player/FIRE
   rotate: false
-  xy: 1682, 3318
-  size: 890, 720
-  orig: 890, 720
+  xy: 841, 1298
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 1
 player/FIRE
   rotate: false
-  xy: 1682, 2596
-  size: 890, 720
-  orig: 890, 720
+  xy: 1682, 3318
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 2
 player/FIRE
   rotate: false
-  xy: 2574, 3318
-  size: 890, 720
-  orig: 890, 720
+  xy: 841, 576
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 3
 player/FIRE
   rotate: false
-  xy: 2574, 2596
-  size: 890, 720
-  orig: 890, 720
+  xy: 1682, 2596
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 4
 player/FIRE
   rotate: false
-  xy: 841, 1298
-  size: 890, 720
-  orig: 890, 720
+  xy: 2404, 3318
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 5
 player/FIRE
   rotate: false
-  xy: 841, 576
-  size: 890, 720
-  orig: 890, 720
+  xy: 2404, 2596
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 6
 player/FIRE
   rotate: false
-  xy: 1733, 1874
-  size: 890, 720
-  orig: 890, 720
+  xy: 3126, 3318
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 7
-player/Female_Death
+player/Female_Punch
   rotate: false
-  xy: 1733, 1152
-  size: 880, 720
-  orig: 880, 720
+  xy: 3126, 2596
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 1
-player/Female_Death
+player/Female_Punch
   rotate: false
-  xy: 2625, 1874
-  size: 880, 720
-  orig: 880, 720
+  xy: 1682, 1874
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 2
-player/Female_Death
+player/Female_Punch
   rotate: false
-  xy: 2615, 1152
-  size: 880, 720
-  orig: 880, 720
+  xy: 2404, 1874
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 3
-player/Female_Death
+player/Female_Punch
   rotate: false
-  xy: 1733, 430
-  size: 880, 720
-  orig: 880, 720
+  xy: 3126, 1874
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 4
-player/Female_Death
+player/Female_Punch
   rotate: false
-  xy: 2615, 430
-  size: 880, 720
-  orig: 880, 720
+  xy: 1563, 1152
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
   index: 5
+player/Female_Punch
+  rotate: false
+  xy: 2285, 1152
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 6
+player/Female_Run
+  rotate: false
+  xy: 3007, 1152
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 1
+player/Female_Run
+  rotate: false
+  xy: 1563, 430
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 2
+player/Female_Run
+  rotate: false
+  xy: 2285, 430
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 3
+player/Female_Run
+  rotate: false
+  xy: 3007, 430
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 4
 walls/discharge-wall
   rotate: false
-  xy: 3466, 3438
+  xy: 3848, 3438
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 1
 walls/discharge-wall
   rotate: false
-  xy: 3466, 2836
+  xy: 3729, 1272
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 2
 walls/light-wall
   rotate: false
-  xy: 3518, 3438
+  xy: 3848, 2836
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 1
 walls/light-wall
   rotate: false
-  xy: 3518, 2836
+  xy: 3900, 3438
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 2
 walls/plasma-wall
   rotate: false
-  xy: 3570, 3438
+  xy: 3729, 670
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 1
 walls/plasma-wall
   rotate: false
-  xy: 3570, 2836
+  xy: 3781, 1272
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: 2
 
 animations2.png
-size: 3770,3610
+size: 3610,3610
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-player/Female_Death
+player/Female_Run
   rotate: false
   xy: 0, 2888
-  size: 880, 720
-  orig: 880, 720
+  size: 720, 720
+  orig: 720, 720
   offset: 0, 0
-  index: 6
-player/Female_Punch
+  index: 5
+player/Female_Run
   rotate: false
   xy: 0, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 1
-player/Female_Punch
+  index: 6
+player/Male_Run
   rotate: false
-  xy: 882, 2888
+  xy: 722, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 2
-player/Female_Punch
+  index: 1
+player/Male_Run
   rotate: false
   xy: 0, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 3
-player/Female_Punch
+  index: 2
+player/Male_Run
   rotate: false
   xy: 722, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 4
-player/Female_Punch
+  index: 3
+player/Male_Run
   rotate: false
-  xy: 1604, 2888
+  xy: 1444, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
-player/Female_Punch
+  index: 4
+player/Male_Run
   rotate: false
   xy: 0, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 6
-player/Female_Run
+  index: 5
+player/Male_Run
   rotate: false
   xy: 722, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 1
-player/Female_Run
+  index: 6
+player/Shock
   rotate: false
   xy: 1444, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 2
-player/Female_Run
+  index: 1
+player/Shock
   rotate: false
-  xy: 2326, 2888
+  xy: 1444, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 3
-player/Female_Run
+  index: 7
+player/Shock
+  rotate: false
+  xy: 1444, 2166
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 4
+player/Shock
+  rotate: false
+  xy: 2166, 2888
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 2
+player/Shock
+  rotate: false
+  xy: 2166, 2888
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 8
+player/Shock
+  rotate: false
+  xy: 2166, 2888
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 5
+player/Shock
   rotate: false
   xy: 0, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 4
-player/Female_Run
+  index: 3
+player/Shock
+  rotate: false
+  xy: 0, 0
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 6
+player/Shock
+  rotate: false
+  xy: 0, 0
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 9
+player/Wall
   rotate: false
   xy: 722, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
-player/Female_Run
+  index: 1
+player/Wall
   rotate: false
   xy: 1444, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 6
-player/Male_Run
+  index: 2
+player/Wall
   rotate: false
   xy: 2166, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 1
-player/Male_Run
+  index: 3
+player/Wall
   rotate: false
-  xy: 3048, 2888
+  xy: 2888, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 2
-player/Male_Run
+  index: 4
+player/Wall
   rotate: false
   xy: 722, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 3
-player/Male_Run
+  index: 5
+player/Wall
   rotate: false
   xy: 1444, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 4
-player/Male_Run
+  index: 6
+player/Wall
   rotate: false
   xy: 2166, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
-player/Male_Run
-  rotate: false
-  xy: 2888, 2166
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 6
+  index: 7
