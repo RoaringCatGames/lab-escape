@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
+import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.data.GameStats;
@@ -59,6 +60,8 @@ public class BubbleRunnerStage extends BaseStage {
 
     //private static final int SECONDS_PER_RESOURCE_REGEN = 2;
 
+    private static final float COMBO_BASE_OSCILLATION_RATE = 20f;
+    private static final float COMBO_OSCILATION_INCREASE_RATE = 10f;
 
     //Order of values:  xPos, yPos, width, height
     private static final float INDICATOR_WIDTH = ViewportUtil.VP_WIDTH/4;
@@ -89,6 +92,8 @@ public class BubbleRunnerStage extends BaseStage {
     private int highestCombo = 0;
     private ComboLevels currentComboLevel = ComboLevels.NONE;
     private Label comboLabel;
+    private DecoratedUIContainer comboContainer;
+    private OscillatingDecorator comboDecorator;
 
     //Obstacle Generation Values
     /**
@@ -183,9 +188,14 @@ public class BubbleRunnerStage extends BaseStage {
 
         Label.LabelStyle style = new Label.LabelStyle(assetManager.get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT), Color.ORANGE);
         comboLabel = new Label(currentCombo + "x Combo!!", style);
-        comboLabel.setPosition(player.getX(), player.getTop()+HUD_HEIGHT);
-        comboLabel.setVisible(false);
-        addActor(comboLabel);
+
+
+        comboContainer = new DecoratedUIContainer(comboLabel);
+        comboContainer.setPosition(player.getX() + (comboLabel.getWidth()/2), player.getTop()+HUD_HEIGHT);
+
+        comboDecorator = new OscillatingDecorator(-3f, 3f, 40f);
+        comboContainer.addDecorator(comboDecorator);
+        addActor(comboContainer);
 
 
         comboSfx = new ObjectMap<ComboLevels, Sound>();
@@ -227,6 +237,8 @@ public class BubbleRunnerStage extends BaseStage {
 
             //Process wall collision events
             processWallCollisions();
+
+            adjustComboOscillation();
 
             //Any walls marked for removal need to be
             //  dropped and disposed of
@@ -532,6 +544,20 @@ public class BubbleRunnerStage extends BaseStage {
         }
 
         return result;
+    }
+
+    private void adjustComboOscillation(){
+        float result = COMBO_BASE_OSCILLATION_RATE;
+        for(int threshold:COMBO_THRESHOLDS){
+            if(currentCombo >= threshold){
+                result += COMBO_OSCILATION_INCREASE_RATE;
+            }else{
+                break;
+            }
+        }
+
+        Gdx.app.log("STAGE", "Rotation Speed: " + result);
+        comboDecorator.setRotationSpeed(result);
     }
 
     private boolean adjustComboLevel(int latestCombo){
