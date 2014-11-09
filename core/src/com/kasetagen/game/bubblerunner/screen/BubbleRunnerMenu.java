@@ -39,7 +39,6 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
     private TextButton startGameButton;
     private TextButton optionsButton;
-    private TextureRegion bgTextureRegion;
 
 
     private Music bgMusic;
@@ -73,7 +72,6 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
             }
         };
 
-        bgTextureRegion = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.TITLE_SCREEN, AssetsUtil.TEXTURE));
         TextureAtlas atlas = gameProcessor.getAssetManager().get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         Animation titleAni = new Animation(AnimationUtil.TITLE_CYCLE_RATE, atlas.findRegions("screens/Title"));
         stage.addActor(new AnimatedActor(0, 0, stage.getWidth(), stage.getHeight(), titleAni,0f));
