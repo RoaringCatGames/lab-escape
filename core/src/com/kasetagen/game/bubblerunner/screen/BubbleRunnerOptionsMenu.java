@@ -38,7 +38,8 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
     TextButton charToggle;
     Animation womanAnimation;
     Animation manAnimation;
-    Image currentFrame;
+    Image currentWomanFrame;
+    Image currentManFrame;
     float timeElapsed = 0f;
 
     private String getFloatStringVal(float val){
@@ -59,7 +60,7 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         }
         Skin skin = gameProcessor.getAssetManager().get(AssetsUtil.DEFAULT_SKIN, AssetsUtil.SKIN);
 
-        Label bgVolLbl = new Label("Background Volume: " , skin);
+        Label bgVolLbl = new Label("BKGD Volume: " , skin);
         bgValue = new Label(getFloatStringVal(bgVolValue), skin);
         Label sfxVolLbl = new Label("SFX Volume: " , skin);
         sfxValue = new Label(getFloatStringVal(sfxVolValue), skin);
@@ -124,13 +125,43 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
             }
         });
 
+
+
         TextureAtlas atlas = gameProcessor.getAssetManager().get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
         manAnimation = new Animation(1f/8f, atlas.findRegions("player/Male_Run"));
         womanAnimation = new Animation(1f/8f, atlas.findRegions("player/Female_Run"));
 
-        currentFrame = new Image(manAnimation.getKeyFrame(0f));
-        currentFrame.setSize(180f, 180f);
+        currentManFrame = new Image(manAnimation.getKeyFrame(0f));
+        currentManFrame.setSize(180f, 180f);
+
+        currentWomanFrame = new Image(womanAnimation.getKeyFrame(0f));
+        currentWomanFrame.setSize(180f, 180f);
+
+        currentManFrame.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //if(selectionIsWoman()){
+                charValue.setText("Man");
+                //}else{
+                //    charValue.setText("Woman");
+                //}
+                gameProcessor.saveGameData(charDataSaver);
+            }
+        });
+
+        currentWomanFrame.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                //if(selectionIsWoman()){
+                charValue.setText("Woman");
+                //}else{
+                //    charValue.setText("Woman");
+                //}
+                gameProcessor.saveGameData(charDataSaver);
+            }
+        });
+
 
         backToMainMenuButton = new TextButton("Back to Main Menu", skin);
         backToMainMenuButton.addListener(new ClickListener(){
@@ -140,33 +171,43 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
             }
         });
 
+        Table rootTable = new Table(skin);
+        rootTable.setFillParent(true);
+        stage.addActor(rootTable);
+
+        Table playerTable = new Table(skin);
+        float playerSelectSize = currentManFrame.getWidth()*2;
+        playerTable.columnDefaults(0).center().height(playerSelectSize).width(playerSelectSize);
+        playerTable.columnDefaults(1).center().height(playerSelectSize).width(playerSelectSize);
+        playerTable.add(currentManFrame);
+        playerTable.add(currentWomanFrame);
+        rootTable.add(playerTable);
+
         float colWidth = stage.getWidth()/3;
         float colHeight = stage.getHeight()/5;
-        Table table = new Table(skin);
-        table.setFillParent(true);
-        stage.addActor(table);
-        table.columnDefaults(0).right();
-        table.columnDefaults(1).center().width(colWidth).height(colHeight);
-        table.columnDefaults(2).expandX().left().padLeft(50);
 
-        table.add(charSelect).right();
-        table.add(currentFrame).height(colHeight*2);
-        table.add(charToggle);
+        Table volumeTable = new Table(skin);
+        volumeTable.columnDefaults(0).right();
+        volumeTable.columnDefaults(1).center().width(colWidth).height(colHeight);
+        volumeTable.columnDefaults(2).expandX().left().padLeft(50);
 
-        table.row();
-        table.add(bgVolLbl).right();
-        table.add(bgVolumeSet);
-        table.add(bgValue);
+        volumeTable.row();
+        volumeTable.add(bgVolLbl).right();
+        volumeTable.add(bgVolumeSet);
+        volumeTable.add(bgValue);
 
-        table.row();
-        table.add(sfxVolLbl).right();
-        table.add(sfxVolumeSet);
-        table.add(sfxValue);
+        volumeTable.row();
+        volumeTable.add(sfxVolLbl).right();
+        volumeTable.add(sfxVolumeSet);
+        volumeTable.add(sfxValue);
 
-        table.row();
-        table.add();
-        table.add(backToMainMenuButton).height(colHeight/2);
-        table.add();
+        volumeTable.row();
+        volumeTable.add();
+        volumeTable.add(backToMainMenuButton).height(colHeight/2).padBottom(20f);
+        volumeTable.add();
+
+        rootTable.row();
+        rootTable.add(volumeTable);
     }
 
     private boolean selectionIsWoman(){
@@ -181,12 +222,22 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
             TextureRegion tr = womanAnimation.getKeyFrame(timeElapsed, true);
             if(!tr.isFlipX())
                 tr.flip(true, false);
-            currentFrame.setDrawable(new TextureRegionDrawable(tr));
+            currentWomanFrame.setDrawable(new TextureRegionDrawable(tr));
+            TextureRegion mTr = manAnimation.getKeyFrame(0f, false);
+            if(!mTr.isFlipX()){
+                mTr.flip(true, false);
+            }
+            currentManFrame.setDrawable(new TextureRegionDrawable(mTr));
         }else{
             TextureRegion tr = manAnimation.getKeyFrame(timeElapsed, true);
             if(!tr.isFlipX())
                 tr.flip(true, false);
-            currentFrame.setDrawable(new TextureRegionDrawable(tr));
+            currentManFrame.setDrawable(new TextureRegionDrawable(tr));
+            TextureRegion wTr = womanAnimation.getKeyFrame(0f, false);
+            if(!wTr.isFlipX()){
+                wTr.flip(true, false);
+            }
+            currentWomanFrame.setDrawable(new TextureRegionDrawable(wTr));
         }
         super.render(delta);
 }

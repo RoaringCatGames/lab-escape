@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -12,11 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
+import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
 /**
@@ -26,9 +30,12 @@ import com.kasetagen.game.bubblerunner.util.AssetsUtil;
  * Time: 10:59 PM
  * To change this template use File | Settings | File Templates.
  */
-public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{//ApplicationAdapter implements Screen, InputProcessor, IStageManager{
+public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
     protected IGameProcessor gameProcessor;
+
+    private float buttonX = 200f;
+    private float buttonY = 600f;
 
     private TextButton startGameButton;
     private TextButton optionsButton;
@@ -67,24 +74,27 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{//ApplicationAdapte
         };
 
         bgTextureRegion = new TextureRegion(gameProcessor.getAssetManager().get(AssetsUtil.TITLE_SCREEN, AssetsUtil.TEXTURE));
-        stage.addActor(new GenericActor(0, 0, stage.getWidth(), stage.getHeight(), bgTextureRegion, Color.DARK_GRAY));
+        TextureAtlas atlas = gameProcessor.getAssetManager().get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
+        Animation titleAni = new Animation(AnimationUtil.TITLE_CYCLE_RATE, atlas.findRegions("screens/Title"));
+        stage.addActor(new AnimatedActor(0, 0, stage.getWidth(), stage.getHeight(), titleAni,0f));
+
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = gameProcessor.getAssetManager().get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT);
+        style.font = gameProcessor.getAssetManager().get(AssetsUtil.REXLIA_48, AssetsUtil.BITMAP_FONT);
         style.fontColor =  Color.CYAN;
         style.overFontColor = Color.RED;
         style.downFontColor = Color.GRAY;
-//        float fontScale = 2f;
-//        style.font.setScale(fontScale);
+
+
 
         startGameButton = new TextButton("Touch to Start", style);
         startGameButton.addListener(listener);
-        startGameButton.setPosition(((stage.getWidth()/4) * 3) - startGameButton.getWidth()/2, (stage.getHeight()/4));
+        startGameButton.setPosition(buttonX, buttonY);
 
         stage.addActor(startGameButton);
 
         optionsButton = new TextButton("Options", style);
-        optionsButton.setPosition(((stage.getWidth() / 4) * 3) - startGameButton.getWidth() / 2, (stage.getHeight() / 8));
+        optionsButton.setPosition(buttonX+(startGameButton.getWidth()/4), buttonY - startGameButton.getHeight());
         optionsButton.addListener(listener);
 
         stage.addActor(optionsButton);
