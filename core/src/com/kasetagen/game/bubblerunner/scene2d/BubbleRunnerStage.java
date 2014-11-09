@@ -68,8 +68,8 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float INDICATOR_HEIGHT = ViewportUtil.VP_HEIGHT/4;
 
     private static String characterSelected = "Woman";
-    private static float[] playerDimensions = new float[] { 100f, 120f, 360f, 360f };//ViewportUtil.VP_WIDTH/8, (ViewportUtil.VP_HEIGHT/3) }; //old width 160f
-    //private static float[] floorDimensions = new float[] { 0f, 0f, ViewportUtil.VP_WIDTH, FLOOR_HEIGHT };
+    private static float[] playerDimensions = new float[] { 100f, 120f, 360f, 360f };
+
     private static float[] wallDimensions = new float[] {ViewportUtil.VP_WIDTH+FLOOR_HEIGHT,
                                                          FLOOR_HEIGHT, 40f, ViewportUtil.VP_HEIGHT-FLOOR_HEIGHT };
     private static float[] warningIndicatorDimensions = new float[] {ViewportUtil.VP_WIDTH/2 - (INDICATOR_WIDTH/2), ViewportUtil.VP_HEIGHT/2-(INDICATOR_HEIGHT/2),

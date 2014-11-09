@@ -324,59 +324,73 @@ player/Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 6
+  index: 9
 player/Shock
   rotate: false
   xy: 0, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 9
-player/Wall
+  index: 6
+player/Shock
   rotate: false
   xy: 722, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 1
-player/Wall
+  index: 10
+player/Shock
   rotate: false
   xy: 1444, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 2
+  index: 11
 player/Wall
   rotate: false
   xy: 2166, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 3
+  index: 1
 player/Wall
   rotate: false
   xy: 2888, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 4
+  index: 2
 player/Wall
   rotate: false
   xy: 722, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
+  index: 3
 player/Wall
   rotate: false
   xy: 1444, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 6
+  index: 4
 player/Wall
   rotate: false
   xy: 2166, 1444
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 5
+player/Wall
+  rotate: false
+  xy: 2888, 2166
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 6
+player/Wall
+  rotate: false
+  xy: 1444, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0

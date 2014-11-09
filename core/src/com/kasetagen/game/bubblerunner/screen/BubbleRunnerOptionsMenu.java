@@ -150,7 +150,7 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         table.columnDefaults(2).expandX().left().padLeft(50);
 
         table.add(charSelect).right();
-        table.add(currentFrame);
+        table.add(currentFrame).height(colHeight*2);
         table.add(charToggle);
 
         table.row();
