@@ -556,7 +556,6 @@ public class BubbleRunnerStage extends BaseStage {
             }
         }
 
-        Gdx.app.log("STAGE", "Rotation Speed: " + result);
         comboDecorator.setRotationSpeed(result);
     }
 
@@ -880,11 +879,11 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private void initializeEnvironmentGroups(){
-//    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.WALL.toString()));
-//    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACKFLOOR.toString()));
-//    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()));
-//    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.PILLAR.toString()));
-//    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.OBSTACLES.toString()));
+    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.WALL.toString()));
+    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACKFLOOR.toString()));
+    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()));
+    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.PILLAR.toString()));
+    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.OBSTACLES.toString()));
     }
     
     private void initializeStartingScene(){
