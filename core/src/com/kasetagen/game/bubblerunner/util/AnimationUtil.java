@@ -15,4 +15,6 @@ public class AnimationUtil {
     public static final float RUNNER_WALL_CYCLE_RATE = 1f/8f;
 
     public static final float TITLE_CYCLE_RATE = 1f/3f;
+
+    public static final float SHIELD_CYCLE_RATE = 1f/10f;
 }

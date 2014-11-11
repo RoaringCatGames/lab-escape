@@ -1,7 +1,9 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
 
 /**
@@ -13,15 +15,25 @@ import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
  */
 public class ShieldGroup extends GenericGroup {
 
-    private static final float FIELD_ADJUST = 20f;
+    private static final float SHIELD_WIDTH = 100f;
+    private static final float SHIELD_HEIGHT = 360f;
+
+    private static final float FIELD_ADJUST_X = SHIELD_WIDTH;
+    private static final float FIELD_ADJUST_Y = 75f;
 
     private Array<ForceField> fields;
     public int maxFields = 1;
     public int resourceUsage = 1;
+    private ObjectMap<ForceFieldType, Animation> shieldAnimations;
 
     public ShieldGroup(float x, float y, float width, float height) {
-        super(x, y, width, height, null, Color.YELLOW);
+        super(x, y, width, height, null, Color.BLACK);
         fields = new Array<ForceField>();
+        shieldAnimations = new ObjectMap<ForceFieldType, Animation>();
+    }
+
+    public void setShieldAnimation(ForceFieldType fft, Animation ani){
+        shieldAnimations.put(fft, ani);
     }
 
     public void addField(ForceFieldType ff){
@@ -34,27 +46,19 @@ public class ShieldGroup extends GenericGroup {
         }
 
         float radius = getWidth();
-        float x = getX()-getWidth()/2;
-        float y = getY();
-        ForceField field = new ForceField(x, y, radius, ff);
+        float x = getWidth() - (SHIELD_WIDTH/4);
+        float y = FIELD_ADJUST_Y;
+        ForceField field = new ForceField(x, y, SHIELD_WIDTH, SHIELD_HEIGHT, shieldAnimations.get(ff), ff);
 
-        for(int i=fields.size-1;i>=0;i--){
-            fields.get(i).targetRadius = fields.get(i).targetRadius + (FIELD_ADJUST);
+        for(int i=0;i<fields.size;i++){
+            fields.get(i).targetX += FIELD_ADJUST_X;
         }
+//        for(int i=fields.size-1;i>=0;i--){
+//            fields.get(i).targetX = fields.get(i).targetX + (FIELD_ADJUST_X);
+//        }
 
         this.addActor(field);
         fields.add(field);
-    }
-
-    public void addField(ForceFieldType ff, int index){
-
-        float adjust = fields.size > 0 ? FIELD_ADJUST *fields.size - 1 : 0;
-        float radius = getWidth() + adjust;
-        float x = getX() - (getWidth()/2) - adjust;
-        float y = getY() - adjust;
-        ForceField field = new ForceField(x, y, radius, ff);
-        this.addActor(field);
-        fields.insert(index, field);
     }
 
     public void removeField(ForceField ff){
@@ -62,7 +66,7 @@ public class ShieldGroup extends GenericGroup {
         fields.removeValue(ff, true);
 
         for(int i=0;i<fields.size;i++){
-            fields.get(i).targetRadius = getWidth() + (FIELD_ADJUST * (fields.size-i-1));
+            fields.get(i).targetX -= FIELD_ADJUST_X*(fields.size-i-1);//= getWidth()-(SHIELD_WIDTH/4) + (FIELD_ADJUST_X * (fields.size-i-1));
         }
     }
 
@@ -84,7 +88,7 @@ public class ShieldGroup extends GenericGroup {
         //When we remove a forcefield, we need to readjust all of the remaining
         //  fields into the proper positions.
         for(int i=0;i<fields.size;i++){
-            fields.get(i).targetRadius = getWidth() + (FIELD_ADJUST * (fields.size-i-1));
+            fields.get(i).targetX = getWidth() + (FIELD_ADJUST_X * (fields.size-i-1));
         }
     }
 
@@ -103,5 +107,4 @@ public class ShieldGroup extends GenericGroup {
         }
         return ff;
     }
-
 }

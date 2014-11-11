@@ -850,6 +850,12 @@ public class BubbleRunnerStage extends BaseStage {
                                   playerDimensions[1],
                                   playerDimensions[2],
                                   playerDimensions[3]);
+        Animation redShield = new Animation(AnimationUtil.SHIELD_CYCLE_RATE, atlas.findRegions("Shields/Red"));
+        Animation greenShield = new Animation(AnimationUtil.SHIELD_CYCLE_RATE, atlas.findRegions("Shields/Green"));
+        Animation blueShield = new Animation(AnimationUtil.SHIELD_CYCLE_RATE, atlas.findRegions("Shields/Blue"));
+        shields.setShieldAnimation(ForceFieldType.LASER, redShield);
+        shields.setShieldAnimation(ForceFieldType.PLASMA, greenShield);
+        shields.setShieldAnimation(ForceFieldType.LIGHTNING, blueShield);
         shields.maxFields = maxFields;
         addActor(shields);
 
@@ -874,11 +880,11 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private void initializeEnvironmentGroups(){
-    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.WALL.toString()));
-    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACKFLOOR.toString()));
-    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()));
-    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.PILLAR.toString()));
-    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.OBSTACLES.toString()));
+//    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.WALL.toString()));
+//    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACKFLOOR.toString()));
+//    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()));
+//    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.PILLAR.toString()));
+//    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.OBSTACLES.toString()));
     }
     
     private void initializeStartingScene(){
