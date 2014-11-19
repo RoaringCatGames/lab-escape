@@ -9,6 +9,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -77,6 +78,8 @@ public class BubbleRunnerStage extends BaseStage {
                                                                      INDICATOR_WIDTH, INDICATOR_HEIGHT};
 
     private static ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.LIGHTNING, ForceFieldType.PLASMA, ForceFieldType.LASER};
+
+    private static Vector3 origPos;
 
     //Delegates
 	private IGameProcessor gameProcessor;
@@ -212,6 +215,8 @@ public class BubbleRunnerStage extends BaseStage {
         TextureRegion instructionsRegion = new TextureRegion(assetManager.get(AssetsUtil.CONTROLS, AssetsUtil.TEXTURE));
         instructions = new GenericActor(0f, 0f, instructionsRegion.getRegionWidth(), instructionsRegion.getRegionHeight(), instructionsRegion, Color.CYAN);
         addActor(instructions);
+
+        origPos = new Vector3(getCamera().position);
     }
 
     @Override
@@ -274,9 +279,8 @@ public class BubbleRunnerStage extends BaseStage {
             Iterator<ICameraModifier> itr = cameraTricks.iterator();
             while(itr.hasNext()){
                 ICameraModifier mod = itr.next();
-                if(!mod.isComplete()){
-                    mod.modify(getCamera(), delta);
-                }else{
+                mod.modify(getCamera(), delta);
+                if(mod.isComplete()){
                     itr.remove();
                 }
             }
@@ -351,25 +355,31 @@ public class BubbleRunnerStage extends BaseStage {
                     cameraTricks.add(new ICameraModifier() {
                         private float duration = 0.5f;
                         private float elapsedTime = 0f;
-                        private float maxOffset = 3f;
+                        private float maxOffset = 5f + cameraTricks.size;
                         private float currentOffset = 0f;
                         private int direction = 1;
 
                         @Override
                         public void modify(Camera camera, float delta) {
-                            Gdx.app.log("CameraMod", "Delta: " + delta + " ElapsedTime: " + elapsedTime);
                             this.elapsedTime += delta;
-                            Gdx.app.log("CameraMod", "Delta2: " + delta + " ElapsedTime2: " + elapsedTime);
-                            if(currentOffset >= maxOffset || currentOffset <= -maxOffset){
-                                direction *= -1;
+                            if(!isComplete()){
+                                if(currentOffset >= maxOffset || currentOffset <= -maxOffset){
+                                    direction *= -1;
+                                }
+                                currentOffset += direction;
+                                //camera.position.add(direction, 0, 0);
+
+                                float x = (float)(currentOffset*Math.cos(elapsedTime) + origPos.x);
+                                float y = (float)(currentOffset*Math.sin(elapsedTime) + origPos.y);
+                                camera.position.set(x, y, camera.position.z);
+                            }else{
+                                Gdx.app.log("CAMERAMOD", "Setting to Original Position: " + origPos.toString());
+                                camera.position.set(origPos);
                             }
-                            currentOffset += direction;
-                            camera.position.add(direction, 0, 0);
                         }
 
                         @Override
                         public boolean isComplete() {
-                            Gdx.app.log("CameraMod", "Elapsed: " + this.elapsedTime + " Duration: " + duration);
                             return elapsedTime >= duration;
                         }
                     });
