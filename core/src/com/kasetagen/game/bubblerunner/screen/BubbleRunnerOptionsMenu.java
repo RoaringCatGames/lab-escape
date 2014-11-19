@@ -16,6 +16,7 @@ import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
+import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
 /**
@@ -36,10 +37,10 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
     Label charSelect;
     Label charValue;
     TextButton charToggle;
-    Animation womanAnimation;
-    Animation manAnimation;
-    Image currentWomanFrame;
-    Image currentManFrame;
+    Animation character1Animation;
+    Animation character2Animation;
+    Image currentCharacter1Frame;
+    Image currentCharacter2Frame;
     float timeElapsed = 0f;
 
     private String getFloatStringVal(float val){
@@ -56,7 +57,7 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         float bgVolValue = delegate.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
         String charStoredValue = delegate.getStoredString(GameOptions.CHARACTER_SELECT_KEY);
         if(charStoredValue == null || "".equals(charStoredValue.trim())){
-            charStoredValue = "Woman";
+            charStoredValue = AnimationUtil.CHARACTER_2;
         }
         Skin skin = gameProcessor.getAssetManager().get(AssetsUtil.DEFAULT_SKIN, AssetsUtil.SKIN);
 
@@ -116,10 +117,10 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         charToggle.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(selectionIsWoman()){
-                    charValue.setText("Man");
+                if(selectionIsCharacter2()){
+                    charValue.setText(AnimationUtil.CHARACTER_1);
                 }else{
-                    charValue.setText("Woman");
+                    charValue.setText(AnimationUtil.CHARACTER_2);
                 }
                 gameProcessor.saveGameData(charDataSaver);
             }
@@ -129,35 +130,27 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
 
         TextureAtlas atlas = gameProcessor.getAssetManager().get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
-        manAnimation = new Animation(1f/8f, atlas.findRegions("player/Male_Run"));
-        womanAnimation = new Animation(1f/8f, atlas.findRegions("player/Female_Run"));
+        character1Animation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions("player/Male_Run"));
+        character2Animation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions("player/Female_Run"));
 
-        currentManFrame = new Image(manAnimation.getKeyFrame(0f));
-        currentManFrame.setSize(180f, 180f);
+        currentCharacter1Frame = new Image(character1Animation.getKeyFrame(0f));
+        currentCharacter1Frame.setSize(180f, 180f);
 
-        currentWomanFrame = new Image(womanAnimation.getKeyFrame(0f));
-        currentWomanFrame.setSize(180f, 180f);
+        currentCharacter2Frame = new Image(character2Animation.getKeyFrame(0f));
+        currentCharacter2Frame.setSize(180f, 180f);
 
-        currentManFrame.addListener(new ClickListener(){
+        currentCharacter1Frame.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //if(selectionIsWoman()){
-                charValue.setText("Man");
-                //}else{
-                //    charValue.setText("Woman");
-                //}
+                charValue.setText(AnimationUtil.CHARACTER_1);
                 gameProcessor.saveGameData(charDataSaver);
             }
         });
 
-        currentWomanFrame.addListener(new ClickListener(){
+        currentCharacter2Frame.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                //if(selectionIsWoman()){
-                charValue.setText("Woman");
-                //}else{
-                //    charValue.setText("Woman");
-                //}
+                charValue.setText(AnimationUtil.CHARACTER_2);
                 gameProcessor.saveGameData(charDataSaver);
             }
         });
@@ -176,11 +169,11 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         stage.addActor(rootTable);
 
         Table playerTable = new Table(skin);
-        float playerSelectSize = currentManFrame.getWidth()*2;
+        float playerSelectSize = currentCharacter1Frame.getWidth()*2;
         playerTable.columnDefaults(0).center().height(playerSelectSize).width(playerSelectSize);
         playerTable.columnDefaults(1).center().height(playerSelectSize).width(playerSelectSize);
-        playerTable.add(currentManFrame);
-        playerTable.add(currentWomanFrame);
+        playerTable.add(currentCharacter1Frame);
+        playerTable.add(currentCharacter2Frame);
         rootTable.add(playerTable);
 
         float colWidth = stage.getWidth()/3;
@@ -210,34 +203,34 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         rootTable.add(volumeTable);
     }
 
-    private boolean selectionIsWoman(){
-        return "Woman".equals(charValue.getText().toString());
+    private boolean selectionIsCharacter2(){
+        return AnimationUtil.CHARACTER_2.equals(charValue.getText().toString());
     }
 
     @Override
     public void render(float delta) {
         Gdx.app.log("RENDER MENU", "Delta: " + delta);
         timeElapsed += delta;
-        if(selectionIsWoman()){
-            TextureRegion tr = womanAnimation.getKeyFrame(timeElapsed, true);
+        if(selectionIsCharacter2()){
+            TextureRegion tr = character2Animation.getKeyFrame(timeElapsed, true);
             if(!tr.isFlipX())
                 tr.flip(true, false);
-            currentWomanFrame.setDrawable(new TextureRegionDrawable(tr));
-            TextureRegion mTr = manAnimation.getKeyFrame(0f, false);
+            currentCharacter2Frame.setDrawable(new TextureRegionDrawable(tr));
+            TextureRegion mTr = character1Animation.getKeyFrame(0f, false);
             if(!mTr.isFlipX()){
                 mTr.flip(true, false);
             }
-            currentManFrame.setDrawable(new TextureRegionDrawable(mTr));
+            currentCharacter1Frame.setDrawable(new TextureRegionDrawable(mTr));
         }else{
-            TextureRegion tr = manAnimation.getKeyFrame(timeElapsed, true);
+            TextureRegion tr = character1Animation.getKeyFrame(timeElapsed, true);
             if(!tr.isFlipX())
                 tr.flip(true, false);
-            currentManFrame.setDrawable(new TextureRegionDrawable(tr));
-            TextureRegion wTr = womanAnimation.getKeyFrame(0f, false);
+            currentCharacter1Frame.setDrawable(new TextureRegionDrawable(tr));
+            TextureRegion wTr = character2Animation.getKeyFrame(0f, false);
             if(!wTr.isFlipX()){
                 wTr.flip(true, false);
             }
-            currentWomanFrame.setDrawable(new TextureRegionDrawable(wTr));
+            currentCharacter2Frame.setDrawable(new TextureRegionDrawable(wTr));
         }
         super.render(delta);
 }

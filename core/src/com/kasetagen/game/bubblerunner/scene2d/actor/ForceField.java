@@ -17,6 +17,7 @@ public class ForceField extends AnimatedActor {
 
     public ForceFieldType forceFieldType;
     public float targetX;
+    public float tweenSpeed;
     //public float radius;
 
     public ForceField(float x, float y, float width, float height, Animation ani, ForceFieldType ff){
@@ -25,6 +26,7 @@ public class ForceField extends AnimatedActor {
         forceFieldType = ff;
         targetX = x;
         this.isLooping = false;
+        tweenSpeed = width*2;
         //this.radius = radius;
     }
 
@@ -34,36 +36,19 @@ public class ForceField extends AnimatedActor {
 
         //Manually "Tween" our position
         if(targetX > getX()){
-            setX(getX() + 2f);//radius++;
-//            setX(getX() - 1);
-//            setY(getY() -1);
-//            setWidth(radius*2);
-//            setHeight(radius*2);
+            setX(getX() + (delta*tweenSpeed));
+            if(getX() > targetX){
+                setX(targetX);
+            }
         }else if(targetX < getX()){
-            setX(getX() - 2f);
-//            setX(getX() + 1);
-//            setY(getY() + 1);
-//            setWidth(radius*2);
-//            setHeight(radius*2);
+            setX(getX() - (delta*tweenSpeed));
+            if(getX() < targetX){
+                setX(targetX);
+            }
         }
 
         if(textureRegion != null && !textureRegion.isFlipX()){
             textureRegion.flip(true, false);
         }
-    }
-
-    @Override
-    public void drawFull(Batch batch, float parentAlpha) {
-        super.drawFull(batch, parentAlpha);
-//        batch.end();
-//        batch.begin();
-//        Gdx.gl20.glLineWidth(5f);
-//        debugRenderer.setProjectionMatrix(getStage().getCamera().combined);
-//        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        debugRenderer.setColor(getColor());
-//        debugRenderer.circle(getOriginX(), getOriginY(), radius);
-//        debugRenderer.end();
-//        batch.end();
-//        batch.begin();
     }
 }

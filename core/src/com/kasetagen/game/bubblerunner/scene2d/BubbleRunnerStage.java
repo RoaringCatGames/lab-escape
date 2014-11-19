@@ -6,9 +6,9 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -31,6 +31,7 @@ import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 import com.kasetagen.game.bubblerunner.util.PlayerStates;
 import com.kasetagen.game.bubblerunner.util.ViewportUtil;
 
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -67,7 +68,7 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float INDICATOR_WIDTH = ViewportUtil.VP_WIDTH/4;
     private static final float INDICATOR_HEIGHT = ViewportUtil.VP_HEIGHT/4;
 
-    private static String characterSelected = "Woman";
+    private static String characterSelected = AnimationUtil.CHARACTER_2;
     private static float[] playerDimensions = new float[] { 100f, 120f, 360f, 360f };
 
     private static float[] wallDimensions = new float[] {ViewportUtil.VP_WIDTH+FLOOR_HEIGHT,
@@ -110,8 +111,6 @@ public class BubbleRunnerStage extends BaseStage {
 
     //Input Listeners
     private InputListener createAndLeaveListener;
-    private InputListener keysReleasedListener;
-    private InputListener currentListener;
 
     //Actors
     public Player player;
@@ -139,11 +138,14 @@ public class BubbleRunnerStage extends BaseStage {
     private GenericActor instructions;
     
     private enum EnvironmentType {WALL, FLOOR, PILLAR, PLAYER, BACKFLOOR, OBSTACLES};
+
+    private Array<ICameraModifier> cameraTricks;
     
     public BubbleRunnerStage(IGameProcessor gameProcessor){
         super();
         this.gameProcessor = gameProcessor;
     	assetManager = this.gameProcessor.getAssetManager();
+        cameraTricks = new Array<ICameraModifier>();
     	//batch = this.getBatch();
     	EnvironmentManager.initialize(this);
     	
@@ -154,7 +156,7 @@ public class BubbleRunnerStage extends BaseStage {
         highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
         mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
         highestCombo = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
-        characterSelected = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY, "Woman");
+        characterSelected = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY, AnimationUtil.CHARACTER_2);
 
         //SET WALL VELOCITY
         wallAndFloorVelocity = -1f*(getWidth()/2);
@@ -231,9 +233,6 @@ public class BubbleRunnerStage extends BaseStage {
             proccessDestroyedEnvironment();
             
             generateEnvironment(delta);
-            
-            //Move Walls Closer based on Speed
-            processObstacleMovements(delta);
 
             //Process wall collision events
             processWallCollisions();
@@ -271,6 +270,18 @@ public class BubbleRunnerStage extends BaseStage {
                 comboLabel.setVisible(false);
             }
 
+
+            Iterator<ICameraModifier> itr = cameraTricks.iterator();
+            while(itr.hasNext()){
+                ICameraModifier mod = itr.next();
+                if(!mod.isComplete()){
+                    mod.modify(getCamera(), delta);
+                }else{
+                    itr.remove();
+                }
+            }
+
+            Gdx.app.log("STAGE", "CameraMods: " + cameraTricks.size);
 
             particleBubble.update(delta);
             particleBubble.setPosition(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 4);
@@ -319,6 +330,7 @@ public class BubbleRunnerStage extends BaseStage {
                 //  and increment the score
                 if(w.forceFieldType == outerField.forceFieldType){
                     wallsToRemove.add(w);
+                    //w.setIsRemovable(true);
                     info.score += getWallPointValue(1);
 
                     //Increment our Combo counter
@@ -336,6 +348,32 @@ public class BubbleRunnerStage extends BaseStage {
                     }
 
                     explosionSound.play(explosionVolume);
+                    cameraTricks.add(new ICameraModifier() {
+                        private float duration = 0.5f;
+                        private float elapsedTime = 0f;
+                        private float maxOffset = 3f;
+                        private float currentOffset = 0f;
+                        private int direction = 1;
+
+                        @Override
+                        public void modify(Camera camera, float delta) {
+                            Gdx.app.log("CameraMod", "Delta: " + delta + " ElapsedTime: " + elapsedTime);
+                            this.elapsedTime += delta;
+                            Gdx.app.log("CameraMod", "Delta2: " + delta + " ElapsedTime2: " + elapsedTime);
+                            if(currentOffset >= maxOffset || currentOffset <= -maxOffset){
+                                direction *= -1;
+                            }
+                            currentOffset += direction;
+                            camera.position.add(direction, 0, 0);
+                        }
+
+                        @Override
+                        public boolean isComplete() {
+                            Gdx.app.log("CameraMod", "Elapsed: " + this.elapsedTime + " Duration: " + duration);
+                            return elapsedTime >= duration;
+                        }
+                    });
+
                 }else{
                     //If we hit a bad wall, we reduce your score
                     //  This will discourage jamming out fields like crazy
@@ -356,6 +394,7 @@ public class BubbleRunnerStage extends BaseStage {
 
             if(w.getX() <= (0f-w.getWidth()/2)){
                 wallsToRemove.add(w);
+                //w.setIsRemovable(true);
             }
         }
     }
@@ -445,12 +484,6 @@ public class BubbleRunnerStage extends BaseStage {
     
     private void proccessDestroyedEnvironment(){
     	EnvironmentManager.removeOutOfBoundsEnvironments();
-    }
-    
-    private void processObstacleMovements(float delta){
-        for(Wall w:walls){
-            w.setX(w.getX() + (w.velocity.x * delta));
-        }
     }
 
     private void processDestroyedWalls() {
@@ -865,17 +898,17 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private String getPlayerAnimationName() {
-        return characterSelected.equals("Woman") ? "player/Female_Run" : "player/Male_Run";
+        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Female_Run" : "player/Male_Run";
     }
 
     private String getPlayerShieldingAnimationName(){
-        return characterSelected.equals("Woman") ? "player/Female_Punch" : "player/Male_Punch";
+        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Female_Punch" : "player/Male_Punch";
     }
     private String getPlayerElectroAnimationName(){
-        return characterSelected.equals("Woman") ? "player/Shock" : "player/Shock";
+        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Shock" : "player/Shock";
     }
     private String getPlayerWallAnimationName(){
-        return characterSelected.equals("Woman") ? "player/Wall" : "player/Wall";
+        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Wall" : "player/Wall";
     }
 
     private void initializeEnvironmentGroups(){
@@ -937,7 +970,6 @@ public class BubbleRunnerStage extends BaseStage {
         };
 
         this.addListener(createAndLeaveListener);
-        currentListener = createAndLeaveListener;
     }
 
     private void toggleInstructionsScreen() {
@@ -992,8 +1024,6 @@ public class BubbleRunnerStage extends BaseStage {
 
         controls.setEnergyBar(assetManager.get(AssetsUtil.ENERGY_BAR, AssetsUtil.TEXTURE));
         addActor(controls);
-        
-        Rectangle rec = new Rectangle(0, 0, 50, 50);
     }
 
     public void resume(){

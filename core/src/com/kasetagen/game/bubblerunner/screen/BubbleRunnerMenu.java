@@ -34,7 +34,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
     protected IGameProcessor gameProcessor;
 
-    private float buttonX = 200f;
+    private float buttonX = 250f;
     private float buttonY = 600f;
 
     private TextButton startGameButton;
@@ -79,20 +79,20 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
         style.font = gameProcessor.getAssetManager().get(AssetsUtil.REXLIA_48, AssetsUtil.BITMAP_FONT);
-        style.fontColor =  Color.CYAN;
+        style.fontColor =  Color.YELLOW;
         style.overFontColor = Color.RED;
         style.downFontColor = Color.GRAY;
 
 
 
-        startGameButton = new TextButton("Touch to Start", style);
+        startGameButton = new TextButton("Escape!", style);
         startGameButton.addListener(listener);
         startGameButton.setPosition(buttonX, buttonY);
 
         stage.addActor(startGameButton);
 
         optionsButton = new TextButton("Options", style);
-        optionsButton.setPosition(buttonX+(startGameButton.getWidth()/4), buttonY - startGameButton.getHeight());
+        optionsButton.setPosition(buttonX, buttonY - (startGameButton.getHeight()*1.25f));
         optionsButton.addListener(listener);
 
         stage.addActor(optionsButton);

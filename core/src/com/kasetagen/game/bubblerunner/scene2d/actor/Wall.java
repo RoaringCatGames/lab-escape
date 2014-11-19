@@ -19,7 +19,7 @@ public class Wall extends GenericActor {
     private static final float WALL_CYCLE_RATE = 1f/8f;
 
     public ForceFieldType forceFieldType;
-    public Vector2 velocity;
+    //public Vector2 velocity;
     private Animation animation;
     private float keyFrameTime = 0f;
 

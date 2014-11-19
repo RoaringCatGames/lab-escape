@@ -47,27 +47,28 @@ public class ShieldGroup extends GenericGroup {
 
         float radius = getWidth();
         float x = getWidth() - (SHIELD_WIDTH/4);
+        if(fields.size > 0){
+            x -= (fields.get(fields.size-1).getX()-x);
+        }
         float y = FIELD_ADJUST_Y;
         ForceField field = new ForceField(x, y, SHIELD_WIDTH, SHIELD_HEIGHT, shieldAnimations.get(ff), ff);
 
         for(int i=0;i<fields.size;i++){
             fields.get(i).targetX += FIELD_ADJUST_X;
         }
-//        for(int i=fields.size-1;i>=0;i--){
-//            fields.get(i).targetX = fields.get(i).targetX + (FIELD_ADJUST_X);
-//        }
-
         this.addActor(field);
         fields.add(field);
+
+
     }
 
     public void removeField(ForceField ff){
         this.removeActor(ff);
         fields.removeValue(ff, true);
 
-        for(int i=0;i<fields.size;i++){
-            fields.get(i).targetX -= FIELD_ADJUST_X*(fields.size-i-1);//= getWidth()-(SHIELD_WIDTH/4) + (FIELD_ADJUST_X * (fields.size-i-1));
-        }
+//        for(int i=0;i<fields.size;i++){
+//            fields.get(i).targetX -= FIELD_ADJUST_X*(fields.size-i-1);//= getWidth()-(SHIELD_WIDTH/4) + (FIELD_ADJUST_X * (fields.size-i-1));
+//        }
     }
 
     public void removeField(ForceFieldType ff){
