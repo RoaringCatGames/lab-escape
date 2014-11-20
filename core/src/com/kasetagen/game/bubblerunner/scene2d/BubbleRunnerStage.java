@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -17,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.kasetagen.engine.gdx.scenes.scene2d.IActorDisposer;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
@@ -60,7 +62,6 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float TIME_DECREASE = 100f;
     private static final float MIN_TIME_BETWEEN_WALLS = 300f;
 
-    //private static final int SECONDS_PER_RESOURCE_REGEN = 2;
 
     private static final float COMBO_BASE_OSCILLATION_RATE = 20f;
     private static final float COMBO_OSCILATION_INCREASE_RATE = 10f;
@@ -84,7 +85,6 @@ public class BubbleRunnerStage extends BaseStage {
     //Delegates
 	private IGameProcessor gameProcessor;
 	private AssetManager assetManager;
-    //private Batch batch;
 
     //State Values
     private int highScore = 0;
@@ -96,7 +96,6 @@ public class BubbleRunnerStage extends BaseStage {
     private int highestCombo = 0;
     private ComboLevels currentComboLevel = ComboLevels.NONE;
     private Label comboLabel;
-    private DecoratedUIContainer comboContainer;
     private OscillatingDecorator comboDecorator;
 
     //Obstacle Generation Values
@@ -104,7 +103,6 @@ public class BubbleRunnerStage extends BaseStage {
      * Time Passed is in Seconds
      */
     private float millisecondsPassed = 0f;
-    private Array<Wall> wallsToRemove;
     private int lastWallAdjustTime = 0;
     private long nextGeneration = 1000L;
     private long millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
@@ -112,13 +110,11 @@ public class BubbleRunnerStage extends BaseStage {
 
     private float secondsSinceResourceRegen = 0f;
 
-    //Input Listeners
-    private InputListener createAndLeaveListener;
-
     //Actors
     public Player player;
     public ShieldGroup shields;
     public Array<Wall> walls;
+    public IActorDisposer wallDisposer;
     public Wall collidedWall = null;
     public GameInfo info;
     public Overlay deathOverlay;
@@ -130,7 +126,7 @@ public class BubbleRunnerStage extends BaseStage {
     private Sound zapSound;
     private Sound powerOnSound;
     private Sound explosionSound;
-    //TODO: Move into Player?
+
     private ParticleEffect particleBubble;
 
     private ObjectMap<ComboLevels, Sound> comboSfx;
@@ -140,7 +136,7 @@ public class BubbleRunnerStage extends BaseStage {
 
     private GenericActor instructions;
     
-    private enum EnvironmentType {WALL, FLOOR, PILLAR, PLAYER, BACKFLOOR, OBSTACLES};
+    private enum EnvironmentType {WALL, FLOOR, PILLAR, PLAYER, BACK_FLOOR, OBSTACLES}
 
     private Array<ICameraModifier> cameraTricks;
     
@@ -149,13 +145,10 @@ public class BubbleRunnerStage extends BaseStage {
         this.gameProcessor = gameProcessor;
     	assetManager = this.gameProcessor.getAssetManager();
         cameraTricks = new Array<ICameraModifier>();
-    	//batch = this.getBatch();
-    	EnvironmentManager.initialize(this);
-    	
-        //Initialize Privates
-        wallsToRemove = new Array<Wall>();
-        //floorsToRemove = new Array<Environment>();
 
+    	EnvironmentManager.initialize(this);
+
+        //Initialize Privates
         highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
         mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
         highestCombo = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
@@ -175,6 +168,16 @@ public class BubbleRunnerStage extends BaseStage {
 
         //Initialize Walls
         walls = new Array<Wall>();
+        //We use this disposer as our delegate to capture Actor.remove() calls
+        //  from our walls so that they can "remove themselves" from the walls array
+        wallDisposer = new IActorDisposer() {
+            @Override
+            public void dispose(Actor actor) {
+                if(actor instanceof Wall){
+                    walls.removeValue((Wall)actor, false);
+                }
+            }
+        };
 
         //Setup our InputListeners
         initializeInputListeners();
@@ -195,8 +198,8 @@ public class BubbleRunnerStage extends BaseStage {
         comboLabel = new Label(currentCombo + "x Combo!!", style);
 
 
-        comboContainer = new DecoratedUIContainer(comboLabel);
-        comboContainer.setPosition(player.getX() + (comboLabel.getWidth()/2), player.getTop()+HUD_HEIGHT);
+        DecoratedUIContainer comboContainer = new DecoratedUIContainer(comboLabel);
+        comboContainer.setPosition(player.getX() + (comboLabel.getWidth() / 2), player.getTop() + HUD_HEIGHT);
 
         comboDecorator = new OscillatingDecorator(-3f, 3f, 40f);
         comboContainer.addDecorator(comboDecorator);
@@ -230,13 +233,12 @@ public class BubbleRunnerStage extends BaseStage {
             millisecondsPassed += delta*1000;
             secondsSinceResourceRegen += delta;
 
-            //processResourceRegens
             processResources();
-            
+
             proccessEnvironmentMovement(delta);
-            
+
             proccessDestroyedEnvironment();
-            
+
             generateEnvironment(delta);
 
             //Process wall collision events
@@ -244,10 +246,6 @@ public class BubbleRunnerStage extends BaseStage {
 
             adjustComboOscillation();
 
-            //Any walls marked for removal need to be
-            //  dropped and disposed of
-            processDestroyedWalls();
-            
             //Add New Wall(s) based on time
             generateObstacles();
 
@@ -285,10 +283,12 @@ public class BubbleRunnerStage extends BaseStage {
                 }
             }
 
-            Gdx.app.log("STAGE", "CameraMods: " + cameraTricks.size);
-
             particleBubble.update(delta);
             particleBubble.setPosition(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 4);
+        }else{
+            for(Wall w:walls){
+                w.setXVelocity(0f);
+            }
         }
 
         //Update GameStats
@@ -317,7 +317,7 @@ public class BubbleRunnerStage extends BaseStage {
     	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.FLOOR.toString());
     	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.OBSTACLES.toString());
     	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.PILLAR.toString());
-    	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.BACKFLOOR.toString());
+    	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.BACK_FLOOR.toString());
     	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.WALL.toString());
     	
     	//env.setX(env.getX() + (env.velocity.x * delta));
@@ -333,8 +333,7 @@ public class BubbleRunnerStage extends BaseStage {
                 //WHEN OUTERFIELD == WALL we Destroy Both
                 //  and increment the score
                 if(w.forceFieldType == outerField.forceFieldType){
-                    wallsToRemove.add(w);
-                    //w.setIsRemovable(true);
+                    w.setIsRemovable(true);
                     info.score += getWallPointValue(1);
 
                     //Increment our Combo counter
@@ -355,25 +354,18 @@ public class BubbleRunnerStage extends BaseStage {
                     cameraTricks.add(new ICameraModifier() {
                         private float duration = 0.5f;
                         private float elapsedTime = 0f;
-                        private float maxOffset = 5f + cameraTricks.size;
-                        private float currentOffset = 0f;
-                        private int direction = 1;
+                        private float shakeRadius = 5f;
+                        private float shakeRate = 720f/0.5f;
+
 
                         @Override
                         public void modify(Camera camera, float delta) {
                             this.elapsedTime += delta;
                             if(!isComplete()){
-                                if(currentOffset >= maxOffset || currentOffset <= -maxOffset){
-                                    direction *= -1;
-                                }
-                                currentOffset += direction;
-                                //camera.position.add(direction, 0, 0);
-
-                                float x = (float)(currentOffset*Math.cos(elapsedTime) + origPos.x);
-                                float y = (float)(currentOffset*Math.sin(elapsedTime) + origPos.y);
+                                float x = (float)(shakeRadius*Math.cos(elapsedTime*shakeRate) + origPos.x);
+                                float y = (float)(shakeRadius*Math.sin(elapsedTime*shakeRate) + origPos.y);
                                 camera.position.set(x, y, camera.position.z);
                             }else{
-                                Gdx.app.log("CAMERAMOD", "Setting to Original Position: " + origPos.toString());
                                 camera.position.set(origPos);
                             }
                         }
@@ -403,8 +395,7 @@ public class BubbleRunnerStage extends BaseStage {
             }
 
             if(w.getX() <= (0f-w.getWidth()/2)){
-                wallsToRemove.add(w);
-                //w.setIsRemovable(true);
+                w.setIsRemovable(true);
             }
         }
     }
@@ -469,8 +460,8 @@ public class BubbleRunnerStage extends BaseStage {
     	}
     	
     	//FLOOR1
-    	if(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACKFLOOR.toString()) != null){
-    		Environment prevEnv = EnvironmentManager.getLastEnvironment(EnvironmentType.BACKFLOOR.toString());
+    	if(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACK_FLOOR.toString()) != null){
+    		Environment prevEnv = EnvironmentManager.getLastEnvironment(EnvironmentType.BACK_FLOOR.toString());
     		float nextEnvLoc = ViewportUtil.VP_WIDTH;
     		boolean createEnv = false;
     		
@@ -487,21 +478,13 @@ public class BubbleRunnerStage extends BaseStage {
 	    	if(createEnv){
 		    	Environment floor = new Environment(nextEnvLoc, 210, 757, 100, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
 		    	floor.setXVelocity(wallAndFloorVelocity + 50);
-		    	EnvironmentManager.addActor(floor, false, EnvironmentType.BACKFLOOR.toString());
+		    	EnvironmentManager.addActor(floor, false, EnvironmentType.BACK_FLOOR.toString());
 	    	}
     	}
     }
     
     private void proccessDestroyedEnvironment(){
     	EnvironmentManager.removeOutOfBoundsEnvironments();
-    }
-
-    private void processDestroyedWalls() {
-        for(Wall w:wallsToRemove){
-            walls.removeValue(w, true);
-            w.remove();
-        }
-        wallsToRemove.clear();
     }
 
     private void generateObstacles() {
@@ -533,6 +516,7 @@ public class BubbleRunnerStage extends BaseStage {
                         assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS),
                         getAnimationNameForForceFieldType(fft));
                 w.setXVelocity(wallAndFloorVelocity);
+                w.setDisposer(wallDisposer);
                 walls.add(w);
                 addActor(w);
             }
@@ -677,7 +661,6 @@ public class BubbleRunnerStage extends BaseStage {
         warningIndicator = null;
 
         if(!w.equals(collidedWall)){
-            //wallsToRemove.add(w);
             zapSound.play(sfxVolume);
             isDead = true;
             collidedWall = w;
@@ -705,9 +688,9 @@ public class BubbleRunnerStage extends BaseStage {
             saveCurrentStats();
         }
 
-        deathOverlay.setSubText("Score: " + info.score + "\t Best Score: " + highScore +
-                                "\nMisses: " + info.misses + "\t Most Misses: " + mostMisses +
-                                "\nRun Top Combo: " + highestRunCombo + "\t Highest Combo: " + highestCombo);
+        deathOverlay.setSubText("Score: " + info.score + "\t\t Best Score: " + highScore +
+                                "\n\nMisses: " + info.misses + "\t\t Most Misses: " + mostMisses +
+                                "\n\nRun Top Combo: " + highestRunCombo + "\t\t Highest Combo: " + highestCombo);
         deathOverlay.setVisible(true);
     }
 
@@ -793,12 +776,10 @@ public class BubbleRunnerStage extends BaseStage {
             wasAdded = true;
         }
         if(wasAdded){
-            //TODO: Play Forcefield SoundFX
             powerOnSound.play(sfxVolume);
             player.startShield();
 
         }else{
-            //TODO: Play Resources Limited SoundFX
             zapSound.play(sfxVolume);
         }
 
@@ -923,7 +904,7 @@ public class BubbleRunnerStage extends BaseStage {
 
     private void initializeEnvironmentGroups(){
     	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.WALL.toString()));
-    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACKFLOOR.toString()));
+    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACK_FLOOR.toString()));
     	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()));
     	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.PILLAR.toString()));
     	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.OBSTACLES.toString()));
@@ -938,7 +919,7 @@ public class BubbleRunnerStage extends BaseStage {
 	    	
 	    	Environment floor2 = new Environment(-378, 210, 757, 100, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
 	    	floor2.setXVelocity(wallAndFloorVelocity + 50);
-	    	EnvironmentManager.addActor(floor2, false, EnvironmentType.BACKFLOOR.toString());	
+	    	EnvironmentManager.addActor(floor2, false, EnvironmentType.BACK_FLOOR.toString());
     	}
     }
 
@@ -952,21 +933,21 @@ public class BubbleRunnerStage extends BaseStage {
     }
     
     private void initializeInputListeners() {
-        createAndLeaveListener = new InputListener(){
+        InputListener createAndLeaveListener = new InputListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if(Input.Keys.A == keycode || Input.Keys.LEFT == keycode){  //Or Left
+                if (Input.Keys.A == keycode || Input.Keys.LEFT == keycode) {  //Or Left
                     addLightningField();
-                }else if(Input.Keys.S == keycode || Input.Keys.DOWN == keycode){ //Or Down
+                } else if (Input.Keys.S == keycode || Input.Keys.DOWN == keycode) { //Or Down
                     addPlasmaField();
-                }else if(Input.Keys.D == keycode || Input.Keys.RIGHT == keycode){  //Or Right
+                } else if (Input.Keys.D == keycode || Input.Keys.RIGHT == keycode) {  //Or Right
                     addLaserField();
-                }else if(Input.Keys.TAB == keycode){
+                } else if (Input.Keys.TAB == keycode) {
                     KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
-                }else if(Input.Keys.SPACE == keycode){
+                } else if (Input.Keys.SPACE == keycode) {
                     toggleInstructionsScreen();
                     resetGame();
-                }else if(Input.Keys.ESCAPE == keycode){
+                } else if (Input.Keys.ESCAPE == keycode) {
                     gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
                 }
                 return super.keyDown(event, keycode);

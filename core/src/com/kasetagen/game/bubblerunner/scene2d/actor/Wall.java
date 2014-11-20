@@ -59,4 +59,9 @@ public class Wall extends GenericActor {
             batch.draw(textureRegion, regionX, 0f, regionW, regionH);
         }
     }
+
+    @Override
+    public boolean remove() {
+        return super.remove();    //To change body of overridden methods use File | Settings | File Templates.
+    }
 }
