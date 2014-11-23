@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.kasetagen.engine.gdx.scenes.scene2d.ActorDecorator;
 import com.kasetagen.engine.gdx.scenes.scene2d.IActorDisposer;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
@@ -118,6 +119,7 @@ public class BubbleRunnerStage extends BaseStage {
     public Wall collidedWall = null;
     public GameInfo info;
     public Overlay deathOverlay;
+    public Overlay alarmOverlay;
     public ControlGroup controls;
 
     //Ambiance (Music and Effects
@@ -188,8 +190,9 @@ public class BubbleRunnerStage extends BaseStage {
         //Add and Wire-up Button Controls
         initializeButtonControls();
 
-        //Setup Death Overlay
-        initializeDeathOverlay();
+        //Setup Overlays
+        initializeOverlays();
+
 
         //Initialize HUD (Stats, and GameInfo)
         initializeHUD();
@@ -260,6 +263,7 @@ public class BubbleRunnerStage extends BaseStage {
             comboLabel.setZIndex(index--);
             instructions.setZIndex(index--);
             info.setZIndex(index--);
+            alarmOverlay.setZIndex(index--);
             shields.setZIndex(index--);
             player.setZIndex(index--);
             for(Wall w:walls){
@@ -688,9 +692,9 @@ public class BubbleRunnerStage extends BaseStage {
             saveCurrentStats();
         }
 
-        deathOverlay.setSubText("Score: " + info.score + "\t\t Best Score: " + highScore +
-                                "\n\nMisses: " + info.misses + "\t\t Most Misses: " + mostMisses +
-                                "\n\nRun Top Combo: " + highestRunCombo + "\t\t Highest Combo: " + highestCombo);
+        deathOverlay.setSubText("Score: " + info.score + "\n Best Score: " + highScore +
+                                "\n\nMisses: " + info.misses + "\n Most Misses: " + mostMisses +
+                                "\n\nRun Top Combo: " + highestRunCombo + "\n Highest Combo: " + highestCombo);
         deathOverlay.setVisible(true);
     }
 
@@ -740,9 +744,8 @@ public class BubbleRunnerStage extends BaseStage {
             highestRunCombo = 0;
 
             for(Wall w: walls){
-                w.remove();
+                w.setIsRemovable(true);
             }
-            walls.clear();
             shields.clearFields();
             millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
             isDead = false;
@@ -822,10 +825,41 @@ public class BubbleRunnerStage extends BaseStage {
         explosionSound = assetManager.get(AssetsUtil.EXPLOSION_SOUND, AssetsUtil.SOUND);
     }
 
-    private void initializeDeathOverlay() {
+    private void initializeOverlays() {
         BitmapFont mainFont = assetManager.get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT);
         BitmapFont subFont = assetManager.get(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT);
-        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.PURPLE, Color.DARK_GRAY, mainFont, subFont, "You Failed to Escape!", "Score: 0\nBest Score: 0");
+
+        alarmOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.RED, Color.RED, mainFont, subFont, "", "");
+        alarmOverlay.addDecorator(new ActorDecorator() {
+
+            private float max = 0.2f;
+            private float min = 0.0f;
+            private float current = 0.0f;
+            private float flutterSpeed = 0.1f;
+
+            @Override
+            public void applyAdjustment(Actor actor, float delta) {
+                current += flutterSpeed * delta;
+                if(current >= max){
+                    current = max;
+                    flutterSpeed *= -1;
+                }else if(current <= min){
+                    current = min;
+                    flutterSpeed *= -1;
+                }
+
+                ((Overlay)actor).setBackgroundOpacity(current);
+            }
+        });
+        addActor(alarmOverlay);
+        alarmOverlay.setZIndex(getActors().size - 1);
+
+
+        String subText = "Score: 0\n Best Score: 0" +
+                         "\n\nMisses: 0\n Most Misses: 0" +
+                         "\n\nRun Top Combo: 0\n Highest Combo: 0";
+        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.DARK_GRAY, Color.WHITE, mainFont, subFont, "You Failed to Escape!", subText);
+
         deathOverlay.setVisible(false);
 
         deathOverlay.setDismissButtonEvent(new ClickListener(){

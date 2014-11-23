@@ -21,7 +21,8 @@ import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
  */
 public class Overlay extends GenericGroup {
 
-    private static final float VERTICAL_PADDING = 30f;
+    private static final float VERTICAL_PADDING = 25f;
+    private static final float HORIZONTAL_PADDING = 60f;
 
     private String mainText;
     private String subText;
@@ -32,6 +33,8 @@ public class Overlay extends GenericGroup {
     private TextButton dismissButton;
     private TextButton homeButton;
 
+    private float bgOpacity = 0.3f;
+
     public Overlay(float x, float y, float width, float height, Color bgColor,
                    Color textColor, BitmapFont mainFont, BitmapFont subFont, String mainText, String subText) {
         super(x, y, width, height, null, bgColor);
@@ -39,40 +42,48 @@ public class Overlay extends GenericGroup {
         this.mainText = mainText;
         this.subText = subText;
 
-        Label.LabelStyle mainStyle = new Label.LabelStyle(mainFont, textColor);
-        mainLabel = new Label(mainText, mainStyle);
-        mainLabel.setAlignment(Align.center);
 
-        Label.LabelStyle subStyle = new Label.LabelStyle(subFont, textColor);
-        subLabel = new Label(subText, subStyle);
-        subLabel.setAlignment(Align.center);
+            Label.LabelStyle mainStyle = new Label.LabelStyle(mainFont, textColor);
+            mainLabel = new Label(mainText, mainStyle);
+            mainLabel.setAlignment(Align.center);
 
-        float mainX = getWidth()/2 - mainLabel.getWidth()/2;
-        float mainY = ((getHeight()/4)*3) - mainLabel.getHeight()/2;
-        mainLabel.setPosition(mainX, mainY);
-        addActor(mainLabel);
+            float mainX = getWidth()/2 - mainLabel.getWidth()/2;
+            float mainY = ((getHeight()/8)*7) - mainLabel.getHeight()/2;
+            mainLabel.setPosition(mainX, mainY);
+            addActor(mainLabel);
 
-        float subX = getWidth()/2 - subLabel.getWidth()/2;
-        float subY = mainLabel.getY() - (mainLabel.getHeight()/2) - VERTICAL_PADDING;
-        subLabel.setPosition(subX, subY);
-        addActor(subLabel);
+            Label.LabelStyle subStyle = new Label.LabelStyle(subFont, textColor);
+            subLabel = new Label(subText, subStyle);
+            subLabel.setAlignment(Align.center);
 
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = mainFont;
-        style.fontColor =  Color.CYAN;
-        style.overFontColor = Color.RED;
-        style.downFontColor = Color.GRAY;
+            float subX = getWidth()/2 - subLabel.getWidth()/2;
+            float subY = mainY - (subLabel.getHeight()) - VERTICAL_PADDING;
+            subLabel.setPosition(subX, subY);
+            addActor(subLabel);
 
-        dismissButton = new TextButton("Replay", style);
-        dismissButton.setPosition(getWidth()/2 - dismissButton.getWidth()/2,
-                                  subLabel.getY() - (dismissButton.getHeight()/2) - VERTICAL_PADDING);
-        addActor(dismissButton);
+        if(!"".equals(mainText)){
+            TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+            style.font = mainFont;
+            style.fontColor =  Color.YELLOW;
+            style.overFontColor = Color.RED;
+            style.downFontColor = Color.GRAY;
 
-        homeButton = new TextButton("Back to Menu", style);
-        homeButton.setPosition(getWidth()/2 - homeButton.getWidth()/2,
-                               dismissButton.getY() - dismissButton.getHeight() - VERTICAL_PADDING);
-        homeButton.setVisible(false);
-        addActor(homeButton);
+            dismissButton = new TextButton("Replay", style);
+            homeButton = new TextButton("Back to Menu", style);
+
+
+            float buttonTotalWidth = dismissButton.getWidth() + HORIZONTAL_PADDING + homeButton.getWidth();
+            float dismissX = (getWidth() - buttonTotalWidth)/2;
+            float buttonY = subLabel.getY() - dismissButton.getHeight() - VERTICAL_PADDING;
+
+            float homeX = dismissX + dismissButton.getWidth() + HORIZONTAL_PADDING;
+
+            dismissButton.setPosition(dismissX, buttonY);
+            addActor(dismissButton);
+            homeButton.setPosition(homeX, buttonY);
+            homeButton.setVisible(false);
+            addActor(homeButton);
+        }
     }
 
     public void setMainText(String text){
@@ -104,7 +115,7 @@ public class Overlay extends GenericGroup {
         //Draw the red origin marker
         debugRenderer.setColor(getColor());
         Color c = getColor();
-        debugRenderer.setColor(c.r, c.g, c.b, 0.1f);
+        debugRenderer.setColor(c.r, c.g, c.b, bgOpacity);
         debugRenderer.rect(getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
         //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
         // coming in.
@@ -124,5 +135,9 @@ public class Overlay extends GenericGroup {
             homeButton.addListener(listener);
             homeButton.setVisible(true);
         }
+    }
+
+    public void setBackgroundOpacity(float opacity){
+        bgOpacity = opacity;
     }
 }
