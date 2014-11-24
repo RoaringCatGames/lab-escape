@@ -18,9 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.kasetagen.engine.gdx.scenes.scene2d.ActorDecorator;
-import com.kasetagen.engine.gdx.scenes.scene2d.IActorDisposer;
-import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
+import com.kasetagen.engine.gdx.scenes.scene2d.*;
+import com.kasetagen.engine.gdx.scenes.scene2d.ICameraModifier;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
@@ -136,17 +136,14 @@ public class BubbleRunnerStage extends BaseStage {
     private float bgVolume;
     private float sfxVolume;
 
-    private GenericActor instructions;
+    private AnimatedActor instructions;
     
     private enum EnvironmentType {WALL, FLOOR, PILLAR, PLAYER, BACK_FLOOR, OBSTACLES}
-
-    private Array<ICameraModifier> cameraTricks;
     
     public BubbleRunnerStage(IGameProcessor gameProcessor){
         super();
         this.gameProcessor = gameProcessor;
     	assetManager = this.gameProcessor.getAssetManager();
-        cameraTricks = new Array<ICameraModifier>();
 
     	EnvironmentManager.initialize(this);
 
@@ -218,8 +215,9 @@ public class BubbleRunnerStage extends BaseStage {
         comboSfx.put(ComboLevels.RIDICULOUS, assetManager.get(AssetsUtil.RIDICULOUS, AssetsUtil.SOUND));
         comboSfx.put(ComboLevels.ATOMIC, assetManager.get(AssetsUtil.ATOMIC, AssetsUtil.SOUND));
 
-        TextureRegion instructionsRegion = new TextureRegion(assetManager.get(AssetsUtil.CONTROLS, AssetsUtil.TEXTURE));
-        instructions = new GenericActor(0f, 0f, instructionsRegion.getRegionWidth(), instructionsRegion.getRegionHeight(), instructionsRegion, Color.CYAN);
+        Animation introAnimation = new Animation(1f, assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS).findRegions("intro/intro"));
+        instructions = new AnimatedActor(0f, 0f, getWidth(), getHeight(), introAnimation, 0f);
+        instructions.setIsLooping(false);
         addActor(instructions);
 
         origPos = new Vector3(getCamera().position);
@@ -232,6 +230,9 @@ public class BubbleRunnerStage extends BaseStage {
         if(instructions.isVisible()){
 
         }else if (!isDead) {
+            if(!music.isPlaying()){
+                music.play();
+            }
             //Calculate timestep
             millisecondsPassed += delta*1000;
             secondsSinceResourceRegen += delta;
@@ -275,16 +276,6 @@ public class BubbleRunnerStage extends BaseStage {
                 comboLabel.setVisible(true);
             }else{
                 comboLabel.setVisible(false);
-            }
-
-
-            Iterator<ICameraModifier> itr = cameraTricks.iterator();
-            while(itr.hasNext()){
-                ICameraModifier mod = itr.next();
-                mod.modify(getCamera(), delta);
-                if(mod.isComplete()){
-                    itr.remove();
-                }
             }
 
             particleBubble.update(delta);
@@ -355,7 +346,7 @@ public class BubbleRunnerStage extends BaseStage {
                     }
 
                     explosionSound.play(explosionVolume);
-                    cameraTricks.add(new ICameraModifier() {
+                    addCameraMod(new ICameraModifier() {
                         private float duration = 0.5f;
                         private float elapsedTime = 0f;
                         private float shakeRadius = 5f;
@@ -753,7 +744,7 @@ public class BubbleRunnerStage extends BaseStage {
             shields.maxFields = info.maxFields;
 
             controls.restoreAllResourceLevels();
-            instructions.setVisible(true);
+            //instructions.setVisible(true);
             music.play();
         }
     }
@@ -818,7 +809,6 @@ public class BubbleRunnerStage extends BaseStage {
         initializeVolumes();
         music = assetManager.get(AssetsUtil.DISTORTION_BKG_MUSIC, AssetsUtil.MUSIC);
         music.setVolume(bgVolume);
-        music.play();
 
         zapSound = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         powerOnSound = assetManager.get(AssetsUtil.POWER_ON_SOUND, AssetsUtil.SOUND);
