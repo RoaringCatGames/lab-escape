@@ -8,6 +8,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -18,9 +19,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.kasetagen.engine.gdx.scenes.scene2d.*;
+import com.kasetagen.engine.gdx.scenes.scene2d.ActorDecorator;
+import com.kasetagen.engine.gdx.scenes.scene2d.IActorDisposer;
 import com.kasetagen.engine.gdx.scenes.scene2d.ICameraModifier;
-import com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor;
+import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.Cinematic;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.CinematicScene;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
@@ -35,7 +39,6 @@ import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 import com.kasetagen.game.bubblerunner.util.PlayerStates;
 import com.kasetagen.game.bubblerunner.util.ViewportUtil;
 
-import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -136,7 +139,8 @@ public class BubbleRunnerStage extends BaseStage {
     private float bgVolume;
     private float sfxVolume;
 
-    private AnimatedActor instructions;
+    //private AnimatedActor cinematic;
+    private Cinematic cinematic;
     
     private enum EnvironmentType {WALL, FLOOR, PILLAR, PLAYER, BACK_FLOOR, OBSTACLES}
     
@@ -216,9 +220,28 @@ public class BubbleRunnerStage extends BaseStage {
         comboSfx.put(ComboLevels.ATOMIC, assetManager.get(AssetsUtil.ATOMIC, AssetsUtil.SOUND));
 
         Animation introAnimation = new Animation(1f, assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS).findRegions("intro/intro"));
-        instructions = new AnimatedActor(0f, 0f, getWidth(), getHeight(), introAnimation, 0f);
-        instructions.setIsLooping(false);
-        addActor(instructions);
+        cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false);//new AnimatedActor(0f, 0f, getWidth(), getHeight(), introAnimation, 0f);
+        //cinematic.setIsLooping(false);
+        Gdx.app.log("STAGE", "Camera Original Zoom: " + ((OrthographicCamera)getCamera()).zoom);
+
+        CinematicScene scene1 = new CinematicScene(0, 2f, 0f, 0f, 100f, 100f, 1f, 1f);
+        cinematic.addScene(scene1);
+        CinematicScene scene2 = new CinematicScene(1, 0.5f, 0f, 0f, -100f, 100f, 1f, 1.25f);
+        cinematic.addScene(scene2);
+        CinematicScene scene3 = new CinematicScene(2, 2f, 0f, 0f, 200f, 100f, 1f, 0.5f);
+        cinematic.addScene(scene3);
+        CinematicScene scene4 = new CinematicScene(3, 1f, 0f, 0f, 300f, 100f, 1f, 1f);
+        cinematic.addScene(scene4);
+        CinematicScene scene5 = new CinematicScene(4, 1f, 0f, 0f, 400f, 100f, 1f, 1f);
+        cinematic.addScene(scene5);
+        CinematicScene scene6 = new CinematicScene(5, 1f, 0f, 0f, 500f, 100f, 1f, 0.8f);
+        cinematic.addScene(scene6);
+        CinematicScene scene7 = new CinematicScene(6, 1f, 0f, 0f, 600f, 100f, 1f, 2f);
+        cinematic.addScene(scene7);
+        CinematicScene scene8 = new CinematicScene(7, 1f, 0f, 0f, 700f, 100f, 0.8f, 1f);
+        cinematic.addScene(scene8);
+        addActor(cinematic);
+        cinematic.start();
 
         origPos = new Vector3(getCamera().position);
     }
@@ -227,9 +250,8 @@ public class BubbleRunnerStage extends BaseStage {
     public void act(float delta) {
         super.act(delta);
 
-        if(instructions.isVisible()){
-
-        }else if (!isDead) {
+        if(cinematic.isComplete() && !isDead) {
+            hideCinematic();
             if(!music.isPlaying()){
                 music.play();
             }
@@ -259,10 +281,10 @@ public class BubbleRunnerStage extends BaseStage {
             //Adjust Resource Levels
 
             int index = getActors().size - 1;
+            cinematic.setZIndex(index--);
             deathOverlay.setZIndex(index--);
             controls.setZIndex(index--);
             comboLabel.setZIndex(index--);
-            instructions.setZIndex(index--);
             info.setZIndex(index--);
             alarmOverlay.setZIndex(index--);
             shields.setZIndex(index--);
@@ -744,7 +766,7 @@ public class BubbleRunnerStage extends BaseStage {
             shields.maxFields = info.maxFields;
 
             controls.restoreAllResourceLevels();
-            //instructions.setVisible(true);
+            //cinematic.setVisible(true);
             music.play();
         }
     }
@@ -969,7 +991,7 @@ public class BubbleRunnerStage extends BaseStage {
                 } else if (Input.Keys.TAB == keycode) {
                     KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
                 } else if (Input.Keys.SPACE == keycode) {
-                    toggleInstructionsScreen();
+                    hideCinematic();
                     resetGame();
                 } else if (Input.Keys.ESCAPE == keycode) {
                     gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
@@ -979,7 +1001,7 @@ public class BubbleRunnerStage extends BaseStage {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                toggleInstructionsScreen();
+                hideCinematic();
                 return super.touchDown(event, x, y, pointer, button);
             }
         };
@@ -987,9 +1009,9 @@ public class BubbleRunnerStage extends BaseStage {
         this.addListener(createAndLeaveListener);
     }
 
-    private void toggleInstructionsScreen() {
-        if(instructions.isVisible()){
-            instructions.setVisible(false);
+    private void hideCinematic() {
+        if(cinematic.isVisible()){
+            cinematic.setVisible(false);
         }
     }
 
