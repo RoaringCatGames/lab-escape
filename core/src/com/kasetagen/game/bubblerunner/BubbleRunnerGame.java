@@ -6,9 +6,9 @@ import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.kasetagen.engine.IDataSaver;
+import com.kasetagen.engine.IGameProcessor;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
-import com.kasetagen.game.bubblerunner.data.IDataSaver;
-import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerMenu;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerOptionsMenu;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerScreen;
@@ -136,6 +136,11 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
     }
 
  //IGameProcessor
+
+    @Override
+    public String getStartScreen() {
+        return MENU;
+    }
 
     @Override
     public boolean isLoaded() {

@@ -19,6 +19,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.kasetagen.engine.IDataSaver;
+import com.kasetagen.engine.IGameProcessor;
 import com.kasetagen.engine.gdx.scenes.scene2d.ActorDecorator;
 import com.kasetagen.engine.gdx.scenes.scene2d.IActorDisposer;
 import com.kasetagen.engine.gdx.scenes.scene2d.ICameraModifier;
@@ -30,9 +32,7 @@ import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.data.GameStats;
-import com.kasetagen.game.bubblerunner.data.IDataSaver;
 import com.kasetagen.game.bubblerunner.data.WallPattern;
-import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
 import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
@@ -145,7 +145,7 @@ public class BubbleRunnerStage extends BaseStage {
     private enum EnvironmentType {WALL, FLOOR, PILLAR, PLAYER, BACK_FLOOR, OBSTACLES}
     
     public BubbleRunnerStage(IGameProcessor gameProcessor){
-        super();
+        super(gameProcessor);
         this.gameProcessor = gameProcessor;
     	assetManager = this.gameProcessor.getAssetManager();
 
@@ -942,10 +942,10 @@ public class BubbleRunnerStage extends BaseStage {
         return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Female_Punch" : "player/Male_Punch";
     }
     private String getPlayerElectroAnimationName(){
-        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Shock" : "player/Shock";
+        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Female_Shock" : "player/Male_Shock";
     }
     private String getPlayerWallAnimationName(){
-        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Wall" : "player/Wall";
+        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Female_Wall" : "player/Male_Wall";
     }
 
     private void initializeEnvironmentGroups(){

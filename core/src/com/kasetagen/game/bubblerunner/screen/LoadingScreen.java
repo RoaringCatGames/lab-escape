@@ -3,9 +3,9 @@ package com.kasetagen.game.bubblerunner.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.kasetagen.engine.IGameProcessor;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
-import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
 
 /**
@@ -23,7 +23,7 @@ public class LoadingScreen extends BaseBubbleRunnerScreen{
 
     public LoadingScreen(IGameProcessor delegate) {
         super(delegate);
-        stage = new BaseStage();
+        stage = new BaseStage(delegate);
 
         loadingAtlas = new TextureAtlas(Gdx.files.internal("animations/loading.atlas"));
         loadingAnimation = new Animation(1f/6f, loadingAtlas.findRegions("Loading"));

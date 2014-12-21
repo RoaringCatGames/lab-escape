@@ -11,10 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.kasetagen.engine.IDataSaver;
+import com.kasetagen.engine.IGameProcessor;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
-import com.kasetagen.game.bubblerunner.data.IDataSaver;
-import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
+
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
 import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
@@ -51,7 +52,7 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
     public BubbleRunnerOptionsMenu(IGameProcessor delegate){
         super(delegate);
 
-        stage = new BaseStage();
+        stage = new BaseStage(delegate);
 
         float sfxVolValue = delegate.getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY);
         float bgVolValue = delegate.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);

@@ -11,7 +11,8 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
+import com.kasetagen.engine.IGameProcessor;
+//import com.kasetagen.game.bubblerunner.delegate.IGameProcessor;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,7 +42,7 @@ public class BubbleRunner3dStage extends BaseStage {
     public ModelInstance instance;
     
     public BubbleRunner3dStage(IGameProcessor gameProcessor){
-        super();
+        super(gameProcessor);
         
         cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         cam.position.set(10f, 10f, 10f);
