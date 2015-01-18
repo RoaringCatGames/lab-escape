@@ -220,25 +220,41 @@ public class BubbleRunnerStage extends BaseStage {
         comboSfx.put(ComboLevels.ATOMIC, assetManager.get(AssetsUtil.ATOMIC, AssetsUtil.SOUND));
 
         Animation introAnimation = new Animation(1f, assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS).findRegions("intro/intro"));
-        cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false);//new AnimatedActor(0f, 0f, getWidth(), getHeight(), introAnimation, 0f);
+        cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);//new AnimatedActor(0f, 0f, getWidth(), getHeight(), introAnimation, 0f);
         //cinematic.setIsLooping(false);
         Gdx.app.log("STAGE", "Camera Original Zoom: " + ((OrthographicCamera)getCamera()).zoom);
 
-        CinematicScene scene1 = new CinematicScene(0, 2f, 0f, 0f, 100f, 100f, 1f, 1f);
+
+        CinematicScene scene1 = new CinematicScene(2f, 0f, 0f, 100f, 100f, 1f, 1f);
+        scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         cinematic.addScene(scene1);
-        CinematicScene scene2 = new CinematicScene(1, 0.5f, 0f, 0f, -100f, 100f, 1f, 1.25f);
+
+        CinematicScene scene2 = new CinematicScene(0.5f, 0f, 0f, -100f, 100f, 1f, 1.25f);
+        scene2.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
         cinematic.addScene(scene2);
-        CinematicScene scene3 = new CinematicScene(2, 2f, 0f, 0f, 200f, 100f, 1f, 0.5f);
+
+        CinematicScene scene3 = new CinematicScene(2f, 0f, 0f, 200f, 100f, 1f, 0.5f);
+        scene3.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         cinematic.addScene(scene3);
-        CinematicScene scene4 = new CinematicScene(3, 1f, 0f, 0f, 300f, 100f, 1f, 1f);
+
+        CinematicScene scene4 = new CinematicScene(1f, 0f, 0f, 300f, 100f, 1f, 1f);
+        scene4.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
         cinematic.addScene(scene4);
-        CinematicScene scene5 = new CinematicScene(4, 1f, 0f, 0f, 400f, 100f, 1f, 1f);
+
+        CinematicScene scene5 = new CinematicScene(1f, 0f, 0f, 400f, 100f, 1f, 1f);
+        scene5.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         cinematic.addScene(scene5);
-        CinematicScene scene6 = new CinematicScene(5, 1f, 0f, 0f, 500f, 100f, 1f, 0.8f);
+
+        CinematicScene scene6 = new CinematicScene(1f, 0f, 0f, 500f, 100f, 1f, 0.8f);
+        scene6.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
         cinematic.addScene(scene6);
-        CinematicScene scene7 = new CinematicScene(6, 1f, 0f, 0f, 600f, 100f, 1f, 2f);
+
+        CinematicScene scene7 = new CinematicScene(1f, 0f, 0f, 600f, 100f, 1f, 2f);
+        scene7.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         cinematic.addScene(scene7);
-        CinematicScene scene8 = new CinematicScene(7, 1f, 0f, 0f, 700f, 100f, 0.8f, 1f);
+
+        CinematicScene scene8 = new CinematicScene(1f, 0f, 0f, 700f, 100f, 0.8f, 1f);
+        scene8.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
         cinematic.addScene(scene8);
         addActor(cinematic);
         cinematic.start();
@@ -314,10 +330,6 @@ public class BubbleRunnerStage extends BaseStage {
     @Override
     public void draw() {
         super.draw();
-
-        //batch.begin();
-        //particleBubble.draw(batch);
-        //batch.end();
     }
 
     private void processResources(){

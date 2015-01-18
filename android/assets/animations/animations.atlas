@@ -67,13 +67,6 @@ intro/intro
   orig: 2560, 1440
   offset: 0, 0
   index: 2
-intro/intro
-  rotate: false
-  xy: 0, 1208
-  size: 2560, 1440
-  orig: 2560, 1440
-  offset: 0, 0
-  index: 3
 player/FIRE
   rotate: false
   xy: 2564, 482
@@ -156,7 +149,7 @@ intro/intro
   size: 2560, 1440
   orig: 2560, 1440
   offset: 0, 0
-  index: 4
+  index: 3
 newwall/obstacle_blue
   rotate: false
   xy: 0, 602
@@ -302,14 +295,14 @@ intro/intro
   size: 2560, 1440
   orig: 2560, 1440
   offset: 0, 0
-  index: 5
+  index: 4
 intro/intro
   rotate: false
   xy: 0, 726
   size: 2560, 1440
   orig: 2560, 1440
   offset: 0, 0
-  index: 6
+  index: 5
 player/Female_Punch
   rotate: false
   xy: 2562, 2888
@@ -427,14 +420,14 @@ intro/intro
   size: 2560, 1440
   orig: 2560, 1440
   offset: 0, 0
-  index: 7
+  index: 6
 intro/intro
   rotate: false
   xy: 0, 726
   size: 2560, 1440
   orig: 2560, 1440
   offset: 0, 0
-  index: 8
+  index: 7
 player/Female_Wall
   rotate: false
   xy: 2562, 2888
@@ -534,185 +527,192 @@ filter: Nearest,Nearest
 repeat: none
 Shields/Red
   rotate: false
-  xy: 3610, 1444
+  xy: 3610, 0
   size: 200, 720
   orig: 200, 720
   offset: 0, 0
   index: 3
-intro/mask
+intro/intro
   rotate: false
   xy: 0, 2168
+  size: 2560, 1440
+  orig: 2560, 1440
+  offset: 0, 0
+  index: 8
+intro/mask
+  rotate: false
+  xy: 0, 726
   size: 2560, 1440
   orig: 2560, 1440
   offset: 0, 0
   index: 3
 player/Male_Run
   rotate: false
-  xy: 0, 1446
+  xy: 2562, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 2
 player/Male_Run
   rotate: false
-  xy: 2562, 2888
+  xy: 0, 4
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 3
 player/Male_Run
   rotate: false
-  xy: 0, 724
+  xy: 2562, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 4
-player/Male_Run
-  rotate: false
-  xy: 722, 1446
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 5
 player/Male_Run
   rotate: false
   xy: 3284, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
+  index: 5
+player/Male_Run
+  rotate: false
+  xy: 722, 4
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
   index: 6
 player/Male_Shock
   rotate: false
-  xy: 0, 2
+  xy: 2562, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 1
 player/Male_Shock
-  rotate: false
-  xy: 722, 724
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 2
-player/Male_Shock
-  rotate: false
-  xy: 1444, 1446
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 3
-player/Male_Shock
-  rotate: false
-  xy: 722, 2
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 4
-player/Male_Shock
-  rotate: false
-  xy: 1444, 724
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 5
-player/Male_Wall
-  rotate: false
-  xy: 1444, 2
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 1
-player/Male_Wall
-  rotate: false
-  xy: 2562, 2166
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 2
-player/Male_Wall
   rotate: false
   xy: 3284, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 3
-player/Male_Wall
+  index: 2
+player/Male_Shock
   rotate: false
-  xy: 2166, 1444
+  xy: 1444, 4
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 3
+player/Male_Shock
+  rotate: false
+  xy: 3284, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 4
-player/Male_Wall
+player/Male_Shock
   rotate: false
-  xy: 2166, 722
+  xy: 2562, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 5
 player/Male_Wall
   rotate: false
-  xy: 2888, 1444
+  xy: 3284, 722
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 1
+player/Male_Wall
+  rotate: false
+  xy: 2166, 0
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 2
+player/Male_Wall
+  rotate: false
+  xy: 2888, 0
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 3
+
+animations6.png
+size: 3610,3610
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+player/Male_Wall
+  rotate: false
+  xy: 0, 2888
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 4
+player/Male_Wall
+  rotate: false
+  xy: 0, 2166
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 5
+player/Male_Wall
+  rotate: false
+  xy: 722, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 6
 player/Male_Wall
   rotate: false
-  xy: 2888, 722
+  xy: 0, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 7
 player/Shock
   rotate: false
-  xy: 2166, 0
+  xy: 722, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 1
 player/Shock
   rotate: false
-  xy: 2166, 0
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 4
-player/Shock
-  rotate: false
-  xy: 2166, 0
+  xy: 722, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 7
 player/Shock
   rotate: false
-  xy: 2888, 0
+  xy: 722, 2166
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 4
+player/Shock
+  rotate: false
+  xy: 1444, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 2
 player/Shock
   rotate: false
-  xy: 2888, 0
+  xy: 1444, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 5
 player/Shock
   rotate: false
-  xy: 2888, 0
+  xy: 1444, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 8
-
-animations6.png
-size: 3610,1444
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 player/Shock
   rotate: false
   xy: 0, 722
@@ -720,13 +720,6 @@ player/Shock
   orig: 720, 720
   offset: 0, 0
   index: 3
-player/Shock
-  rotate: false
-  xy: 0, 722
-  size: 720, 720
-  orig: 720, 720
-  offset: 0, 0
-  index: 6
 player/Shock
   rotate: false
   xy: 0, 722
@@ -736,63 +729,70 @@ player/Shock
   index: 9
 player/Shock
   rotate: false
-  xy: 0, 0
+  xy: 0, 722
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 6
+player/Shock
+  rotate: false
+  xy: 722, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 10
 player/Shock
   rotate: false
-  xy: 722, 722
+  xy: 1444, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 11
 player/Wall
   rotate: false
-  xy: 722, 0
+  xy: 2166, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 1
 player/Wall
   rotate: false
-  xy: 1444, 722
+  xy: 0, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 2
 player/Wall
   rotate: false
-  xy: 1444, 0
+  xy: 722, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 3
 player/Wall
   rotate: false
-  xy: 2166, 722
+  xy: 1444, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 4
 player/Wall
   rotate: false
-  xy: 2166, 0
+  xy: 2166, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 5
 player/Wall
   rotate: false
-  xy: 2888, 722
+  xy: 2888, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 6
 player/Wall
   rotate: false
-  xy: 2888, 0
+  xy: 722, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
