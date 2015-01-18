@@ -140,90 +140,20 @@ public class BubbleRunnerStage extends BaseStage {
     private float sfxVolume;
 
     //private AnimatedActor cinematic;
-    private Cinematic cinematic;
+    //private Cinematic cinematic;
     
     private enum EnvironmentType {WALL, FLOOR, PILLAR, PLAYER, BACK_FLOOR, OBSTACLES}
-    
+
+
     public BubbleRunnerStage(IGameProcessor gameProcessor){
         super(gameProcessor);
         this.gameProcessor = gameProcessor;
-    	assetManager = this.gameProcessor.getAssetManager();
-
-    	EnvironmentManager.initialize(this);
-
-        //Initialize Privates
-        highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
-        mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
-        highestCombo = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
-        characterSelected = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY, AnimationUtil.CHARACTER_2);
-
-        //SET WALL VELOCITY
-        wallAndFloorVelocity = -1f*(getWidth()/2);
-        
-        addActor(new GenericActor(0, 0, 1280, 720, new TextureRegion(assetManager.get(AssetsUtil.BACKGROUND, AssetsUtil.TEXTURE)), Color.GRAY));
-        
-        //Add Player
-        initializePlayer(GameInfo.DEFAULT_MAX_FIELDS);
-        
-        initializeEnvironmentGroups();
-        
-        initializeStartingScene();
-
-        //Initialize Walls
-        walls = new Array<Wall>();
-        //We use this disposer as our delegate to capture Actor.remove() calls
-        //  from our walls so that they can "remove themselves" from the walls array
-        wallDisposer = new IActorDisposer() {
-            @Override
-            public void dispose(Actor actor) {
-                if(actor instanceof Wall){
-                    walls.removeValue((Wall)actor, false);
-                }
-            }
-        };
-
-        //Setup our InputListeners
-        initializeInputListeners();
-        
-        //Setup Background Music
-        initializeAmbience();
-
-        //Add and Wire-up Button Controls
-        initializeButtonControls();
-
-        //Setup Overlays
-        initializeOverlays();
-
-
-        //Initialize HUD (Stats, and GameInfo)
-        initializeHUD();
-
-        Label.LabelStyle style = new Label.LabelStyle(assetManager.get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT), Color.ORANGE);
-        comboLabel = new Label(currentCombo + "x Combo!!", style);
-
-
-        DecoratedUIContainer comboContainer = new DecoratedUIContainer(comboLabel);
-        comboContainer.setPosition(player.getX() + (comboLabel.getWidth() / 2), player.getTop() + HUD_HEIGHT);
-
-        comboDecorator = new OscillatingDecorator(-3f, 3f, 40f);
-        comboContainer.addDecorator(comboDecorator);
-        addActor(comboContainer);
-
-
-        comboSfx = new ObjectMap<ComboLevels, Sound>();
-        comboSfx.put(ComboLevels.NOT_BAD, assetManager.get(AssetsUtil.NOT_BAD, AssetsUtil.SOUND));
-        comboSfx.put(ComboLevels.GREAT, assetManager.get(AssetsUtil.GREAT, AssetsUtil.SOUND));
-        comboSfx.put(ComboLevels.AWESOME, assetManager.get(AssetsUtil.AWESOME, AssetsUtil.SOUND));
-        comboSfx.put(ComboLevels.AMAZING, assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND));
-        comboSfx.put(ComboLevels.BONKERS, assetManager.get(AssetsUtil.BONKERS, AssetsUtil.SOUND));
-        comboSfx.put(ComboLevels.RIDICULOUS, assetManager.get(AssetsUtil.RIDICULOUS, AssetsUtil.SOUND));
-        comboSfx.put(ComboLevels.ATOMIC, assetManager.get(AssetsUtil.ATOMIC, AssetsUtil.SOUND));
+        assetManager = this.gameProcessor.getAssetManager();
 
         Animation introAnimation = new Animation(1f, assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS).findRegions("intro/intro"));
         cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);//new AnimatedActor(0f, 0f, getWidth(), getHeight(), introAnimation, 0f);
         //cinematic.setIsLooping(false);
         Gdx.app.log("STAGE", "Camera Original Zoom: " + ((OrthographicCamera)getCamera()).zoom);
-
 
         CinematicScene scene1 = new CinematicScene(2f, 0f, 0f, 100f, 100f, 1f, 1f);
         scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
@@ -263,10 +193,87 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     @Override
+    public void onCinematicComplete() {
+        EnvironmentManager.initialize(this);
+
+        //Initialize Privates
+        highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
+        mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
+        highestCombo = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
+        characterSelected = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY, AnimationUtil.CHARACTER_2);
+
+        //SET WALL VELOCITY
+        wallAndFloorVelocity = -1f*(getWidth()/2);
+
+        addActor(new GenericActor(0, 0, 1280, 720, new TextureRegion(assetManager.get(AssetsUtil.BACKGROUND, AssetsUtil.TEXTURE)), Color.GRAY));
+
+        //Add Player
+        initializePlayer(GameInfo.DEFAULT_MAX_FIELDS);
+
+        initializeEnvironmentGroups();
+
+        initializeStartingScene();
+
+        //Initialize Walls
+        walls = new Array<Wall>();
+        //We use this disposer as our delegate to capture Actor.remove() calls
+        //  from our walls so that they can "remove themselves" from the walls array
+        wallDisposer = new IActorDisposer() {
+            @Override
+            public void dispose(Actor actor) {
+                if(actor instanceof Wall){
+                    walls.removeValue((Wall)actor, false);
+                }
+            }
+        };
+
+        //Setup our InputListeners
+        initializeInputListeners();
+
+        //Setup Background Music
+        initializeAmbience();
+
+        //Add and Wire-up Button Controls
+        initializeButtonControls();
+
+        //Setup Overlays
+        initializeOverlays();
+
+
+        //Initialize HUD (Stats, and GameInfo)
+        initializeHUD();
+
+        Label.LabelStyle style = new Label.LabelStyle(assetManager.get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT), Color.ORANGE);
+        comboLabel = new Label(currentCombo + "x Combo!!", style);
+
+
+        DecoratedUIContainer comboContainer = new DecoratedUIContainer(comboLabel);
+        comboContainer.setPosition(player.getX() + (comboLabel.getWidth() / 2), player.getTop() + HUD_HEIGHT);
+
+        comboDecorator = new OscillatingDecorator(-3f, 3f, 40f);
+        comboContainer.addDecorator(comboDecorator);
+        addActor(comboContainer);
+
+
+        comboSfx = new ObjectMap<ComboLevels, Sound>();
+        comboSfx.put(ComboLevels.NOT_BAD, assetManager.get(AssetsUtil.NOT_BAD, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.GREAT, assetManager.get(AssetsUtil.GREAT, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.AWESOME, assetManager.get(AssetsUtil.AWESOME, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.AMAZING, assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.BONKERS, assetManager.get(AssetsUtil.BONKERS, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.RIDICULOUS, assetManager.get(AssetsUtil.RIDICULOUS, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.ATOMIC, assetManager.get(AssetsUtil.ATOMIC, AssetsUtil.SOUND));
+
+
+        super.onCinematicComplete();
+    }
+
+
+    @Override
     public void act(float delta) {
         super.act(delta);
 
-        if(cinematic.isComplete() && !isDead) {
+        if(cinematicComplete && !isDead) {
             hideCinematic();
             if(!music.isPlaying()){
                 music.play();
@@ -315,10 +322,7 @@ public class BubbleRunnerStage extends BaseStage {
             }else{
                 comboLabel.setVisible(false);
             }
-
-            particleBubble.update(delta);
-            particleBubble.setPosition(player.getX() + player.getWidth() / 2, player.getY() + player.getHeight() / 4);
-        }else{
+        }else if(walls != null){
             for(Wall w:walls){
                 w.setXVelocity(0f);
             }
@@ -334,10 +338,10 @@ public class BubbleRunnerStage extends BaseStage {
 
     private void processResources(){
         float secondsBetweenResourceRegen = (millisBetweenWalls/1000)/2;
-        if(secondsSinceResourceRegen >= secondsBetweenResourceRegen){//SECONDS_PER_RESOURCE_REGEN){
+        if(secondsSinceResourceRegen >= secondsBetweenResourceRegen){
             regenResources(1);
             //We want to keep any "left-over" time so that we don't get weird timing differences
-            secondsSinceResourceRegen = secondsSinceResourceRegen - secondsBetweenResourceRegen;//SECONDS_PER_RESOURCE_REGEN;
+            secondsSinceResourceRegen = secondsSinceResourceRegen - secondsBetweenResourceRegen;
         }
     }
     
@@ -1078,7 +1082,9 @@ public class BubbleRunnerStage extends BaseStage {
     public void resume(){
         Gdx.app.log("RESUMING", "APPLICATION RESUMING");
         initializeVolumes();
-        music.setVolume(bgVolume);
+        if(music != null){
+            music.setVolume(bgVolume);
+        }
     }
 
 }
