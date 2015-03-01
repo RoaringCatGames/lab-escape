@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  * User: barry
  * Date: 5/26/14
  * Time: 12:40 AM
- * To change this template use File | Settings | File Templates.
  */
 public class AssetsUtil {
 
@@ -27,35 +26,13 @@ public class AssetsUtil {
 
     //TextureAtlases
     public static final String ANIMATION_ATLAS = "animations/animations.atlas";
+    public static final String SPRITE_ATLAS = "sprites/sprites.atlas";
 
     //Skin
     public static final String DEFAULT_SKIN = "uiskin.json";
 
     //Images
-    public static final String TITLE_SCREEN = "images/title-screen.png";
-    public static final String BUBBLE_PARTICLE_IMG = "particles/bubble.jpg";
-    public static final String PLAYER_IMG = "images/player.png";
-    public static final String LIGHTNING_WALL = "images/walls/blue_wall.png";
-    public static final String PLASMA_WALL = "images/walls/yellow_wall.png";
-    public static final String LASER_WALL = "images/walls/green_wall.png";
-    public static final String INDICATOR_SHEET = "images/warning-indicator.png";
-    public static final String FLOOR_CONC = "images/floor/floor_conc.png";
-    public static final String FLOOR_PILLAR = "images/floor/floor_pillar.png";
-    public static final String WALL = "images/floor/wall.png";
-    public static final String ENERGY_BAR = "images/energy_bar.png";
-    public static final String BACKGROUND = "images/bubblerun_bk.png";
-    public static final String CONTROLS = "images/controls-screen.png";
-    
-    //Images -- Buttons
-    public static final String LIGHT_UP = "images/buttons/button_light_off.png";
-    public static final String LIGHT_DOWN = "images/buttons/button_light_on.png";
-    public static final String LIGHT_CHECKED = "images/buttons/button_light_off.png";
-    public static final String PLASMA_UP = "images/buttons/button_plasma_on.png";
-    public static final String PLASMA_DOWN = "images/buttons/button_plasma_off.png";
-    public static final String PLASMA_CHECKED = "images/buttons/button_plasma_off.png";
-    public static final String LASER_UP = "images/buttons/button_discharge_on.png";
-    public static final String LASER_DOWN = "images/buttons/button_discharge_off.png";
-    public static final String LASER_CHECKED = "images/buttons/button_discharge_off.png";
+    public static final String WARNING_INDICATOR = "sprites/warning-indicator.png";
 
     //Font Paths
     public static final String REXLIA_64 = "fonts/rexlia-64.fnt";
@@ -80,6 +57,6 @@ public class AssetsUtil {
     public static final String ATOMIC = "audio/sfx/atomic.mp3";
     
     //Particle Paths
-    public static final String BUBBLE_PARTICLE = "particles/bubbleflame_right.p";
+//    public static final String BUBBLE_PARTICLE = "particles/bubbleflame_right.p";
 
 }

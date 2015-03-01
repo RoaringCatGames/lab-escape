@@ -1,274 +1,211 @@
 
 animations.png
-size: 4060,4092
+size: 4046,3610
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 Shields/Blue
   rotate: false
-  xy: 3844, 3370
+  xy: 3844, 2888
   size: 200, 720
   orig: 200, 720
   offset: 0, 0
   index: 1
 Shields/Blue
   rotate: false
-  xy: 3844, 2648
+  xy: 3844, 2166
   size: 200, 720
   orig: 200, 720
   offset: 0, 0
   index: 2
 Shields/Blue
   rotate: false
-  xy: 3844, 1926
+  xy: 3844, 1444
   size: 200, 720
   orig: 200, 720
   offset: 0, 0
   index: 3
 Shields/Green
   rotate: false
-  xy: 3844, 1204
+  xy: 3844, 722
   size: 200, 720
   orig: 200, 720
   offset: 0, 0
   index: 1
-explosion/explosion
-  rotate: false
-  xy: 0, 352
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 1
-explosion/explosion
-  rotate: false
-  xy: 0, 222
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 2
-explosion/explosion
-  rotate: false
-  xy: 0, 92
-  size: 128, 128
-  orig: 128, 128
-  offset: 0, 0
-  index: 3
 intro/intro
   rotate: false
-  xy: 0, 2650
+  xy: 0, 2168
   size: 2560, 1440
   orig: 2560, 1440
   offset: 0, 0
   index: 1
 intro/intro
   rotate: false
-  xy: 0, 1208
+  xy: 0, 726
   size: 2560, 1440
   orig: 2560, 1440
   offset: 0, 0
   index: 2
 player/FIRE
   rotate: false
-  xy: 2564, 482
+  xy: 2564, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 1
 player/FIRE
   rotate: false
-  xy: 3286, 482
+  xy: 3286, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 2
 screens/Title
   rotate: false
-  xy: 2562, 3370
+  xy: 2562, 2888
   size: 1280, 720
   orig: 1280, 720
   offset: 0, 0
   index: 1
 screens/Title
   rotate: false
-  xy: 2562, 2648
+  xy: 2562, 2166
   size: 1280, 720
   orig: 1280, 720
   offset: 0, 0
   index: 2
 screens/Title
   rotate: false
-  xy: 2562, 1926
+  xy: 2562, 1444
   size: 1280, 720
   orig: 1280, 720
   offset: 0, 0
   index: 3
 screens/Title
   rotate: false
-  xy: 2562, 1204
+  xy: 2562, 722
   size: 1280, 720
   orig: 1280, 720
   offset: 0, 0
   index: 4
 screens/Title
   rotate: false
-  xy: 0, 482
+  xy: 0, 0
   size: 1280, 720
   orig: 1280, 720
   offset: 0, 0
   index: 5
 screens/Title
   rotate: false
-  xy: 1282, 482
+  xy: 1282, 0
   size: 1280, 720
   orig: 1280, 720
   offset: 0, 0
   index: 6
-walls/discharge-wall
-  rotate: false
-  xy: 4008, 602
-  size: 50, 600
-  orig: 50, 600
-  offset: 0, 0
-  index: 1
-walls/discharge-wall
-  rotate: false
-  xy: 4008, 0
-  size: 50, 600
-  orig: 50, 600
-  offset: 0, 0
-  index: 2
 
 animations2.png
-size: 4006,4064
+size: 4006,3610
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 intro/intro
   rotate: false
-  xy: 0, 2622
+  xy: 0, 2168
   size: 2560, 1440
   orig: 2560, 1440
   offset: 0, 0
   index: 3
-newwall/obstacle_blue
-  rotate: false
-  xy: 0, 602
-  size: 839, 2018
-  orig: 839, 2018
-  offset: 0, 0
-  index: -1
-newwall/obstacle_green
-  rotate: false
-  xy: 841, 602
-  size: 839, 2018
-  orig: 839, 2018
-  offset: 0, 0
-  index: -1
-newwall/obstacle_red
-  rotate: false
-  xy: 1682, 602
-  size: 839, 2018
-  orig: 839, 2018
-  offset: 0, 0
-  index: -1
 player/FIRE
   rotate: false
-  xy: 2562, 3342
+  xy: 2562, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 3
 player/FIRE
   rotate: false
-  xy: 3284, 3342
+  xy: 3284, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 4
 player/FIRE
   rotate: false
-  xy: 2562, 2620
+  xy: 2562, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 5
 player/FIRE
   rotate: false
-  xy: 3284, 2620
+  xy: 3284, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 6
 player/FIRE
   rotate: false
-  xy: 2523, 1898
+  xy: 2523, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 7
 player/Female_Punch
   rotate: false
-  xy: 3245, 1898
+  xy: 3245, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 1
 player/Female_Punch
   rotate: false
-  xy: 2523, 1176
+  xy: 2523, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 2
 player/Female_Punch
   rotate: false
-  xy: 3245, 1176
+  xy: 3245, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 3
 player/Female_Punch
   rotate: false
-  xy: 2523, 454
+  xy: 2523, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 4
 player/Female_Punch
   rotate: false
-  xy: 3245, 454
+  xy: 3245, 0
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 5
-walls/light-wall
+walls/obstacle_blue
   rotate: false
-  xy: 0, 0
-  size: 50, 600
-  orig: 50, 600
+  xy: 0, 148
+  size: 839, 2018
+  orig: 839, 2018
   offset: 0, 0
-  index: 1
-walls/light-wall
+  index: -1
+walls/obstacle_green
   rotate: false
-  xy: 52, 0
-  size: 50, 600
-  orig: 50, 600
+  xy: 841, 148
+  size: 839, 2018
+  orig: 839, 2018
   offset: 0, 0
-  index: 2
-walls/plasma-wall
+  index: -1
+walls/obstacle_red
   rotate: false
-  xy: 104, 0
-  size: 50, 600
-  orig: 50, 600
+  xy: 1682, 148
+  size: 839, 2018
+  orig: 839, 2018
   offset: 0, 0
-  index: 1
-walls/plasma-wall
-  rotate: false
-  xy: 156, 0
-  size: 50, 600
-  orig: 50, 600
-  offset: 0, 0
-  index: 2
+  index: -1
 
 animations3.png
 size: 4014,3610
@@ -705,14 +642,14 @@ player/Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
+  index: 8
 player/Shock
   rotate: false
   xy: 1444, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 8
+  index: 5
 player/Shock
   rotate: false
   xy: 0, 722

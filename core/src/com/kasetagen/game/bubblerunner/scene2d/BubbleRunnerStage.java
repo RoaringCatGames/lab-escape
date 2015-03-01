@@ -34,10 +34,7 @@ import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.data.WallPattern;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
-import com.kasetagen.game.bubblerunner.util.AnimationUtil;
-import com.kasetagen.game.bubblerunner.util.AssetsUtil;
-import com.kasetagen.game.bubblerunner.util.PlayerStates;
-import com.kasetagen.game.bubblerunner.util.ViewportUtil;
+import com.kasetagen.game.bubblerunner.util.*;
 
 import java.util.Random;
 
@@ -54,6 +51,7 @@ public class BubbleRunnerStage extends BaseStage {
         NONE, NOT_BAD, GREAT, AWESOME, AMAZING, BONKERS, RIDICULOUS, ATOMIC
     }
 
+    private static final long[] shockPulseTimings = new long[] { 0, 100, 100, 100, 100, 100, 100 };
     private static final int[] COMBO_THRESHOLDS = new int[] {10, 20, 30, 50, 70, 100, 150};
 //    private static final int[] COMBO_THRESHOLDS = new int[] {5, 10, 12, 15, 18, 20, 21};
 
@@ -89,6 +87,8 @@ public class BubbleRunnerStage extends BaseStage {
     //Delegates
 	private IGameProcessor gameProcessor;
 	private AssetManager assetManager;
+    private TextureAtlas aniAtlas;
+    private TextureAtlas spriteAtlas;
 
     //State Values
     private int highScore = 0;
@@ -149,9 +149,11 @@ public class BubbleRunnerStage extends BaseStage {
         super(gameProcessor);
         this.gameProcessor = gameProcessor;
         assetManager = this.gameProcessor.getAssetManager();
+        aniAtlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
+        spriteAtlas = assetManager.get(AssetsUtil.SPRITE_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
-        Animation introAnimation = new Animation(1f, assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS).findRegions("intro/intro"));
-        cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);//new AnimatedActor(0f, 0f, getWidth(), getHeight(), introAnimation, 0f);
+        Animation introAnimation = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_INTRO));
+        cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);
         //cinematic.setIsLooping(false);
         Gdx.app.log("STAGE", "Camera Original Zoom: " + ((OrthographicCamera)getCamera()).zoom);
 
@@ -205,7 +207,7 @@ public class BubbleRunnerStage extends BaseStage {
         //SET WALL VELOCITY
         wallAndFloorVelocity = -1f*(getWidth()/2);
 
-        addActor(new GenericActor(0, 0, 1280, 720, new TextureRegion(assetManager.get(AssetsUtil.BACKGROUND, AssetsUtil.TEXTURE)), Color.GRAY));
+        addActor(new GenericActor(0, 0, 1280, 720, spriteAtlas.findRegion(AtlasUtil.SPRITE_BG), Color.GRAY));
 
         //Add Player
         initializePlayer(GameInfo.DEFAULT_MAX_FIELDS);
@@ -388,17 +390,17 @@ public class BubbleRunnerStage extends BaseStage {
                         private float duration = 0.5f;
                         private float elapsedTime = 0f;
                         private float shakeRadius = 5f;
-                        private float shakeRate = 720f/0.5f;
+                        private float shakeRate = 720f / 0.5f;
 
 
                         @Override
                         public void modify(Camera camera, float delta) {
                             this.elapsedTime += delta;
-                            if(!isComplete()){
-                                float x = (float)(shakeRadius*Math.cos(elapsedTime*shakeRate) + origPos.x);
-                                float y = (float)(shakeRadius*Math.sin(elapsedTime*shakeRate) + origPos.y);
+                            if (!isComplete()) {
+                                float x = (float) (shakeRadius * Math.cos(elapsedTime * shakeRate) + origPos.x);
+                                float y = (float) (shakeRadius * Math.sin(elapsedTime * shakeRate) + origPos.y);
                                 camera.position.set(x, y, camera.position.z);
-                            }else{
+                            } else {
                                 camera.position.set(origPos);
                             }
                         }
@@ -455,7 +457,7 @@ public class BubbleRunnerStage extends BaseStage {
 	    	}
 	    	
 	    	if(createEnv){
-		    	Environment floor = new Environment(nextEnvLoc, 10, 757, 208, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+		    	Environment floor = new Environment(nextEnvLoc, 10, 757, 208, spriteAtlas.findRegion(AtlasUtil.SPRITE_FLOOR), Color.GRAY);
 		    	floor.setXVelocity(wallAndFloorVelocity);
 		    	EnvironmentManager.addActor(floor, false, EnvironmentType.FLOOR.toString());
 	    	}
@@ -463,7 +465,7 @@ public class BubbleRunnerStage extends BaseStage {
     	
     	// Pillars  	
     	if(millisecondsPassed >= nextGeneration){
-	    	Environment pillar = new Environment(ViewportUtil.VP_WIDTH, 280, 473, 559, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_PILLAR, AssetsUtil.TEXTURE)), Color.GRAY);
+	    	Environment pillar = new Environment(ViewportUtil.VP_WIDTH, 280, 473, 559, spriteAtlas.findRegion(AtlasUtil.SPRITE_PILLAR), Color.GRAY);
 	    	pillar.setXVelocity(wallAndFloorVelocity + 100);
 	    	
 	    	EnvironmentManager.addActor(pillar, false, EnvironmentType.PILLAR.toString());
@@ -486,7 +488,7 @@ public class BubbleRunnerStage extends BaseStage {
 	    	}
 	    	
 	    	if(createEnv){
-		    	Environment floor = new Environment(nextEnvLoc, 310, 473, 250, new TextureRegion(assetManager.get(AssetsUtil.WALL, AssetsUtil.TEXTURE)), Color.GRAY);
+		    	Environment floor = new Environment(nextEnvLoc, 310, 473, 250, spriteAtlas.findRegion(AtlasUtil.SPRITE_WALL), Color.GRAY);
 		    	floor.setXVelocity(wallAndFloorVelocity + 100);
 		    	EnvironmentManager.addActor(floor, false, EnvironmentType.WALL.toString());
 	    	}
@@ -509,7 +511,7 @@ public class BubbleRunnerStage extends BaseStage {
 	    	}
 	    	
 	    	if(createEnv){
-		    	Environment floor = new Environment(nextEnvLoc, 210, 757, 100, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+		    	Environment floor = new Environment(nextEnvLoc, 210, 757, 100, spriteAtlas.findRegion(AtlasUtil.SPRITE_FLOOR), Color.GRAY);
 		    	floor.setXVelocity(wallAndFloorVelocity + 50);
 		    	EnvironmentManager.addActor(floor, false, EnvironmentType.BACK_FLOOR.toString());
 	    	}
@@ -533,7 +535,7 @@ public class BubbleRunnerStage extends BaseStage {
                                                        warningIndicatorDimensions[3],
                                                        wp,
                                                        Color.RED,
-                                                       assetManager.get(AssetsUtil.INDICATOR_SHEET, AssetsUtil.TEXTURE));
+                                                       assetManager.get(AssetsUtil.WARNING_INDICATOR, AssetsUtil.TEXTURE));
             //warningIndicator.lifetime = (millisBetweenWalls/1000)/2;
             addActor(warningIndicator);
 
@@ -546,7 +548,7 @@ public class BubbleRunnerStage extends BaseStage {
                         wallDimensions[2],
                         wallDimensions[3],
                         fft,
-                        assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS),
+                        aniAtlas,
                         getAnimationNameForForceFieldType(fft));
                 w.setXVelocity(wallAndFloorVelocity);
                 w.setDisposer(wallDisposer);
@@ -562,16 +564,16 @@ public class BubbleRunnerStage extends BaseStage {
         String name;
         switch(fft){
             case LIGHTNING:
-                name = "newwall/obstacle_blue";
+                name = AtlasUtil.ANI_WALL_LIGHTNING;
                 break;
             case PLASMA:
-                name = "newwall/obstacle_green";
+                name = AtlasUtil.ANI_WALL_PLASMA;
                 break;
             case LASER:
-                name = "newwall/obstacle_red";
+                name = AtlasUtil.ANI_WALL_LASER;
                 break;
             default:
-                name = "walls/light-wall";
+                name = AtlasUtil.ANI_WALL_LIGHTNING;
                 break;
         }
 
@@ -669,15 +671,13 @@ public class BubbleRunnerStage extends BaseStage {
                 incrementMaxFields();
             }
         }
-
-
     }
 
     private void processDeath(Wall w) {
         //Checking so we only sound once for now
-
         switch(w.forceFieldType){
             case LIGHTNING:
+                Gdx.input.vibrate(shockPulseTimings, -1);
                 player.setState(PlayerStates.ELECTRO_DEATH, true);
                 break;
             case LASER:
@@ -756,7 +756,7 @@ public class BubbleRunnerStage extends BaseStage {
             String charSelect = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY);
             if(!"".equals(charSelect) && !charSelect.equals(characterSelected)){
                 characterSelected = charSelect;
-                String aniName = getPlayerAnimationName();
+                String aniName = AnimationUtil.getPlayerAnimationName(characterSelected);
                 TextureAtlas atlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
                 Animation ani = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(aniName));
@@ -908,12 +908,13 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private void initializePlayer(int maxFields) {
-        String aniName = getPlayerAnimationName();
-        String shieldAniName = getPlayerShieldingAnimationName();
-        String electroName = getPlayerElectroAnimationName();
-        String wallName = getPlayerWallAnimationName();
-        TextureAtlas atlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
-        Animation defaultPlayerAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(aniName));
+        String aniName = AnimationUtil.getPlayerAnimationName(characterSelected);
+        String shieldAniName = AnimationUtil.getPlayerShieldingAnimationName(characterSelected);
+        String electroName = AnimationUtil.getPlayerElectroAnimationName(characterSelected);
+        String wallName = AnimationUtil.getPlayerWallAnimationName(characterSelected);
+        String fireName = AnimationUtil.getPlayerFireAnimationName(characterSelected);
+
+        Animation defaultPlayerAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, aniAtlas.findRegions(aniName));
 
         player = new Player(playerDimensions[0],
                 playerDimensions[1],
@@ -921,13 +922,13 @@ public class BubbleRunnerStage extends BaseStage {
                 playerDimensions[3],
                 defaultPlayerAnimation);
         //player.maxFields = maxFields;
-        Animation shieldingAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(shieldAniName));
+        Animation shieldingAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, aniAtlas.findRegions(shieldAniName));
         player.setShieldingAnimation(shieldingAnimation);
-        Animation electroAni = new Animation(AnimationUtil.RUNNER_ELECTRO_CYCLE_RATE, atlas.findRegions(electroName));
+        Animation electroAni = new Animation(AnimationUtil.RUNNER_ELECTRO_CYCLE_RATE, aniAtlas.findRegions(electroName));
         player.addStateAnimation(PlayerStates.ELECTRO_DEATH, electroAni);
-        Animation fireAni = new Animation(AnimationUtil.RUNNER_FIRE_CYCLE_RATE, atlas.findRegions("player/FIRE"));
+        Animation fireAni = new Animation(AnimationUtil.RUNNER_FIRE_CYCLE_RATE, aniAtlas.findRegions(fireName));
         player.addStateAnimation(PlayerStates.FIRE_DEATH, fireAni);
-        Animation wallAni = new Animation(AnimationUtil.RUNNER_WALL_CYCLE_RATE, atlas.findRegions(wallName));
+        Animation wallAni = new Animation(AnimationUtil.RUNNER_WALL_CYCLE_RATE, aniAtlas.findRegions(wallName));
         player.addStateAnimation(PlayerStates.WALL_DEATH, wallAni);
         addActor(player);
 
@@ -935,34 +936,19 @@ public class BubbleRunnerStage extends BaseStage {
                                   playerDimensions[1],
                                   playerDimensions[2],
                                   playerDimensions[3]);
-        Animation redShield = new Animation(AnimationUtil.SHIELD_CYCLE_RATE, atlas.findRegions("Shields/Red"));
-        Animation greenShield = new Animation(AnimationUtil.SHIELD_CYCLE_RATE, atlas.findRegions("Shields/Green"));
-        Animation blueShield = new Animation(AnimationUtil.SHIELD_CYCLE_RATE, atlas.findRegions("Shields/Blue"));
+        Animation redShield = new Animation(AnimationUtil.SHIELD_CYCLE_RATE, aniAtlas.findRegions(AtlasUtil.ANI_SHIELD_RED));
         shields.setShieldAnimation(ForceFieldType.LASER, redShield);
+        Animation greenShield = new Animation(AnimationUtil.SHIELD_CYCLE_RATE, aniAtlas.findRegions(AtlasUtil.ANI_SHIELD_GREEN));
         shields.setShieldAnimation(ForceFieldType.PLASMA, greenShield);
+        Animation blueShield = new Animation(AnimationUtil.SHIELD_CYCLE_RATE, aniAtlas.findRegions(AtlasUtil.ANI_SHIELD_BLUE));
         shields.setShieldAnimation(ForceFieldType.LIGHTNING, blueShield);
         shields.maxFields = maxFields;
         addActor(shields);
-
-        //NOT SURE WHERE THIS GOES
-        particleBubble = assetManager.get(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
-        particleBubble.start();
-        particleBubble.findEmitter("bubble1").setContinuous(true); // reset works for all emitters of particle
     }
 
-    private String getPlayerAnimationName() {
-        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Female_Run" : "player/Male_Run";
-    }
-
-    private String getPlayerShieldingAnimationName(){
-        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Female_Punch" : "player/Male_Punch";
-    }
-    private String getPlayerElectroAnimationName(){
-        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Female_Shock" : "player/Male_Shock";
-    }
-    private String getPlayerWallAnimationName(){
-        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? "player/Female_Wall" : "player/Male_Wall";
-    }
+//    private String getPlayerAnimationName() {
+//        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? AtlasUtil.ANI_VEDA_RUN : AtlasUtil.ANI_FRED_RUN;
+//    }
 
     private void initializeEnvironmentGroups(){
     	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.WALL.toString()));
@@ -973,13 +959,12 @@ public class BubbleRunnerStage extends BaseStage {
     }
     
     private void initializeStartingScene(){
-
     	if(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()) != null){
-	    	Environment floor = new Environment(-378, 10, 757, 208, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+	    	Environment floor = new Environment(-378, 10, 757, 208, spriteAtlas.findRegion(AtlasUtil.SPRITE_FLOOR), Color.GRAY);
 	    	floor.setXVelocity(wallAndFloorVelocity);
 	    	EnvironmentManager.addActor(floor, false, EnvironmentType.FLOOR.toString());
 	    	
-	    	Environment floor2 = new Environment(-378, 210, 757, 100, new TextureRegion(assetManager.get(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE)), Color.GRAY);
+	    	Environment floor2 = new Environment(-378, 210, 757, 100, spriteAtlas.findRegion(AtlasUtil.SPRITE_FLOOR), Color.GRAY);
 	    	floor2.setXVelocity(wallAndFloorVelocity + 50);
 	    	EnvironmentManager.addActor(floor2, false, EnvironmentType.BACK_FLOOR.toString());
     	}
@@ -1039,17 +1024,17 @@ public class BubbleRunnerStage extends BaseStage {
                 sUp, sDown, sChecked,
                 dUp, dDown, dChecked;
 
-        aUp = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.LIGHT_UP, AssetsUtil.TEXTURE)));
-        aDown = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.LIGHT_DOWN, AssetsUtil.TEXTURE)));
-        aChecked = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.LIGHT_CHECKED, AssetsUtil.TEXTURE)));
+        aUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_UP));//new TextureRegion(assetManager.get(AssetsUtil.LIGHT_UP, AssetsUtil.TEXTURE)));
+        aDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_DOWN));//new TextureRegion(assetManager.get(AssetsUtil.LIGHT_DOWN, AssetsUtil.TEXTURE)));
+        aChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_CHECKED));//new TextureRegion(assetManager.get(AssetsUtil.LIGHT_CHECKED, AssetsUtil.TEXTURE)));
 
-        sUp = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.PLASMA_UP, AssetsUtil.TEXTURE)));
-        sDown = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.PLASMA_DOWN, AssetsUtil.TEXTURE)));
-        sChecked = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.PLASMA_CHECKED, AssetsUtil.TEXTURE)));
+        sUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_UP));//new TextureRegion(assetManager.get(AssetsUtil.PLASMA_UP, AssetsUtil.TEXTURE)));
+        sDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_DOWN));//new TextureRegion(assetManager.get(AssetsUtil.PLASMA_DOWN, AssetsUtil.TEXTURE)));
+        sChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_CHECKED));//new TextureRegion(assetManager.get(AssetsUtil.PLASMA_CHECKED, AssetsUtil.TEXTURE)));
 
-        dUp = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.LASER_UP, AssetsUtil.TEXTURE)));
-        dDown = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.LASER_DOWN, AssetsUtil.TEXTURE)));
-        dChecked = new TextureRegionDrawable(new TextureRegion(assetManager.get(AssetsUtil.LASER_CHECKED, AssetsUtil.TEXTURE)));
+        dUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_UP));//new TextureRegion(assetManager.get(AssetsUtil.LASER_UP, AssetsUtil.TEXTURE)));
+        dDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_DOWN));//new TextureRegion(assetManager.get(AssetsUtil.LASER_DOWN, AssetsUtil.TEXTURE)));
+        dChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_CHECKED));//new TextureRegion(assetManager.get(AssetsUtil.LASER_CHECKED, AssetsUtil.TEXTURE)));
 
         controls.addButton(aUp, aDown, aChecked, new ClickListener(){
             @Override
@@ -1075,7 +1060,7 @@ public class BubbleRunnerStage extends BaseStage {
             }
         }, true, ForceFieldType.LASER);
 
-        controls.setEnergyBar(assetManager.get(AssetsUtil.ENERGY_BAR, AssetsUtil.TEXTURE));
+        controls.setEnergyBar(spriteAtlas.findRegion(AtlasUtil.SPRITE_ENERGY_BAR));//assetManager.get(AssetsUtil.ENERGY_BAR, AssetsUtil.TEXTURE));
         addActor(controls);
     }
 

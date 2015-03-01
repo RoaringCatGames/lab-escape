@@ -3,6 +3,7 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -33,7 +34,7 @@ public class ControlGroup extends GenericGroup {
 
     private int heatScore = 0;
 
-    private Texture energyBar = null;
+    private TextureRegion energyBar = null;
 
     private Array<ForceFieldImageButton> buttons;
 
@@ -65,7 +66,7 @@ public class ControlGroup extends GenericGroup {
         buttonCount++;
     }
 
-    public void setEnergyBar(Texture barTexture){
+    public void setEnergyBar(TextureRegion barTexture){
         energyBar = barTexture;
     }
 

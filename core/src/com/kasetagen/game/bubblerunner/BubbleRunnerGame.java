@@ -80,10 +80,11 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
 	}
 
     public void loadAssets(){
+        assetManager.load(AssetsUtil.DEFAULT_SKIN, AssetsUtil.SKIN);
         assetManager.load(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
+        assetManager.load(AssetsUtil.SPRITE_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
-        assetManager.load(AssetsUtil.TITLE_SCREEN, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.CONTROLS, AssetsUtil.TEXTURE);
+        assetManager.load(AssetsUtil.WARNING_INDICATOR, AssetsUtil.TEXTURE);
 
         assetManager.load(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT);
         assetManager.load(AssetsUtil.REXLIA_48, AssetsUtil.BITMAP_FONT);
@@ -93,6 +94,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
 
         assetManager.load(AssetsUtil.EIGHT_BIT_BKG_MUSIC, AssetsUtil.MUSIC);
         assetManager.load(AssetsUtil.DISTORTION_BKG_MUSIC, AssetsUtil.MUSIC);
+
         assetManager.load(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.EXPLOSION_SOUND, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.POWER_ON_SOUND, AssetsUtil.SOUND);
@@ -105,34 +107,6 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.RIDICULOUS, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.ATOMIC, AssetsUtil.SOUND);
 
-
-        assetManager.load(AssetsUtil.BUBBLE_PARTICLE, AssetsUtil.PARTICLE);
-        assetManager.load(AssetsUtil.BUBBLE_PARTICLE_IMG, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.PLAYER_IMG, AssetsUtil.TEXTURE);
-
-        assetManager.load(AssetsUtil.PLAYER_IMG, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.INDICATOR_SHEET, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.LIGHTNING_WALL, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.PLASMA_WALL, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.LASER_WALL, AssetsUtil.TEXTURE);
-
-        assetManager.load(AssetsUtil.LIGHT_UP, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.LIGHT_DOWN, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.LIGHT_CHECKED, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.PLASMA_UP, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.PLASMA_DOWN, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.PLASMA_CHECKED, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.LASER_UP, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.LASER_DOWN, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.LASER_CHECKED, AssetsUtil.TEXTURE);
-
-        assetManager.load(AssetsUtil.FLOOR_CONC, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.FLOOR_PILLAR, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.WALL, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.BACKGROUND, AssetsUtil.TEXTURE);
-        assetManager.load(AssetsUtil.ENERGY_BAR, AssetsUtil.TEXTURE);
-
-        assetManager.load(AssetsUtil.DEFAULT_SKIN, AssetsUtil.SKIN);
     }
 
  //IGameProcessor

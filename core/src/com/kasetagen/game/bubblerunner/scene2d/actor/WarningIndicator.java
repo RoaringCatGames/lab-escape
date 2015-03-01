@@ -13,7 +13,6 @@ import com.kasetagen.game.bubblerunner.data.WallPattern;
  * User: barry
  * Date: 7/27/14
  * Time: 11:11 AM
- * To change this template use File | Settings | File Templates.
  */
 public class WarningIndicator extends GenericActor {
 
