@@ -1,9 +1,6 @@
 package com.kasetagen.game.bubblerunner;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
-import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.kasetagen.engine.IDataSaver;
@@ -28,6 +25,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
     BubbleRunnerOptionsMenu options;
     BubbleRunnerMenu menu;
     BubbleRunnerScreen runnerScreen;
+    InputMultiplexer input;
 
     boolean isInitialized = false;
     protected AssetManager assetManager;
@@ -49,6 +47,8 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         }
         assetManager = new AssetManager();
         loadAssets();
+
+        input = new InputMultiplexer();
 	}
 
 
@@ -147,7 +147,9 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
             }
 
             setScreen(options);
-            Gdx.input.setInputProcessor(options.getStage());
+            input.clear();
+            input.addProcessor(options.getStage());
+            //Gdx.input.setInputProcessor(options.getStage());
 
         }else if(MENU.equalsIgnoreCase(screenName)){
             if(menu == null){
@@ -155,7 +157,10 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
             }
 
             setScreen(menu);
-            Gdx.input.setInputProcessor(menu.getStage());
+            input.clear();
+            input.addProcessor(menu.getStage());
+            input.addProcessor(menu);
+            //Gdx.input.setInputProcessor(menu.getStage());
 
         }else if(RUNNER.equalsIgnoreCase(screenName)){
             //Load the Game Screen!!
@@ -164,8 +169,11 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
             }
 
             setScreen(runnerScreen);
-            Gdx.input.setInputProcessor(runnerScreen.getStage());
+            input.clear();
+            input.addProcessor(runnerScreen.getStage());
+            //Gdx.input.setInputProcessor(runnerScreen.getStage());
         }
+        Gdx.input.setInputProcessor(input);
     }
 
     @Override

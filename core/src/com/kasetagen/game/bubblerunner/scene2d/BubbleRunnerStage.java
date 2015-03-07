@@ -152,44 +152,48 @@ public class BubbleRunnerStage extends BaseStage {
         aniAtlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         spriteAtlas = assetManager.get(AssetsUtil.SPRITE_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
-        Animation introAnimation = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_INTRO));
-        cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);
-        //cinematic.setIsLooping(false);
+//        Animation introAnimation = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_INTRO));
+//        cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);
         Gdx.app.log("STAGE", "Camera Original Zoom: " + ((OrthographicCamera)getCamera()).zoom);
 
-        CinematicScene scene1 = new CinematicScene(2f, 0f, 0f, 100f, 100f, 1f, 1f);
-        scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-        cinematic.addScene(scene1);
+//        CinematicScene scene1 = new CinematicScene(2f, 0f, 0f, 100f, 100f, 1f, 1f);
+//        scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+//        cinematic.addScene(scene1);
+//
+//        CinematicScene scene2 = new CinematicScene(0.5f, 0f, 0f, -100f, 100f, 1f, 1.25f);
+//        scene2.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+//        cinematic.addScene(scene2);
+//
+//        CinematicScene scene3 = new CinematicScene(2f, 0f, 0f, 200f, 100f, 1f, 0.5f);
+//        scene3.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+//        cinematic.addScene(scene3);
+//
+//        CinematicScene scene4 = new CinematicScene(1f, 0f, 0f, 300f, 100f, 1f, 1f);
+//        scene4.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+//        cinematic.addScene(scene4);
+//
+//        CinematicScene scene5 = new CinematicScene(1f, 0f, 0f, 400f, 100f, 1f, 1f);
+//        scene5.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+//        cinematic.addScene(scene5);
+//
+//        CinematicScene scene6 = new CinematicScene(1f, 0f, 0f, 500f, 100f, 1f, 0.8f);
+//        scene6.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+//        cinematic.addScene(scene6);
+//
+//        CinematicScene scene7 = new CinematicScene(1f, 0f, 0f, 600f, 100f, 1f, 2f);
+//        scene7.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+//        cinematic.addScene(scene7);
+//
+//        CinematicScene scene8 = new CinematicScene(1f, 0f, 0f, 700f, 100f, 0.8f, 1f);
+//        scene8.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+//        cinematic.addScene(scene8);
+//        addActor(cinematic);
+//        cinematic.start();
 
-        CinematicScene scene2 = new CinematicScene(0.5f, 0f, 0f, -100f, 100f, 1f, 1.25f);
-        scene2.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-        cinematic.addScene(scene2);
+        //TO MAKE MOONSHOT VERSION WORK
+        cinematicComplete = true;
+        onCinematicComplete();
 
-        CinematicScene scene3 = new CinematicScene(2f, 0f, 0f, 200f, 100f, 1f, 0.5f);
-        scene3.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-        cinematic.addScene(scene3);
-
-        CinematicScene scene4 = new CinematicScene(1f, 0f, 0f, 300f, 100f, 1f, 1f);
-        scene4.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-        cinematic.addScene(scene4);
-
-        CinematicScene scene5 = new CinematicScene(1f, 0f, 0f, 400f, 100f, 1f, 1f);
-        scene5.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-        cinematic.addScene(scene5);
-
-        CinematicScene scene6 = new CinematicScene(1f, 0f, 0f, 500f, 100f, 1f, 0.8f);
-        scene6.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-        cinematic.addScene(scene6);
-
-        CinematicScene scene7 = new CinematicScene(1f, 0f, 0f, 600f, 100f, 1f, 2f);
-        scene7.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-        cinematic.addScene(scene7);
-
-        CinematicScene scene8 = new CinematicScene(1f, 0f, 0f, 700f, 100f, 0.8f, 1f);
-        scene8.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-        cinematic.addScene(scene8);
-        addActor(cinematic);
-        cinematic.start();
 
         origPos = new Vector3(getCamera().position);
     }
@@ -306,7 +310,7 @@ public class BubbleRunnerStage extends BaseStage {
             //Adjust Resource Levels
 
             int index = getActors().size - 1;
-            cinematic.setZIndex(index--);
+            //cinematic.setZIndex(index--);
             deathOverlay.setZIndex(index--);
             controls.setZIndex(index--);
             comboLabel.setZIndex(index--);
@@ -1011,7 +1015,7 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private void hideCinematic() {
-        if(cinematic.isVisible()){
+        if(cinematic != null && cinematic.isVisible()){
             cinematic.setVisible(false);
         }
     }

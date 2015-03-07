@@ -17,7 +17,6 @@ import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
  * User: barry
  * Date: 6/9/14
  * Time: 9:32 PM
- * To change this template use File | Settings | File Templates.
  */
 public class Overlay extends GenericGroup {
 

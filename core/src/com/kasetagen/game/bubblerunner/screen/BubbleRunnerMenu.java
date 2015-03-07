@@ -83,7 +83,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
 
 
-        startGameButton = new TextButton("Escape!", style);
+        startGameButton = new TextButton("Press A to Start!", style);
         startGameButton.addListener(listener);
         startGameButton.setPosition(buttonX, buttonY);
 
@@ -93,7 +93,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         optionsButton.setPosition(buttonX, buttonY - (startGameButton.getHeight()*1.25f));
         optionsButton.addListener(listener);
 
-        stage.addActor(optionsButton);
+        //stage.addActor(optionsButton);
     }
 
     @Override
