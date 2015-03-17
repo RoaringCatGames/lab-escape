@@ -14,7 +14,6 @@ import com.kasetagen.game.bubblerunner.util.AnimationUtil;
  * User: barry
  * Date: 5/27/14
  * Time: 7:43 PM
- * To change this template use File | Settings | File Templates.
  */
 
 public class Player extends AnimatedActor {
@@ -33,7 +32,9 @@ public class Player extends AnimatedActor {
 
         //animation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(animationName));
         //deathAnimation = new Animation(AnimationUtil.RUNNER_FIRE_CYCLE_RATE, atlas.findRegions("player/Wall"));
-        textureRegion = animation.getKeyFrame(keyFrameTime);
+        if(animation != null){
+            textureRegion = animation.getKeyFrame(keyFrameTime);
+        }
         collider.set(x + (width/4), y, width/2, height);
         Gdx.app.log("PLAYER", "COllider (x, y, w, h): " + collider.x + ", " + collider.y + ", " + collider.width + ", " + collider.height);
     }

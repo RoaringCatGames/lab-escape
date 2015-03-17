@@ -47,6 +47,7 @@ public class AssetsUtil {
     public static final String ZAP_SOUND = "audio/zap.mp3";
     public static final String EXPLOSION_SOUND = "audio/explosion.mp3";
     public static final String POWER_ON_SOUND = "audio/power-on.mp3";
+    public static final String SCREAM = "audio/scream.mp3";
 
     public static final String NOT_BAD = "audio/sfx/not-bad_1.mp3";
     public static final String GREAT = "audio/sfx/great_1.mp3";

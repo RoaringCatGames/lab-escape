@@ -133,6 +133,7 @@ public class BubbleRunnerStage extends BaseStage {
     private Sound zapSound;
     private Sound powerOnSound;
     private Sound explosionSound;
+    private Sound screamSound;
 
     private ObjectMap<ComboLevels, Sound> comboSfx;
 
@@ -166,35 +167,66 @@ public class BubbleRunnerStage extends BaseStage {
         Animation introAnimation = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_INTRO));
         cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);
 
-        CinematicScene scene1 = new CinematicScene(2f, 0f, 0f, 100f, 100f, 1f, 1f);
+        float duration = 0.3f;
+        float startX = 0f;
+        float startY = 0f;
+        float endX = 50f;
+        float endY = 30f;
+        float startZoom = 1f;
+        float endZoom = 1f;
+        CinematicScene scene1 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
         scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         cinematic.addScene(scene1);
 
-        CinematicScene scene2 = new CinematicScene(0.5f, 0f, 0f, -100f, 100f, 1f, 1.25f);
+        duration = 0.5f;
+        endX = -100f;
+        endY = 100f;
+        endZoom = 1.25f;
+        CinematicScene scene2 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
         scene2.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
         cinematic.addScene(scene2);
 
-        CinematicScene scene3 = new CinematicScene(2f, 0f, 0f, 200f, 100f, 1f, 0.5f);
+        duration = 2f;
+        endX = 200f;
+        endY = 100f;
+        endZoom = 0.5f;
+        CinematicScene scene3 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
         scene3.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         cinematic.addScene(scene3);
 
-        CinematicScene scene4 = new CinematicScene(1f, 0f, 0f, 300f, 100f, 1f, 1f);
+        duration = 1f;
+        endX = 300f;
+        endZoom = 1f;
+        CinematicScene scene4 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
         scene4.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
         cinematic.addScene(scene4);
 
-        CinematicScene scene5 = new CinematicScene(1f, 0f, 0f, 400f, 100f, 1f, 1f);
+        endX = 400f;
+        CinematicScene scene5 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
         scene5.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         cinematic.addScene(scene5);
 
-        CinematicScene scene6 = new CinematicScene(1f, 0f, 0f, 500f, 100f, 1f, 0.8f);
+        endX = 500f;
+        endY = -100f;
+        startZoom = 0.5f;
+        endZoom = 0.8f;
+        CinematicScene scene6 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
         scene6.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
         cinematic.addScene(scene6);
 
-        CinematicScene scene7 = new CinematicScene(1f, 0f, 0f, 600f, 100f, 1f, 2f);
+        endX = 600f;
+        endY = 100f;
+        startZoom = 1f;
+        endZoom = 2f;
+        CinematicScene scene7 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
         scene7.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         cinematic.addScene(scene7);
 
-        CinematicScene scene8 = new CinematicScene(1f, 0f, 0f, 700f, 100f, 0.8f, 1f);
+        endX = 700f;
+        endY = -200f;
+        startZoom = 0.8f;
+        endZoom = 1f;
+        CinematicScene scene8 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
         scene8.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
         cinematic.addScene(scene8);
         addActor(cinematic);
@@ -629,7 +661,7 @@ public class BubbleRunnerStage extends BaseStage {
         setEnvVelocity(0f);
 
         if(!w.equals(collidedWall)){
-            zapSound.play(sfxVolume);
+            screamSound.play(sfxVolume);
             isDead = true;
             collidedWall = w;
             music.stop();
@@ -689,13 +721,13 @@ public class BubbleRunnerStage extends BaseStage {
             bgVolume = gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
             sfxVolume = gameProcessor.getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY);
             String charSelect = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY);
+            Gdx.app.log("CHAR SELECT", "Selected: " + charSelect);
             if(!"".equals(charSelect) && !charSelect.equals(characterSelected)){
                 characterSelected = charSelect;
-                String aniName = AnimationUtil.getPlayerAnimationName(characterSelected);
-                TextureAtlas atlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
-
-                Animation ani = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(aniName));
-                player.resetAnimation(ani);
+                if(cinematicComplete && player != null){
+                    Gdx.app.log("ANIMATIONS", "RESETING PLAYER ANIMATIONS");
+                    setPlayerAnimations();
+                }
             }
 
             player.setState(PlayerStates.DEFAULT);
@@ -728,7 +760,7 @@ public class BubbleRunnerStage extends BaseStage {
             ((GenericActor)a).velocity.x = velocity;
         }
 
-        for(Actor a:floorGroup.getChildren()){
+        for(Actor a:tunnelGroup.getChildren()){
             ((GenericActor)a).velocity.x = velocity;
         }
     }
@@ -797,6 +829,7 @@ public class BubbleRunnerStage extends BaseStage {
         zapSound = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         powerOnSound = assetManager.get(AssetsUtil.POWER_ON_SOUND, AssetsUtil.SOUND);
         explosionSound = assetManager.get(AssetsUtil.EXPLOSION_SOUND, AssetsUtil.SOUND);
+        screamSound = assetManager.get(AssetsUtil.SCREAM, AssetsUtil.SOUND);
     }
 
     private void initializeOverlays() {
@@ -853,29 +886,37 @@ public class BubbleRunnerStage extends BaseStage {
         deathOverlay.setZIndex(getActors().size - 1);
     }
 
-    private void initializePlayer(int maxFields) {
-        String aniName = AnimationUtil.getPlayerAnimationName(characterSelected);
-        String shieldAniName = AnimationUtil.getPlayerShieldingAnimationName(characterSelected);
-        String electroName = AnimationUtil.getPlayerElectroAnimationName(characterSelected);
-        String wallName = AnimationUtil.getPlayerWallAnimationName(characterSelected);
-        String fireName = AnimationUtil.getPlayerFireAnimationName(characterSelected);
+    private void setPlayerAnimations(){
+        if(player != null){
+            String aniName = AnimationUtil.getPlayerAnimationName(characterSelected);
+            String shieldAniName = AnimationUtil.getPlayerShieldingAnimationName(characterSelected);
+            String electroName = AnimationUtil.getPlayerElectroAnimationName(characterSelected);
+            String wallName = AnimationUtil.getPlayerWallAnimationName(characterSelected);
+            String fireName = AnimationUtil.getPlayerFireAnimationName(characterSelected);
 
-        Animation defaultPlayerAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, aniAtlas.findRegions(aniName));
+            Animation defaultPlayerAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, aniAtlas.findRegions(aniName));
+            player.resetAnimation(defaultPlayerAnimation);
+            player.addStateAnimation(PlayerStates.DEFAULT, defaultPlayerAnimation);
+            Animation shieldingAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, aniAtlas.findRegions(shieldAniName));
+            player.setShieldingAnimation(shieldingAnimation);
+            Animation electroAni = new Animation(AnimationUtil.RUNNER_ELECTRO_CYCLE_RATE, aniAtlas.findRegions(electroName));
+            player.addStateAnimation(PlayerStates.ELECTRO_DEATH, electroAni);
+            Animation fireAni = new Animation(AnimationUtil.RUNNER_FIRE_CYCLE_RATE, aniAtlas.findRegions(fireName));
+            player.addStateAnimation(PlayerStates.FIRE_DEATH, fireAni);
+            Animation wallAni = new Animation(AnimationUtil.RUNNER_WALL_CYCLE_RATE, aniAtlas.findRegions(wallName));
+            player.addStateAnimation(PlayerStates.WALL_DEATH, wallAni);
+        }
+    }
+    private void initializePlayer(int maxFields) {
+
 
         player = new Player(playerDimensions[0],
                 playerDimensions[1],
                 playerDimensions[2],
                 playerDimensions[3],
-                defaultPlayerAnimation);
+                null);
         //player.maxFields = maxFields;
-        Animation shieldingAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, aniAtlas.findRegions(shieldAniName));
-        player.setShieldingAnimation(shieldingAnimation);
-        Animation electroAni = new Animation(AnimationUtil.RUNNER_ELECTRO_CYCLE_RATE, aniAtlas.findRegions(electroName));
-        player.addStateAnimation(PlayerStates.ELECTRO_DEATH, electroAni);
-        Animation fireAni = new Animation(AnimationUtil.RUNNER_FIRE_CYCLE_RATE, aniAtlas.findRegions(fireName));
-        player.addStateAnimation(PlayerStates.FIRE_DEATH, fireAni);
-        Animation wallAni = new Animation(AnimationUtil.RUNNER_WALL_CYCLE_RATE, aniAtlas.findRegions(wallName));
-        player.addStateAnimation(PlayerStates.WALL_DEATH, wallAni);
+        setPlayerAnimations();
         addActor(player);
 
         shields = new ShieldGroup(playerDimensions[0],
@@ -909,14 +950,7 @@ public class BubbleRunnerStage extends BaseStage {
     private TextureRegion getTunnelTextureRegion(){
 
         Array<TextureAtlas.AtlasRegion> tunnels = spriteAtlas.findRegions(AtlasUtil.SPRITE_WALL);
-//        int segment = rand.nextInt(100);
         int index = 0;
-//        if(segment < 10){
-//            index = 1;
-//        }else if(segment < 20){
-//            index = 2;
-//        }
-
         return tunnels.get(index);
     }
 
@@ -1053,6 +1087,7 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     public void resume(){
+        Gdx.app.log("RESUMING", "Stage Resuming");
         initializeVolumes();
         if(music != null){
             music.setVolume(bgVolume);
