@@ -10,13 +10,11 @@ import com.kasetagen.game.bubblerunner.util.ViewportUtil;
  * User: barry
  * Date: 8/4/14
  * Time: 10:13 PM
- * To change this template use File | Settings | File Templates.
  */
 public class BaseStage extends Kitten2dStage {
 
     public BaseStage(IGameProcessor gp){
         super(new StretchViewport(ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT), gp);
     }
-
 
 }

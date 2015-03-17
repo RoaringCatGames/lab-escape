@@ -148,6 +148,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
 
             setScreen(options);
             input.clear();
+            input.addProcessor(options);
             input.addProcessor(options.getStage());
             //Gdx.input.setInputProcessor(options.getStage());
 

@@ -2,6 +2,7 @@ package com.kasetagen.game.bubblerunner.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -25,7 +26,6 @@ import com.kasetagen.game.bubblerunner.util.AssetsUtil;
  * User: barry
  * Date: 7/20/14
  * Time: 8:32 PM
- * To change this template use File | Settings | File Templates.
  */
 public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
 
@@ -33,7 +33,9 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
     Slider sfxVolumeSet;
     TextButton backToMainMenuButton;
 
+    Label bgVolLbl;
     Label bgValue;
+    Label sfxVolLbl;
     Label sfxValue;
     Label charSelect;
     Label charValue;
@@ -62,10 +64,11 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         }
         Skin skin = gameProcessor.getAssetManager().get(AssetsUtil.DEFAULT_SKIN, AssetsUtil.SKIN);
 
-        Label bgVolLbl = new Label("BKGD Volume: " , skin);
+        bgVolLbl = new Label("BKGD Volume: " , skin);
         bgValue = new Label(getFloatStringVal(bgVolValue), skin);
-        Label sfxVolLbl = new Label("SFX Volume: " , skin);
+        sfxVolLbl = new Label("SFX Volume: " , skin);
         sfxValue = new Label(getFloatStringVal(sfxVolValue), skin);
+
 
         bgVolumeSet = new Slider(0f, 1f, 0.1f, false, skin);
         bgVolumeSet.setValue(bgVolValue);
@@ -234,5 +237,17 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
             currentCharacter2Frame.setDrawable(new TextureRegionDrawable(wTr));
         }
         super.render(delta);
-}
+    }
+
+    private void processRight(){
+
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+
+        sfxValue.setColor(Color.CYAN);
+
+        return super.keyDown(keycode);
+    }
 }

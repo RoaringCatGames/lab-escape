@@ -1,124 +1,138 @@
 
 sprites.png
-size: 3921,1938
+size: 4096,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 buttons/button_discharge_off
-  rotate: false
-  xy: 3512, 1529
-  size: 407, 407
-  orig: 407, 407
-  offset: 0, 0
-  index: -1
-buttons/button_discharge_on
-  rotate: false
-  xy: 0, 409
-  size: 407, 407
-  orig: 407, 407
-  offset: 0, 0
-  index: -1
-buttons/button_light_off
-  rotate: false
-  xy: 409, 409
-  size: 407, 407
-  orig: 407, 407
-  offset: 0, 0
-  index: -1
-buttons/button_light_on
   rotate: false
   xy: 0, 0
   size: 407, 407
   orig: 407, 407
   offset: 0, 0
   index: -1
-buttons/button_plasma_off
+buttons/button_discharge_on
   rotate: false
   xy: 409, 0
   size: 407, 407
   orig: 407, 407
   offset: 0, 0
   index: -1
-buttons/button_plasma_on
+buttons/button_light_off
   rotate: false
-  xy: 818, 286
+  xy: 3512, 1120
   size: 407, 407
   orig: 407, 407
   offset: 0, 0
   index: -1
+buttons/button_light_on
+  rotate: false
+  xy: 3414, 711
+  size: 407, 407
+  orig: 407, 407
+  offset: 0, 0
+  index: -1
+buttons/button_plasma_off
+  rotate: false
+  xy: 838, 294
+  size: 407, 407
+  orig: 407, 407
+  offset: 0, 0
+  index: -1
+buttons/button_plasma_on
+  rotate: false
+  xy: 1247, 294
+  size: 407, 407
+  orig: 407, 407
+  offset: 0, 0
+  index: -1
+env/Floor
+  rotate: false
+  xy: 3512, 1529
+  size: 417, 415
+  orig: 417, 415
+  offset: 0, 0
+  index: 1
+env/Floor
+  rotate: false
+  xy: 0, 409
+  size: 417, 415
+  orig: 417, 415
+  offset: 0, 0
+  index: 2
+env/Floor
+  rotate: false
+  xy: 419, 409
+  size: 417, 415
+  orig: 417, 415
+  offset: 0, 0
+  index: 3
 env/bg
   rotate: false
-  xy: 948, 1216
+  xy: 948, 1224
   size: 1280, 720
   orig: 1280, 720
   offset: 0, 0
   index: -1
 env/floor
   rotate: false
-  xy: 948, 797
+  xy: 948, 805
   size: 1515, 417
   orig: 1515, 417
   offset: 0, 0
   index: -1
 env/pillar
   rotate: false
-  xy: 0, 818
+  xy: 0, 826
   size: 946, 1118
   orig: 946, 1118
   offset: 0, 0
   index: -1
 env/wall
   rotate: false
-  xy: 2465, 714
+  xy: 2465, 722
   size: 947, 500
   orig: 947, 500
   offset: 0, 0
   index: -1
 ui/controls-screen
   rotate: false
-  xy: 2230, 1216
+  xy: 2230, 1224
   size: 1280, 720
   orig: 1280, 720
   offset: 0, 0
   index: -1
 ui/energy_bar
   rotate: false
-  xy: 818, 695
+  xy: 838, 703
   size: 1156, 100
   orig: 1156, 100
   offset: 0, 0
   index: -1
-ui/warning-indicator
-  rotate: false
-  xy: 3512, 1257
-  size: 320, 270
-  orig: 320, 270
-  offset: 0, 0
-  index: -1
 walls/blue_wall
   rotate: false
-  xy: 3414, 614
+  xy: 3931, 1344
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: -1
 walls/green_wall
   rotate: false
-  xy: 3466, 614
+  xy: 3983, 1344
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: -1
 walls/plasma_wall
   rotate: false
-  xy: 3518, 655
+  xy: 4035, 1344
   size: 50, 600
   orig: 50, 600
   offset: 0, 0
   index: -1
 walls/yellow_wall
   rotate: false
-  xy: 3570, 655
+  xy: 3823, 518
   size: 50, 600
   orig: 50, 600
   offset: 0, 0

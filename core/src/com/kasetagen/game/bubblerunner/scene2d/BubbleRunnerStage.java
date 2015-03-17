@@ -8,12 +8,13 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -28,6 +29,7 @@ import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.Cinematic;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.CinematicScene;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
@@ -132,18 +134,27 @@ public class BubbleRunnerStage extends BaseStage {
     private Sound powerOnSound;
     private Sound explosionSound;
 
-    private ParticleEffect particleBubble;
-
     private ObjectMap<ComboLevels, Sound> comboSfx;
 
     private float bgVolume;
     private float sfxVolume;
 
-    //private AnimatedActor cinematic;
-    //private Cinematic cinematic;
-    
-    private enum EnvironmentType {WALL, FLOOR, PILLAR, PLAYER, BACK_FLOOR, OBSTACLES}
+    private GenericGroup floorGroup;
+    private GenericGroup tunnelGroup;
+    private GenericGroup bgGroup;
 
+    private Random rand = new Random(System.currentTimeMillis());
+
+    private float FLR_WIDTH = 417f/2;
+    private float FLR_HEIGHT = 415f/2;
+    private float FLR_Y = 0f;
+    private int floorCount = ((int)Math.ceil(ViewportUtil.VP_WIDTH/FLR_WIDTH)) + 1;
+    private float TNL_WIDTH = 947f/2;
+    private float TNL_HEIGHT = 500f/2;
+    private float TNL_Y = FLR_HEIGHT;
+    private int tunnelCount = ((int)Math.ceil(ViewportUtil.VP_WIDTH/TNL_WIDTH) + 1);
+
+    private ActorDecorator offScreenDecorator;
 
     public BubbleRunnerStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -152,55 +163,57 @@ public class BubbleRunnerStage extends BaseStage {
         aniAtlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         spriteAtlas = assetManager.get(AssetsUtil.SPRITE_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
-//        Animation introAnimation = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_INTRO));
-//        cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);
-        Gdx.app.log("STAGE", "Camera Original Zoom: " + ((OrthographicCamera)getCamera()).zoom);
+        Animation introAnimation = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_INTRO));
+        cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);
 
-//        CinematicScene scene1 = new CinematicScene(2f, 0f, 0f, 100f, 100f, 1f, 1f);
-//        scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-//        cinematic.addScene(scene1);
-//
-//        CinematicScene scene2 = new CinematicScene(0.5f, 0f, 0f, -100f, 100f, 1f, 1.25f);
-//        scene2.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-//        cinematic.addScene(scene2);
-//
-//        CinematicScene scene3 = new CinematicScene(2f, 0f, 0f, 200f, 100f, 1f, 0.5f);
-//        scene3.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-//        cinematic.addScene(scene3);
-//
-//        CinematicScene scene4 = new CinematicScene(1f, 0f, 0f, 300f, 100f, 1f, 1f);
-//        scene4.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-//        cinematic.addScene(scene4);
-//
-//        CinematicScene scene5 = new CinematicScene(1f, 0f, 0f, 400f, 100f, 1f, 1f);
-//        scene5.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-//        cinematic.addScene(scene5);
-//
-//        CinematicScene scene6 = new CinematicScene(1f, 0f, 0f, 500f, 100f, 1f, 0.8f);
-//        scene6.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-//        cinematic.addScene(scene6);
-//
-//        CinematicScene scene7 = new CinematicScene(1f, 0f, 0f, 600f, 100f, 1f, 2f);
-//        scene7.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-//        cinematic.addScene(scene7);
-//
-//        CinematicScene scene8 = new CinematicScene(1f, 0f, 0f, 700f, 100f, 0.8f, 1f);
-//        scene8.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-//        cinematic.addScene(scene8);
-//        addActor(cinematic);
-//        cinematic.start();
+        CinematicScene scene1 = new CinematicScene(2f, 0f, 0f, 100f, 100f, 1f, 1f);
+        scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+        cinematic.addScene(scene1);
 
-        //TO MAKE MOONSHOT VERSION WORK
-        cinematicComplete = true;
-        onCinematicComplete();
+        CinematicScene scene2 = new CinematicScene(0.5f, 0f, 0f, -100f, 100f, 1f, 1.25f);
+        scene2.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+        cinematic.addScene(scene2);
 
+        CinematicScene scene3 = new CinematicScene(2f, 0f, 0f, 200f, 100f, 1f, 0.5f);
+        scene3.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+        cinematic.addScene(scene3);
+
+        CinematicScene scene4 = new CinematicScene(1f, 0f, 0f, 300f, 100f, 1f, 1f);
+        scene4.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+        cinematic.addScene(scene4);
+
+        CinematicScene scene5 = new CinematicScene(1f, 0f, 0f, 400f, 100f, 1f, 1f);
+        scene5.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+        cinematic.addScene(scene5);
+
+        CinematicScene scene6 = new CinematicScene(1f, 0f, 0f, 500f, 100f, 1f, 0.8f);
+        scene6.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+        cinematic.addScene(scene6);
+
+        CinematicScene scene7 = new CinematicScene(1f, 0f, 0f, 600f, 100f, 1f, 2f);
+        scene7.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+        cinematic.addScene(scene7);
+
+        CinematicScene scene8 = new CinematicScene(1f, 0f, 0f, 700f, 100f, 0.8f, 1f);
+        scene8.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+        cinematic.addScene(scene8);
+        addActor(cinematic);
+        cinematic.start();
 
         origPos = new Vector3(getCamera().position);
+
+        offScreenDecorator = new ActorDecorator() {
+            @Override
+            public void applyAdjustment(Actor actor, float v) {
+                if(actor.getX() <= -(actor.getWidth())){
+                    ((GenericActor)actor).setIsRemovable(true);
+                }
+            }
+        };
     }
 
     @Override
     public void onCinematicComplete() {
-        EnvironmentManager.initialize(this);
 
         //Initialize Privates
         highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
@@ -209,14 +222,20 @@ public class BubbleRunnerStage extends BaseStage {
         characterSelected = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY, AnimationUtil.CHARACTER_2);
 
         //SET WALL VELOCITY
-        wallAndFloorVelocity = -1f*(getWidth()/2);
+        wallAndFloorVelocity = -1f*(getWidth()/4);
 
-        addActor(new GenericActor(0, 0, 1280, 720, spriteAtlas.findRegion(AtlasUtil.SPRITE_BG), Color.GRAY));
+        floorGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLUE);
+        tunnelGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.RED);
+        bgGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.GREEN);
+
+        addActor(bgGroup);
+        addActor(tunnelGroup);
+        addActor(floorGroup);
+
+        bgGroup.addActor(new GenericActor(0, 0, 1280, 720, spriteAtlas.findRegion(AtlasUtil.SPRITE_BG), Color.GRAY));
 
         //Add Player
         initializePlayer(GameInfo.DEFAULT_MAX_FIELDS);
-
-        initializeEnvironmentGroups();
 
         initializeStartingScene();
 
@@ -234,7 +253,7 @@ public class BubbleRunnerStage extends BaseStage {
         };
 
         //Setup our InputListeners
-        initializeInputListeners();
+        //initializeInputListeners();
 
         //Setup Background Music
         initializeAmbience();
@@ -290,11 +309,7 @@ public class BubbleRunnerStage extends BaseStage {
 
             processResources();
 
-            proccessEnvironmentMovement(delta);
-
-            proccessDestroyedEnvironment();
-
-            generateEnvironment(delta);
+            generateEnvironment();
 
             //Process wall collision events
             processWallCollisions();
@@ -349,17 +364,6 @@ public class BubbleRunnerStage extends BaseStage {
             //We want to keep any "left-over" time so that we don't get weird timing differences
             secondsSinceResourceRegen = secondsSinceResourceRegen - secondsBetweenResourceRegen;
         }
-    }
-    
-    private void proccessEnvironmentMovement(float delta){
-    	// temp parameters
-    	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.FLOOR.toString());
-    	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.OBSTACLES.toString());
-    	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.PILLAR.toString());
-    	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.BACK_FLOOR.toString());
-    	EnvironmentManager.proccessEnvironmentGroupMovement(delta, EnvironmentType.WALL.toString());
-    	
-    	//env.setX(env.getX() + (env.velocity.x * delta));
     }
 
     private void processWallCollisions() {
@@ -439,91 +443,14 @@ public class BubbleRunnerStage extends BaseStage {
         }
     }
     
-    private void generateEnvironment(float delta){
-    	generateLabEnvironment(delta);
-    }
-    
-    private void generateLabEnvironment(float delta){
-    	// gen first environment
-    	if(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()) != null){
-    		Environment prevEnv = EnvironmentManager.getLastEnvironment(EnvironmentType.FLOOR.toString());
-    		float nextEnvLoc = ViewportUtil.VP_WIDTH;
-    		boolean createEnv = false;
-    		
-	    	if(prevEnv != null){
-		    	nextEnvLoc = prevEnv.getX()+prevEnv.getWidth()/2;
-	
-		    	if(nextEnvLoc < ViewportUtil.VP_WIDTH + prevEnv.getWidth()){
-		    		createEnv = true;
-		    	}	
-	    	} else{
-	    		createEnv = true;
-	    	}
-	    	
-	    	if(createEnv){
-		    	Environment floor = new Environment(nextEnvLoc, 10, 757, 208, spriteAtlas.findRegion(AtlasUtil.SPRITE_FLOOR), Color.GRAY);
-		    	floor.setXVelocity(wallAndFloorVelocity);
-		    	EnvironmentManager.addActor(floor, false, EnvironmentType.FLOOR.toString());
-	    	}
-    	} 
-    	
-    	// Pillars  	
-    	if(millisecondsPassed >= nextGeneration){
-	    	Environment pillar = new Environment(ViewportUtil.VP_WIDTH, 280, 473, 559, spriteAtlas.findRegion(AtlasUtil.SPRITE_PILLAR), Color.GRAY);
-	    	pillar.setXVelocity(wallAndFloorVelocity + 100);
-	    	
-	    	EnvironmentManager.addActor(pillar, false, EnvironmentType.PILLAR.toString());
-    	}
-    	
-    	//WALL
-    	if(EnvironmentManager.getEnvironmentGroup(EnvironmentType.WALL.toString()) != null){
-    		Environment prevEnv = EnvironmentManager.getLastEnvironment(EnvironmentType.WALL.toString());
-    		float nextEnvLoc = ViewportUtil.VP_WIDTH;
-    		boolean createEnv = false;
-    		
-	    	if(prevEnv != null){
-		    	nextEnvLoc = prevEnv.getX()+prevEnv.getWidth()/2;
-	
-		    	if(nextEnvLoc < ViewportUtil.VP_WIDTH + prevEnv.getWidth()){
-		    		createEnv = true;
-		    	}	
-	    	} else{
-	    		createEnv = true;
-	    	}
-	    	
-	    	if(createEnv){
-		    	Environment floor = new Environment(nextEnvLoc, 310, 473, 250, spriteAtlas.findRegion(AtlasUtil.SPRITE_WALL), Color.GRAY);
-		    	floor.setXVelocity(wallAndFloorVelocity + 100);
-		    	EnvironmentManager.addActor(floor, false, EnvironmentType.WALL.toString());
-	    	}
-    	}
-    	
-    	//FLOOR1
-    	if(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACK_FLOOR.toString()) != null){
-    		Environment prevEnv = EnvironmentManager.getLastEnvironment(EnvironmentType.BACK_FLOOR.toString());
-    		float nextEnvLoc = ViewportUtil.VP_WIDTH;
-    		boolean createEnv = false;
-    		
-	    	if(prevEnv != null){
-		    	nextEnvLoc = prevEnv.getX()+prevEnv.getWidth()/2;
-	
-		    	if(nextEnvLoc < ViewportUtil.VP_WIDTH + prevEnv.getWidth()){
-		    		createEnv = true;
-		    	}	
-	    	} else{
-	    		createEnv = true;
-	    	}
-	    	
-	    	if(createEnv){
-		    	Environment floor = new Environment(nextEnvLoc, 210, 757, 100, spriteAtlas.findRegion(AtlasUtil.SPRITE_FLOOR), Color.GRAY);
-		    	floor.setXVelocity(wallAndFloorVelocity + 50);
-		    	EnvironmentManager.addActor(floor, false, EnvironmentType.BACK_FLOOR.toString());
-	    	}
-    	}
-    }
-    
-    private void proccessDestroyedEnvironment(){
-    	EnvironmentManager.removeOutOfBoundsEnvironments();
+    private void generateEnvironment(){
+        if(floorGroup.getChildren().size < floorCount){
+            generateNextFloor();
+        }
+
+        if(tunnelGroup.getChildren().size < tunnelCount){
+            generateNextTunnel();
+        }
     }
 
     private void generateObstacles() {
@@ -694,8 +621,12 @@ public class BubbleRunnerStage extends BaseStage {
 
         player.setIsDead(true);
 
-        warningIndicator.remove();
-        warningIndicator = null;
+        if(warningIndicator != null){
+            warningIndicator.remove();
+            warningIndicator = null;
+        }
+
+        setEnvVelocity(0f);
 
         if(!w.equals(collidedWall)){
             zapSound.play(sfxVolume);
@@ -785,9 +716,20 @@ public class BubbleRunnerStage extends BaseStage {
 
             shields.maxFields = info.maxFields;
 
+            setEnvVelocity(wallAndFloorVelocity);
+
             controls.restoreAllResourceLevels();
-            //cinematic.setVisible(true);
             music.play();
+        }
+    }
+
+    private void setEnvVelocity(float velocity){
+        for(Actor a:floorGroup.getChildren()){
+            ((GenericActor)a).velocity.x = velocity;
+        }
+
+        for(Actor a:floorGroup.getChildren()){
+            ((GenericActor)a).velocity.x = velocity;
         }
     }
 
@@ -950,28 +892,60 @@ public class BubbleRunnerStage extends BaseStage {
         addActor(shields);
     }
 
-//    private String getPlayerAnimationName() {
-//        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? AtlasUtil.ANI_VEDA_RUN : AtlasUtil.ANI_FRED_RUN;
-//    }
+    private TextureRegion getFloorTextureRegion(){
 
-    private void initializeEnvironmentGroups(){
-    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.WALL.toString()));
-    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.BACK_FLOOR.toString()));
-    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()));
-    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.PILLAR.toString()));
-    	addActor(EnvironmentManager.getEnvironmentGroup(EnvironmentType.OBSTACLES.toString()));
+        Array<TextureAtlas.AtlasRegion> floors = spriteAtlas.findRegions(AtlasUtil.SPRITE_FLOOR);
+        int segment = rand.nextInt(100);
+        int index = 0;
+        if(segment < 10){
+            index = 1;
+        }else if(segment < 20){
+            index = 2;
+        }
+
+        return floors.get(index);
+    }
+
+    private TextureRegion getTunnelTextureRegion(){
+
+        Array<TextureAtlas.AtlasRegion> tunnels = spriteAtlas.findRegions(AtlasUtil.SPRITE_WALL);
+//        int segment = rand.nextInt(100);
+        int index = 0;
+//        if(segment < 10){
+//            index = 1;
+//        }else if(segment < 20){
+//            index = 2;
+//        }
+
+        return tunnels.get(index);
+    }
+
+    public void generateNextFloor(){
+        int currentFloorCount = floorGroup.getChildren().size;
+        float nextPos = currentFloorCount == 0 ? 0f : floorGroup.getChildren().get(currentFloorCount-1).getRight();
+        GenericActor floor = new GenericActor(nextPos, FLR_Y, FLR_WIDTH, FLR_HEIGHT, getFloorTextureRegion(), Color.GRAY);
+        floor.velocity.x = wallAndFloorVelocity;
+        floor.addDecorator(offScreenDecorator);
+        floorGroup.addActor(floor);
+    }
+
+    public void generateNextTunnel(){
+        int currentTunnelCount = tunnelGroup.getChildren().size;
+        float nextPos = currentTunnelCount == 0 ? 0f : tunnelGroup.getChildren().get(currentTunnelCount-1).getRight();
+        GenericActor tunnel = new GenericActor(nextPos, TNL_Y, TNL_WIDTH, TNL_HEIGHT, getTunnelTextureRegion(), Color.GRAY);
+        tunnel.velocity.x = wallAndFloorVelocity;
+        tunnel.addDecorator(offScreenDecorator);
+        tunnelGroup.addActor(tunnel);
     }
     
     private void initializeStartingScene(){
-    	if(EnvironmentManager.getEnvironmentGroup(EnvironmentType.FLOOR.toString()) != null){
-	    	Environment floor = new Environment(-378, 10, 757, 208, spriteAtlas.findRegion(AtlasUtil.SPRITE_FLOOR), Color.GRAY);
-	    	floor.setXVelocity(wallAndFloorVelocity);
-	    	EnvironmentManager.addActor(floor, false, EnvironmentType.FLOOR.toString());
-	    	
-	    	Environment floor2 = new Environment(-378, 210, 757, 100, spriteAtlas.findRegion(AtlasUtil.SPRITE_FLOOR), Color.GRAY);
-	    	floor2.setXVelocity(wallAndFloorVelocity + 50);
-	    	EnvironmentManager.addActor(floor2, false, EnvironmentType.BACK_FLOOR.toString());
-    	}
+        for(int i=0;i<floorCount;i++){
+            generateNextFloor();
+        }
+
+        for(int i=0;i<tunnelCount;i++){
+            generateNextTunnel();
+        }
     }
 
     private void initializeHUD() {
@@ -979,39 +953,49 @@ public class BubbleRunnerStage extends BaseStage {
         float infoY = ViewportUtil.VP_HEIGHT - HUD_HEIGHT;
         float infoWidth = getWidth();
         float infoHeight = HUD_HEIGHT;
-        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT), controls); //COURIER_FONT_32, AssetsUtil.BITMAP_FONT), controls);
+        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT), controls);
         addActor(info);
     }
-    
-    private void initializeInputListeners() {
-        InputListener createAndLeaveListener = new InputListener() {
-            @Override
-            public boolean keyDown(InputEvent event, int keycode) {
-                if (Input.Keys.A == keycode || Input.Keys.LEFT == keycode) {  //Or Left
-                    addLightningField();
-                } else if (Input.Keys.S == keycode || Input.Keys.DOWN == keycode) { //Or Down
-                    addPlasmaField();
-                } else if (Input.Keys.D == keycode || Input.Keys.RIGHT == keycode) {  //Or Right
-                    addLaserField();
-                } else if (Input.Keys.TAB == keycode) {
-                    KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
-                } else if (Input.Keys.SPACE == keycode) {
+
+    @Override
+    public boolean keyDown(int keyCode) {
+
+        if(isDead){
+            if(Input.Keys.LEFT == keyCode){
+                deathOverlay.markDismissed();
+            }else if(Input.Keys.RIGHT == keyCode){
+                deathOverlay.markHome();
+            }else if(Input.Keys.ENTER == keyCode || Input.Keys.SPACE == keyCode){
+                if(deathOverlay.isDismissChecked()){
                     hideCinematic();
                     resetGame();
-                } else if (Input.Keys.ESCAPE == keycode) {
+                }else if(deathOverlay.isHomeChecked()){
                     gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
                 }
-                return super.keyDown(event, keycode);
             }
+        }
 
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                hideCinematic();
-                return super.touchDown(event, x, y, pointer, button);
-            }
-        };
+        if (Input.Keys.A == keyCode || Input.Keys.LEFT == keyCode) {  //Or Left
+            addLightningField();
+        } else if (Input.Keys.S == keyCode || Input.Keys.DOWN == keyCode) { //Or Down
+            addPlasmaField();
+        } else if (Input.Keys.D == keyCode || Input.Keys.RIGHT == keyCode) {  //Or Right
+            addLaserField();
+        } else if (Input.Keys.TAB == keyCode) {
+            KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
+        } else if (Input.Keys.SPACE == keyCode) {
+            hideCinematic();
+            resetGame();
+        } else if (Input.Keys.ESCAPE == keyCode) {
+            gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
+        }
+        return super.keyDown(keyCode);
+    }
 
-        this.addListener(createAndLeaveListener);
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        hideCinematic();
+        return super.touchDown(screenX, screenY, pointer, button);
     }
 
     private void hideCinematic() {
@@ -1028,17 +1012,17 @@ public class BubbleRunnerStage extends BaseStage {
                 sUp, sDown, sChecked,
                 dUp, dDown, dChecked;
 
-        aUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_UP));//new TextureRegion(assetManager.get(AssetsUtil.LIGHT_UP, AssetsUtil.TEXTURE)));
-        aDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_DOWN));//new TextureRegion(assetManager.get(AssetsUtil.LIGHT_DOWN, AssetsUtil.TEXTURE)));
-        aChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_CHECKED));//new TextureRegion(assetManager.get(AssetsUtil.LIGHT_CHECKED, AssetsUtil.TEXTURE)));
+        aUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_UP));
+        aDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_DOWN));
+        aChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_CHECKED));
 
-        sUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_UP));//new TextureRegion(assetManager.get(AssetsUtil.PLASMA_UP, AssetsUtil.TEXTURE)));
-        sDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_DOWN));//new TextureRegion(assetManager.get(AssetsUtil.PLASMA_DOWN, AssetsUtil.TEXTURE)));
-        sChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_CHECKED));//new TextureRegion(assetManager.get(AssetsUtil.PLASMA_CHECKED, AssetsUtil.TEXTURE)));
+        sUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_UP));
+        sDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_DOWN));
+        sChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_CHECKED));
 
-        dUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_UP));//new TextureRegion(assetManager.get(AssetsUtil.LASER_UP, AssetsUtil.TEXTURE)));
-        dDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_DOWN));//new TextureRegion(assetManager.get(AssetsUtil.LASER_DOWN, AssetsUtil.TEXTURE)));
-        dChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_CHECKED));//new TextureRegion(assetManager.get(AssetsUtil.LASER_CHECKED, AssetsUtil.TEXTURE)));
+        dUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_UP));
+        dDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_DOWN));
+        dChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_CHECKED));
 
         controls.addButton(aUp, aDown, aChecked, new ClickListener(){
             @Override
@@ -1064,12 +1048,11 @@ public class BubbleRunnerStage extends BaseStage {
             }
         }, true, ForceFieldType.LASER);
 
-        controls.setEnergyBar(spriteAtlas.findRegion(AtlasUtil.SPRITE_ENERGY_BAR));//assetManager.get(AssetsUtil.ENERGY_BAR, AssetsUtil.TEXTURE));
+        controls.setEnergyBar(spriteAtlas.findRegion(AtlasUtil.SPRITE_ENERGY_BAR));
         addActor(controls);
     }
 
     public void resume(){
-        Gdx.app.log("RESUMING", "APPLICATION RESUMING");
         initializeVolumes();
         if(music != null){
             music.setVolume(bgVolume);

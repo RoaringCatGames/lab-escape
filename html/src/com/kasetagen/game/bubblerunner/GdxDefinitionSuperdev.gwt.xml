@@ -3,7 +3,7 @@
 <module rename-to="html">
 	<inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
 
-    <inherits name='Kasetengine' />
+    <inherits name='Kitten2d' />
     <inherits name='BubbleRunnerGame' />
 
 	<entry-point class='com.kasetagen.game.bubblerunner.client.HtmlLauncher' />

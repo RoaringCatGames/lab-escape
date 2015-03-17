@@ -65,9 +65,11 @@ public class Overlay extends GenericGroup {
             style.font = mainFont;
             style.fontColor =  Color.YELLOW;
             style.overFontColor = Color.RED;
+            style.checkedFontColor = Color.RED;
             style.downFontColor = Color.GRAY;
 
             dismissButton = new TextButton("Replay", style);
+            dismissButton.setChecked(true);
             homeButton = new TextButton("Back to Menu", style);
 
 
@@ -83,6 +85,24 @@ public class Overlay extends GenericGroup {
             homeButton.setVisible(false);
             addActor(homeButton);
         }
+    }
+
+    public boolean isDismissChecked(){
+        return dismissButton.isChecked();
+    }
+
+    public boolean isHomeChecked(){
+        return homeButton.isChecked();
+    }
+
+    public void markDismissed(){
+        dismissButton.setChecked(true);
+        homeButton.setChecked(false);
+    }
+
+    public void markHome(){
+        homeButton.setChecked(true);
+        dismissButton.setChecked(false);
     }
 
     public void setMainText(String text){

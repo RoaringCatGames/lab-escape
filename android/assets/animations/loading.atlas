@@ -1,6 +1,6 @@
 
 loading.png
-size: 3846,2888
+size: 4096,4096
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none

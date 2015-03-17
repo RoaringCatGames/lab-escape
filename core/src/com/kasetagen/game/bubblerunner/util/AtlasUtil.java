@@ -37,7 +37,7 @@ public class AtlasUtil {
     //----Sprites
     //-----------
     public static final String SPRITE_BG = "env/bg";
-    public static final String SPRITE_FLOOR = "env/floor";
+    public static final String SPRITE_FLOOR = "env/Floor";
     public static final String SPRITE_WALL = "env/wall";
     public static final String SPRITE_PILLAR = "env/pillar";
 

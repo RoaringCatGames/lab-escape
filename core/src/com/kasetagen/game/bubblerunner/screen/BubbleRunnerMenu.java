@@ -26,7 +26,6 @@ import com.kasetagen.game.bubblerunner.util.AssetsUtil;
  * User: barry
  * Date: 5/25/14
  * Time: 10:59 PM
- * To change this template use File | Settings | File Templates.
  */
 public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
@@ -79,21 +78,22 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         style.font = gameProcessor.getAssetManager().get(AssetsUtil.REXLIA_48, AssetsUtil.BITMAP_FONT);
         style.fontColor =  Color.YELLOW;
         style.overFontColor = Color.RED;
+        style.checkedFontColor = Color.RED;
         style.downFontColor = Color.GRAY;
 
 
 
-        startGameButton = new TextButton("Press A to Start!", style);
+        startGameButton = new TextButton("Escape!", style);
         startGameButton.addListener(listener);
         startGameButton.setPosition(buttonX, buttonY);
-
+        startGameButton.setChecked(true);
         stage.addActor(startGameButton);
 
         optionsButton = new TextButton("Options", style);
         optionsButton.setPosition(buttonX, buttonY - (startGameButton.getHeight()*1.25f));
         optionsButton.addListener(listener);
 
-        //stage.addActor(optionsButton);
+        stage.addActor(optionsButton);
     }
 
     @Override
@@ -141,9 +141,23 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 //
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode == Input.Keys.SPACE){
-            bgMusic.stop();
-            gameProcessor.changeToScreen(BubbleRunnerGame.RUNNER);
+        if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER){
+            if(startGameButton.isChecked()){
+                bgMusic.stop();
+                gameProcessor.changeToScreen(BubbleRunnerGame.RUNNER);
+            }else if(optionsButton.isChecked()){
+                gameProcessor.changeToScreen(BubbleRunnerGame.OPTIONS);
+            }
+        }
+
+        if(keycode == Input.Keys.DOWN){
+            optionsButton.setChecked(true);
+            startGameButton.setChecked(false);
+        }
+
+        if(keycode == Input.Keys.UP){
+            startGameButton.setChecked(true);
+            optionsButton.setChecked(false);
         }
 
         return false;

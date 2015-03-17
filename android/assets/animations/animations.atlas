@@ -1,6 +1,6 @@
 
 animations.png
-size: 4046,3610
+size: 4096,4096
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -104,7 +104,7 @@ screens/Title
   index: 6
 
 animations2.png
-size: 4006,3610
+size: 4096,4096
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -208,7 +208,7 @@ walls/obstacle_red
   index: -1
 
 animations3.png
-size: 4014,3610
+size: 4096,4096
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -333,7 +333,7 @@ player/Female_Wall
   index: 1
 
 animations4.png
-size: 4014,3610
+size: 4096,4096
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -458,7 +458,7 @@ player/Male_Run
   index: 1
 
 animations5.png
-size: 4006,3610
+size: 4096,4096
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -576,7 +576,7 @@ player/Male_Wall
   index: 3
 
 animations6.png
-size: 3610,3610
+size: 4096,4096
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -621,14 +621,14 @@ player/Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 7
+  index: 4
 player/Shock
   rotate: false
   xy: 722, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 4
+  index: 7
 player/Shock
   rotate: false
   xy: 1444, 2888
@@ -642,14 +642,14 @@ player/Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 8
+  index: 5
 player/Shock
   rotate: false
   xy: 1444, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
+  index: 8
 player/Shock
   rotate: false
   xy: 0, 722
@@ -663,14 +663,14 @@ player/Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 9
+  index: 6
 player/Shock
   rotate: false
   xy: 0, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 6
+  index: 9
 player/Shock
   rotate: false
   xy: 722, 1444
