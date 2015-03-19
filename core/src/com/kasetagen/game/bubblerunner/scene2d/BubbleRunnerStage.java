@@ -8,6 +8,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -146,12 +147,13 @@ public class BubbleRunnerStage extends BaseStage {
 
     private Random rand = new Random(System.currentTimeMillis());
 
-    private float FLR_WIDTH = 417f/2;
-    private float FLR_HEIGHT = 415f/2;
+    private float FLR_WIDTH = 450f/2f;
+    private float FLR_HEIGHT = 450f/2f;
+    private float FLR_X_OFFSET = 0f;//-152f/2f;
     private float FLR_Y = 0f;
-    private int floorCount = ((int)Math.ceil(ViewportUtil.VP_WIDTH/FLR_WIDTH)) + 1;
-    private float TNL_WIDTH = 947f/2;
-    private float TNL_HEIGHT = 500f/2;
+    private int floorCount = ((int)Math.ceil(ViewportUtil.VP_WIDTH/(FLR_WIDTH+FLR_X_OFFSET))) + 1;
+    private float TNL_WIDTH = 1024f/2;
+    private float TNL_HEIGHT = 1020f/2;
     private float TNL_Y = FLR_HEIGHT;
     private int tunnelCount = ((int)Math.ceil(ViewportUtil.VP_WIDTH/TNL_WIDTH) + 1);
 
@@ -254,7 +256,7 @@ public class BubbleRunnerStage extends BaseStage {
         characterSelected = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY, AnimationUtil.CHARACTER_2);
 
         //SET WALL VELOCITY
-        wallAndFloorVelocity = -1f*(getWidth()/4);
+        wallAndFloorVelocity = -1f*(getWidth()/2);
 
         floorGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLUE);
         tunnelGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.RED);
@@ -950,14 +952,20 @@ public class BubbleRunnerStage extends BaseStage {
     private TextureRegion getTunnelTextureRegion(){
 
         Array<TextureAtlas.AtlasRegion> tunnels = spriteAtlas.findRegions(AtlasUtil.SPRITE_WALL);
+        int segment = rand.nextInt(100);
         int index = 0;
+        if(segment < 20){
+            index = 1;
+        }else if(segment < 40){
+            index = 2;
+        }
         return tunnels.get(index);
     }
 
     public void generateNextFloor(){
         int currentFloorCount = floorGroup.getChildren().size;
         float nextPos = currentFloorCount == 0 ? 0f : floorGroup.getChildren().get(currentFloorCount-1).getRight();
-        GenericActor floor = new GenericActor(nextPos, FLR_Y, FLR_WIDTH, FLR_HEIGHT, getFloorTextureRegion(), Color.GRAY);
+        GenericActor floor = new GenericActor(nextPos + FLR_X_OFFSET, FLR_Y, FLR_WIDTH, FLR_HEIGHT, getFloorTextureRegion(), Color.GRAY);
         floor.velocity.x = wallAndFloorVelocity;
         floor.addDecorator(offScreenDecorator);
         floorGroup.addActor(floor);
@@ -1018,6 +1026,9 @@ public class BubbleRunnerStage extends BaseStage {
         } else if (Input.Keys.TAB == keyCode) {
             KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
         } else if (Input.Keys.SPACE == keyCode) {
+            if(!cinematicComplete){
+                //cinematic.complete();
+            }
             hideCinematic();
             resetGame();
         } else if (Input.Keys.ESCAPE == keyCode) {

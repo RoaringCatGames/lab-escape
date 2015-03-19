@@ -642,14 +642,14 @@ player/Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
+  index: 8
 player/Shock
   rotate: false
   xy: 1444, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 8
+  index: 5
 player/Shock
   rotate: false
   xy: 0, 722
@@ -663,14 +663,14 @@ player/Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 6
+  index: 9
 player/Shock
   rotate: false
   xy: 0, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 9
+  index: 6
 player/Shock
   rotate: false
   xy: 722, 1444

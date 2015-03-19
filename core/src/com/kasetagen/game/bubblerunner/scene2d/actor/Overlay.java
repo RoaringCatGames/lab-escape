@@ -132,7 +132,7 @@ public class Overlay extends GenericGroup {
         debugRenderer.setProjectionMatrix(getStage().getCamera().combined);
         debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
         //Draw the red origin marker
-        debugRenderer.setColor(getColor());
+        //debugRenderer.setColor(getColor());
         Color c = getColor();
         debugRenderer.setColor(c.r, c.g, c.b, bgOpacity);
         debugRenderer.rect(getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
