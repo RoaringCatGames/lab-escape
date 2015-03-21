@@ -1,5 +1,6 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -155,6 +156,7 @@ public class Wall{
     }
 
     public void setIsRemovable(boolean isRemovable){
+        Gdx.app.log("WALL", "Setting Removable: " + isRemovable);
         if(leftWall != null){
             leftWall.setIsRemovable(isRemovable);
             leftWall = null;

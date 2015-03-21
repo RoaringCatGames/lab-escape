@@ -516,7 +516,7 @@ public class BubbleRunnerStage extends BaseStage {
                 processDeath(w);
             }
 
-            if(w.getX() <= (0f-w.getWidth()/2)){
+            if(w.getX() <= (0f-w.getWidth())){
                 w.setIsRemovable(true);
             }
         }
@@ -539,7 +539,7 @@ public class BubbleRunnerStage extends BaseStage {
             if(warningIndicator != null){
                 warningIndicator.remove();
             }
-            warningIndicator = new WarningIndicator(warningIndicatorDimensions[0]+ 10f*walls.size,
+            warningIndicator = new WarningIndicator(warningIndicatorDimensions[0],
                                                        warningIndicatorDimensions[1],
                                                        warningIndicatorDimensions[2],
                                                        warningIndicatorDimensions[3],
@@ -553,7 +553,7 @@ public class BubbleRunnerStage extends BaseStage {
                 ForceFieldType fft = wp.forceFields.get(i);
 
                 //TODO: REMOVE
-                fft = ForceFieldType.PLASMA;
+                //fft = ForceFieldType.PLASMA;
 
                 //FORMULA:  xPos = startX + (N * (wallWidth + wallPadding)
                 //          - Where N = NumberOfWalls-1
@@ -565,42 +565,38 @@ public class BubbleRunnerStage extends BaseStage {
                 float keyFrame = rand.nextInt(5000) * WALL_CYCLE_RATE;
                 Animation leftAni = new Animation(WALL_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true, false)));
                 AnimatedActor leftWall = new AnimatedActor(x + (i*(w + wp.wallPadding)), y, w/2, h, leftAni,keyFrame);
+
                 Animation rightAni = new Animation(WALL_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, false, false)));
                 AnimatedActor rightWall = new AnimatedActor(leftWall.getRight(), y, w/2, h, rightAni, keyFrame);
 
                 GenericActor collider = new GenericActor(leftWall.getRight()-(wallColliderDimensions[0]/2), y, wallColliderDimensions[0], wallColliderDimensions[1], null, Color.BLACK);
-                Wall wall = new Wall(leftWall, rightWall, collider, fft);
-
-//                Wall w = new Wall(wallDimensions[0] + (i*(wallDimensions[2] + wp.wallPadding)),
-//                        wallDimensions[1],
-//                        wallDimensions[2],
-//                        wallDimensions[3],
-//                        wallAni,
-//                        0f,
-//                        fft);
-                Animation leftBreakAni = new Animation(WALL_BREAK_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true, true)));
-                Animation rightBreakAni = new Animation(WALL_BREAK_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, false, true)));
-                String name = getFlourishAnimationNameForForceFieldType(fft);
-
                 AnimatedActor flourish = new AnimatedActor(collider.getRight(), y, SHATTER_WIDTH, SHATTER_HEIGHT, null, 0f);
-                wall.addFlourishing(flourish);
+
+
+                leftWall.addDecorator(offScreenDecorator);
+                leftWall.addDecorator(offScreenDecorator);
+                flourish.addDecorator(offScreenDecorator);
+                collider.addDecorator(offScreenDecorator);
+
                 leftWallGroup.addActor(leftWall);
                 //Put the flourish behind the wall
                 rightWallGroup.addActor(flourish);
                 rightWallGroup.addActor(rightWall);
                 addActor(collider);
 
+                Animation leftBreakAni = new Animation(WALL_BREAK_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true, true)));
+                Animation rightBreakAni = new Animation(WALL_BREAK_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, false, true)));
+                String name = getFlourishAnimationNameForForceFieldType(fft);
                 Animation flourishAni = null;
                 if(name != null){
                     flourishAni = new Animation(WALL_BREAK_CYCLE_RATE, aniAtlas.findRegions(getFlourishAnimationNameForForceFieldType(fft)));
                 }
+                Wall wall = new Wall(leftWall, rightWall, collider, fft);
+                wall.addFlourishing(flourish);
                 wall.addStateAnimation("BREAKING", leftBreakAni, rightBreakAni, flourishAni);
                 wall.setXVelocity(wallAndFloorVelocity);
-                //w.addDecorator(wallColliderDecorator);
-                //w.setDisposer(wallDisposer);
 
                 walls.add(wall);
-                //addActor(w);
             }
 
             nextGeneration += millisBetweenWalls;
