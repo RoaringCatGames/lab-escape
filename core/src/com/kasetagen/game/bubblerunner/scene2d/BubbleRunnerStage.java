@@ -8,7 +8,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -16,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -59,7 +59,6 @@ public class BubbleRunnerStage extends BaseStage {
 //    private static final int[] COMBO_THRESHOLDS = new int[] {5, 10, 12, 15, 18, 20, 21};
 
     private static final float HUD_HEIGHT = 40f;
-    private static final float FLOOR_HEIGHT = 160f;
 
     private static final int SECONDS_BETWEEN_DIFF_SHIFT = 20;
     private static final long BASE_TIME_BETWEEN_WALLS = 4000L;
@@ -67,6 +66,8 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float TIME_DECREASE = 100f;
     private static final float MIN_TIME_BETWEEN_WALLS = 300f;
 
+    private static final float WALL_CYCLE_RATE = 1f/2f;
+    private static final float WALL_BREAK_CYCLE_RATE = 1f/10f;
 
     private static final float COMBO_BASE_OSCILLATION_RATE = 20f;
     private static final float COMBO_OSCILATION_INCREASE_RATE = 10f;
@@ -78,8 +79,12 @@ public class BubbleRunnerStage extends BaseStage {
     private static String characterSelected = AnimationUtil.CHARACTER_2;
     private static float[] playerDimensions = new float[] { 100f, 120f, 360f, 360f };
 
-    private static float[] wallDimensions = new float[] {ViewportUtil.VP_WIDTH+FLOOR_HEIGHT,
-                                                         FLOOR_HEIGHT, 40f, ViewportUtil.VP_HEIGHT-FLOOR_HEIGHT };
+    private static float WALL_START_X = ViewportUtil.VP_WIDTH + 160f;
+    private static float WALL_Y = 0f;
+    private static float WALL_WIDTH = 525f/2f;
+    private static float WALL_HEIGHT = 1440f/2f;
+    private static float[] wallDimensions = new float[] { WALL_START_X, WALL_Y, WALL_WIDTH, WALL_HEIGHT };
+    private static float[] wallColliderDimensions = new float[] { 40f, ViewportUtil.VP_HEIGHT };
     private static float[] warningIndicatorDimensions = new float[] {ViewportUtil.VP_WIDTH/2 - (INDICATOR_WIDTH/2), ViewportUtil.VP_HEIGHT/2-(INDICATOR_HEIGHT/2),
                                                                      INDICATOR_WIDTH, INDICATOR_HEIGHT};
 
@@ -147,17 +152,18 @@ public class BubbleRunnerStage extends BaseStage {
 
     private Random rand = new Random(System.currentTimeMillis());
 
-    private float FLR_WIDTH = 450f/2f;
-    private float FLR_HEIGHT = 450f/2f;
-    private float FLR_X_OFFSET = 0f;//-152f/2f;
-    private float FLR_Y = 0f;
-    private int floorCount = ((int)Math.ceil(ViewportUtil.VP_WIDTH/(FLR_WIDTH+FLR_X_OFFSET))) + 1;
+    private float FLOOR_WIDTH = 420f/2f;
+    private float FLOOR_HEIGHT = 420f/2f;
+    private float FLOOR_X_OFFSET = 0f;//-152f/2f;
+    private float FLOOR_Y = 0f;
+    private int floorCount = ((int)Math.ceil(ViewportUtil.VP_WIDTH/(FLOOR_WIDTH + FLOOR_X_OFFSET))) + 1;
     private float TNL_WIDTH = 1024f/2;
     private float TNL_HEIGHT = 1020f/2;
-    private float TNL_Y = FLR_HEIGHT;
+    private float TNL_Y = FLOOR_HEIGHT;
     private int tunnelCount = ((int)Math.ceil(ViewportUtil.VP_WIDTH/TNL_WIDTH) + 1);
 
     private ActorDecorator offScreenDecorator;
+    private ActorDecorator wallColliderDecorator;
 
     public BubbleRunnerStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -244,6 +250,17 @@ public class BubbleRunnerStage extends BaseStage {
                 }
             }
         };
+
+        wallColliderDecorator = new ActorDecorator() {
+            @Override
+            public void applyAdjustment(Actor actor, float v) {
+                if(actor instanceof Wall){
+                    float midX = actor.getX() + actor.getOriginX();
+                    float targetX = midX - wallColliderDimensions[0]/2f;
+                    ((GenericActor)actor).collider.set(targetX, actor.getY(), wallColliderDimensions[0], wallColliderDimensions[1]);
+                }
+            }
+        };
     }
 
     @Override
@@ -266,7 +283,8 @@ public class BubbleRunnerStage extends BaseStage {
         addActor(tunnelGroup);
         addActor(floorGroup);
 
-        bgGroup.addActor(new GenericActor(0, 0, 1280, 720, spriteAtlas.findRegion(AtlasUtil.SPRITE_BG), Color.GRAY));
+        //TODO: Put bg sky?
+        //bgGroup.addActor(new GenericActor(0, 0, 1280, 720, spriteAtlas.findRegion(AtlasUtil.SPRITE_BG), Color.GRAY));
 
         //Add Player
         initializePlayer(GameInfo.DEFAULT_MAX_FIELDS);
@@ -285,9 +303,6 @@ public class BubbleRunnerStage extends BaseStage {
                 }
             }
         };
-
-        //Setup our InputListeners
-        //initializeInputListeners();
 
         //Setup Background Music
         initializeAmbience();
@@ -359,7 +374,7 @@ public class BubbleRunnerStage extends BaseStage {
             //Adjust Resource Levels
 
             int index = getActors().size - 1;
-            //cinematic.setZIndex(index--);
+            cinematic.setZIndex(index--);
             deathOverlay.setZIndex(index--);
             controls.setZIndex(index--);
             comboLabel.setZIndex(index--);
@@ -404,13 +419,16 @@ public class BubbleRunnerStage extends BaseStage {
         ForceField outerField = shields.getOuterForceField();
         for(Wall w:walls){
 
-            //Check for Collisions and apply player/wall information
-            if(outerField != null && w.collider.overlaps(outerField.collider)){
+            if("BREAKING".equals(w.getCurrentState())){
+                //Do nothing, let it slide around us
+            }else if(outerField != null && w.collider.overlaps(outerField.collider)){
 
                 //WHEN OUTERFIELD == WALL we Destroy Both
                 //  and increment the score
                 if(w.forceFieldType == outerField.forceFieldType){
-                    w.setIsRemovable(true);
+                    //w.setIsRemovable(true);
+                    w.setState("BREAKING", true);
+                    w.setIsLooping(false);
                     info.score += getWallPointValue(1);
 
                     //Increment our Combo counter
@@ -501,22 +519,27 @@ public class BubbleRunnerStage extends BaseStage {
                                                        wp,
                                                        Color.RED,
                                                        assetManager.get(AssetsUtil.WARNING_INDICATOR, AssetsUtil.TEXTURE));
-            //warningIndicator.lifetime = (millisBetweenWalls/1000)/2;
+//            warningIndicator.addAction(Actions.fadeOut(millisBetweenWalls));
             addActor(warningIndicator);
 
             for(int i=0;i<wp.wallCount;i++){
                 ForceFieldType fft = wp.forceFields.get(i);
                 //FORMULA:  xPos = startX + (N * (wallWidth + wallPadding)
                 //          - Where N = NumberOfWalls-1
+                Animation wallAni = new Animation(WALL_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, false)));
+                Animation wallBreaking = new Animation(WALL_BREAK_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true)));
                 Wall w = new Wall(wallDimensions[0] + (i*(wallDimensions[2] + wp.wallPadding)),
                         wallDimensions[1],
                         wallDimensions[2],
                         wallDimensions[3],
-                        fft,
-                        aniAtlas,
-                        getAnimationNameForForceFieldType(fft));
+                        wallAni,
+                        0f,
+                        fft);
+                w.addStateAnimation("BREAKING", wallBreaking);
                 w.setXVelocity(wallAndFloorVelocity);
+                w.addDecorator(wallColliderDecorator);
                 w.setDisposer(wallDisposer);
+
                 walls.add(w);
                 addActor(w);
             }
@@ -525,14 +548,14 @@ public class BubbleRunnerStage extends BaseStage {
         }
     }
 
-    private String getAnimationNameForForceFieldType(ForceFieldType fft){
+    private String getAnimationNameForForceFieldType(ForceFieldType fft, boolean isBreaking){
         String name;
         switch(fft){
             case LIGHTNING:
-                name = AtlasUtil.ANI_WALL_LIGHTNING;
+                name = isBreaking ? AtlasUtil.ANI_WALL_LIGHTNING : AtlasUtil.ANI_WALL_LIGHTNING;
                 break;
             case PLASMA:
-                name = AtlasUtil.ANI_WALL_PLASMA;
+                name = isBreaking ? AtlasUtil.ANI_WALL_PLASMA_BR : AtlasUtil.ANI_WALL_PLASMA;
                 break;
             case LASER:
                 name = AtlasUtil.ANI_WALL_LASER;
@@ -965,7 +988,7 @@ public class BubbleRunnerStage extends BaseStage {
     public void generateNextFloor(){
         int currentFloorCount = floorGroup.getChildren().size;
         float nextPos = currentFloorCount == 0 ? 0f : floorGroup.getChildren().get(currentFloorCount-1).getRight();
-        GenericActor floor = new GenericActor(nextPos + FLR_X_OFFSET, FLR_Y, FLR_WIDTH, FLR_HEIGHT, getFloorTextureRegion(), Color.GRAY);
+        GenericActor floor = new GenericActor(nextPos + FLOOR_X_OFFSET, FLOOR_Y, FLOOR_WIDTH, FLOOR_HEIGHT, getFloorTextureRegion(), Color.GRAY);
         floor.velocity.x = wallAndFloorVelocity;
         floor.addDecorator(offScreenDecorator);
         floorGroup.addActor(floor);
