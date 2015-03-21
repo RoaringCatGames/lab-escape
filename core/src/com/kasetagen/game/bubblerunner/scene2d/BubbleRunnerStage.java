@@ -27,10 +27,7 @@ import com.kasetagen.engine.gdx.scenes.scene2d.ActorDecorator;
 import com.kasetagen.engine.gdx.scenes.scene2d.IActorDisposer;
 import com.kasetagen.engine.gdx.scenes.scene2d.ICameraModifier;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
-import com.kasetagen.engine.gdx.scenes.scene2d.actors.Cinematic;
-import com.kasetagen.engine.gdx.scenes.scene2d.actors.CinematicScene;
-import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
-import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.*;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
@@ -39,6 +36,7 @@ import com.kasetagen.game.bubblerunner.data.WallPattern;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
 import com.kasetagen.game.bubblerunner.util.*;
 
+import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -88,6 +86,9 @@ public class BubbleRunnerStage extends BaseStage {
     private static float[] warningIndicatorDimensions = new float[] {ViewportUtil.VP_WIDTH/2 - (INDICATOR_WIDTH/2), ViewportUtil.VP_HEIGHT/2-(INDICATOR_HEIGHT/2),
                                                                      INDICATOR_WIDTH, INDICATOR_HEIGHT};
 
+    private static float SHATTER_WIDTH = 1361f/2f;
+    private static float SHATTER_HEIGHT = 1224f/2f;
+
     private static ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.LIGHTNING, ForceFieldType.PLASMA, ForceFieldType.LASER};
 
     private static Vector3 origPos;
@@ -108,6 +109,7 @@ public class BubbleRunnerStage extends BaseStage {
     private int highestCombo = 0;
     private ComboLevels currentComboLevel = ComboLevels.NONE;
     private Label comboLabel;
+    private DecoratedUIContainer comboContainer;
     private OscillatingDecorator comboDecorator;
 
     //Obstacle Generation Values
@@ -149,6 +151,8 @@ public class BubbleRunnerStage extends BaseStage {
     private GenericGroup floorGroup;
     private GenericGroup tunnelGroup;
     private GenericGroup bgGroup;
+    private GenericGroup leftWallGroup;
+    private GenericGroup rightWallGroup;
 
     private Random rand = new Random(System.currentTimeMillis());
 
@@ -163,7 +167,7 @@ public class BubbleRunnerStage extends BaseStage {
     private int tunnelCount = ((int)Math.ceil(ViewportUtil.VP_WIDTH/TNL_WIDTH) + 1);
 
     private ActorDecorator offScreenDecorator;
-    private ActorDecorator wallColliderDecorator;
+//    private ActorDecorator wallColliderDecorator;
 
     public BubbleRunnerStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -175,68 +179,68 @@ public class BubbleRunnerStage extends BaseStage {
         Animation introAnimation = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_INTRO));
         cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);
 
-        float duration = 0.3f;
+        float duration = 3f;
         float startX = 0f;
-        float startY = 0f;
-        float endX = 50f;
-        float endY = 30f;
+        float startY = -720f;
+        float endX = 0f;
+        float endY = 720f;
         float startZoom = 1f;
         float endZoom = 1f;
         CinematicScene scene1 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
         scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         cinematic.addScene(scene1);
 
-        duration = 0.5f;
-        endX = -100f;
-        endY = 100f;
-        endZoom = 1.25f;
-        CinematicScene scene2 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-        scene2.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-        cinematic.addScene(scene2);
-
-        duration = 2f;
-        endX = 200f;
-        endY = 100f;
-        endZoom = 0.5f;
-        CinematicScene scene3 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-        scene3.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-        cinematic.addScene(scene3);
-
-        duration = 1f;
-        endX = 300f;
-        endZoom = 1f;
-        CinematicScene scene4 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-        scene4.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-        cinematic.addScene(scene4);
-
-        endX = 400f;
-        CinematicScene scene5 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-        scene5.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-        cinematic.addScene(scene5);
-
-        endX = 500f;
-        endY = -100f;
-        startZoom = 0.5f;
-        endZoom = 0.8f;
-        CinematicScene scene6 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-        scene6.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-        cinematic.addScene(scene6);
-
-        endX = 600f;
-        endY = 100f;
-        startZoom = 1f;
-        endZoom = 2f;
-        CinematicScene scene7 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-        scene7.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-        cinematic.addScene(scene7);
-
-        endX = 700f;
-        endY = -200f;
-        startZoom = 0.8f;
-        endZoom = 1f;
-        CinematicScene scene8 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-        scene8.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-        cinematic.addScene(scene8);
+//        duration = 0.5f;
+//        endX = -100f;
+//        endY = 100f;
+//        endZoom = 1.25f;
+//        CinematicScene scene2 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
+//        scene2.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+//        cinematic.addScene(scene2);
+//
+//        duration = 2f;
+//        endX = 200f;
+//        endY = 100f;
+//        endZoom = 0.5f;
+//        CinematicScene scene3 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
+//        scene3.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+//        cinematic.addScene(scene3);
+//
+//        duration = 1f;
+//        endX = 300f;
+//        endZoom = 1f;
+//        CinematicScene scene4 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
+//        scene4.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+//        cinematic.addScene(scene4);
+//
+//        endX = 400f;
+//        CinematicScene scene5 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
+//        scene5.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+//        cinematic.addScene(scene5);
+//
+//        endX = 500f;
+//        endY = -100f;
+//        startZoom = 0.5f;
+//        endZoom = 0.8f;
+//        CinematicScene scene6 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
+//        scene6.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+//        cinematic.addScene(scene6);
+//
+//        endX = 600f;
+//        endY = 100f;
+//        startZoom = 1f;
+//        endZoom = 2f;
+//        CinematicScene scene7 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
+//        scene7.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+//        cinematic.addScene(scene7);
+//
+//        endX = 700f;
+//        endY = -200f;
+//        startZoom = 0.8f;
+//        endZoom = 1f;
+//        CinematicScene scene8 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
+//        scene8.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
+//        cinematic.addScene(scene8);
         addActor(cinematic);
         cinematic.start();
 
@@ -251,16 +255,16 @@ public class BubbleRunnerStage extends BaseStage {
             }
         };
 
-        wallColliderDecorator = new ActorDecorator() {
-            @Override
-            public void applyAdjustment(Actor actor, float v) {
-                if(actor instanceof Wall){
-                    float midX = actor.getX() + actor.getOriginX();
-                    float targetX = midX - wallColliderDimensions[0]/2f;
-                    ((GenericActor)actor).collider.set(targetX, actor.getY(), wallColliderDimensions[0], wallColliderDimensions[1]);
-                }
-            }
-        };
+//        wallColliderDecorator = new ActorDecorator() {
+//            @Override
+//            public void applyAdjustment(Actor actor, float v) {
+//                if(actor instanceof Wall){
+//                    float midX = actor.getX() + actor.getOriginX();
+//                    float targetX = midX - wallColliderDimensions[0]/2f;
+//                    ((GenericActor)actor).collider.set(targetX, actor.getY(), wallColliderDimensions[0], wallColliderDimensions[1]);
+//                }
+//            }
+//        };
     }
 
     @Override
@@ -278,16 +282,20 @@ public class BubbleRunnerStage extends BaseStage {
         floorGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLUE);
         tunnelGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.RED);
         bgGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.GREEN);
+        leftWallGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.GREEN);
 
         addActor(bgGroup);
         addActor(tunnelGroup);
         addActor(floorGroup);
+        addActor(leftWallGroup);
 
         //TODO: Put bg sky?
         //bgGroup.addActor(new GenericActor(0, 0, 1280, 720, spriteAtlas.findRegion(AtlasUtil.SPRITE_BG), Color.GRAY));
 
         //Add Player
         initializePlayer(GameInfo.DEFAULT_MAX_FIELDS);
+        rightWallGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.GREEN);
+        addActor(rightWallGroup);
 
         initializeStartingScene();
 
@@ -295,14 +303,14 @@ public class BubbleRunnerStage extends BaseStage {
         walls = new Array<Wall>();
         //We use this disposer as our delegate to capture Actor.remove() calls
         //  from our walls so that they can "remove themselves" from the walls array
-        wallDisposer = new IActorDisposer() {
-            @Override
-            public void dispose(Actor actor) {
-                if(actor instanceof Wall){
-                    walls.removeValue((Wall)actor, false);
-                }
-            }
-        };
+//        wallDisposer = new IActorDisposer() {
+//            @Override
+//            public void dispose(Actor actor) {
+//                if(actor instanceof Wall){
+//                    walls.removeValue((Wall)actor, false);
+//                }
+//            }
+//        };
 
         //Setup Background Music
         initializeAmbience();
@@ -321,7 +329,7 @@ public class BubbleRunnerStage extends BaseStage {
         comboLabel = new Label(currentCombo + "x Combo!!", style);
 
 
-        DecoratedUIContainer comboContainer = new DecoratedUIContainer(comboLabel);
+        comboContainer = new DecoratedUIContainer(comboLabel);
         comboContainer.setPosition(player.getX() + (comboLabel.getWidth() / 2), player.getTop() + HUD_HEIGHT);
 
         comboDecorator = new OscillatingDecorator(-3f, 3f, 40f);
@@ -352,6 +360,16 @@ public class BubbleRunnerStage extends BaseStage {
             if(!music.isPlaying()){
                 music.play();
             }
+
+            //Remove any walls from the array to
+            //  let them be destroyed.
+            Iterator<Wall> itr = walls.iterator();
+            while(itr.hasNext()){
+                Wall w = itr.next();
+                if(w.isRemovable()){
+                    itr.remove();
+                }
+            }
             //Calculate timestep
             millisecondsPassed += delta*1000;
             secondsSinceResourceRegen += delta;
@@ -380,11 +398,20 @@ public class BubbleRunnerStage extends BaseStage {
             comboLabel.setZIndex(index--);
             info.setZIndex(index--);
             alarmOverlay.setZIndex(index--);
+            comboContainer.setZIndex(index--);
+            if(warningIndicator != null){
+                warningIndicator.setZIndex(index--);
+            }
+            rightWallGroup.setZIndex(index--);
             shields.setZIndex(index--);
             player.setZIndex(index--);
-            for(Wall w:walls){
-                w.setZIndex(index--);
-            }
+            leftWallGroup.setZIndex(index--);
+            floorGroup.setZIndex(index--);
+            tunnelGroup.setZIndex(index--);
+
+//            for(Wall w:walls){
+//                w.setZIndex(index--);
+//            }
 
             if(currentCombo >= COMBO_THRESHOLDS[0]){
                 comboLabel.setText(currentCombo + "x Combo!!");
@@ -524,44 +551,109 @@ public class BubbleRunnerStage extends BaseStage {
 
             for(int i=0;i<wp.wallCount;i++){
                 ForceFieldType fft = wp.forceFields.get(i);
+
+                //TODO: REMOVE
+                fft = ForceFieldType.PLASMA;
+
                 //FORMULA:  xPos = startX + (N * (wallWidth + wallPadding)
                 //          - Where N = NumberOfWalls-1
-                Animation wallAni = new Animation(WALL_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, false)));
-                Animation wallBreaking = new Animation(WALL_BREAK_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true)));
-                Wall w = new Wall(wallDimensions[0] + (i*(wallDimensions[2] + wp.wallPadding)),
-                        wallDimensions[1],
-                        wallDimensions[2],
-                        wallDimensions[3],
-                        wallAni,
-                        0f,
-                        fft);
-                w.addStateAnimation("BREAKING", wallBreaking);
-                w.setXVelocity(wallAndFloorVelocity);
-                w.addDecorator(wallColliderDecorator);
-                w.setDisposer(wallDisposer);
+                float x, y, w, h;
+                x = wallDimensions[0];
+                y = wallDimensions[1];
+                w = wallDimensions[2];
+                h = wallDimensions[3];
+                float keyFrame = rand.nextInt(5000) * WALL_CYCLE_RATE;
+                Animation leftAni = new Animation(WALL_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true, false)));
+                AnimatedActor leftWall = new AnimatedActor(x + (i*(w + wp.wallPadding)), y, w/2, h, leftAni,keyFrame);
+                Animation rightAni = new Animation(WALL_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, false, false)));
+                AnimatedActor rightWall = new AnimatedActor(leftWall.getRight(), y, w/2, h, rightAni, keyFrame);
 
-                walls.add(w);
-                addActor(w);
+                GenericActor collider = new GenericActor(leftWall.getRight()-(wallColliderDimensions[0]/2), y, wallColliderDimensions[0], wallColliderDimensions[1], null, Color.BLACK);
+                Wall wall = new Wall(leftWall, rightWall, collider, fft);
+
+//                Wall w = new Wall(wallDimensions[0] + (i*(wallDimensions[2] + wp.wallPadding)),
+//                        wallDimensions[1],
+//                        wallDimensions[2],
+//                        wallDimensions[3],
+//                        wallAni,
+//                        0f,
+//                        fft);
+                Animation leftBreakAni = new Animation(WALL_BREAK_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true, true)));
+                Animation rightBreakAni = new Animation(WALL_BREAK_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, false, true)));
+                String name = getFlourishAnimationNameForForceFieldType(fft);
+
+                AnimatedActor flourish = new AnimatedActor(collider.getRight(), y, SHATTER_WIDTH, SHATTER_HEIGHT, null, 0f);
+                wall.addFlourishing(flourish);
+                leftWallGroup.addActor(leftWall);
+                //Put the flourish behind the wall
+                rightWallGroup.addActor(flourish);
+                rightWallGroup.addActor(rightWall);
+                addActor(collider);
+
+                Animation flourishAni = null;
+                if(name != null){
+                    flourishAni = new Animation(WALL_BREAK_CYCLE_RATE, aniAtlas.findRegions(getFlourishAnimationNameForForceFieldType(fft)));
+                }
+                wall.addStateAnimation("BREAKING", leftBreakAni, rightBreakAni, flourishAni);
+                wall.setXVelocity(wallAndFloorVelocity);
+                //w.addDecorator(wallColliderDecorator);
+                //w.setDisposer(wallDisposer);
+
+                walls.add(wall);
+                //addActor(w);
             }
 
             nextGeneration += millisBetweenWalls;
         }
     }
 
-    private String getAnimationNameForForceFieldType(ForceFieldType fft, boolean isBreaking){
+    private String getFlourishAnimationNameForForceFieldType(ForceFieldType fft){
+        String name = null;
+        switch(fft){
+            case LIGHTNING:
+                break;
+            case PLASMA:
+                name = AtlasUtil.ANI_PLASMA_FLOURISH;
+                break;
+            case LASER:
+                break;
+            default:
+                break;
+        }
+
+        return name;
+    }
+
+    private String getAnimationNameForForceFieldType(ForceFieldType fft, boolean isLeft, boolean isBreaking){
         String name;
         switch(fft){
             case LIGHTNING:
-                name = isBreaking ? AtlasUtil.ANI_WALL_LIGHTNING : AtlasUtil.ANI_WALL_LIGHTNING;
+                if(isLeft){
+                    name = isBreaking ? AtlasUtil.ANI_WALL_LIGHTNING : AtlasUtil.ANI_WALL_LIGHTNING;
+                }else{
+                    name = isBreaking ? AtlasUtil.ANI_WALL_LIGHTNING : AtlasUtil.ANI_WALL_LIGHTNING;
+                }
                 break;
             case PLASMA:
-                name = isBreaking ? AtlasUtil.ANI_WALL_PLASMA_BR : AtlasUtil.ANI_WALL_PLASMA;
+                if(isLeft){
+                    name = isBreaking ? AtlasUtil.ANI_WALL_PLASMA_BR_L : AtlasUtil.ANI_WALL_PLASMA_L;
+                }else{
+                    name = isBreaking ? AtlasUtil.ANI_WALL_PLASMA_BR_R : AtlasUtil.ANI_WALL_PLASMA_R;
+                }
                 break;
             case LASER:
-                name = AtlasUtil.ANI_WALL_LASER;
+                if(isLeft){
+                    name = AtlasUtil.ANI_WALL_LASER;
+                }else{
+                    name = AtlasUtil.ANI_WALL_LASER;
+                }
                 break;
             default:
-                name = AtlasUtil.ANI_WALL_LIGHTNING;
+                if(isLeft){
+                    name = AtlasUtil.ANI_WALL_LIGHTNING;
+                }else{
+                    name = AtlasUtil.ANI_WALL_LIGHTNING;
+                }
                 break;
         }
 
