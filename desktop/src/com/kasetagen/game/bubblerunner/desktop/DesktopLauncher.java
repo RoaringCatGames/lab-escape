@@ -11,7 +11,7 @@ public class DesktopLauncher {
         config.width = 1280;
         config.height = 720;
 
-        boolean useController = false;
+        boolean useController = true;
 		new LwjglApplication(new BubbleRunnerGame(useController), config);
 	}
 }

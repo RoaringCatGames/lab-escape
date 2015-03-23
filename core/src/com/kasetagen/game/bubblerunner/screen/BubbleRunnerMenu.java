@@ -118,6 +118,9 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
     @Override
     public void show() {
+        if(!bgMusic.isPlaying())
+            bgMusic.play();
+        gameProcessor.setBGMusic(bgMusic);
     }
 
     @Override
