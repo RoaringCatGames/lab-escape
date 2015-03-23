@@ -3,6 +3,7 @@ package com.kasetagen.game.bubblerunner.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -60,6 +61,8 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
 
     Table rootTable;
 
+    Sound sfx;
+
     int focusIndex = 0;
 
     private String getFloatStringVal(float val){
@@ -80,6 +83,7 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         }
         Skin skin = gameProcessor.getAssetManager().get(AssetsUtil.DEFAULT_SKIN, AssetsUtil.SKIN);
 
+        sfx = gameProcessor.getAssetManager().get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         /*
          * Initialize BG controls
          */
@@ -101,6 +105,7 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.log("UITest", "slider: " + bgVolumeSet.getValue());
                 gameProcessor.saveGameData(bgDataSaver);
+                gameProcessor.setBGMusicVolume(bgVolumeSet.getValue());
             }
         });
 
@@ -125,6 +130,7 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.log("UITest", "slider: " + sfxVolumeSet.getValue());
                 gameProcessor.saveGameData(sfxDataSaver);
+                sfx.play(sfxVolumeSet.getValue());
             }
         });
 
@@ -236,7 +242,6 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
 
         volumeTable.row().colspan(3);
         volumeTable.add(backToMainMenuButton).center();
-
 
         rootTable.row();
         rootTable.add(volumeTable).expandX();

@@ -2,6 +2,7 @@ package com.kasetagen.game.bubblerunner;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.kasetagen.engine.IDataSaver;
 import com.kasetagen.engine.IGameProcessor;
@@ -26,6 +27,8 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
     BubbleRunnerMenu menu;
     BubbleRunnerScreen runnerScreen;
     InputMultiplexer input;
+
+    Music bgMusic;
 
     boolean isInitialized = false;
     protected AssetManager assetManager;
@@ -107,10 +110,24 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.BONKERS, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.RIDICULOUS, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.ATOMIC, AssetsUtil.SOUND);
-
     }
 
  //IGameProcessor
+
+
+    @Override
+    public void setBGMusic(Music music) {
+        if(music != null){
+            bgMusic = music;
+        }
+    }
+
+    @Override
+    public void setBGMusicVolume(float newVolume) {
+        if(bgMusic != null){
+            bgMusic.setVolume(newVolume);
+        }
+    }
 
     @Override
     public String getStartScreen() {
@@ -176,6 +193,14 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         }
         Gdx.input.setInputProcessor(input);
     }
+
+//    @Override
+//    public void onBgVolumeChange(float v) {
+//        Screen s = getScreen();
+//        if(s instanceof Kitten2dScreen){
+//            ((Kitten2dScreen) s.setBGVolume(v))
+//        }
+//    }
 
     @Override
     public String getStoredString(String key) {

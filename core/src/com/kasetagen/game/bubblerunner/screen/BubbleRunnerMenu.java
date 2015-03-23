@@ -47,6 +47,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         bgMusic = delegate.getAssetManager().get(AssetsUtil.EIGHT_BIT_BKG_MUSIC, AssetsUtil.MUSIC);
         bgMusic.setVolume(delegate.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY));
         bgMusic.play();
+        this.gameProcessor.setBGMusic(bgMusic);
 
 
         ClickListener listener = new ClickListener()

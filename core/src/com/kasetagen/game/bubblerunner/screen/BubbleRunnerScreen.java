@@ -16,7 +16,6 @@ import com.kasetagen.game.bubblerunner.scene2d.BubbleRunnerStage;
  * User: barry
  * Date: 5/27/14
  * Time: 7:55 PM
- * To change this template use File | Settings | File Templates.
  */
 public class BubbleRunnerScreen extends ApplicationAdapter implements Screen, InputProcessor, IStageManager {
 
