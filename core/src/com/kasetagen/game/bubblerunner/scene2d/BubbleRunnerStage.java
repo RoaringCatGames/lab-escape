@@ -606,11 +606,13 @@ public class BubbleRunnerStage extends BaseStage {
         String name = null;
         switch(fft){
             case LIGHTNING:
+                name = AtlasUtil.ANI_TESLA_FLOURISH;
                 break;
             case PLASMA:
                 name = AtlasUtil.ANI_PLASMA_FLOURISH;
                 break;
             case LASER:
+                name = AtlasUtil.ANI_LASER_FLOURISH;
                 break;
             default:
                 break;
@@ -624,9 +626,9 @@ public class BubbleRunnerStage extends BaseStage {
         switch(fft){
             case LIGHTNING:
                 if(isLeft){
-                    name = isBreaking ? AtlasUtil.ANI_WALL_LIGHTNING : AtlasUtil.ANI_WALL_LIGHTNING;
+                    name = isBreaking ? AtlasUtil.ANI_WALL_TESLA_BR_L : AtlasUtil.ANI_WALL_TESLA_L;
                 }else{
-                    name = isBreaking ? AtlasUtil.ANI_WALL_LIGHTNING : AtlasUtil.ANI_WALL_LIGHTNING;
+                    name = isBreaking ? AtlasUtil.ANI_WALL_TESLA_BR_R : AtlasUtil.ANI_WALL_TESLA_R;
                 }
                 break;
             case PLASMA:
@@ -638,9 +640,9 @@ public class BubbleRunnerStage extends BaseStage {
                 break;
             case LASER:
                 if(isLeft){
-                    name = AtlasUtil.ANI_WALL_LASER;
+                    name = isBreaking ? AtlasUtil.ANI_WALL_LASER_BR_L : AtlasUtil.ANI_WALL_LASER_L;
                 }else{
-                    name = AtlasUtil.ANI_WALL_LASER;
+                    name = isBreaking ? AtlasUtil.ANI_WALL_LASER_BR_R : AtlasUtil.ANI_WALL_LASER_R;
                 }
                 break;
             default:
