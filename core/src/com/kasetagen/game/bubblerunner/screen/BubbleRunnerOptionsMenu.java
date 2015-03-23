@@ -1,6 +1,7 @@
 package com.kasetagen.game.bubblerunner.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.kasetagen.engine.IDataSaver;
 import com.kasetagen.engine.IGameProcessor;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
@@ -29,14 +31,13 @@ import com.kasetagen.game.bubblerunner.util.AssetsUtil;
  */
 public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
 
-    Slider bgVolumeSet;
-    Slider sfxVolumeSet;
-    TextButton backToMainMenuButton;
+    private static final int MIN_INDEX = 0;
+    private static final int MAX_INDEX = 3; //Zero-based index, with 4 controls
+    private static final float VOLUME_INCREMENT = 0.1f;
 
-    Label bgVolLbl;
-    Label bgValue;
-    Label sfxVolLbl;
-    Label sfxValue;
+    private static final float CHAR_SELECT_SIZE = 720f/3f;
+
+    //CharSelect
     Label charSelect;
     Label charValue;
     TextButton charToggle;
@@ -45,6 +46,21 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
     Image currentCharacter1Frame;
     Image currentCharacter2Frame;
     float timeElapsed = 0f;
+
+    //BG Volume
+    Label bgVolLbl;
+    Slider bgVolumeSet;
+    Label bgValue;
+
+    //SFX Volume
+    Label sfxVolLbl;
+    Slider sfxVolumeSet;
+    Label sfxValue;
+    TextButton backToMainMenuButton;
+
+    Table rootTable;
+
+    int focusIndex = 0;
 
     private String getFloatStringVal(float val){
         return Integer.toString((int) Math.floor(val * 10));
@@ -64,12 +80,11 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         }
         Skin skin = gameProcessor.getAssetManager().get(AssetsUtil.DEFAULT_SKIN, AssetsUtil.SKIN);
 
+        /*
+         * Initialize BG controls
+         */
         bgVolLbl = new Label("BKGD Volume: " , skin);
         bgValue = new Label(getFloatStringVal(bgVolValue), skin);
-        sfxVolLbl = new Label("SFX Volume: " , skin);
-        sfxValue = new Label(getFloatStringVal(sfxVolValue), skin);
-
-
         bgVolumeSet = new Slider(0f, 1f, 0.1f, false, skin);
         bgVolumeSet.setValue(bgVolValue);
 
@@ -90,6 +105,11 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         });
 
 
+        /*
+         * Initialize SFX controls
+         */
+        sfxVolLbl = new Label("SFX Volume: " , skin);
+        sfxValue = new Label(getFloatStringVal(sfxVolValue), skin);
         sfxVolumeSet = new Slider(0f, 1f, 0.1f, false, skin);
         sfxVolumeSet.setValue(sfxVolValue);
 
@@ -108,6 +128,9 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
             }
         });
 
+        /*
+         * Initialize Character Controls
+         */
         charSelect = new Label("Select Character: ", skin);
         charValue = new Label(charStoredValue, skin);
         charDataSaver = new IDataSaver() {
@@ -138,24 +161,22 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         character2Animation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions("player/Female_Run"));
 
         currentCharacter1Frame = new Image(character1Animation.getKeyFrame(0f));
-        currentCharacter1Frame.setSize(180f, 180f);
+        currentCharacter1Frame.setSize(CHAR_SELECT_SIZE, CHAR_SELECT_SIZE);
 
         currentCharacter2Frame = new Image(character2Animation.getKeyFrame(0f));
-        currentCharacter2Frame.setSize(180f, 180f);
+        currentCharacter2Frame.setSize(CHAR_SELECT_SIZE, CHAR_SELECT_SIZE);
 
         currentCharacter1Frame.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                charValue.setText(AnimationUtil.CHARACTER_1);
-                gameProcessor.saveGameData(charDataSaver);
+                selectCharacter(true);
             }
         });
 
         currentCharacter2Frame.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                charValue.setText(AnimationUtil.CHARACTER_2);
-                gameProcessor.saveGameData(charDataSaver);
+                selectCharacter(false);
             }
         });
 
@@ -164,29 +185,44 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         backToMainMenuButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
+                returnButtonPressed();
             }
         });
 
-        Table rootTable = new Table(skin);
+
+        float textRowHeight = stage.getHeight()/7;
+
+        rootTable = new Table(skin);
         rootTable.setFillParent(true);
+        rootTable.center();
         stage.addActor(rootTable);
 
         Table playerTable = new Table(skin);
-        float playerSelectSize = currentCharacter1Frame.getWidth()*2;
-        playerTable.columnDefaults(0).center().height(playerSelectSize).width(playerSelectSize);
-        playerTable.columnDefaults(1).center().height(playerSelectSize).width(playerSelectSize);
-        playerTable.add(currentCharacter1Frame);
-        playerTable.add(currentCharacter2Frame);
-        rootTable.add(playerTable);
+        playerTable.columnDefaults(1).center().height(CHAR_SELECT_SIZE).width(CHAR_SELECT_SIZE);
+        playerTable.columnDefaults(2).expandX();
+        playerTable.columnDefaults(3).center().height(CHAR_SELECT_SIZE).width(CHAR_SELECT_SIZE);
 
-        float colWidth = stage.getWidth()/3;
-        float colHeight = stage.getHeight()/5;
 
+        playerTable.row().colspan(5).height(textRowHeight);
+        playerTable.add(charSelect).expandX();
+
+        playerTable.row();
+        playerTable.add(currentCharacter1Frame).maxSize(CHAR_SELECT_SIZE).prefSize(CHAR_SELECT_SIZE).minSize(CHAR_SELECT_SIZE);
+        playerTable.add();
+        playerTable.add(currentCharacter2Frame).maxSize(CHAR_SELECT_SIZE).prefSize(CHAR_SELECT_SIZE).minSize(CHAR_SELECT_SIZE);;
+
+        playerTable.row().colspan(5).height(textRowHeight);
+        playerTable.add(charValue);
+
+        rootTable.add(playerTable).expandX();
+
+
+
+        float centerColWidth = stage.getWidth()/2f;
         Table volumeTable = new Table(skin);
         volumeTable.columnDefaults(0).right();
-        volumeTable.columnDefaults(1).center().width(colWidth).height(colHeight);
-        volumeTable.columnDefaults(2).expandX().left().padLeft(50);
+        volumeTable.columnDefaults(1).center().width(centerColWidth).height(textRowHeight);
+        volumeTable.columnDefaults(2).expandX().left().padLeft(50).width(50);
 
         volumeTable.row();
         volumeTable.add(bgVolLbl).right();
@@ -198,22 +234,21 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         volumeTable.add(sfxVolumeSet);
         volumeTable.add(sfxValue);
 
-        volumeTable.row();
-        volumeTable.add();
-        volumeTable.add(backToMainMenuButton).height(colHeight/2).padBottom(20f);
-        volumeTable.add();
+        volumeTable.row().colspan(3);
+        volumeTable.add(backToMainMenuButton).center();
+
 
         rootTable.row();
-        rootTable.add(volumeTable);
+        rootTable.add(volumeTable).expandX();
+
+        setDefaultColors();
+        selectMenuItem(focusIndex);
     }
 
-    private boolean selectionIsCharacter2(){
-        return AnimationUtil.CHARACTER_2.equals(charValue.getText().toString());
-    }
+
 
     @Override
     public void render(float delta) {
-        Gdx.app.log("RENDER MENU", "Delta: " + delta);
         timeElapsed += delta;
         if(selectionIsCharacter2()){
             TextureRegion tr = character2Animation.getKeyFrame(timeElapsed, true);
@@ -239,15 +274,131 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         super.render(delta);
     }
 
-    private void processRight(){
+    @Override
+    public void show() {
+        super.show();    //To change body of overridden methods use File | Settings | File Templates.
 
+        Gdx.app.log("OPTIONS", "Show Called");
+
+        focusIndex = 0;
+        setDefaultColors();
+        selectMenuItem(focusIndex);
     }
 
     @Override
     public boolean keyDown(int keycode) {
 
-        sfxValue.setColor(Color.CYAN);
+        if(keycode == Input.Keys.DOWN){
+            if(focusIndex < MAX_INDEX){
+                focusIndex++;
+            }
+            selectMenuItem(focusIndex);
+        }else if(keycode == Input.Keys.UP){
+            if(focusIndex > MIN_INDEX){
+                focusIndex--;
+            }
+            selectMenuItem(focusIndex);
+        }else if(keycode == Input.Keys.RIGHT){
+            //Adjust value right
+            handleRightAdjust(focusIndex);
+        }else if(keycode == Input.Keys.LEFT){
+            //Adjust value left
+            handleLeftAdjust(focusIndex);
+        }else if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER){
+            //if return button go home.
+            returnButtonPressed();
+        }
 
-        return super.keyDown(keycode);
+//        if(keycode == Input.Keys.TAB){
+//            rootTable.setDebug(!rootTable.getDebug());
+//        }
+
+        return true;
+    }
+
+    private void setDefaultColors(){
+        charSelect.setColor(Color.YELLOW);
+        charValue.setColor(Color.YELLOW);
+        charToggle.setColor(Color.YELLOW);
+        bgVolLbl.setColor(Color.YELLOW);
+        bgValue.setColor(Color.YELLOW);
+        sfxVolLbl.setColor(Color.YELLOW);
+        sfxValue.setColor(Color.YELLOW);
+        backToMainMenuButton.setColor(Color.YELLOW);
+    }
+
+    private void selectCharacter(boolean isLeft){
+        if(isLeft){
+            charValue.setText(AnimationUtil.CHARACTER_1);
+        }else{
+            charValue.setText(AnimationUtil.CHARACTER_2);
+        }
+
+        gameProcessor.saveGameData(charDataSaver);
+    }
+
+    private boolean selectionIsCharacter2(){
+        return AnimationUtil.CHARACTER_2.equals(charValue.getText().toString());
+    }
+
+    public void returnButtonPressed(){
+        focusIndex = 0;
+        gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
+    }
+
+    public void selectMenuItem(int index){
+        setDefaultColors();
+        switch(index){
+            case 0:
+                charSelect.setColor(Color.RED);
+                charValue.setColor(Color.RED);
+                charToggle.setColor(Color.RED);
+                break;
+            case 1:
+                bgVolLbl.setColor(Color.RED);
+                bgValue.setColor(Color.RED);
+                break;
+            case 2:
+                sfxVolLbl.setColor(Color.RED);
+                sfxValue.setColor(Color.RED);
+                break;
+            case 3:
+                backToMainMenuButton.setColor(Color.RED);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void handleRightAdjust(int index){
+        switch(index){
+            case 0:
+                selectCharacter(false);
+                break;
+            case 1:
+                bgVolumeSet.setValue(bgVolumeSet.getValue() + VOLUME_INCREMENT);
+                break;
+            case 2:
+                sfxVolumeSet.setValue(sfxVolumeSet.getValue() + VOLUME_INCREMENT);
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void handleLeftAdjust(int index){
+        switch(index){
+            case 0:
+                selectCharacter(true);
+                break;
+            case 1:
+                bgVolumeSet.setValue(bgVolumeSet.getValue() - VOLUME_INCREMENT);
+                break;
+            case 2:
+                sfxVolumeSet.setValue(sfxVolumeSet.getValue() - VOLUME_INCREMENT);
+                break;
+            default:
+                break;
+        }
     }
 }

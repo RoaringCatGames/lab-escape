@@ -147,22 +147,22 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
                 options = new BubbleRunnerOptionsMenu(this);
             }
 
-            setScreen(options);
+
             input.clear();
             input.addProcessor(options);
             input.addProcessor(options.getStage());
-            //Gdx.input.setInputProcessor(options.getStage());
+            setScreen(options);
 
         }else if(MENU.equalsIgnoreCase(screenName)){
             if(menu == null){
                 menu = new BubbleRunnerMenu(this);
             }
 
-            setScreen(menu);
+
             input.clear();
             input.addProcessor(menu.getStage());
             input.addProcessor(menu);
-            //Gdx.input.setInputProcessor(menu.getStage());
+            setScreen(menu);
 
         }else if(RUNNER.equalsIgnoreCase(screenName)){
             //Load the Game Screen!!
@@ -170,10 +170,9 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
                 runnerScreen = new BubbleRunnerScreen(this);
             }
 
-            setScreen(runnerScreen);
             input.clear();
             input.addProcessor(runnerScreen.getStage());
-            //Gdx.input.setInputProcessor(runnerScreen.getStage());
+            setScreen(runnerScreen);
         }
         Gdx.input.setInputProcessor(input);
     }

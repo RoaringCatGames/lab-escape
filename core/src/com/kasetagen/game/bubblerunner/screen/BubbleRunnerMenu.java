@@ -141,6 +141,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 //
     @Override
     public boolean keyDown(int keycode) {
+        Gdx.app.log("MENU", "KeyDown Fired!");
         if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER){
             if(startGameButton.isChecked()){
                 bgMusic.stop();
@@ -160,43 +161,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
             optionsButton.setChecked(false);
         }
 
-        return false;
-    }
-
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return true;
     }
 
 //
