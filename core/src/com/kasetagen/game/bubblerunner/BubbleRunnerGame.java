@@ -7,10 +7,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.kasetagen.engine.IDataSaver;
 import com.kasetagen.engine.IGameProcessor;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
+import com.kasetagen.engine.screen.LoadingScreen;
+import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerMenu;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerOptionsMenu;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerScreen;
-import com.kasetagen.game.bubblerunner.screen.LoadingScreen;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
 public class BubbleRunnerGame extends Game implements IGameProcessor {
@@ -153,12 +154,11 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
     public void changeToScreen(String screenName) {
         if(LOADING.equalsIgnoreCase(screenName))    {
             if(loading == null){
-                loading = new LoadingScreen(this);
+                loading = new LoadingScreen(this, "animations/loading.atlas", "Lab_Loading", new BaseStage(this));
             }
 
             setScreen(loading);
-        }
-        if(OPTIONS.equalsIgnoreCase(screenName)){
+        }else if(OPTIONS.equalsIgnoreCase(screenName)){
 
             if(options == null){
                 options = new BubbleRunnerOptionsMenu(this);
@@ -193,14 +193,6 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         }
         Gdx.input.setInputProcessor(input);
     }
-
-//    @Override
-//    public void onBgVolumeChange(float v) {
-//        Screen s = getScreen();
-//        if(s instanceof Kitten2dScreen){
-//            ((Kitten2dScreen) s.setBGVolume(v))
-//        }
-//    }
 
     @Override
     public String getStoredString(String key) {

@@ -37,7 +37,7 @@ public class GameInfo extends GenericGroup {
 
         //controls = player;
 
-        LabelStyle style = new LabelStyle(font, Color.BLACK);//getColor());
+        LabelStyle style = new LabelStyle(font, Color.YELLOW);//getColor());
         style.font.setScale(1f);
         scoreLabel = new Label(SCORE_PREFIX + score, style);
         scoreLabel.setPosition(0, 0);

@@ -35,9 +35,9 @@ public class AtlasUtil {
     public static final String ANI_WALL_TESLA_BR_R = "walls/Tesla_Wall_Break_Right";
     public static final String ANI_TESLA_FLOURISH = "walls/Tesla_Spark";
 
-    public static final String ANI_WALL_PLASMA_L = "walls/Glass_Wall";
+    public static final String ANI_WALL_PLASMA_L = "walls/Glass_Wall_Left";
     public static final String ANI_WALL_PLASMA_BR_L = "walls/Glass_Wall_Break_Left";
-    public static final String ANI_WALL_PLASMA_R = "walls/Glass_Wall";
+    public static final String ANI_WALL_PLASMA_R = "walls/Glass_Wall_Right";
     public static final String ANI_WALL_PLASMA_BR_R = "walls/Glass_Wall_Break_Right";
     public static final String ANI_PLASMA_FLOURISH = "walls/Glass_Shatter";
 

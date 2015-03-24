@@ -65,6 +65,8 @@ public class BubbleRunnerStage extends BaseStage {
 
     private static final float WALL_CYCLE_RATE = 1f/2f;
     private static final float WALL_BREAK_CYCLE_RATE = 1f/10f;
+    private static final float TESLA_CYCLE_RATE = 1/15f;
+    private static final float LASER_CYCLE_RATE = 1f/8f;
 
     private static final float COMBO_BASE_OSCILLATION_RATE = 20f;
     private static final float COMBO_OSCILATION_INCREASE_RATE = 10f;
@@ -276,7 +278,7 @@ public class BubbleRunnerStage extends BaseStage {
         characterSelected = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY, AnimationUtil.CHARACTER_2);
 
         //SET WALL VELOCITY
-        wallAndFloorVelocity = -1f*(getWidth()/2);
+        wallAndFloorVelocity = -1f*(getWidth()/2f);
 
         floorGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLUE);
         tunnelGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.RED);
@@ -552,7 +554,7 @@ public class BubbleRunnerStage extends BaseStage {
                 ForceFieldType fft = wp.forceFields.get(i);
 
                 //TODO: REMOVE
-                //fft = ForceFieldType.PLASMA;
+                //fft = fft == ForceFieldType.LIGHTNING ? ForceFieldType.PLASMA : fft;
 
                 //FORMULA:  xPos = startX + (N * (wallWidth + wallPadding)
                 //          - Where N = NumberOfWalls-1
@@ -562,10 +564,11 @@ public class BubbleRunnerStage extends BaseStage {
                 w = wallDimensions[2];
                 h = wallDimensions[3];
                 float keyFrame = rand.nextInt(5000) * WALL_CYCLE_RATE;
-                Animation leftAni = new Animation(WALL_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true, false)));
+                float cycleRate = getAnimationCycleRateForForceFieldType(fft, false);
+                Animation leftAni = new Animation(cycleRate, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true, false)));
                 AnimatedActor leftWall = new AnimatedActor(x + (i*(w + wp.wallPadding)), y, w/2, h, leftAni,keyFrame);
 
-                Animation rightAni = new Animation(WALL_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, false, false)));
+                Animation rightAni = new Animation(cycleRate, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, false, false)));
                 AnimatedActor rightWall = new AnimatedActor(leftWall.getRight(), y, w/2, h, rightAni, keyFrame);
 
                 GenericActor collider = new GenericActor(leftWall.getRight()-(wallColliderDimensions[0]/2), y, wallColliderDimensions[0], wallColliderDimensions[1], null, Color.BLACK);
@@ -583,8 +586,9 @@ public class BubbleRunnerStage extends BaseStage {
                 rightWallGroup.addActor(rightWall);
                 addActor(collider);
 
-                Animation leftBreakAni = new Animation(WALL_BREAK_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true, true)));
-                Animation rightBreakAni = new Animation(WALL_BREAK_CYCLE_RATE, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, false, true)));
+                float breakCycleRate = getAnimationCycleRateForForceFieldType(fft, true);
+                Animation leftBreakAni = new Animation(breakCycleRate, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true, true)));
+                Animation rightBreakAni = new Animation(breakCycleRate, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, false, true)));
                 String name = getFlourishAnimationNameForForceFieldType(fft);
                 Animation flourishAni = null;
                 if(name != null){
@@ -602,17 +606,35 @@ public class BubbleRunnerStage extends BaseStage {
         }
     }
 
+    private float getAnimationCycleRateForForceFieldType(ForceFieldType fft, boolean isBreaking){
+        float rate = WALL_CYCLE_RATE;
+        if(isBreaking){
+            return WALL_BREAK_CYCLE_RATE;
+        }
+        switch(fft){
+            case LIGHTNING:
+                rate = TESLA_CYCLE_RATE;
+                break;
+            case LASER:
+                rate = LASER_CYCLE_RATE;
+                break;
+            default:
+                break;
+        }
+        return rate;
+    }
+
     private String getFlourishAnimationNameForForceFieldType(ForceFieldType fft){
         String name = null;
         switch(fft){
             case LIGHTNING:
-                name = AtlasUtil.ANI_TESLA_FLOURISH;
+                //name = AtlasUtil.ANI_TESLA_FLOURISH;
                 break;
             case PLASMA:
                 name = AtlasUtil.ANI_PLASMA_FLOURISH;
                 break;
             case LASER:
-                name = AtlasUtil.ANI_LASER_FLOURISH;
+                //name = AtlasUtil.ANI_LASER_FLOURISH;
                 break;
             default:
                 break;
