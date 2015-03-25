@@ -27,21 +27,21 @@ buttons/button_light_off
   index: -1
 buttons/button_light_on
   rotate: false
-  xy: 2065, 811
+  xy: 2052, 811
   size: 407, 407
   orig: 407, 407
   offset: 0, 0
   index: -1
 buttons/button_plasma_off
   rotate: false
-  xy: 2474, 811
+  xy: 2461, 811
   size: 407, 407
   orig: 407, 407
   offset: 0, 0
   index: -1
 buttons/button_plasma_on
   rotate: false
-  xy: 2065, 402
+  xy: 2870, 811
   size: 407, 407
   orig: 407, 407
   offset: 0, 0
@@ -100,33 +100,5 @@ ui/energy_bar
   xy: 2052, 1220
   size: 1156, 100
   orig: 1156, 100
-  offset: 0, 0
-  index: -1
-walls/blue_wall
-  rotate: false
-  xy: 1857, 420
-  size: 50, 600
-  orig: 50, 600
-  offset: 0, 0
-  index: -1
-walls/green_wall
-  rotate: false
-  xy: 1909, 420
-  size: 50, 600
-  orig: 50, 600
-  offset: 0, 0
-  index: -1
-walls/plasma_wall
-  rotate: false
-  xy: 1961, 420
-  size: 50, 600
-  orig: 50, 600
-  offset: 0, 0
-  index: -1
-walls/yellow_wall
-  rotate: false
-  xy: 2013, 420
-  size: 50, 600
-  orig: 50, 600
   offset: 0, 0
   index: -1

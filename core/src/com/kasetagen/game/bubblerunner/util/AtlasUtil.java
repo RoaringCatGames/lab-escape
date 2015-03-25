@@ -28,6 +28,14 @@ public class AtlasUtil {
     public static final String ANI_SHIELD_GREEN = "Shields/Green";
     public static final String ANI_SHIELD_BLUE = "Shields/Blue";
 
+    public static final String ANI_NESSIE_WALL = "tunnel/Wall_Window_Nessie";
+    public static final String ANI_SASSIE_WALL = "tunnel/Wall_Window_Sassie";
+    public static final String ANI_GUY_WALL = "tunnel/Wall_Window_Male";
+    public static final String ANI_LADY_WALL = "tunnel/Wall_Window_Female";
+    public static final String ANI_CRACKED_WALL = "tunnel/Wall_Crack";
+    public static final String ANI_STAINED_WALL = "tunnel/Wall_Stain";
+    public static final String ANI_BASIC_WALL = "tunnel/Wall_Basic";
+
 
     public static final String ANI_WALL_TESLA_L = "walls/Tesla_Wall_Left";
     public static final String ANI_WALL_TESLA_BR_L = "walls/Tesla_Wall_Break_Left";
@@ -70,5 +78,6 @@ public class AtlasUtil {
 
     public static final String SPRITE_ENERGY_BAR  = "ui/energy_bar";
     public static final String SPRITE_WARNING = "ui/warning-indicator";
+
 
 }

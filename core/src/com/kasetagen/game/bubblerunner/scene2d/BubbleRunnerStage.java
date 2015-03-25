@@ -31,6 +31,7 @@ import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.data.GameStats;
+import com.kasetagen.game.bubblerunner.data.TunnelAnimation;
 import com.kasetagen.game.bubblerunner.data.WallPattern;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
 import com.kasetagen.game.bubblerunner.util.*;
@@ -155,6 +156,8 @@ public class BubbleRunnerStage extends BaseStage {
     private GenericGroup leftWallGroup;
     private GenericGroup rightWallGroup;
 
+    private boolean tunnelGroupHasSpecialTunnel = false;
+
     private Random rand = new Random(System.currentTimeMillis());
 
     private float FLOOR_WIDTH = 420f/2f;
@@ -169,6 +172,8 @@ public class BubbleRunnerStage extends BaseStage {
 
     private ActorDecorator offScreenDecorator;
 //    private ActorDecorator wallColliderDecorator;
+
+    private ActorDecorator resumeAnimationOnScreenDecorator;
 
     public BubbleRunnerStage(IGameProcessor gameProcessor){
         super(gameProcessor);
@@ -191,57 +196,6 @@ public class BubbleRunnerStage extends BaseStage {
         scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         cinematic.addScene(scene1);
 
-//        duration = 0.5f;
-//        endX = -100f;
-//        endY = 100f;
-//        endZoom = 1.25f;
-//        CinematicScene scene2 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-//        scene2.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-//        cinematic.addScene(scene2);
-//
-//        duration = 2f;
-//        endX = 200f;
-//        endY = 100f;
-//        endZoom = 0.5f;
-//        CinematicScene scene3 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-//        scene3.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-//        cinematic.addScene(scene3);
-//
-//        duration = 1f;
-//        endX = 300f;
-//        endZoom = 1f;
-//        CinematicScene scene4 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-//        scene4.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-//        cinematic.addScene(scene4);
-//
-//        endX = 400f;
-//        CinematicScene scene5 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-//        scene5.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-//        cinematic.addScene(scene5);
-//
-//        endX = 500f;
-//        endY = -100f;
-//        startZoom = 0.5f;
-//        endZoom = 0.8f;
-//        CinematicScene scene6 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-//        scene6.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-//        cinematic.addScene(scene6);
-//
-//        endX = 600f;
-//        endY = 100f;
-//        startZoom = 1f;
-//        endZoom = 2f;
-//        CinematicScene scene7 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-//        scene7.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-//        cinematic.addScene(scene7);
-//
-//        endX = 700f;
-//        endY = -200f;
-//        startZoom = 0.8f;
-//        endZoom = 1f;
-//        CinematicScene scene8 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-//        scene8.music = assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-//        cinematic.addScene(scene8);
         addActor(cinematic);
         cinematic.start();
 
@@ -252,20 +206,24 @@ public class BubbleRunnerStage extends BaseStage {
             public void applyAdjustment(Actor actor, float v) {
                 if(actor.getX() <= -(actor.getWidth())){
                     ((GenericActor)actor).setIsRemovable(true);
+                    //if We are removing a special segment we flag that we can add one
+                    if(actor instanceof TunnelSegment && ((TunnelSegment)actor).isSpecial()){
+                        tunnelGroupHasSpecialTunnel = false;
+                    }
                 }
             }
         };
 
-//        wallColliderDecorator = new ActorDecorator() {
-//            @Override
-//            public void applyAdjustment(Actor actor, float v) {
-//                if(actor instanceof Wall){
-//                    float midX = actor.getX() + actor.getOriginX();
-//                    float targetX = midX - wallColliderDimensions[0]/2f;
-//                    ((GenericActor)actor).collider.set(targetX, actor.getY(), wallColliderDimensions[0], wallColliderDimensions[1]);
-//                }
-//            }
-//        };
+        resumeAnimationOnScreenDecorator = new ActorDecorator() {
+            @Override
+            public void applyAdjustment(Actor actor, float v) {
+                if(actor instanceof AnimatedActor){
+                    if(actor.getX() + actor.getOriginX() <= getWidth()){
+                        ((AnimatedActor)actor).resume();
+                    }
+                }
+            }
+        };
     }
 
     @Override
@@ -302,16 +260,6 @@ public class BubbleRunnerStage extends BaseStage {
 
         //Initialize Walls
         walls = new Array<Wall>();
-        //We use this disposer as our delegate to capture Actor.remove() calls
-        //  from our walls so that they can "remove themselves" from the walls array
-//        wallDisposer = new IActorDisposer() {
-//            @Override
-//            public void dispose(Actor actor) {
-//                if(actor instanceof Wall){
-//                    walls.removeValue((Wall)actor, false);
-//                }
-//            }
-//        };
 
         //Setup Background Music
         initializeAmbience();
@@ -410,10 +358,6 @@ public class BubbleRunnerStage extends BaseStage {
             floorGroup.setZIndex(index--);
             tunnelGroup.setZIndex(index--);
 
-//            for(Wall w:walls){
-//                w.setZIndex(index--);
-//            }
-
             if(currentCombo >= COMBO_THRESHOLDS[0]){
                 comboLabel.setText(currentCombo + "x Combo!!");
                 comboLabel.setVisible(true);
@@ -454,9 +398,10 @@ public class BubbleRunnerStage extends BaseStage {
                 //WHEN OUTERFIELD == WALL we Destroy Both
                 //  and increment the score
                 if(w.forceFieldType == outerField.forceFieldType){
-                    //w.setIsRemovable(true);
                     w.setState("BREAKING", true);
-                    w.setIsLooping(false);
+                    if(w.forceFieldType == ForceFieldType.PLASMA){
+                        w.setIsLooping(false);
+                    }
                     info.score += getWallPointValue(1);
 
                     //Increment our Combo counter
@@ -547,7 +492,6 @@ public class BubbleRunnerStage extends BaseStage {
                                                        wp,
                                                        Color.RED,
                                                        assetManager.get(AssetsUtil.WARNING_INDICATOR, AssetsUtil.TEXTURE));
-//            warningIndicator.addAction(Actions.fadeOut(millisBetweenWalls));
             addActor(warningIndicator);
 
             for(int i=0;i<wp.wallCount;i++){
@@ -1106,12 +1050,55 @@ public class BubbleRunnerStage extends BaseStage {
         floorGroup.addActor(floor);
     }
 
+    public TunnelAnimation buildAnimationForTunnel(){
+        int segment = rand.nextInt(100);
+        if(tunnelGroupHasSpecialTunnel){
+            segment += 18; //skip the specials, and increase Basic chances
+        }
+        TunnelAnimation animation;
+        if(segment < 3){
+            //nessie
+
+            animation = new TunnelAnimation(new Animation(1f/4f, aniAtlas.findRegions(AtlasUtil.ANI_NESSIE_WALL)), true);
+            tunnelGroupHasSpecialTunnel = true;
+        }else if(segment < 6){
+            //Sassie
+            animation = new TunnelAnimation(new Animation(1f/4f, aniAtlas.findRegions(AtlasUtil.ANI_SASSIE_WALL)), true);
+            tunnelGroupHasSpecialTunnel = true;
+        }else if(segment < 12){
+            //baldGuy
+            animation = new TunnelAnimation(new Animation(1f/2f, aniAtlas.findRegions(AtlasUtil.ANI_GUY_WALL)), true);
+            tunnelGroupHasSpecialTunnel = true;
+        }else if(segment < 18){
+            //labLady
+            animation = new TunnelAnimation(new Animation(1f/2f, aniAtlas.findRegions(AtlasUtil.ANI_LADY_WALL)), true);
+            tunnelGroupHasSpecialTunnel = true;
+        }else if(segment < 38){
+            //cracked
+            animation = new TunnelAnimation(new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_CRACKED_WALL)), false);
+        }else if(segment < 58){
+            //stained
+            animation = new TunnelAnimation(new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_STAINED_WALL)), false);
+        }else{
+            //basic
+            animation = new TunnelAnimation(new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BASIC_WALL)), false);
+        }
+
+        return animation;
+    }
+
     public void generateNextTunnel(){
         int currentTunnelCount = tunnelGroup.getChildren().size;
         float nextPos = currentTunnelCount == 0 ? 0f : tunnelGroup.getChildren().get(currentTunnelCount-1).getRight();
-        GenericActor tunnel = new GenericActor(nextPos, TNL_Y, TNL_WIDTH, TNL_HEIGHT, getTunnelTextureRegion(), Color.GRAY);
+        TunnelAnimation ani = buildAnimationForTunnel();
+        //GenericActor tunnel = new GenericActor(nextPos, TNL_Y, TNL_WIDTH, TNL_HEIGHT, getTunnelTextureRegion(), Color.GRAY);
+        TunnelSegment tunnel = new TunnelSegment(nextPos, TNL_Y, TNL_WIDTH, TNL_HEIGHT, ani.animation, 0f);
+        tunnel.setSpecial(ani.isSpecial);
         tunnel.velocity.x = wallAndFloorVelocity;
         tunnel.addDecorator(offScreenDecorator);
+        tunnel.setIsLooping(false);
+        tunnel.pause();
+        tunnel.addDecorator(resumeAnimationOnScreenDecorator);
         tunnelGroup.addActor(tunnel);
     }
     
