@@ -55,16 +55,12 @@ public class AtlasUtil {
     public static final String ANI_WALL_LASER_BR_R = "walls/Laser_Wall_Break_Right";
     public static final String ANI_LASER_FLOURISH = "walls/Laser_Flash";
 
-    public static final String ANI_WALL_LASER = "walls/obstacle_red";
-    public static final String ANI_WALL_LIGHTNING = "walls/obstacle_blue";
-
     //-----------
     //----Sprites
     //-----------
     public static final String SPRITE_BG = "env/bg";
     public static final String SPRITE_FLOOR = "env/Floor";
-    public static final String SPRITE_WALL = "env/Wall";
-    public static final String SPRITE_PILLAR = "env/pillar";
+    public static final String SPRITE_HAZARD = "env/Hazard";
 
     public static final String SPRITE_LIGHT_UP = "buttons/button_light_off";
     public static final String SPRITE_LIGHT_DOWN = "buttons/button_light_on";
@@ -77,7 +73,4 @@ public class AtlasUtil {
     public static final String SPRITE_LASER_CHECKED = "buttons/button_discharge_off";
 
     public static final String SPRITE_ENERGY_BAR  = "ui/energy_bar";
-    public static final String SPRITE_WARNING = "ui/warning-indicator";
-
-
 }

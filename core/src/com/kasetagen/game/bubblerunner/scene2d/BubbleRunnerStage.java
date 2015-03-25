@@ -1,5 +1,6 @@
 package com.kasetagen.game.bubblerunner.scene2d;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
@@ -77,7 +78,7 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float INDICATOR_HEIGHT = ViewportUtil.VP_HEIGHT/4;
 
     private static String characterSelected = AnimationUtil.CHARACTER_2;
-    private static float[] playerDimensions = new float[] { 100f, 120f, 360f, 360f };
+    private static float[] playerDimensions = new float[] { 100f, 100f, 360f, 360f };
 
     private static float WALL_START_X = ViewportUtil.VP_WIDTH + 160f;
     private static float WALL_Y = 0f;
@@ -151,6 +152,7 @@ public class BubbleRunnerStage extends BaseStage {
     private float sfxVolume;
 
     private GenericGroup floorGroup;
+    private GenericGroup floorAccentGroup;
     private GenericGroup tunnelGroup;
     private GenericGroup bgGroup;
     private GenericGroup leftWallGroup;
@@ -165,6 +167,12 @@ public class BubbleRunnerStage extends BaseStage {
     private float FLOOR_X_OFFSET = 0f;//-152f/2f;
     private float FLOOR_Y = 0f;
     private int floorCount = ((int)Math.ceil(ViewportUtil.VP_WIDTH/(FLOOR_WIDTH + FLOOR_X_OFFSET))) + 1;
+
+    private float ACCENT_WIDTH = 263f/2f;
+    private float ACCENT_HEIGHT = 125f/2f;
+    private float ACCENT_Y = 0f;
+    private int accentCount = 2* (((int)Math.ceil(ViewportUtil.VP_WIDTH/ACCENT_WIDTH)) + 1);
+
     private float TNL_WIDTH = 1024f/2;
     private float TNL_HEIGHT = 1020f/2;
     private float TNL_Y = FLOOR_HEIGHT;
@@ -239,6 +247,7 @@ public class BubbleRunnerStage extends BaseStage {
         wallAndFloorVelocity = -1f*(getWidth()/2f);
 
         floorGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLUE);
+        floorAccentGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLUE);
         tunnelGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.RED);
         bgGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.GREEN);
         leftWallGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.GREEN);
@@ -246,6 +255,7 @@ public class BubbleRunnerStage extends BaseStage {
         addActor(bgGroup);
         addActor(tunnelGroup);
         addActor(floorGroup);
+        addActor(floorAccentGroup);
         addActor(leftWallGroup);
 
         //TODO: Put bg sky?
@@ -355,6 +365,7 @@ public class BubbleRunnerStage extends BaseStage {
             shields.setZIndex(index--);
             player.setZIndex(index--);
             leftWallGroup.setZIndex(index--);
+            floorAccentGroup.setZIndex(index--);
             floorGroup.setZIndex(index--);
             tunnelGroup.setZIndex(index--);
 
@@ -473,6 +484,10 @@ public class BubbleRunnerStage extends BaseStage {
             generateNextFloor();
         }
 
+        if(floorAccentGroup.getChildren().size < accentCount){
+            generteNextFloorAccent();
+        }
+
         if(tunnelGroup.getChildren().size < tunnelCount){
             generateNextTunnel();
         }
@@ -588,7 +603,7 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private String getAnimationNameForForceFieldType(ForceFieldType fft, boolean isLeft, boolean isBreaking){
-        String name;
+        String name = null;
         switch(fft){
             case LIGHTNING:
                 if(isLeft){
@@ -609,13 +624,6 @@ public class BubbleRunnerStage extends BaseStage {
                     name = isBreaking ? AtlasUtil.ANI_WALL_LASER_BR_L : AtlasUtil.ANI_WALL_LASER_L;
                 }else{
                     name = isBreaking ? AtlasUtil.ANI_WALL_LASER_BR_R : AtlasUtil.ANI_WALL_LASER_R;
-                }
-                break;
-            default:
-                if(isLeft){
-                    name = AtlasUtil.ANI_WALL_LIGHTNING;
-                }else{
-                    name = AtlasUtil.ANI_WALL_LIGHTNING;
                 }
                 break;
         }
@@ -840,6 +848,10 @@ public class BubbleRunnerStage extends BaseStage {
             ((GenericActor)a).velocity.x = velocity;
         }
 
+        for(Actor a:floorAccentGroup.getChildren()){
+            ((GenericActor)a).velocity.x = velocity;
+        }
+
         for(Actor a:tunnelGroup.getChildren()){
             ((GenericActor)a).velocity.x = velocity;
         }
@@ -920,10 +932,10 @@ public class BubbleRunnerStage extends BaseStage {
         alarmOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.RED, Color.RED, mainFont, subFont, "", "");
         alarmOverlay.addDecorator(new ActorDecorator() {
 
-            private float max = 0.2f;
+            private float max = 0.15f;
             private float min = 0.0f;
             private float current = 0.0f;
-            private float flutterSpeed = 0.1f;
+            private float flutterSpeed = 0.075f;
 
             @Override
             public void applyAdjustment(Actor actor, float delta) {
@@ -1028,9 +1040,9 @@ public class BubbleRunnerStage extends BaseStage {
         return floors.get(index);
     }
 
-    private TextureRegion getTunnelTextureRegion(){
+    private TextureRegion getAccentTextureRegion(){
 
-        Array<TextureAtlas.AtlasRegion> tunnels = spriteAtlas.findRegions(AtlasUtil.SPRITE_WALL);
+        Array<TextureAtlas.AtlasRegion> hazards = spriteAtlas.findRegions(AtlasUtil.SPRITE_HAZARD);
         int segment = rand.nextInt(100);
         int index = 0;
         if(segment < 20){
@@ -1038,7 +1050,7 @@ public class BubbleRunnerStage extends BaseStage {
         }else if(segment < 40){
             index = 2;
         }
-        return tunnels.get(index);
+        return hazards.get(index);
     }
 
     public void generateNextFloor(){
@@ -1048,6 +1060,19 @@ public class BubbleRunnerStage extends BaseStage {
         floor.velocity.x = wallAndFloorVelocity;
         floor.addDecorator(offScreenDecorator);
         floorGroup.addActor(floor);
+    }
+
+    public void generteNextFloorAccent(){
+        int currentAccentCount = floorAccentGroup.getChildren().size;
+        float nextPos = currentAccentCount == 0 ? 0f : floorAccentGroup.getChildren().get(currentAccentCount - 1).getRight();
+        GenericActor accent = new GenericActor(nextPos, ACCENT_Y, ACCENT_WIDTH, ACCENT_HEIGHT, getAccentTextureRegion(), Color.GRAY);
+        accent.velocity.x = wallAndFloorVelocity;
+        accent.addDecorator(offScreenDecorator);
+        floorAccentGroup.addActor(accent);
+        GenericActor accentTwo = new GenericActor(nextPos, FLOOR_HEIGHT-ACCENT_HEIGHT, ACCENT_WIDTH, ACCENT_HEIGHT, getAccentTextureRegion(), Color.GRAY);
+        accentTwo.velocity.x = wallAndFloorVelocity;
+        accentTwo.addDecorator(offScreenDecorator);
+        floorAccentGroup.addActor(accentTwo);
     }
 
     public TunnelAnimation buildAnimationForTunnel(){
@@ -1107,6 +1132,10 @@ public class BubbleRunnerStage extends BaseStage {
             generateNextFloor();
         }
 
+        for(int i=0;i<accentCount;i++){
+            generteNextFloorAccent();
+        }
+
         for(int i=0;i<tunnelCount;i++){
             generateNextTunnel();
         }
@@ -1148,9 +1177,6 @@ public class BubbleRunnerStage extends BaseStage {
         } else if (Input.Keys.TAB == keyCode) {
             KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
         } else if (Input.Keys.SPACE == keyCode) {
-            if(!cinematicComplete){
-                //cinematic.complete();
-            }
             hideCinematic();
             resetGame();
         } else if (Input.Keys.ESCAPE == keyCode) {
@@ -1175,45 +1201,49 @@ public class BubbleRunnerStage extends BaseStage {
 
         controls = new ControlGroup(0, 0, getWidth(), 60f, Color.CYAN);
 
-        TextureRegionDrawable aUp, aDown, aChecked,
-                sUp, sDown, sChecked,
-                dUp, dDown, dChecked;
 
-        aUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_UP));
-        aDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_DOWN));
-        aChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_CHECKED));
+        if(Gdx.app.getType() != Application.ApplicationType.Desktop){
 
-        sUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_UP));
-        sDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_DOWN));
-        sChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_CHECKED));
+            TextureRegionDrawable aUp, aDown, aChecked,
+                    sUp, sDown, sChecked,
+                    dUp, dDown, dChecked;
 
-        dUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_UP));
-        dDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_DOWN));
-        dChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_CHECKED));
+            aUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_UP));
+            aDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_DOWN));
+            aChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_CHECKED));
 
-        controls.addButton(aUp, aDown, aChecked, new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                addLightningField();
-            }
-        }, true, ForceFieldType.LIGHTNING);
+            sUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_UP));
+            sDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_DOWN));
+            sChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_CHECKED));
 
-        controls.addButton(sUp, sDown, sChecked, new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                addPlasmaField();
-            }
-        }, true, ForceFieldType.PLASMA);
+            dUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_UP));
+            dDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_DOWN));
+            dChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_CHECKED));
 
-        controls.addButton(dUp, dDown, dChecked, new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                addLaserField();
-            }
-        }, true, ForceFieldType.LASER);
+            controls.addButton(aUp, aDown, aChecked, new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    addLightningField();
+                }
+            }, true, ForceFieldType.LIGHTNING);
+
+            controls.addButton(sUp, sDown, sChecked, new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    addPlasmaField();
+                }
+            }, true, ForceFieldType.PLASMA);
+
+            controls.addButton(dUp, dDown, dChecked, new ClickListener(){
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    super.clicked(event, x, y);
+                    addLaserField();
+                }
+            }, true, ForceFieldType.LASER);
+        }
 
         controls.setEnergyBar(spriteAtlas.findRegion(AtlasUtil.SPRITE_ENERGY_BAR));
         addActor(controls);

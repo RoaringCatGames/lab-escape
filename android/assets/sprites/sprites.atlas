@@ -67,6 +67,27 @@ env/Floor
   orig: 420, 420
   offset: 0, 0
   index: 3
+env/Hazard
+  rotate: false
+  xy: 3756, 1917
+  size: 263, 125
+  orig: 263, 125
+  offset: 0, 0
+  index: 1
+env/Hazard
+  rotate: false
+  xy: 1026, 51
+  size: 263, 125
+  orig: 263, 125
+  offset: 0, 0
+  index: 2
+env/Hazard
+  rotate: false
+  xy: 3756, 1790
+  size: 263, 125
+  orig: 263, 125
+  offset: 0, 0
+  index: 3
 env/Wall
   rotate: false
   xy: 0, 1022

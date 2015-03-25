@@ -577,6 +577,20 @@ player/Female_Shock
   index: 2
 player/Female_Shock
   rotate: false
+  xy: 2431, 2888
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 6
+player/Female_Shock
+  rotate: false
+  xy: 2431, 2888
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 4
+player/Female_Shock
+  rotate: false
   xy: 2431, 2166
   size: 720, 720
   orig: 720, 720
@@ -584,18 +598,32 @@ player/Female_Shock
   index: 3
 player/Female_Shock
   rotate: false
+  xy: 2431, 2166
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 7
+player/Female_Shock
+  rotate: false
+  xy: 2431, 2166
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 5
+player/Female_Shock
+  rotate: false
   xy: 2431, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 4
+  index: 8
 player/Female_Shock
   rotate: false
   xy: 2961, 722
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
+  index: 9
 player/Female_Wall
   rotate: false
   xy: 2961, 0
@@ -814,11 +842,39 @@ player/Male_Shock
   index: 2
 player/Male_Shock
   rotate: false
+  xy: 2958, 0
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 6
+player/Male_Shock
+  rotate: false
+  xy: 2958, 0
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 4
+player/Male_Shock
+  rotate: false
   xy: 3152, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
   index: 3
+player/Male_Shock
+  rotate: false
+  xy: 3152, 2888
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 7
+player/Male_Shock
+  rotate: false
+  xy: 3152, 2888
+  size: 720, 720
+  orig: 720, 720
+  offset: 0, 0
+  index: 5
 walls/Laser_Wall_Break_Right
   rotate: false
   xy: 0, 2168
@@ -894,14 +950,14 @@ player/Male_Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 4
+  index: 8
 player/Male_Shock
   rotate: false
   xy: 1250, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
+  index: 9
 player/Male_Wall
   rotate: false
   xy: 1972, 2888
@@ -964,14 +1020,14 @@ player/Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 7
+  index: 4
 player/Shock
   rotate: false
   xy: 986, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 4
+  index: 7
 player/Shock
   rotate: false
   xy: 1708, 1444
