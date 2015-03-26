@@ -602,14 +602,14 @@ player/Female_Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 7
+  index: 5
 player/Female_Shock
   rotate: false
   xy: 2431, 2166
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
+  index: 7
 player/Female_Shock
   rotate: false
   xy: 2431, 1444
@@ -867,14 +867,14 @@ player/Male_Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 7
+  index: 5
 player/Male_Shock
   rotate: false
   xy: 3152, 2888
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
+  index: 7
 walls/Laser_Wall_Break_Right
   rotate: false
   xy: 0, 2168
@@ -1020,14 +1020,14 @@ player/Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 4
+  index: 7
 player/Shock
   rotate: false
   xy: 986, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 7
+  index: 4
 player/Shock
   rotate: false
   xy: 1708, 1444
@@ -1041,14 +1041,14 @@ player/Shock
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 8
+  index: 5
 player/Shock
   rotate: false
   xy: 1708, 1444
   size: 720, 720
   orig: 720, 720
   offset: 0, 0
-  index: 5
+  index: 8
 player/Shock
   rotate: false
   xy: 2430, 1444
