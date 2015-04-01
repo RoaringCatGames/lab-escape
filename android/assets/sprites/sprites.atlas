@@ -6,14 +6,14 @@ filter: Nearest,Nearest
 repeat: none
 buttons/button_discharge_off
   rotate: false
-  xy: 1448, 613
+  xy: 1448, 554
   size: 407, 407
   orig: 407, 407
   offset: 0, 0
   index: -1
 buttons/button_discharge_on
   rotate: false
-  xy: 1448, 204
+  xy: 1448, 145
   size: 407, 407
   orig: 407, 407
   offset: 0, 0
@@ -27,67 +27,60 @@ buttons/button_light_off
   index: -1
 buttons/button_light_on
   rotate: false
-  xy: 2052, 811
+  xy: 1857, 554
   size: 407, 407
   orig: 407, 407
   offset: 0, 0
   index: -1
 buttons/button_plasma_off
   rotate: false
-  xy: 2461, 811
+  xy: 1857, 145
   size: 407, 407
   orig: 407, 407
   offset: 0, 0
   index: -1
 buttons/button_plasma_on
   rotate: false
-  xy: 2870, 811
+  xy: 2266, 752
   size: 407, 407
   orig: 407, 407
   offset: 0, 0
   index: -1
 env/Floor
   rotate: false
-  xy: 1026, 600
-  size: 420, 420
-  orig: 420, 420
-  offset: 0, 0
-  index: 1
-env/Floor
-  rotate: false
   xy: 3334, 1622
   size: 420, 420
   orig: 420, 420
   offset: 0, 0
+  index: 1
+env/Floor
+  rotate: false
+  xy: 1026, 541
+  size: 420, 420
+  orig: 420, 420
+  offset: 0, 0
   index: 2
 env/Floor
   rotate: false
-  xy: 1026, 178
+  xy: 1026, 119
   size: 420, 420
   orig: 420, 420
   offset: 0, 0
   index: 3
 env/Hazard
   rotate: false
-  xy: 3756, 1917
-  size: 263, 125
-  orig: 263, 125
+  xy: 1026, 963
+  size: 1000, 57
+  orig: 1000, 57
   offset: 0, 0
   index: 1
 env/Hazard
   rotate: false
-  xy: 1026, 51
-  size: 263, 125
-  orig: 263, 125
+  xy: 2052, 1161
+  size: 1000, 57
+  orig: 1000, 57
   offset: 0, 0
   index: 2
-env/Hazard
-  rotate: false
-  xy: 3756, 1790
-  size: 263, 125
-  orig: 263, 125
-  offset: 0, 0
-  index: 3
 env/Wall
   rotate: false
   xy: 0, 1022

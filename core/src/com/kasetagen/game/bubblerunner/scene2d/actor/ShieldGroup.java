@@ -5,31 +5,33 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
+import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OffsetColliderDecorator;
 
 /**
  * Created with IntelliJ IDEA.
  * User: barry
  * Date: 10/30/14
  * Time: 9:12 PM
- * To change this template use File | Settings | File Templates.
  */
 public class ShieldGroup extends GenericGroup {
 
-    private static final float SHIELD_WIDTH = 100f;
-    private static final float SHIELD_HEIGHT = 360f;
+    private static final float SHIELD_SIZE = 275f/2f;
 
-    private static final float FIELD_ADJUST_X = SHIELD_WIDTH;
-    private static final float FIELD_ADJUST_Y = 75f;
+    private static final float FIELD_ADJUST_X = SHIELD_SIZE+10f;
+    private static final float FIELD_ADJUST_Y = 200f;
 
     private Array<ForceField> fields;
     public int maxFields = 1;
     public int resourceUsage = 1;
     private ObjectMap<ForceFieldType, Animation> shieldAnimations;
 
+    private OffsetColliderDecorator colliderDecorator;
+
     public ShieldGroup(float x, float y, float width, float height) {
         super(x, y, width, height, null, Color.BLACK);
         fields = new Array<ForceField>();
         shieldAnimations = new ObjectMap<ForceFieldType, Animation>();
+        colliderDecorator = new OffsetColliderDecorator(SHIELD_SIZE/4f, SHIELD_SIZE/4f, SHIELD_SIZE/2f, SHIELD_SIZE/2f);
     }
 
     public void setShieldAnimation(ForceFieldType fft, Animation ani){
@@ -45,14 +47,14 @@ public class ShieldGroup extends GenericGroup {
             fields.removeIndex(0);
         }
 
-        float radius = getWidth();
-        float x = getWidth() - (SHIELD_WIDTH/4);
+
+        float x = getWidth() - (SHIELD_SIZE/4);
         if(fields.size > 0){
             x -= (fields.get(fields.size-1).getX()-x);
         }
         float y = FIELD_ADJUST_Y;
-        ForceField field = new ForceField(x, y, SHIELD_WIDTH, SHIELD_HEIGHT, shieldAnimations.get(ff), ff);
-
+        ForceField field = new ForceField(x, y, SHIELD_SIZE, SHIELD_SIZE, shieldAnimations.get(ff), ff);
+        field.addDecorator(colliderDecorator);
         for(int i=0;i<fields.size;i++){
             fields.get(i).targetX += FIELD_ADJUST_X;
         }
@@ -65,10 +67,6 @@ public class ShieldGroup extends GenericGroup {
     public void removeField(ForceField ff){
         this.removeActor(ff);
         fields.removeValue(ff, true);
-
-//        for(int i=0;i<fields.size;i++){
-//            fields.get(i).targetX -= FIELD_ADJUST_X*(fields.size-i-1);//= getWidth()-(SHIELD_WIDTH/4) + (FIELD_ADJUST_X * (fields.size-i-1));
-//        }
     }
 
     public void removeField(ForceFieldType ff){

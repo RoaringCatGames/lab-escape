@@ -1,9 +1,6 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.math.Vector2;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor;
 
 /**
@@ -11,7 +8,6 @@ import com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor;
  * User: barry
  * Date: 6/1/14
  * Time: 7:34 PM
- * To change this template use File | Settings | File Templates.
  */
 public class ForceField extends AnimatedActor {
 
@@ -47,8 +43,8 @@ public class ForceField extends AnimatedActor {
             }
         }
 
-        if(textureRegion != null && !textureRegion.isFlipX()){
-            textureRegion.flip(true, false);
-        }
+//        if(textureRegion != null && !textureRegion.isFlipX()){
+//            textureRegion.flip(true, false);
+//        }
     }
 }

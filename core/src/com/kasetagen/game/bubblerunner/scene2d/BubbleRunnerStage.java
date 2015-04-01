@@ -26,7 +26,6 @@ import com.kasetagen.engine.IGameProcessor;
 import com.kasetagen.engine.gdx.scenes.scene2d.ActorDecorator;
 import com.kasetagen.engine.gdx.scenes.scene2d.IActorDisposer;
 import com.kasetagen.engine.gdx.scenes.scene2d.ICameraModifier;
-import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.*;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
@@ -145,6 +144,7 @@ public class BubbleRunnerStage extends BaseStage {
     private Sound powerOnSound;
     private Sound explosionSound;
     private Sound screamSound;
+    private Sound fryingPanSound;
 
     private ObjectMap<ComboLevels, Sound> comboSfx;
 
@@ -168,8 +168,8 @@ public class BubbleRunnerStage extends BaseStage {
     private float FLOOR_Y = 0f;
     private int floorCount = ((int)Math.ceil(ViewportUtil.VP_WIDTH/(FLOOR_WIDTH + FLOOR_X_OFFSET))) + 1;
 
-    private float ACCENT_WIDTH = 263f/2f;
-    private float ACCENT_HEIGHT = 125f/2f;
+    private float ACCENT_WIDTH = 1000f/2f;
+    private float ACCENT_HEIGHT = 57f/2f;
     private float ACCENT_Y = 0f;
     private int accentCount = 2* (((int)Math.ceil(ViewportUtil.VP_WIDTH/ACCENT_WIDTH)) + 1);
 
@@ -749,7 +749,18 @@ public class BubbleRunnerStage extends BaseStage {
         setEnvVelocity(0f);
 
         if(!w.equals(collidedWall)){
-            screamSound.play(sfxVolume);
+            switch(w.forceFieldType){
+                case PLASMA:
+                    fryingPanSound.play(sfxVolume);
+                    break;
+                case LASER:
+                    screamSound.play(sfxVolume);
+                    break;
+                case LIGHTNING:
+
+                    break;
+            }
+
             isDead = true;
             collidedWall = w;
             music.stop();
@@ -923,6 +934,7 @@ public class BubbleRunnerStage extends BaseStage {
         powerOnSound = assetManager.get(AssetsUtil.POWER_ON_SOUND, AssetsUtil.SOUND);
         explosionSound = assetManager.get(AssetsUtil.EXPLOSION_SOUND, AssetsUtil.SOUND);
         screamSound = assetManager.get(AssetsUtil.SCREAM, AssetsUtil.SOUND);
+        fryingPanSound = assetManager.get(AssetsUtil.FRYING_PAN, AssetsUtil.SOUND);
     }
 
     private void initializeOverlays() {
@@ -1045,10 +1057,8 @@ public class BubbleRunnerStage extends BaseStage {
         Array<TextureAtlas.AtlasRegion> hazards = spriteAtlas.findRegions(AtlasUtil.SPRITE_HAZARD);
         int segment = rand.nextInt(100);
         int index = 0;
-        if(segment < 20){
+        if(segment < 50){
             index = 1;
-        }else if(segment < 40){
-            index = 2;
         }
         return hazards.get(index);
     }
@@ -1068,6 +1078,7 @@ public class BubbleRunnerStage extends BaseStage {
         GenericActor accent = new GenericActor(nextPos, ACCENT_Y, ACCENT_WIDTH, ACCENT_HEIGHT, getAccentTextureRegion(), Color.GRAY);
         accent.velocity.x = wallAndFloorVelocity;
         accent.addDecorator(offScreenDecorator);
+        accent.flipTextureRegion(false, true);
         floorAccentGroup.addActor(accent);
         GenericActor accentTwo = new GenericActor(nextPos, FLOOR_HEIGHT-ACCENT_HEIGHT, ACCENT_WIDTH, ACCENT_HEIGHT, getAccentTextureRegion(), Color.GRAY);
         accentTwo.velocity.x = wallAndFloorVelocity;
@@ -1084,19 +1095,19 @@ public class BubbleRunnerStage extends BaseStage {
         if(segment < 3){
             //nessie
 
-            animation = new TunnelAnimation(new Animation(1f/4f, aniAtlas.findRegions(AtlasUtil.ANI_NESSIE_WALL)), true);
+            animation = new TunnelAnimation(new Animation(1f/3f, aniAtlas.findRegions(AtlasUtil.ANI_NESSIE_WALL)), true);
             tunnelGroupHasSpecialTunnel = true;
         }else if(segment < 6){
             //Sassie
-            animation = new TunnelAnimation(new Animation(1f/4f, aniAtlas.findRegions(AtlasUtil.ANI_SASSIE_WALL)), true);
+            animation = new TunnelAnimation(new Animation(1f/6f, aniAtlas.findRegions(AtlasUtil.ANI_SASSIE_WALL)), true);
             tunnelGroupHasSpecialTunnel = true;
         }else if(segment < 12){
             //baldGuy
-            animation = new TunnelAnimation(new Animation(1f/2f, aniAtlas.findRegions(AtlasUtil.ANI_GUY_WALL)), true);
+            animation = new TunnelAnimation(new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_GUY_WALL)), true);
             tunnelGroupHasSpecialTunnel = true;
         }else if(segment < 18){
             //labLady
-            animation = new TunnelAnimation(new Animation(1f/2f, aniAtlas.findRegions(AtlasUtil.ANI_LADY_WALL)), true);
+            animation = new TunnelAnimation(new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_LADY_WALL)), true);
             tunnelGroupHasSpecialTunnel = true;
         }else if(segment < 38){
             //cracked
@@ -1116,12 +1127,13 @@ public class BubbleRunnerStage extends BaseStage {
         int currentTunnelCount = tunnelGroup.getChildren().size;
         float nextPos = currentTunnelCount == 0 ? 0f : tunnelGroup.getChildren().get(currentTunnelCount-1).getRight();
         TunnelAnimation ani = buildAnimationForTunnel();
+        ani.animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
         //GenericActor tunnel = new GenericActor(nextPos, TNL_Y, TNL_WIDTH, TNL_HEIGHT, getTunnelTextureRegion(), Color.GRAY);
         TunnelSegment tunnel = new TunnelSegment(nextPos, TNL_Y, TNL_WIDTH, TNL_HEIGHT, ani.animation, 0f);
         tunnel.setSpecial(ani.isSpecial);
         tunnel.velocity.x = wallAndFloorVelocity;
         tunnel.addDecorator(offScreenDecorator);
-        tunnel.setIsLooping(false);
+        //tunnel.setIsLooping(false);
         tunnel.pause();
         tunnel.addDecorator(resumeAnimationOnScreenDecorator);
         tunnelGroup.addActor(tunnel);
@@ -1174,14 +1186,15 @@ public class BubbleRunnerStage extends BaseStage {
             addPlasmaField();
         } else if (Input.Keys.D == keyCode || Input.Keys.RIGHT == keyCode) {  //Or Right
             addLaserField();
-        } else if (Input.Keys.TAB == keyCode) {
-            KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
         } else if (Input.Keys.SPACE == keyCode) {
             hideCinematic();
             resetGame();
         } else if (Input.Keys.ESCAPE == keyCode) {
             gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
         }
+//        else if (Input.Keys.TAB == keyCode) {
+//            KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
+//        }
         return super.keyDown(keyCode);
     }
 

@@ -10,6 +10,25 @@ public class AtlasUtil {
 
     public static final String ANI_INTRO = "intro/intro";
 
+    //INTRO
+    public static final String ANI_TITLE_BG = "screens/Background";
+    public static final String ANI_TITLE_C5 = "screens/C5";
+    public static final String ANI_TITLE_C4 = "screens/C4";
+    public static final String ANI_TITLE_C3 = "screens/C3";
+    public static final String ANI_TITLE_C2 = "screens/C2";
+    public static final String ANI_TITLE_C1 = "screens/C1";
+
+    public static final String ANI_TITLE_MOON = "screens/Fannie_Moon";
+    public static final String ANI_TITLE_PLATFORM = "screens/Platform";
+    public static final String ANI_TITLE_SKYLINE2 = "screens/Skyline2";
+    public static final String ANI_TITLE_SKYLINE1 = "screens/Skyline1";
+    public static final String ANI_TITLE_TITLE = "screens/Title";
+    public static final String ANI_TITLE_EDISON = "screens/Edison/Edison";
+    public static final String ANI_TITLE_EDYN = "screens/Edyn/Edyn";
+    public static final String ANI_TITLE_EDYN_EYES = "screens/Edyn/Eyes";
+
+
+
     //Veda Animations
     public static final String ANI_VEDA_RUN = "player/Female_Run";
     public static final String ANI_VEDA_PUNCH = "player/Female_Punch";

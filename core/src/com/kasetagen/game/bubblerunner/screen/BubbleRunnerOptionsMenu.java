@@ -14,12 +14,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.kasetagen.engine.IDataSaver;
 import com.kasetagen.engine.IGameProcessor;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
-
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
 import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
@@ -76,7 +74,10 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
         stage = new BaseStage(delegate);
 
         float sfxVolValue = delegate.getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY);
+        sfxVolValue = sfxVolValue < 0f ? 0f : sfxVolValue;
         float bgVolValue = delegate.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
+        bgVolValue = bgVolValue < 0f ? 0f : bgVolValue;
+
         String charStoredValue = delegate.getStoredString(GameOptions.CHARACTER_SELECT_KEY);
         if(charStoredValue == null || "".equals(charStoredValue.trim())){
             charStoredValue = AnimationUtil.CHARACTER_2;
@@ -313,10 +314,6 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
             //if return button go home.
             returnButtonPressed();
         }
-
-//        if(keycode == Input.Keys.TAB){
-//            rootTable.setDebug(!rootTable.getDebug());
-//        }
 
         return true;
     }

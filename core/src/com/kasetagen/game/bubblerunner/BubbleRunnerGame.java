@@ -8,6 +8,7 @@ import com.kasetagen.engine.IDataSaver;
 import com.kasetagen.engine.IGameProcessor;
 import com.kasetagen.engine.gdx.scenes.scene2d.KasetagenStateUtil;
 import com.kasetagen.engine.screen.LoadingScreen;
+import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerMenu;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerOptionsMenu;
@@ -51,6 +52,15 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         }
         assetManager = new AssetManager();
         loadAssets();
+        float val = getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
+        if(val < 0f){
+               saveGameData(new IDataSaver() {
+                   @Override
+                   public void updatePreferences(Preferences preferences) {
+                       preferences.putFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY, 0.5f);
+                   }
+               });
+        }
 
         input = new InputMultiplexer();
 	}
@@ -103,6 +113,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.EXPLOSION_SOUND, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.POWER_ON_SOUND, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.SCREAM, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.FRYING_PAN, AssetsUtil.SOUND);
 
         assetManager.load(AssetsUtil.NOT_BAD, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.GREAT, AssetsUtil.SOUND);

@@ -5,7 +5,6 @@ package com.kasetagen.game.bubblerunner.data;
  * User: barry
  * Date: 5/27/14
  * Time: 7:47 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GameStats {
     //TODO: Implement GameStats

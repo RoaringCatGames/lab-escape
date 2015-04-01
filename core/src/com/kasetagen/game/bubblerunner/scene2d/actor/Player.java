@@ -3,10 +3,8 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor;
-import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 
 
 /**
