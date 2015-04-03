@@ -1,5 +1,5 @@
 
-uiskin2.png
+uiskin.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -44,9 +44,9 @@ default-scroll
   index: -1
 default-slider-knob
   rotate: false
-  xy: 1, 1
-  size: 9, 18
-  orig: 9, 18
+  xy: 174, 1
+  size: 15, 30
+  orig: 15, 30
   offset: 0, 0
   index: -1
 default-round-down

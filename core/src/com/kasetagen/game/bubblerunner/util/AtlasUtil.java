@@ -29,11 +29,14 @@ public class AtlasUtil {
     public static final String ANI_TITLE_PLAY_BTN = "screens/Escape";
     public static final String ANI_TITLE_OPT_BTN = "screens/Options";
 
+    public static final String ANI_OPTIONS_CHARSELECT = "screens/options/Edyn_Select_Small";
     public static final String ANI_OPTIONS_RUNNERSCAFFOLD = "screens/options/Runner";
     public static final String ANI_OPTIONS_VOLUMESCAFFOLD = "screens/options/Volume";
     public static final String ANI_OPTIONS_EDISON_SELECT = "screens/options/Edison_Select_Small";//"screens/options/Edison_Select";
     public static final String ANI_OPTIONS_EDYN_SELECT = "screens/options/Edyn_Select_Small";//"screens/options/Edyn_Select";
     public static final String ANI_OPTIONS_MAINMENU = "screens/options/MainMenu";
+    public static final String ANI_OPTIONS_MUSIC = "screens/options/Edyn_Select_Small";
+    public static final String ANI_OPTIONS_SFX = "screens/options/Edyn_Select_Small";
 
 
     //Veda Animations

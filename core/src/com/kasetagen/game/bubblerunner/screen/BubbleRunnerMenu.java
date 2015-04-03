@@ -113,11 +113,17 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
     private Sound sfx;
     private String charValue;
     private IDataSaver bgDataSaver, sfxDataSaver, charDataSaver;
+    private AnimatedActor charIndicator;
+
     //BG Volume
+    private AnimatedActor bgIndicator;
     private Slider bgVolumeSet;
 
     //SFX Volume
+    private AnimatedActor sfxIndicator;
     private Slider sfxVolumeSet;
+
+    private Array<AnimatedActor> indicators;
 
     public BubbleRunnerMenu(IGameProcessor delegate){
         super(delegate);
@@ -161,9 +167,14 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
             }
         };
 
+        indicators = new Array<AnimatedActor>();
         assembleMenuGroup(atlas);
 
         assembleOptionsGroup(atlas);
+
+        indicators.add(charIndicator);
+        indicators.add(bgIndicator);
+        indicators.add(sfxIndicator);
     }
 
     private void assembleMenuGroup(TextureAtlas atlas) {
@@ -314,6 +325,10 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         /*
          * Add Player Buttons
          */
+        Animation charAni = new Animation(1f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_CHARSELECT));
+        charIndicator = new AnimatedActor(500f, 600f, 400f, 100f, charAni, 0f);
+        charIndicator.setTargetKeyFrame(1);
+        optionsGroup.addActor(charIndicator);
 
         Array<TextureAtlas.AtlasRegion> edynImgs = atlas.findRegions(AtlasUtil.ANI_OPTIONS_EDYN_SELECT);
         TextureRegionDrawable edynUp = new TextureRegionDrawable(edynImgs.get(0));
@@ -357,10 +372,14 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         /*
          * Add Sliders
          */
+        Animation bgAni = new Animation(1f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_MUSIC));
+        bgIndicator = new AnimatedActor(100f, 150f, 200f, 100f, bgAni, 0f);
+        bgIndicator.setTargetKeyFrame(0);
+        optionsGroup.addActor(bgIndicator);
 
         bgVolumeSet = new Slider(0f, 1f, 0.1f, false, skin);
         bgVolumeSet.setValue(bgVolValue);
-        bgVolumeSet.setPosition(320f, 200f);
+        bgVolumeSet.setPosition(319f, 190f);
         bgVolumeSet.setSize(500f, 20f);
         optionsGroup.addActor(bgVolumeSet);
         bgDataSaver = new IDataSaver() {
@@ -378,9 +397,14 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         });
 
 
+        Animation sfxAni = new Animation(1f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_SFX));
+        sfxIndicator = new AnimatedActor(20f, 18f, 100f, 100f, sfxAni, 0f);
+        sfxIndicator.setTargetKeyFrame(0);
+        optionsGroup.addActor(sfxIndicator);
+
         sfxVolumeSet = new Slider(0f, 1f, 0.1f, false, skin);
         sfxVolumeSet.setValue(sfxVolValue);
-        sfxVolumeSet.setPosition(215f, 80f);
+        sfxVolumeSet.setPosition(208f, 68f);
         sfxVolumeSet.setSize(500f, 20f);
         optionsGroup.addActor(sfxVolumeSet);
         sfxDataSaver = new IDataSaver() {
@@ -448,24 +472,37 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         gameProcessor.saveGameData(charDataSaver);
     }
 
+    private void highlightIndicator(int index){
+        for(int i=0;i<indicators.size;i++){
+            if(i != index){
+                indicators.get(i).setTargetKeyFrame(0);
+            }else{
+                indicators.get(i).setTargetKeyFrame(1);
+            }
+        }
+    }
 
-    public void selectMenuItem(int index){
+    private void selectMenuItem(int index){
         //setDefaultColors();
         switch(index){
             case 0:
+                highlightIndicator(index);
 //                charSelect.setColor(Color.RED);
 //                charValue.setColor(Color.RED);
 //                charToggle.setColor(Color.RED);
                 break;
             case 1:
+                highlightIndicator(index);
 //                bgVolLbl.setColor(Color.RED);
 //                bgValue.setColor(Color.RED);
                 break;
             case 2:
+                highlightIndicator(index);
 //                sfxVolLbl.setColor(Color.RED);
 //                sfxValue.setColor(Color.RED);
                 break;
             case 3:
+                highlightIndicator(index);
 //                backToMainMenuButton.setColor(Color.RED);
                 break;
             default:
