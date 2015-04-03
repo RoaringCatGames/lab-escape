@@ -144,7 +144,12 @@ public class Wall{
     }
 
     public boolean isRemovable(){
-        return isRemovable;
+
+        return isRemovable ||
+               ((leftWall == null || leftWall.isRemovable()) &&
+                (rightWall == null || leftWall.isRemovable()) &&
+                (collidingActor == null || leftWall.isRemovable()) &&
+                (flourishing == null || flourishing.isRemovable()));
     }
 
     public void setIsRemovable(boolean isRemovable){

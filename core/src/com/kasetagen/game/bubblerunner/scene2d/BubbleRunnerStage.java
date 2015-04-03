@@ -67,7 +67,7 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float WALL_CYCLE_RATE = 1f/2f;
     private static final float WALL_BREAK_CYCLE_RATE = 1f/10f;
     private static final float TESLA_CYCLE_RATE = 1/15f;
-    private static final float LASER_CYCLE_RATE = 1f/8f;
+    private static final float LASER_CYCLE_RATE = 1f/4f;
 
     private static final float COMBO_BASE_OSCILLATION_RATE = 20f;
     private static final float COMBO_OSCILATION_INCREASE_RATE = 10f;
@@ -325,6 +325,7 @@ public class BubbleRunnerStage extends BaseStage {
             while(itr.hasNext()){
                 Wall w = itr.next();
                 if(w.isRemovable()){
+                    Gdx.app.log("ACT", "Removing Useless wall");
                     itr.remove();
                 }
             }
@@ -547,6 +548,10 @@ public class BubbleRunnerStage extends BaseStage {
                 float breakCycleRate = getAnimationCycleRateForForceFieldType(fft, true);
                 Animation leftBreakAni = new Animation(breakCycleRate, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true, true)));
                 Animation rightBreakAni = new Animation(breakCycleRate, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, false, true)));
+                if(fft == ForceFieldType.LASER){
+                    leftBreakAni.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+                    rightBreakAni.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+                }
                 String name = getFlourishAnimationNameForForceFieldType(fft);
                 Animation flourishAni = null;
                 if(name != null){
@@ -567,8 +572,20 @@ public class BubbleRunnerStage extends BaseStage {
     private float getAnimationCycleRateForForceFieldType(ForceFieldType fft, boolean isBreaking){
         float rate = WALL_CYCLE_RATE;
         if(isBreaking){
-            return WALL_BREAK_CYCLE_RATE;
+            switch(fft){
+                case LIGHTNING:
+                    rate = TESLA_CYCLE_RATE;
+                    break;
+                case LASER:
+                    rate = LASER_CYCLE_RATE;
+                    break;
+                default:
+                    rate = WALL_BREAK_CYCLE_RATE;
+                    break;
+            }
+            return rate;
         }
+
         switch(fft){
             case LIGHTNING:
                 rate = TESLA_CYCLE_RATE;

@@ -166,6 +166,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         if(LOADING.equalsIgnoreCase(screenName))    {
             if(loading == null){
                 loading = new LoadingScreen(this, "animations/loading.atlas", "Lab_Loading", new BaseStage(this));
+                loading.setIsAnimatedWithProgress(true);
             }
 
             setScreen(loading);

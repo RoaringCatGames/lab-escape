@@ -142,10 +142,10 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                //bgMusic.stop();
                 Actor btn = event.getListenerActor();
 
                 if(btn == startGameButton){
+                    bgMusic.stop();
                     gameProcessor.changeToScreen(BubbleRunnerGame.RUNNER);
 
                 } else if (btn == optionsButton){
@@ -323,7 +323,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         edynSelect.setSize(CHAR_SELECT_SIZE, CHAR_SELECT_SIZE);
         edynSelect.setPosition(EDYN_SELECT_X, CHAR_SELECT_Y);
         edynSelect.addListener(listener);
-        edynSelect.setChecked(charValue == AnimationUtil.CHARACTER_1);
+        edynSelect.setChecked(AnimationUtil.CHARACTER_2.equals(charValue));
         optionsGroup.addActor(edynSelect);
 
         Array<TextureAtlas.AtlasRegion> edisonImgs = atlas.findRegions(AtlasUtil.ANI_OPTIONS_EDISON_SELECT);
@@ -333,7 +333,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         edisonSelect.setSize(CHAR_SELECT_SIZE, CHAR_SELECT_SIZE);
         edisonSelect.setPosition(EDISON_SELECT_X, CHAR_SELECT_Y);
         edisonSelect.addListener(listener);
-        edisonSelect.setChecked(charValue == AnimationUtil.CHARACTER_1);
+        edisonSelect.setChecked(AnimationUtil.CHARACTER_1.equals(charValue));
         optionsGroup.addActor(edisonSelect);
 
         charDataSaver = new IDataSaver() {
