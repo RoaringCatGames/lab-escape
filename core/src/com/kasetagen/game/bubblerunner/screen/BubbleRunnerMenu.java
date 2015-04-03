@@ -101,10 +101,15 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
     private static final int MAX_INDEX = 3; //Zero-based index, with 4 controls
     private static final float VOLUME_INCREMENT = 0.1f;
 
-    private static final float CHAR_SELECT_SIZE = 355f/2f;
-    private static final float CHAR_SELECT_Y = 404f;
-    private static final float EDYN_SELECT_X = 213f;
-    private static final float EDISON_SELECT_X = 524.5f;
+    private static final float CHAR_CIRCLE_SIZE = 200f;
+    private static final float CHAR_CIRCLE_Y = 391f;
+    private static final float EDYN_SELECT_X = 203f;
+    private static final float EDISON_SELECT_X = 516f;
+    private static final float MM_X = 900f;
+    private static final float MM_Y = 300f;
+    private static final float MM_W = 312f;
+    private static final float MM_H = 50f;
+
     private ImageButton edisonSelect;
     private ImageButton edynSelect;
     private ImageButton mainMenuButton;
@@ -113,6 +118,23 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
     private Sound sfx;
     private String charValue;
     private IDataSaver bgDataSaver, sfxDataSaver, charDataSaver;
+    private Array<AnimatedActor> indicators;
+
+    private static final float CHAR_SEL_X = 500f;
+    private static final float CHAR_SEL_Y = 630f;
+    private static final float CHAR_SEL_W = 505f;
+    private static final float CHAR_SEL_H = 70f;
+
+    private static final float MUSIC_X = 63f;
+    private static final float MUSIC_Y = 175f;
+    private static final float MUSIC_W = 212f;
+    private static final float MUSIC_H = 62f;
+
+    private static final float SFX_X = 50f;
+    private static final float SFX_Y = 50f;
+    private static final float SFX_W = 150f;
+    private static final float SFX_H = 62f;
+
     private AnimatedActor charIndicator;
 
     //BG Volume
@@ -123,7 +145,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
     private AnimatedActor sfxIndicator;
     private Slider sfxVolumeSet;
 
-    private Array<AnimatedActor> indicators;
+
 
     public BubbleRunnerMenu(IGameProcessor delegate){
         super(delegate);
@@ -326,7 +348,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
          * Add Player Buttons
          */
         Animation charAni = new Animation(1f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_CHARSELECT));
-        charIndicator = new AnimatedActor(500f, 600f, 400f, 100f, charAni, 0f);
+        charIndicator = new AnimatedActor(CHAR_SEL_X, CHAR_SEL_Y, CHAR_SEL_W, CHAR_SEL_H, charAni, 0f);
         charIndicator.setTargetKeyFrame(1);
         optionsGroup.addActor(charIndicator);
 
@@ -335,8 +357,8 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         TextureRegionDrawable edynDown = new TextureRegionDrawable(edynImgs.get(1));
         edynSelect = new ImageButton(edynUp, edynDown, edynDown);
 
-        edynSelect.setSize(CHAR_SELECT_SIZE, CHAR_SELECT_SIZE);
-        edynSelect.setPosition(EDYN_SELECT_X, CHAR_SELECT_Y);
+        edynSelect.setSize(CHAR_CIRCLE_SIZE, CHAR_CIRCLE_SIZE);
+        edynSelect.setPosition(EDYN_SELECT_X, CHAR_CIRCLE_Y);
         edynSelect.addListener(listener);
         edynSelect.setChecked(AnimationUtil.CHARACTER_2.equals(charValue));
         optionsGroup.addActor(edynSelect);
@@ -345,8 +367,8 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         TextureRegionDrawable edisonUp = new TextureRegionDrawable(edisonImgs.get(0));
         TextureRegionDrawable edisonDown = new TextureRegionDrawable(edisonImgs.get(1));
         edisonSelect = new ImageButton(edisonUp, edisonDown, edisonDown);
-        edisonSelect.setSize(CHAR_SELECT_SIZE, CHAR_SELECT_SIZE);
-        edisonSelect.setPosition(EDISON_SELECT_X, CHAR_SELECT_Y);
+        edisonSelect.setSize(CHAR_CIRCLE_SIZE, CHAR_CIRCLE_SIZE);
+        edisonSelect.setPosition(EDISON_SELECT_X, CHAR_CIRCLE_Y);
         edisonSelect.addListener(listener);
         edisonSelect.setChecked(AnimationUtil.CHARACTER_1.equals(charValue));
         optionsGroup.addActor(edisonSelect);
@@ -354,7 +376,6 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         charDataSaver = new IDataSaver() {
             @Override
             public void updatePreferences(Preferences prefs) {
-                Gdx.app.log("OPTIONS", "Saving Value: " + charValue);
                 prefs.putString(GameOptions.CHARACTER_SELECT_KEY, charValue);
             }
         };
@@ -362,9 +383,11 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         /*
          * Add Main Menu Button
          */
-        mainMenuButton = new ImageButton(new TextureRegionDrawable(atlas.findRegion(AtlasUtil.ANI_OPTIONS_MAINMENU)));
-        mainMenuButton.setSize(623f/2f, 75f/2f);
-        mainMenuButton.setPosition(900f, 300f);
+        Array<TextureAtlas.AtlasRegion> mmImgs = atlas.findRegions(AtlasUtil.ANI_OPTIONS_MAINMENU);
+        TextureRegionDrawable mmDown = new TextureRegionDrawable(mmImgs.get(1));
+        mainMenuButton = new ImageButton(new TextureRegionDrawable(mmImgs.get(0)), mmDown, mmDown);
+        mainMenuButton.setSize(MM_W, MM_H);
+        mainMenuButton.setPosition(MM_X, MM_Y);
         mainMenuButton.addListener(listener);
         optionsGroup.addActor(mainMenuButton);
 
@@ -373,7 +396,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
          * Add Sliders
          */
         Animation bgAni = new Animation(1f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_MUSIC));
-        bgIndicator = new AnimatedActor(100f, 150f, 200f, 100f, bgAni, 0f);
+        bgIndicator = new AnimatedActor(MUSIC_X, MUSIC_Y, MUSIC_W, MUSIC_H, bgAni, 0f);
         bgIndicator.setTargetKeyFrame(0);
         optionsGroup.addActor(bgIndicator);
 
@@ -398,7 +421,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
 
         Animation sfxAni = new Animation(1f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_SFX));
-        sfxIndicator = new AnimatedActor(20f, 18f, 100f, 100f, sfxAni, 0f);
+        sfxIndicator = new AnimatedActor(SFX_X, SFX_Y, SFX_W, SFX_H, sfxAni, 0f);
         sfxIndicator.setTargetKeyFrame(0);
         optionsGroup.addActor(sfxIndicator);
 
@@ -484,26 +507,15 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
     private void selectMenuItem(int index){
         //setDefaultColors();
+        highlightIndicator(index);
         switch(index){
             case 0:
-                highlightIndicator(index);
-//                charSelect.setColor(Color.RED);
-//                charValue.setColor(Color.RED);
-//                charToggle.setColor(Color.RED);
-                break;
             case 1:
-                highlightIndicator(index);
-//                bgVolLbl.setColor(Color.RED);
-//                bgValue.setColor(Color.RED);
-                break;
             case 2:
-                highlightIndicator(index);
-//                sfxVolLbl.setColor(Color.RED);
-//                sfxValue.setColor(Color.RED);
+                mainMenuButton.setChecked(false);
                 break;
             case 3:
-                highlightIndicator(index);
-//                backToMainMenuButton.setColor(Color.RED);
+                mainMenuButton.setChecked(true);
                 break;
             default:
                 break;
@@ -596,7 +608,6 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
         boolean trapped = false;
         if(isMenuView){
-            Gdx.app.log("MENU", "KeyDown Fired!");
             if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER){
                 if(startGameButton.isChecked()){
                     bgMusic.stop();
@@ -605,7 +616,6 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
                 }else if(optionsButton.isChecked()){
                     trapped = true;
                     showOptionsMenu();
-                    //gameProcessor.changeToScreen(BubbleRunnerGame.OPTIONS);
                 }
             }else if(keycode == Input.Keys.DOWN){
                 trapped = true;

@@ -11,21 +11,18 @@ import com.kasetagen.engine.screen.LoadingScreen;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerMenu;
-import com.kasetagen.game.bubblerunner.screen.BubbleRunnerOptionsMenu;
 import com.kasetagen.game.bubblerunner.screen.BubbleRunnerScreen;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 
 public class BubbleRunnerGame extends Game implements IGameProcessor {
 
     public static final String LOADING = "loading";
-    public static final String OPTIONS = "options";
     public static final String MENU = "menu";
     public static final String RUNNER = "runner";
 
     public static final String BUBBLE_RUNNER_DATA_NAME = "BubbleRunnerData";
 
     LoadingScreen loading;
-    BubbleRunnerOptionsMenu options;
     BubbleRunnerMenu menu;
     BubbleRunnerScreen runnerScreen;
     InputMultiplexer input;
@@ -170,18 +167,6 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
             }
 
             setScreen(loading);
-        }else if(OPTIONS.equalsIgnoreCase(screenName)){
-
-            if(options == null){
-                options = new BubbleRunnerOptionsMenu(this);
-            }
-
-
-            input.clear();
-            input.addProcessor(options);
-            input.addProcessor(options.getStage());
-            setScreen(options);
-
         }else if(MENU.equalsIgnoreCase(screenName)){
             if(menu == null){
                 menu = new BubbleRunnerMenu(this);
