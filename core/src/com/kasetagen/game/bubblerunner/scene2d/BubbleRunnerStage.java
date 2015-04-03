@@ -179,7 +179,6 @@ public class BubbleRunnerStage extends BaseStage {
     private int tunnelCount = ((int)Math.ceil(ViewportUtil.VP_WIDTH/TNL_WIDTH) + 1);
 
     private ActorDecorator offScreenDecorator;
-//    private ActorDecorator wallColliderDecorator;
 
     private ActorDecorator resumeAnimationOnScreenDecorator;
 
@@ -1087,32 +1086,34 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     public TunnelAnimation buildAnimationForTunnel(){
-        int segment = rand.nextInt(100);
+        int segment = rand.nextInt(1000);
         if(tunnelGroupHasSpecialTunnel){
-            segment += 18; //skip the specials, and increase Basic chances
+            segment += 550; //skip the specials, and increase Basic chances
         }
         TunnelAnimation animation;
-        if(segment < 3){
+        if(segment < 2){
             //nessie
 
-            animation = new TunnelAnimation(new Animation(1f/3f, aniAtlas.findRegions(AtlasUtil.ANI_NESSIE_WALL)), true);
+            animation = new TunnelAnimation(new Animation(1f/3f, aniAtlas.findRegions(AtlasUtil.ANI_NESSIE_WALL)), true, false);
             tunnelGroupHasSpecialTunnel = true;
-        }else if(segment < 6){
+        }else if(segment < 3){
             //Sassie
-            animation = new TunnelAnimation(new Animation(1f/6f, aniAtlas.findRegions(AtlasUtil.ANI_SASSIE_WALL)), true);
+            animation = new TunnelAnimation(new Animation(1f/6f, aniAtlas.findRegions(AtlasUtil.ANI_SASSIE_WALL)), true, false);
             tunnelGroupHasSpecialTunnel = true;
-        }else if(segment < 12){
+        }else if(segment < 150){
             //baldGuy
             animation = new TunnelAnimation(new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_GUY_WALL)), true);
+            animation.animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
             tunnelGroupHasSpecialTunnel = true;
-        }else if(segment < 18){
+        }else if(segment < 350){
             //labLady
             animation = new TunnelAnimation(new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_LADY_WALL)), true);
+            animation.animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
             tunnelGroupHasSpecialTunnel = true;
-        }else if(segment < 38){
+        }else if(segment < 550){
             //cracked
             animation = new TunnelAnimation(new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_CRACKED_WALL)), false);
-        }else if(segment < 58){
+        }else if(segment < 750){
             //stained
             animation = new TunnelAnimation(new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_STAINED_WALL)), false);
         }else{
@@ -1127,12 +1128,13 @@ public class BubbleRunnerStage extends BaseStage {
         int currentTunnelCount = tunnelGroup.getChildren().size;
         float nextPos = currentTunnelCount == 0 ? 0f : tunnelGroup.getChildren().get(currentTunnelCount-1).getRight();
         TunnelAnimation ani = buildAnimationForTunnel();
-        ani.animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+        //ani.animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
         //GenericActor tunnel = new GenericActor(nextPos, TNL_Y, TNL_WIDTH, TNL_HEIGHT, getTunnelTextureRegion(), Color.GRAY);
         TunnelSegment tunnel = new TunnelSegment(nextPos, TNL_Y, TNL_WIDTH, TNL_HEIGHT, ani.animation, 0f);
         tunnel.setSpecial(ani.isSpecial);
         tunnel.velocity.x = wallAndFloorVelocity;
         tunnel.addDecorator(offScreenDecorator);
+        tunnel.setIsLooping(ani.shouldLoop);
         //tunnel.setIsLooping(false);
         tunnel.pause();
         tunnel.addDecorator(resumeAnimationOnScreenDecorator);

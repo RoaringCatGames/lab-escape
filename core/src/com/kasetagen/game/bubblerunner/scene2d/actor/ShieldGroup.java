@@ -15,10 +15,10 @@ import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OffsetColliderDecorato
  */
 public class ShieldGroup extends GenericGroup {
 
-    private static final float SHIELD_SIZE = 275f/2f;
+    private static final float SHIELD_SIZE = 350f/2f;
 
     private static final float FIELD_ADJUST_X = SHIELD_SIZE+10f;
-    private static final float FIELD_ADJUST_Y = 200f;
+    private static final float FIELD_ADJUST_Y = 175f;
 
     private Array<ForceField> fields;
     public int maxFields = 1;

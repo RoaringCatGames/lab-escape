@@ -127,6 +127,7 @@ public class BubbleRunnerOptionsMenu extends BaseBubbleRunnerScreen{
             }
         };
 
+        //sfxVolumeSet.getStyle().
         sfxVolumeSet.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.log("UITest", "slider: " + sfxVolumeSet.getValue());

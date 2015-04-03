@@ -15,7 +15,7 @@ public class AnimationUtil {
 
     public static final float TITLE_CYCLE_RATE = 1f/6f;
 
-    public static final float SHIELD_CYCLE_RATE = 1f/6f;
+    public static final float SHIELD_CYCLE_RATE = 1f/8f;
     public static final String CHARACTER_1 = "Edison";
     public static final String CHARACTER_2 = "Edyn";
 
