@@ -57,6 +57,13 @@ public class AtlasUtil {
     public static final String ANI_SHIELD_GREEN = "Shields/Green";
     public static final String ANI_SHIELD_BLUE = "Shields/Blue";
 
+    public static final String ANI_BUTTON_BLUE_DEF = "buttons/Red_Default";
+    public static final String ANI_BUTTON_BLUE_PRESSED = "buttons/Red";
+    public static final String ANI_BUTTON_GREEN_DEF = "buttons/Red_Default";
+    public static final String ANI_BUTTON_GREEN_PRESSED = "buttons/Red";
+    public static final String ANI_BUTTON_RED_DEF = "buttons/Red_Default";
+    public static final String ANI_BUTTON_RED_PRESSED = "buttons/Red";
+
     public static final String ANI_NESSIE_WALL = "tunnel/Wall_Window_Nessie";
     public static final String ANI_SASSIE_WALL = "tunnel/Wall_Window_Sassie";
     public static final String ANI_GUY_WALL = "tunnel/Wall_Window_Male";

@@ -1,6 +1,7 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
 
 /**
@@ -15,12 +17,12 @@ import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
  * User: barry
  * Date: 6/22/14
  * Time: 11:13 AM
- * To change this template use File | Settings | File Templates.
  */
 public class ControlGroup extends GenericGroup {
 
-    private static final float BUTTON_WIDTH = 150f;
-    private static final float BUTTON_HEIGHT = 150f;
+
+    private static final float BUTTON_WIDTH = 260f/2f;//150f;
+    private static final float BUTTON_HEIGHT = 475f/2f;//150f;
     private static final float BUTTON_PADDING = 10f;
 
     private static final float BAR_START = BUTTON_WIDTH * 4f;
@@ -46,21 +48,22 @@ public class ControlGroup extends GenericGroup {
         buttons = new Array<ForceFieldImageButton>();
     }
 
-    public void addButton(Drawable up, Drawable down, Drawable over, EventListener listener, boolean isVisible, ForceFieldType fft){
-        ImageButton.ImageButtonStyle buttonStyle = new ImageButton.ImageButtonStyle();
-        buttonStyle.imageUp = up;
-        buttonStyle.imageDown = down;
-        buttonStyle.imageOver = over;
+    public void setPressed(ForceFieldType fft){
+        for(ForceFieldImageButton b:buttons){
+            if(b.forceFieldType == fft){
+                b.setState("PRESSED", true);
+            }
+        }
+    }
 
-        ForceFieldImageButton button = new ForceFieldImageButton(buttonStyle, fft);
-        button.setPosition(getButtonX(buttonCount), 0);
-        button.setWidth(BUTTON_WIDTH);
-        button.setHeight(BUTTON_HEIGHT);
-        button.addListener(listener);
-        button.setVisible(isVisible);
-        addActor(button);
+    public void addButton(ForceFieldType fft, EventListener listener, Animation defaultAni, Animation pressedAni){
+        ForceFieldImageButton btn = new ForceFieldImageButton(getButtonX(buttonCount), -30f, BUTTON_WIDTH, BUTTON_HEIGHT, defaultAni, fft);
+        btn.addStateAnimation("PRESSED", pressedAni);
+        btn.addListener(listener);
+        btn.setIsLooping(false);
+        addActor(btn);
 
-        buttons.add(button);
+        buttons.add(btn);
 
         buttonCount++;
     }
@@ -76,7 +79,6 @@ public class ControlGroup extends GenericGroup {
 
     public int getResourceLevel(ForceFieldType fft){
         return heatScore;
-        //return resourceLevels.get(fft);
     }
 
     public int getHeatMax(){
@@ -92,6 +94,17 @@ public class ControlGroup extends GenericGroup {
 
     public void restoreAllResourceLevels(){
         heatScore = 0;
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        //Reset all of our animations
+        for(ForceFieldImageButton b:buttons){
+            if("PRESSED".equals(b.getCurrentState()) && b.isAnimationComplete()){
+                b.setState(AnimatedActor.DEFAULT_STATE, true);
+            }
+        }
     }
 
     @Override

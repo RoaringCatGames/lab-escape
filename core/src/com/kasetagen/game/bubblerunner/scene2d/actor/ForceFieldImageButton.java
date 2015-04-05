@@ -1,20 +1,21 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor;
 
 /**
  * Created with IntelliJ IDEA.
  * User: barry
  * Date: 7/20/14
  * Time: 3:58 PM
- * To change this template use File | Settings | File Templates.
  */
-public class ForceFieldImageButton extends ImageButton {
+public class ForceFieldImageButton extends AnimatedActor {
 
     public ForceFieldType forceFieldType;
-    public ForceFieldImageButton(ImageButtonStyle style, ForceFieldType fft){
-        super(style);
-        forceFieldType = fft;
-    }
 
+
+    public ForceFieldImageButton(float x, float y, float width, float height, Animation animation, ForceFieldType fft) {
+        super(x, y, width, height, animation, 0f);
+        this.forceFieldType = fft;
+    }
 }

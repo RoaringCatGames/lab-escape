@@ -72,6 +72,16 @@ public class Wall{
         }
     }
 
+    public float getRight(){
+        if(rightWall != null){
+            return rightWall.getRight();
+        }else if(leftWall != null){
+            return leftWall.getRight();
+        }else{
+            return getX();
+        }
+    }
+
     public float getWidth(){
         float width = 0f;
         if(leftWall != null){

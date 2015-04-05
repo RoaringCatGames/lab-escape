@@ -37,9 +37,20 @@ public class Overlay extends GenericGroup {
     public Overlay(float x, float y, float width, float height, Color bgColor,
                    Color textColor, BitmapFont mainFont, BitmapFont subFont, String mainText, String subText) {
         super(x, y, width, height, null, bgColor);
+        init(x, y, width, height, bgColor, textColor, mainFont, subFont, mainText, subText, 0.3f);
+    }
 
+    public Overlay(float x, float y, float width, float height, Color bgColor,
+                   Color textColor, BitmapFont mainFont, BitmapFont subFont, String mainText, String subText, float bgOpacity) {
+        super(x, y, width, height, null, bgColor);
+        init(x, y, width, height, bgColor, textColor, mainFont, subFont, mainText, subText, bgOpacity);
+    }
+
+    private void init(float x, float y, float width, float height, Color bgColor,
+                      Color textColor, BitmapFont mainFont, BitmapFont subFont, String mainText, String subText, float bgOpacity) {
         this.mainText = mainText;
         this.subText = subText;
+        this.bgOpacity = bgOpacity;
 
 
             Label.LabelStyle mainStyle = new Label.LabelStyle(mainFont, textColor);

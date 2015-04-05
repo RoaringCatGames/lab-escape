@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -136,6 +137,7 @@ public class BubbleRunnerStage extends BaseStage {
     public Overlay deathOverlay;
     public Overlay alarmOverlay;
     public ControlGroup controls;
+    public ObjectMap<ForceFieldType, Array<Animation>> controlAnimations;
 
     //Ambiance (Music and Effects
     private WarningIndicator warningIndicator;
@@ -509,6 +511,7 @@ public class BubbleRunnerStage extends BaseStage {
                                                        assetManager.get(AssetsUtil.WARNING_INDICATOR, AssetsUtil.TEXTURE));
             addActor(warningIndicator);
 
+
             for(int i=0;i<wp.wallCount;i++){
                 ForceFieldType fft = wp.forceFields.get(i);
 
@@ -519,6 +522,14 @@ public class BubbleRunnerStage extends BaseStage {
                 //          - Where N = NumberOfWalls-1
                 float x, y, w, h;
                 x = wallDimensions[0];
+                //If X is < endingWall.getRight() Adjust
+                if(walls.size > 0){
+                    float lastWallRight = walls.get(walls.size - 1).getRight();
+                    if(x <= lastWallRight){
+                        Gdx.app.log("WALL GENERATOR", "Adjusting starting X Position");
+                        x += wp.wallPadding;
+                    }
+                }
                 y = wallDimensions[1];
                 w = wallDimensions[2];
                 h = wallDimensions[3];
@@ -767,7 +778,7 @@ public class BubbleRunnerStage extends BaseStage {
         if(!w.equals(collidedWall)){
             switch(w.forceFieldType){
                 case PLASMA:
-                    fryingPanSound.play(sfxVolume);
+                    //fryingPanSound.play(sfxVolume);
                     break;
                 case LASER:
                     screamSound.play(sfxVolume);
@@ -916,14 +927,17 @@ public class BubbleRunnerStage extends BaseStage {
 
     private void addLightningField(){
         addField(ForceFieldType.LIGHTNING);
+        controls.setPressed(ForceFieldType.LIGHTNING);
     }
 
     private void addPlasmaField(){
         addField(ForceFieldType.PLASMA);
+        controls.setPressed(ForceFieldType.PLASMA);
     }
 
     private void addLaserField(){
         addField(ForceFieldType.LASER);
+        controls.setPressed(ForceFieldType.LASER);
     }
 
 
@@ -986,7 +1000,7 @@ public class BubbleRunnerStage extends BaseStage {
         String subText = "Score: 0\n Best Score: 0" +
                          "\n\nMisses: 0\n Most Misses: 0" +
                          "\n\nRun Top Combo: 0\n Highest Combo: 0";
-        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.DARK_GRAY, Color.WHITE, mainFont, subFont, "You Failed to Escape!", subText);
+        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.DARK_GRAY, Color.WHITE, mainFont, subFont, "You Failed to Escape!", subText, 0.6f);
 
         deathOverlay.setVisible(false);
 
@@ -1231,50 +1245,44 @@ public class BubbleRunnerStage extends BaseStage {
 
     private void initializeButtonControls(){
 
+        // BLUE
+        Animation blueDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_BLUE_DEF));
+        Animation bluePressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_BLUE_PRESSED));
+        Animation greenDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_GREEN_DEF));
+        Animation greenPressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_GREEN_PRESSED));
+        Animation redDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_RED_DEF));
+        Animation redPressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_RED_PRESSED));
+
         controls = new ControlGroup(0, 0, getWidth(), 60f, Color.CYAN);
 
 
-        if(Gdx.app.getType() != Application.ApplicationType.Desktop){
+        if(true || Gdx.app.getType() != Application.ApplicationType.Desktop){
 
-            TextureRegionDrawable aUp, aDown, aChecked,
-                    sUp, sDown, sChecked,
-                    dUp, dDown, dChecked;
-
-            aUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_UP));
-            aDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_DOWN));
-            aChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LIGHT_CHECKED));
-
-            sUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_UP));
-            sDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_DOWN));
-            sChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_PLASMA_CHECKED));
-
-            dUp = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_UP));
-            dDown = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_DOWN));
-            dChecked = new TextureRegionDrawable(spriteAtlas.findRegion(AtlasUtil.SPRITE_LASER_CHECKED));
-
-            controls.addButton(aUp, aDown, aChecked, new ClickListener(){
+            EventListener blistener = new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     addLightningField();
                 }
-            }, true, ForceFieldType.LIGHTNING);
-
-            controls.addButton(sUp, sDown, sChecked, new ClickListener(){
+            };
+            EventListener glistener = new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     addPlasmaField();
                 }
-            }, true, ForceFieldType.PLASMA);
-
-            controls.addButton(dUp, dDown, dChecked, new ClickListener(){
+            };
+            EventListener rlistener = new ClickListener(){
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     super.clicked(event, x, y);
                     addLaserField();
                 }
-            }, true, ForceFieldType.LASER);
+            };
+
+            controls.addButton(ForceFieldType.LIGHTNING, blistener, blueDefAni, bluePressedAni);
+            controls.addButton(ForceFieldType.PLASMA, glistener, greenDefAni, greenPressedAni);
+            controls.addButton(ForceFieldType.LASER, rlistener, redDefAni, redPressedAni);
         }
 
         controls.setEnergyBar(spriteAtlas.findRegion(AtlasUtil.SPRITE_ENERGY_BAR));
