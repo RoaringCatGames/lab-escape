@@ -32,8 +32,8 @@ public class AtlasUtil {
     public static final String ANI_OPTIONS_CHARSELECT = "screens/options/Select_Runner";
     public static final String ANI_OPTIONS_RUNNERSCAFFOLD = "screens/options/Runner";
     public static final String ANI_OPTIONS_VOLUMESCAFFOLD = "screens/options/Volume";
-    public static final String ANI_OPTIONS_EDISON_SELECT = "screens/options/Edison_Select";//"screens/options/Edison_Select";
-    public static final String ANI_OPTIONS_EDYN_SELECT = "screens/options/Edyn_Select";//"screens/options/Edyn_Select";
+    public static final String ANI_OPTIONS_EDISON_SELECT = "screens/options/Edison_Select";
+    public static final String ANI_OPTIONS_EDYN_SELECT = "screens/options/Edyn_Select";
     public static final String ANI_OPTIONS_MAINMENU = "screens/options/Main_menu";
     public static final String ANI_OPTIONS_MUSIC = "screens/options/Music";
     public static final String ANI_OPTIONS_SFX = "screens/options/sfx";
@@ -57,10 +57,10 @@ public class AtlasUtil {
     public static final String ANI_SHIELD_GREEN = "Shields/Green";
     public static final String ANI_SHIELD_BLUE = "Shields/Blue";
 
-    public static final String ANI_BUTTON_BLUE_DEF = "buttons/Red_Default";
-    public static final String ANI_BUTTON_BLUE_PRESSED = "buttons/Red";
-    public static final String ANI_BUTTON_GREEN_DEF = "buttons/Red_Default";
-    public static final String ANI_BUTTON_GREEN_PRESSED = "buttons/Red";
+    public static final String ANI_BUTTON_BLUE_DEF = "buttons/Blue_Default";
+    public static final String ANI_BUTTON_BLUE_PRESSED = "buttons/Blue";
+    public static final String ANI_BUTTON_GREEN_DEF = "buttons/Green_Default";
+    public static final String ANI_BUTTON_GREEN_PRESSED = "buttons/Green";
     public static final String ANI_BUTTON_RED_DEF = "buttons/Red_Default";
     public static final String ANI_BUTTON_RED_PRESSED = "buttons/Red";
 
@@ -77,7 +77,6 @@ public class AtlasUtil {
     public static final String ANI_WALL_TESLA_BR_L = "walls/Tesla_Wall_Break_Left";
     public static final String ANI_WALL_TESLA_R = "walls/Tesla_Wall_Right";
     public static final String ANI_WALL_TESLA_BR_R = "walls/Tesla_Wall_Break_Right";
-    public static final String ANI_TESLA_FLOURISH = "walls/Tesla_Spark";
 
     public static final String ANI_WALL_PLASMA_L = "walls/Glass_Wall_Left";
     public static final String ANI_WALL_PLASMA_BR_L = "walls/Glass_Wall_Break_Left";
@@ -89,24 +88,17 @@ public class AtlasUtil {
     public static final String ANI_WALL_LASER_BR_L = "walls/Laser_Wall_Break_Left";
     public static final String ANI_WALL_LASER_R = "walls/Laser_Wall_Right";
     public static final String ANI_WALL_LASER_BR_R = "walls/Laser_Wall_Break_Right";
-    public static final String ANI_LASER_FLOURISH = "walls/Laser_Flash";
 
     //-----------
     //----Sprites
     //-----------
-    public static final String SPRITE_BG = "env/bg";
     public static final String SPRITE_FLOOR = "env/Floor";
     public static final String SPRITE_HAZARD = "env/Hazard";
 
-    public static final String SPRITE_LIGHT_UP = "buttons/button_light_off";
-    public static final String SPRITE_LIGHT_DOWN = "buttons/button_light_on";
-    public static final String SPRITE_LIGHT_CHECKED = "buttons/button_light_off";
-    public static final String SPRITE_PLASMA_UP = "buttons/button_plasma_on";
-    public static final String SPRITE_PLASMA_DOWN = "buttons/button_plasma_off";
-    public static final String SPRITE_PLASMA_CHECKED = "buttons/button_plasma_off";
-    public static final String SPRITE_LASER_UP = "buttons/button_discharge_on";
-    public static final String SPRITE_LASER_DOWN = "buttons/button_discharge_off";
-    public static final String SPRITE_LASER_CHECKED = "buttons/button_discharge_off";
+    public static final String SPRITE_WARNING_INDICATOR = "ui/warning-indicator";
+    public static final String SPRITE_BLUE_INDICATOR = "ui/Blue_Warning";
+    public static final String SPRITE_GREEN_INDICATOR = "ui/Green_Warning";
+    public static final String SPRITE_RED_INDICATOR = "ui/Red_Warning";
 
     public static final String SPRITE_ENERGY_BAR  = "ui/energy_bar";
 }

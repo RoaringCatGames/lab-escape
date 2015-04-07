@@ -97,11 +97,14 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
 
         assetManager.load(AssetsUtil.WARNING_INDICATOR, AssetsUtil.TEXTURE);
 
-        assetManager.load(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT);
-        assetManager.load(AssetsUtil.REXLIA_48, AssetsUtil.BITMAP_FONT);
-        assetManager.load(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT);
-        assetManager.load(AssetsUtil.REXLIA_24, AssetsUtil.BITMAP_FONT);
-        assetManager.load(AssetsUtil.REXLIA_16, AssetsUtil.BITMAP_FONT);
+//        assetManager.load(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT);
+//        assetManager.load(AssetsUtil.REXLIA_48, AssetsUtil.BITMAP_FONT);
+//        assetManager.load(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT);
+//        assetManager.load(AssetsUtil.REXLIA_24, AssetsUtil.BITMAP_FONT);
+//        assetManager.load(AssetsUtil.REXLIA_16, AssetsUtil.BITMAP_FONT);
+        assetManager.load(AssetsUtil.NEUROPOL_32, AssetsUtil.BITMAP_FONT);
+        assetManager.load(AssetsUtil.NEUROPOL_48, AssetsUtil.BITMAP_FONT);
+        assetManager.load(AssetsUtil.NEUROPOL_64, AssetsUtil.BITMAP_FONT);
 
         assetManager.load(AssetsUtil.EIGHT_BIT_BKG_MUSIC, AssetsUtil.MUSIC);
         assetManager.load(AssetsUtil.DISTORTION_BKG_MUSIC, AssetsUtil.MUSIC);

@@ -4,21 +4,21 @@ size: 4096,4096
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-buttons/Red
+buttons/Blue
   rotate: false
   xy: 3962, 2850
   size: 130, 238
   orig: 130, 238
   offset: 0, 0
   index: 1
-buttons/Red_Default
+buttons/Blue_Default
   rotate: false
   xy: 3962, 2850
   size: 130, 238
   orig: 130, 238
   offset: 0, 0
   index: 1
-buttons/Red
+buttons/Blue
   rotate: false
   xy: 3962, 2610
   size: 130, 238
@@ -409,23 +409,37 @@ size: 4096,4096
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-Shields/Blue
-  rotate: false
-  xy: 1521, 567
-  size: 175, 175
-  orig: 175, 175
-  offset: 0, 0
-  index: 1
-Shields/Blue
-  rotate: false
-  xy: 1521, 390
-  size: 175, 175
-  orig: 175, 175
-  offset: 0, 0
-  index: 2
-buttons/Red
+buttons/Blue
   rotate: false
   xy: 3888, 3124
+  size: 130, 238
+  orig: 130, 238
+  offset: 0, 0
+  index: 3
+buttons/Green
+  rotate: false
+  xy: 1521, 504
+  size: 130, 238
+  orig: 130, 238
+  offset: 0, 0
+  index: 1
+buttons/Green_Default
+  rotate: false
+  xy: 1521, 504
+  size: 130, 238
+  orig: 130, 238
+  offset: 0, 0
+  index: 1
+buttons/Green
+  rotate: false
+  xy: 1653, 504
+  size: 130, 238
+  orig: 130, 238
+  offset: 0, 0
+  index: 2
+buttons/Green
+  rotate: false
+  xy: 3946, 2884
   size: 130, 238
   orig: 130, 238
   offset: 0, 0
@@ -576,14 +590,14 @@ player/Female_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 4
+  index: 6
 player/Female_Shock
   rotate: false
   xy: 2967, 1616
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 6
+  index: 4
 player/Female_Shock
   rotate: false
   xy: 3329, 1616
@@ -597,14 +611,14 @@ player/Female_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 5
+  index: 7
 player/Female_Shock
   rotate: false
   xy: 3329, 1616
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 7
+  index: 5
 player/Female_Shock
   rotate: false
   xy: 3691, 1616
@@ -1219,49 +1233,91 @@ Shields/Blue
   size: 175, 175
   orig: 175, 175
   offset: 0, 0
-  index: 3
-Shields/Green
-  rotate: false
-  xy: 1810, 1810
-  size: 175, 175
-  orig: 175, 175
-  offset: 0, 0
   index: 1
-Shields/Green
+Shields/Blue
   rotate: false
-  xy: 1448, 724
+  xy: 1580, 724
   size: 175, 175
   orig: 175, 175
   offset: 0, 0
   index: 2
-Shields/Green
+Shields/Blue
   rotate: false
   xy: 177, 0
   size: 175, 175
   orig: 175, 175
   offset: 0, 0
   index: 3
+Shields/Green
+  rotate: false
+  xy: 1580, 547
+  size: 175, 175
+  orig: 175, 175
+  offset: 0, 0
+  index: 1
+Shields/Green
+  rotate: false
+  xy: 354, 0
+  size: 175, 175
+  orig: 175, 175
+  offset: 0, 0
+  index: 2
+Shields/Green
+  rotate: false
+  xy: 531, 0
+  size: 175, 175
+  orig: 175, 175
+  offset: 0, 0
+  index: 3
 Shields/Red
   rotate: false
-  xy: 1810, 1633
+  xy: 708, 0
   size: 175, 175
   orig: 175, 175
   offset: 0, 0
   index: 1
 Shields/Red
   rotate: false
-  xy: 1448, 547
+  xy: 885, 0
   size: 175, 175
   orig: 175, 175
   offset: 0, 0
   index: 2
 Shields/Red
   rotate: false
-  xy: 1625, 724
+  xy: 1062, 0
   size: 175, 175
   orig: 175, 175
   offset: 0, 0
   index: 3
+buttons/Red
+  rotate: false
+  xy: 1810, 1747
+  size: 130, 238
+  orig: 130, 238
+  offset: 0, 0
+  index: 1
+buttons/Red
+  rotate: false
+  xy: 1448, 661
+  size: 130, 238
+  orig: 130, 238
+  offset: 0, 0
+  index: 2
+buttons/Red
+  rotate: false
+  xy: 1810, 1507
+  size: 130, 238
+  orig: 130, 238
+  offset: 0, 0
+  index: 3
+buttons/Red_Default
+  rotate: false
+  xy: 1448, 421
+  size: 130, 238
+  orig: 130, 238
+  offset: 0, 0
+  index: 1
 player/Male_Shock
   rotate: false
   xy: 0, 1625
@@ -1296,14 +1352,14 @@ player/Male_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 5
+  index: 7
 player/Male_Shock
   rotate: false
   xy: 0, 1263
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 7
+  index: 5
 player/Male_Shock
   rotate: false
   xy: 362, 1625
@@ -1401,14 +1457,14 @@ player/Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 8
+  index: 5
 player/Shock
   rotate: false
   xy: 724, 901
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 5
+  index: 8
 player/Shock
   rotate: false
   xy: 1086, 1263

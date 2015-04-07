@@ -280,7 +280,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
 
         TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = gameProcessor.getAssetManager().get(AssetsUtil.REXLIA_48, AssetsUtil.BITMAP_FONT);
+        style.font = gameProcessor.getAssetManager().get(AssetsUtil.NEUROPOL_48, AssetsUtil.BITMAP_FONT);
         style.fontColor =  Color.YELLOW;
         style.overFontColor = Color.RED;
         style.checkedFontColor = Color.RED;

@@ -35,11 +35,16 @@ public class AssetsUtil {
     public static final String WARNING_INDICATOR = "sprites/warning-indicator.png";
 
     //Font Paths
-    public static final String REXLIA_64 = "fonts/rexlia-64.fnt";
-    public static final String REXLIA_48 = "fonts/rexlia-48.fnt";
-    public static final String REXLIA_32 = "fonts/rexlia-32.fnt";
-    public static final String REXLIA_24 = "fonts/rexlia-24.fnt";
-    public static final String REXLIA_16 = "fonts/rexlia-16.fnt";
+//    public static final String REXLIA_64 = "fonts/rexlia-64.fnt";
+//    public static final String REXLIA_48 = "fonts/rexlia-48.fnt";
+//    public static final String REXLIA_32 = "fonts/rexlia-32.fnt";
+//    public static final String REXLIA_24 = "fonts/rexlia-24.fnt";
+//    public static final String REXLIA_16 = "fonts/rexlia-16.fnt";
+
+    //Font Paths
+    public static final String NEUROPOL_64 = "fonts/neuropol-64.fnt";
+    public static final String NEUROPOL_48 = "fonts/neuropol-48.fnt";
+    public static final String NEUROPOL_32 = "fonts/neuropol-32.fnt";
 
     //Audio Paths
     public static final String EIGHT_BIT_BKG_MUSIC = "audio/NeverStopRunning.mp3";

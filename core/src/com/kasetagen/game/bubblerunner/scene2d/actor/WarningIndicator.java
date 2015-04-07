@@ -3,10 +3,12 @@ package com.kasetagen.game.bubblerunner.scene2d.actor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Array;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
 import com.kasetagen.game.bubblerunner.data.WallPattern;
+import com.kasetagen.game.bubblerunner.util.AtlasUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,33 +25,34 @@ public class WarningIndicator extends GenericActor {
     private WallPattern pattern;
     private float alpha = MAX_ALPHA;
     private boolean isDecreasing = true;
-    private Texture texture;
+    //private Texture texture;
     private Array<TextureRegion> indicatorRegions;
     private float timeAlive = 0f;
 
     public float lifetime = 0f;
 
-    public WarningIndicator(float x, float y, float width, float height, WallPattern pattern, Color color, Texture texture){
+    public WarningIndicator(float x, float y, float width, float height, WallPattern pattern, Color color, TextureAtlas spriteAtlas){
+    //public WarningIndicator(float x, float y, float width, float height, WallPattern pattern, Color color, Texture texture){
         super(x, y, width, height, null, color);
         this.pattern = pattern;
-        this.texture = texture;
-        this.textureRegion = new TextureRegion(this.texture, texture.getWidth(), 180);
+        //this.texture = texture;
+        this.textureRegion = spriteAtlas.findRegion(AtlasUtil.SPRITE_WARNING_INDICATOR);//new TextureRegion(this.texture, texture.getWidth(), 180);
 
         indicatorRegions = new Array<TextureRegion>();
         for(ForceFieldType fft:pattern.forceFields){
             TextureRegion r;
             switch (fft){
                 case LASER:
-                    r = new TextureRegion(this.texture, 0, 180, 90, 90);
+                    r = spriteAtlas.findRegion(AtlasUtil.SPRITE_RED_INDICATOR);//new TextureRegion(this.texture, 0, 180, 90, 90);
                     break;
                 case PLASMA:
-                    r = new TextureRegion(this.texture, 90, 180, 90, 90);
+                    r = spriteAtlas.findRegion(AtlasUtil.SPRITE_GREEN_INDICATOR);
                     break;
                 case LIGHTNING:
-                    r = new TextureRegion(this.texture, 180, 180, 90, 90);
+                    r = spriteAtlas.findRegion(AtlasUtil.SPRITE_BLUE_INDICATOR);
                     break;
                 default:
-                    r = new TextureRegion(this.texture, 180, 180, 90, 90);
+                    r = spriteAtlas.findRegion(AtlasUtil.SPRITE_RED_INDICATOR);
                     break;
             }
 
@@ -80,11 +83,8 @@ public class WarningIndicator extends GenericActor {
             }else if(alpha <= MIN_ALPHA && isDecreasing){
                 isDecreasing = false;
             }
-            //Gdx.app.log("INDICATOR!!", "Alpha: " + alpha);
         }
     }
-
-    //TODO: Allow base class to handle an "isDrawing" variable
 
     @Override
     protected void drawBefore(Batch batch, float parentAlpha) {
@@ -100,11 +100,16 @@ public class WarningIndicator extends GenericActor {
         if(isAlive()){
             super.drawFull(batch, parentAlpha);
 
-            float indicatorSideSize = indicatorRegions.size <= 3 ? getWidth()/3 : getWidth()/indicatorRegions.size;
+
+            float buffer = indicatorRegions.size <= 3 ? 15f : 5f;
+            float indicatorSideSize = indicatorRegions.size <= 3 ? 75f : (getWidth() - (buffer*2f*indicatorRegions.size))/indicatorRegions.size;
+
             for(int i=0;i<indicatorRegions.size;i++){
+                float leftBuffer = buffer;
+                float x = getX() + leftBuffer + leftBuffer*2f*i;
                 batch.draw(indicatorRegions.get(i),
-                           getX() + (indicatorSideSize*i),
-                           getY(),
+                           x + (indicatorSideSize*i),
+                           getY() + buffer,
                            indicatorSideSize,
                            indicatorSideSize);
             }

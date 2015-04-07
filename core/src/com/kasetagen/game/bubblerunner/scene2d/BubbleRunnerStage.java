@@ -29,6 +29,7 @@ import com.kasetagen.engine.gdx.scenes.scene2d.IActorDisposer;
 import com.kasetagen.engine.gdx.scenes.scene2d.ICameraModifier;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.*;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
+import com.kasetagen.engine.gdx.scenes.scene2d.decorators.ShakeDecorator;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.data.GameStats;
@@ -70,8 +71,8 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float TESLA_CYCLE_RATE = 1/15f;
     private static final float LASER_CYCLE_RATE = 1f/4f;
 
-    private static final float COMBO_BASE_OSCILLATION_RATE = 20f;
-    private static final float COMBO_OSCILATION_INCREASE_RATE = 10f;
+    private static final float COMBO_BASE_OSCILLATION_RATE = 1f;//20f;
+    private static final float COMBO_OSCILATION_INCREASE_RATE = -0.1f;//10f;
 
     //Order of values:  xPos, yPos, width, height
     private static final float INDICATOR_WIDTH = ViewportUtil.VP_WIDTH/4;
@@ -113,7 +114,8 @@ public class BubbleRunnerStage extends BaseStage {
     private ComboLevels currentComboLevel = ComboLevels.NONE;
     private Label comboLabel;
     private DecoratedUIContainer comboContainer;
-    private OscillatingDecorator comboDecorator;
+    //private OscillatingDecorator comboDecorator;
+    private ShakeDecorator comboDecorator;
 
     //Obstacle Generation Values
     /**
@@ -131,15 +133,14 @@ public class BubbleRunnerStage extends BaseStage {
     public Player player;
     public ShieldGroup shields;
     public Array<Wall> walls;
-    public IActorDisposer wallDisposer;
     public Wall collidedWall = null;
     public GameInfo info;
     public Overlay deathOverlay;
     public Overlay alarmOverlay;
     public ControlGroup controls;
-    public ObjectMap<ForceFieldType, Array<Animation>> controlAnimations;
 
     //Ambiance (Music and Effects
+    //private ShakeDecorator warningShaker;
     private WarningIndicator warningIndicator;
     private Music music;
     private Sound zapSound;
@@ -208,7 +209,9 @@ public class BubbleRunnerStage extends BaseStage {
         addActor(cinematic);
         cinematic.start();
 
+        //warningShaker = new ShakeDecorator(10f, 0f, 0.2f);
         origPos = new Vector3(getCamera().position);
+
 
         offScreenDecorator = new ActorDecorator() {
             @Override
@@ -285,14 +288,14 @@ public class BubbleRunnerStage extends BaseStage {
         //Initialize HUD (Stats, and GameInfo)
         initializeHUD();
 
-        Label.LabelStyle style = new Label.LabelStyle(assetManager.get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT), Color.ORANGE);
+        Label.LabelStyle style = new Label.LabelStyle(assetManager.get(AssetsUtil.NEUROPOL_64, AssetsUtil.BITMAP_FONT), Color.ORANGE);
         comboLabel = new Label(currentCombo + "x Combo!!", style);
 
 
         comboContainer = new DecoratedUIContainer(comboLabel);
         comboContainer.setPosition(player.getX() + (comboLabel.getWidth() / 2), player.getTop() + HUD_HEIGHT);
 
-        comboDecorator = new OscillatingDecorator(-3f, 3f, 40f);
+        comboDecorator = new ShakeDecorator(5f, 10f, 0.5f, 1f);//new OscillatingDecorator(-3f, 3f, 40f);
         comboContainer.addDecorator(comboDecorator);
         addActor(comboContainer);
 
@@ -327,7 +330,6 @@ public class BubbleRunnerStage extends BaseStage {
             while(itr.hasNext()){
                 Wall w = itr.next();
                 if(w.isRemovable()){
-                    Gdx.app.log("ACT", "Removing Useless wall");
                     itr.remove();
                 }
             }
@@ -508,15 +510,14 @@ public class BubbleRunnerStage extends BaseStage {
                                                        warningIndicatorDimensions[3],
                                                        wp,
                                                        Color.RED,
-                                                       assetManager.get(AssetsUtil.WARNING_INDICATOR, AssetsUtil.TEXTURE));
+                                                        spriteAtlas);
+                                                       //assetManager.get(AssetsUtil.WARNING_INDICATOR, AssetsUtil.TEXTURE));
+            //warningIndicator.addDecorator(warningShaker);
             addActor(warningIndicator);
 
 
             for(int i=0;i<wp.wallCount;i++){
                 ForceFieldType fft = wp.forceFields.get(i);
-
-                //TODO: REMOVE
-                //fft = fft == ForceFieldType.LIGHTNING ? ForceFieldType.PLASMA : fft;
 
                 //FORMULA:  xPos = startX + (N * (wallWidth + wallPadding)
                 //          - Where N = NumberOfWalls-1
@@ -526,7 +527,6 @@ public class BubbleRunnerStage extends BaseStage {
                 if(walls.size > 0){
                     float lastWallRight = walls.get(walls.size - 1).getRight();
                     if(x <= lastWallRight){
-                        Gdx.app.log("WALL GENERATOR", "Adjusting starting X Position");
                         x += wp.wallPadding;
                     }
                 }
@@ -663,6 +663,9 @@ public class BubbleRunnerStage extends BaseStage {
         Random r = new Random(System.currentTimeMillis());
         //Based on the Max Fields, we generated a new pattern
         int numFields = r.nextInt(info.maxFields) + 1;
+        if(numFields < info.minFields){
+            numFields = info.minFields;
+        }
         while(numFields > 0){
             ForceFieldType fft = wallTypes[r.nextInt(wallTypes.length)];
             p.addWall(fft);
@@ -696,7 +699,7 @@ public class BubbleRunnerStage extends BaseStage {
             }
         }
 
-        comboDecorator.setRotationSpeed(result);
+        comboDecorator.setShakeSpeed(result);
     }
 
     private boolean adjustComboLevel(int latestCombo){
@@ -898,6 +901,10 @@ public class BubbleRunnerStage extends BaseStage {
     private void incrementMaxFields(){
         info.maxFields += 1;
         shields.maxFields = info.maxFields;
+        if(info.maxFields > 3 && info.maxFields %2 == 0){
+            Gdx.app.log("INCREASING", "Min Fields increases");
+            info.minFields += 1;
+        }
     }
 
     private void addField(ForceFieldType fft){
@@ -968,8 +975,8 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private void initializeOverlays() {
-        BitmapFont mainFont = assetManager.get(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT);
-        BitmapFont subFont = assetManager.get(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT);
+        BitmapFont mainFont = assetManager.get(AssetsUtil.NEUROPOL_64, AssetsUtil.BITMAP_FONT);
+        BitmapFont subFont = assetManager.get(AssetsUtil.NEUROPOL_32, AssetsUtil.BITMAP_FONT);
 
         alarmOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.RED, Color.RED, mainFont, subFont, "", "");
         alarmOverlay.addDecorator(new ActorDecorator() {
@@ -1191,7 +1198,7 @@ public class BubbleRunnerStage extends BaseStage {
         float infoY = ViewportUtil.VP_HEIGHT - HUD_HEIGHT;
         float infoWidth = getWidth();
         float infoHeight = HUD_HEIGHT;
-        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT), controls);
+        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.NEUROPOL_32, AssetsUtil.BITMAP_FONT), controls);
         addActor(info);
     }
 

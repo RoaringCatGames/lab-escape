@@ -4,115 +4,94 @@ size: 2048,1024
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-buttons/button_discharge_off
-  rotate: false
-  xy: 1754, 724
-  size: 204, 204
-  orig: 204, 204
-  offset: 0, 0
-  index: -1
-buttons/button_discharge_on
-  rotate: false
-  xy: 854, 212
-  size: 204, 204
-  orig: 204, 204
-  offset: 0, 0
-  index: -1
-buttons/button_light_off
-  rotate: false
-  xy: 1754, 518
-  size: 204, 204
-  orig: 204, 204
-  offset: 0, 0
-  index: -1
-buttons/button_light_on
-  rotate: false
-  xy: 642, 0
-  size: 204, 204
-  orig: 204, 204
-  offset: 0, 0
-  index: -1
-buttons/button_plasma_off
-  rotate: false
-  xy: 1060, 212
-  size: 204, 204
-  orig: 204, 204
-  offset: 0, 0
-  index: -1
-buttons/button_plasma_on
-  rotate: false
-  xy: 1266, 243
-  size: 204, 204
-  orig: 204, 204
-  offset: 0, 0
-  index: -1
 env/Floor
   rotate: false
-  xy: 1542, 718
+  xy: 1542, 641
   size: 210, 210
   orig: 210, 210
   offset: 0, 0
   index: 1
 env/Floor
   rotate: false
-  xy: 642, 206
+  xy: 0, 77
   size: 210, 210
   orig: 210, 210
   offset: 0, 0
   index: 2
 env/Floor
   rotate: false
-  xy: 1542, 506
+  xy: 1542, 429
   size: 210, 210
   orig: 210, 210
   offset: 0, 0
   index: 3
 env/Hazard
   rotate: false
-  xy: 1542, 930
+  xy: 1542, 853
   size: 500, 29
   orig: 500, 29
   offset: 0, 0
   index: 1
 env/Hazard
   rotate: false
-  xy: 642, 418
+  xy: 0, 289
   size: 500, 29
   orig: 500, 29
   offset: 0, 0
   index: 2
 env/Wall
   rotate: false
-  xy: 0, 449
+  xy: 0, 372
   size: 512, 510
   orig: 512, 510
   offset: 0, 0
   index: 1
 env/Wall
   rotate: false
-  xy: 514, 449
+  xy: 514, 372
   size: 512, 510
   orig: 512, 510
   offset: 0, 0
   index: 2
 env/Wall
   rotate: false
-  xy: 1028, 449
+  xy: 1028, 372
   size: 512, 510
   orig: 512, 510
   offset: 0, 0
   index: 3
-ui/controls-screen
+ui/Blue_Warning
   rotate: false
-  xy: 0, 87
-  size: 640, 360
-  orig: 640, 360
+  xy: 0, 0
+  size: 75, 75
+  orig: 75, 75
+  offset: 0, 0
+  index: -1
+ui/Green_Warning
+  rotate: false
+  xy: 212, 212
+  size: 75, 75
+  orig: 75, 75
+  offset: 0, 0
+  index: -1
+ui/Red_Warning
+  rotate: false
+  xy: 1754, 683
+  size: 75, 75
+  orig: 75, 75
   offset: 0, 0
   index: -1
 ui/energy_bar
   rotate: false
-  xy: 0, 35
+  xy: 0, 320
   size: 578, 50
   orig: 578, 50
+  offset: 0, 0
+  index: -1
+ui/warning-indicator
+  rotate: false
+  xy: 1754, 760
+  size: 160, 91
+  orig: 160, 91
   offset: 0, 0
   index: -1

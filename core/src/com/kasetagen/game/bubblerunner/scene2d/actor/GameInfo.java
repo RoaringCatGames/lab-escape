@@ -12,10 +12,10 @@ import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
  * User: barry
  * Date: 6/8/14
  * Time: 3:41 PM
- * To change this template use File | Settings | File Templates.
  */
 public class GameInfo extends GenericGroup {
 
+    public static final int DEFAULT_MIN_FIELDS = 1;
     public static final int DEFAULT_MAX_FIELDS = 2;
 
     private static final int TEXT_PADDING = 60;
@@ -29,6 +29,7 @@ public class GameInfo extends GenericGroup {
     public int score = 0;
     public int misses = 0;
     public int maxFields = DEFAULT_MAX_FIELDS;
+    public int minFields = DEFAULT_MIN_FIELDS;
 
     //private ControlGroup controls;
 
@@ -73,5 +74,6 @@ public class GameInfo extends GenericGroup {
         score = 0;
         misses = 0;
         maxFields = DEFAULT_MAX_FIELDS;
+        minFields = DEFAULT_MIN_FIELDS;
     }
 }
