@@ -1,104 +1,76 @@
 
 sprites.png
-size: 2048,1024
+size: 2048,256
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 env/Floor
   rotate: false
-  xy: 0, 212
+  xy: 1082, 8
   size: 210, 210
   orig: 210, 210
   offset: 0, 0
   index: 1
 env/Floor
   rotate: false
-  xy: 1542, 639
+  xy: 1294, 8
   size: 210, 210
   orig: 210, 210
   offset: 0, 0
   index: 2
 env/Floor
   rotate: false
-  xy: 0, 0
+  xy: 1506, 8
   size: 210, 210
   orig: 210, 210
   offset: 0, 0
   index: 3
 env/Hazard
   rotate: false
-  xy: 1542, 988
+  xy: 0, 137
   size: 500, 29
   orig: 500, 29
   offset: 0, 0
   index: 1
 env/Hazard
   rotate: false
-  xy: 0, 424
+  xy: 580, 189
   size: 500, 29
   orig: 500, 29
   offset: 0, 0
   index: 2
-env/Wall
-  rotate: false
-  xy: 0, 507
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 1
-env/Wall
-  rotate: false
-  xy: 514, 507
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 2
-env/Wall
-  rotate: false
-  xy: 1028, 507
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 3
 ui/Blue_Warning
   rotate: false
-  xy: 1934, 911
+  xy: 392, 60
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: -1
 ui/Green_Warning
   rotate: false
-  xy: 1542, 562
+  xy: 1718, 143
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: -1
 ui/Red_Warning
   rotate: false
-  xy: 1754, 774
+  xy: 1718, 66
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: -1
 ui/Warning_BG
   rotate: false
-  xy: 1542, 851
+  xy: 0, 0
   size: 390, 135
   orig: 390, 135
   offset: 0, 0
   index: -1
 ui/energy_bar
   rotate: false
-  xy: 0, 455
+  xy: 0, 168
   size: 578, 50
   orig: 578, 50
-  offset: 0, 0
-  index: -1
-ui/warning-indicator
-  rotate: false
-  xy: 212, 331
-  size: 160, 91
-  orig: 160, 91
   offset: 0, 0
   index: -1

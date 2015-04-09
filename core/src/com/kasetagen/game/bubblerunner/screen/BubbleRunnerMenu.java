@@ -52,10 +52,8 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
     private float buttonX = 175f;
     private float buttonY = 580f;
     private boolean isMenuView = true;
-
-    //private TextButton startGameButton;
+;
     private ImageButton startGameButton;
-    //private TextButton optionsButton;
     private ImageButton optionsButton;
     private ActorDecorator infiniteLeftDecorator;
 
@@ -93,10 +91,6 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
     private ClickListener listener;
 
-    private SequenceAction showOptions;
-    private SequenceAction showMenu;
-
-
     private static final int MIN_INDEX = 0;
     private static final int MAX_INDEX = 3; //Zero-based index, with 4 controls
     private static final float VOLUME_INCREMENT = 0.1f;
@@ -112,10 +106,10 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
     private static final float TECHB_H = 300f;
 
 
-    private static final float CHAR_CIRCLE_SIZE = 250f;
-    private static final float CHAR_CIRCLE_Y = 368f;
-    private static final float EDYN_SELECT_X = 180f;
-    private static final float EDISON_SELECT_X = 494f;
+    private static final float CHAR_CIRCLE_SIZE = 200f;
+    private static final float CHAR_CIRCLE_Y = 393f;
+    private static final float EDYN_SELECT_X = 206f;
+    private static final float EDISON_SELECT_X = 518f;
     private static final float EDYN_CIRCLE_X = 60f;
     private static final float EDYN_CIRCLE_Y = 368f;
     private static final float EDYN_CIRCLE_W = 375f;
@@ -174,7 +168,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         this.gameProcessor = delegate;
         stage = new BaseStage(delegate);
 
-        bgMusic = delegate.getAssetManager().get(AssetsUtil.EIGHT_BIT_BKG_MUSIC, AssetsUtil.MUSIC);
+        bgMusic = delegate.getAssetManager().get(AssetsUtil.MENU_BG_MUSIC, AssetsUtil.MUSIC);
         bgMusic.setVolume(delegate.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY));
         bgMusic.play();
         this.gameProcessor.setBGMusic(bgMusic);
@@ -351,7 +345,7 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
          * Gather Reference Interatctions
          */
         Skin skin = gameProcessor.getAssetManager().get(AssetsUtil.DEFAULT_SKIN, AssetsUtil.SKIN);
-        sfx = gameProcessor.getAssetManager().get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+        sfx = gameProcessor.getAssetManager().get(AssetsUtil.SND_SHIELD_ON, AssetsUtil.SOUND);
 
         /*
          * Add Scaffolding

@@ -47,21 +47,30 @@ public class AssetsUtil {
     public static final String NEUROPOL_32 = "fonts/neuropol-32.fnt";
 
     //Audio Paths
-    public static final String EIGHT_BIT_BKG_MUSIC = "audio/NeverStopRunning.mp3";
-    public static final String DISTORTION_BKG_MUSIC = "audio/bkmusic.mp3";
-    public static final String ZAP_SOUND = "audio/zap.mp3";
-    public static final String EXPLOSION_SOUND = "audio/explosion.mp3";
-    public static final String POWER_ON_SOUND = "audio/power-on.mp3";
-    public static final String SCREAM = "audio/scream.mp3";
-    public static final String FRYING_PAN = "audio/flat-hit.mp3";
+    public static final String MENU_BG_MUSIC = "audio/railjet-short.mp3";
+    public static final String GAME_BG_MUSIC = "audio/railjet-long.mp3";
+    public static final String SND_SHIELD_ON = "audio/shield.mp3";
+    public static final String SND_SHIELD_WRONG = "audio/bad-shield.mp3";
+    public static final String SND_WB_ELECTRIC = "audio/wallbreaks/electricity.mp3";
+    public static final String SND_WB_GLASS = "audio/wallbreaks/glass-shatter.mp3";
+    public static final String SND_WB_LASER = "audio/wallbreaks/laser-break.mp3";
+    public static final String SND_DEATH_THUD = "audio/deaths/glass-thud.mp3";
+    public static final String SND_DEATH_EDYN = "audio/deaths/edyn-scream.mp3";
+    public static final String SND_DEATH_EDISON = "audio/deaths/edison-scream.mp3";
+
+//    public static final String ZAP_SOUND = "audio/zap.mp3";
+//    public static final String EXPLOSION_SOUND = "audio/explosion.mp3";
+//    public static final String POWER_ON_SOUND = "audio/power-on.mp3";
+//    public static final String SCREAM = "audio/scream.mp3";
+//    public static final String FRYING_PAN = "audio/flat-hit.mp3";
 
     public static final String NOT_BAD = "audio/sfx/not-bad_1.mp3";
     public static final String GREAT = "audio/sfx/great_1.mp3";
     public static final String AWESOME = "audio/sfx/awesome_1.mp3";
     public static final String AMAZING = "audio/sfx/amazing_1.mp3";
-    public static final String BONKERS = "audio/sfx/bonkers.mp3";
+    //public static final String BONKERS = "audio/sfx/bonkers.mp3";
     public static final String RIDICULOUS = "audio/sfx/ridiculous_1.mp3";
-    public static final String ATOMIC = "audio/sfx/atomic.mp3";
+    //public static final String ATOMIC = "audio/sfx/atomic.mp3";
     
     //Particle Paths
 //    public static final String BUBBLE_PARTICLE = "particles/bubbleflame_right.p";

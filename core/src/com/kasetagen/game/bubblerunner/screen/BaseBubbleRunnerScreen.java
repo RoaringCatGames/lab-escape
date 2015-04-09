@@ -90,7 +90,6 @@ public class BaseBubbleRunnerScreen extends ApplicationAdapter implements Screen
 
     @Override
     public void resize(int width, int height) {
-        Gdx.app.log("Screen Resizing", "Resizing: " + width + "x" + height);
         stage.getViewport().update(width, height);
         super.resize(width, height);
     }

@@ -19,16 +19,13 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.kasetagen.engine.IDataSaver;
 import com.kasetagen.engine.IGameProcessor;
 import com.kasetagen.engine.gdx.scenes.scene2d.ActorDecorator;
-import com.kasetagen.engine.gdx.scenes.scene2d.IActorDisposer;
 import com.kasetagen.engine.gdx.scenes.scene2d.ICameraModifier;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.*;
-import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.ShakeDecorator;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
@@ -143,11 +140,15 @@ public class BubbleRunnerStage extends BaseStage {
     //private ShakeDecorator warningShaker;
     private WarningIndicator warningIndicator;
     private Music music;
-    private Sound zapSound;
-    private Sound powerOnSound;
-    private Sound explosionSound;
-    private Sound screamSound;
-    private Sound fryingPanSound;
+    private Sound shieldUpSound;
+    private Sound badShieldSound;
+    private Sound breakElectricSound;
+    private Sound breakLaserSound;
+    private Sound breakGlassSound;
+    private Sound dieGlassSound;
+    private Sound dieEdisonSound;
+    private Sound dieEdynSound;
+
 
     private ObjectMap<ComboLevels, Sound> comboSfx;
 
@@ -203,7 +204,7 @@ public class BubbleRunnerStage extends BaseStage {
         float startZoom = 1f;
         float endZoom = 1f;
         CinematicScene scene1 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-        scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
+        //scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         cinematic.addScene(scene1);
 
         addActor(cinematic);
@@ -305,9 +306,9 @@ public class BubbleRunnerStage extends BaseStage {
         comboSfx.put(ComboLevels.GREAT, assetManager.get(AssetsUtil.GREAT, AssetsUtil.SOUND));
         comboSfx.put(ComboLevels.AWESOME, assetManager.get(AssetsUtil.AWESOME, AssetsUtil.SOUND));
         comboSfx.put(ComboLevels.AMAZING, assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND));
-        comboSfx.put(ComboLevels.BONKERS, assetManager.get(AssetsUtil.BONKERS, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.BONKERS, assetManager.get(AssetsUtil.GREAT, AssetsUtil.SOUND));
         comboSfx.put(ComboLevels.RIDICULOUS, assetManager.get(AssetsUtil.RIDICULOUS, AssetsUtil.SOUND));
-        comboSfx.put(ComboLevels.ATOMIC, assetManager.get(AssetsUtil.ATOMIC, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.ATOMIC, assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND));
 
 
         super.onCinematicComplete();
@@ -425,15 +426,26 @@ public class BubbleRunnerStage extends BaseStage {
                         highestRunCombo = currentCombo;
                     }
 
-                    float explosionVolume = sfxVolume;
+                    float breakVolume = sfxVolume;
                     if(adjustComboLevel(currentCombo)){
                         playComboSoundEffect();
-                        explosionVolume /= 2;
+                        breakVolume /= 2;
                         //On going up a combo level, we will clear all resource usage
                         regenResources(controls.getResourceLevel());
                     }
 
-                    explosionSound.play(explosionVolume);
+                    switch(w.forceFieldType){
+                        case LIGHTNING:
+                            breakElectricSound.play(breakVolume);
+                            break;
+                        case LASER:
+                            breakLaserSound.play(breakVolume);
+                            break;
+                        case PLASMA:
+                            breakGlassSound.play(breakVolume);
+                            break;
+                    }
+
                     addCameraMod(new ICameraModifier() {
                         private float duration = 0.5f;
                         private float elapsedTime = 0f;
@@ -467,6 +479,8 @@ public class BubbleRunnerStage extends BaseStage {
 
                     //Clear our combo
                     currentCombo = 0;
+
+                    badShieldSound.play(sfxVolume);
                 }
 
                 //Destroy the forcefield if it collides with a wall
@@ -782,13 +796,15 @@ public class BubbleRunnerStage extends BaseStage {
         if(!w.equals(collidedWall)){
             switch(w.forceFieldType){
                 case PLASMA:
-                    //fryingPanSound.play(sfxVolume);
+                    dieGlassSound.play(sfxVolume);
                     break;
                 case LASER:
-                    screamSound.play(sfxVolume);
-                    break;
                 case LIGHTNING:
-
+                    if(AnimationUtil.CHARACTER_1.equals(characterSelected)){
+                        dieEdisonSound.play(sfxVolume);
+                    }else{
+                        dieEdynSound.play(sfxVolume);
+                    }
                     break;
             }
 
@@ -851,11 +867,9 @@ public class BubbleRunnerStage extends BaseStage {
             bgVolume = gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
             sfxVolume = gameProcessor.getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY);
             String charSelect = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY);
-            Gdx.app.log("CHAR SELECT", "Selected: " + charSelect);
             if(!"".equals(charSelect) && !charSelect.equals(characterSelected)){
                 characterSelected = charSelect;
                 if(cinematicComplete && player != null){
-                    Gdx.app.log("ANIMATIONS", "RESETING PLAYER ANIMATIONS");
                     setPlayerAnimations();
                 }
             }
@@ -903,7 +917,6 @@ public class BubbleRunnerStage extends BaseStage {
         info.maxFields += 1;
         shields.maxFields = info.maxFields;
         if(info.maxFields > 3 && info.maxFields %2 == 0){
-            Gdx.app.log("INCREASING", "Min Fields increases");
             info.minFields += 1;
         }
     }
@@ -924,11 +937,10 @@ public class BubbleRunnerStage extends BaseStage {
             wasAdded = true;
         }
         if(wasAdded){
-            powerOnSound.play(sfxVolume);
+            shieldUpSound.play(sfxVolume);
             player.startShield();
-
         }else{
-            zapSound.play(sfxVolume);
+            badShieldSound.play(sfxVolume);
         }
 
     }
@@ -964,15 +976,18 @@ public class BubbleRunnerStage extends BaseStage {
     private void initializeAmbience() {
 
         initializeVolumes();
-        music = assetManager.get(AssetsUtil.DISTORTION_BKG_MUSIC, AssetsUtil.MUSIC);
+        music = assetManager.get(AssetsUtil.GAME_BG_MUSIC, AssetsUtil.MUSIC);
         music.setVolume(bgVolume);
         this.gameProcessor.setBGMusic(music);
 
-        zapSound = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-        powerOnSound = assetManager.get(AssetsUtil.POWER_ON_SOUND, AssetsUtil.SOUND);
-        explosionSound = assetManager.get(AssetsUtil.EXPLOSION_SOUND, AssetsUtil.SOUND);
-        screamSound = assetManager.get(AssetsUtil.SCREAM, AssetsUtil.SOUND);
-        fryingPanSound = assetManager.get(AssetsUtil.FRYING_PAN, AssetsUtil.SOUND);
+        badShieldSound = assetManager.get(AssetsUtil.SND_SHIELD_WRONG, AssetsUtil.SOUND);
+        shieldUpSound = assetManager.get(AssetsUtil.SND_SHIELD_ON, AssetsUtil.SOUND);
+        dieGlassSound = assetManager.get(AssetsUtil.SND_DEATH_THUD, AssetsUtil.SOUND);
+        dieEdisonSound = assetManager.get(AssetsUtil.SND_DEATH_EDISON, AssetsUtil.SOUND);
+        dieEdynSound = assetManager.get(AssetsUtil.SND_DEATH_EDYN, AssetsUtil.SOUND);
+        breakElectricSound = assetManager.get(AssetsUtil.SND_WB_ELECTRIC, AssetsUtil.SOUND);
+        breakGlassSound = assetManager.get(AssetsUtil.SND_WB_GLASS, AssetsUtil.SOUND);
+        breakLaserSound = assetManager.get(AssetsUtil.SND_WB_LASER, AssetsUtil.SOUND);
     }
 
     private void initializeOverlays() {
@@ -1298,7 +1313,6 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     public void resume(){
-        Gdx.app.log("RESUMING", "Stage Resuming");
         initializeVolumes();
         if(music != null){
             music.setVolume(bgVolume);

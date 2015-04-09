@@ -47,6 +47,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
             Gdx.graphics.setVSync(true);
             Gdx.input.setCursorCatched(true);
         }
+        Gdx.input.setCatchBackKey(true);
         assetManager = new AssetManager();
         loadAssets();
         float val = getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
@@ -95,33 +96,29 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         assetManager.load(AssetsUtil.SPRITE_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
-        assetManager.load(AssetsUtil.WARNING_INDICATOR, AssetsUtil.TEXTURE);
-
-//        assetManager.load(AssetsUtil.REXLIA_64, AssetsUtil.BITMAP_FONT);
-//        assetManager.load(AssetsUtil.REXLIA_48, AssetsUtil.BITMAP_FONT);
-//        assetManager.load(AssetsUtil.REXLIA_32, AssetsUtil.BITMAP_FONT);
-//        assetManager.load(AssetsUtil.REXLIA_24, AssetsUtil.BITMAP_FONT);
-//        assetManager.load(AssetsUtil.REXLIA_16, AssetsUtil.BITMAP_FONT);
         assetManager.load(AssetsUtil.NEUROPOL_32, AssetsUtil.BITMAP_FONT);
         assetManager.load(AssetsUtil.NEUROPOL_48, AssetsUtil.BITMAP_FONT);
         assetManager.load(AssetsUtil.NEUROPOL_64, AssetsUtil.BITMAP_FONT);
 
-        assetManager.load(AssetsUtil.EIGHT_BIT_BKG_MUSIC, AssetsUtil.MUSIC);
-        assetManager.load(AssetsUtil.DISTORTION_BKG_MUSIC, AssetsUtil.MUSIC);
+        assetManager.load(AssetsUtil.MENU_BG_MUSIC, AssetsUtil.MUSIC);
+        assetManager.load(AssetsUtil.GAME_BG_MUSIC, AssetsUtil.MUSIC);
 
-        assetManager.load(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
-        assetManager.load(AssetsUtil.EXPLOSION_SOUND, AssetsUtil.SOUND);
-        assetManager.load(AssetsUtil.POWER_ON_SOUND, AssetsUtil.SOUND);
-        assetManager.load(AssetsUtil.SCREAM, AssetsUtil.SOUND);
-        assetManager.load(AssetsUtil.FRYING_PAN, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.SND_SHIELD_ON, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.SND_SHIELD_WRONG, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.SND_WB_ELECTRIC, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.SND_WB_GLASS, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.SND_WB_LASER, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.SND_DEATH_THUD, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.SND_DEATH_EDYN, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.SND_DEATH_EDISON, AssetsUtil.SOUND);
 
         assetManager.load(AssetsUtil.NOT_BAD, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.GREAT, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.AWESOME, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.AMAZING, AssetsUtil.SOUND);
-        assetManager.load(AssetsUtil.BONKERS, AssetsUtil.SOUND);
+        //assetManager.load(AssetsUtil.BONKERS, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.RIDICULOUS, AssetsUtil.SOUND);
-        assetManager.load(AssetsUtil.ATOMIC, AssetsUtil.SOUND);
+        //assetManager.load(AssetsUtil.ATOMIC, AssetsUtil.SOUND);
     }
 
  //IGameProcessor
@@ -166,7 +163,7 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         if(LOADING.equalsIgnoreCase(screenName))    {
             if(loading == null){
                 loading = new LoadingScreen(this, "animations/loading.atlas", "Lab_Loading", new BaseStage(this));
-                loading.setIsAnimatedWithProgress(true);
+                loading.setIsAnimatedWithProgress(false);
             }
 
             setScreen(loading);

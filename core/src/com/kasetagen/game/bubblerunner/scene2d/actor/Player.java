@@ -28,13 +28,10 @@ public class Player extends AnimatedActor {
     public Player(float x, float y, float width, float height, Animation defaultAnimation){
         super(x, y, width, height, defaultAnimation, 0);
 
-        //animation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, atlas.findRegions(animationName));
-        //deathAnimation = new Animation(AnimationUtil.RUNNER_FIRE_CYCLE_RATE, atlas.findRegions("player/Wall"));
         if(animation != null){
             textureRegion = animation.getKeyFrame(keyFrameTime);
         }
         collider.set(x + (width/4), y, width/2, height);
-        Gdx.app.log("PLAYER", "COllider (x, y, w, h): " + collider.x + ", " + collider.y + ", " + collider.width + ", " + collider.height);
     }
 
     public void setShieldingAnimation(Animation ani){
@@ -51,11 +48,6 @@ public class Player extends AnimatedActor {
         animation = ani;
         keyFrameTime = 0f;
     }
-
-//    @Override
-//    protected void adjustCollidingBox(float delta) {
-//        collider.set(getX() + (getWidth()/4), getY(), getWidth()/2, getHeight());
-//    }
 
     @Override
     public void act(float delta) {
@@ -85,7 +77,6 @@ public class Player extends AnimatedActor {
             }
 
         }else{
-            //textureRegion = deathAnimation.getKeyFrame(keyFrameTime, false);
             textureRegion = animation.getKeyFrame(keyFrameTime, false);
         }
 

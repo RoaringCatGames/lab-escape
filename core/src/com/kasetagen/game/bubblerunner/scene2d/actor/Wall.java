@@ -163,7 +163,6 @@ public class Wall{
     }
 
     public void setIsRemovable(boolean isRemovable){
-        Gdx.app.log("WALL", "Setting Removable: " + isRemovable);
         if(leftWall != null){
             leftWall.setIsRemovable(isRemovable);
             leftWall = null;

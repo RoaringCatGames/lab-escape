@@ -1307,503 +1307,405 @@ walls/Tesla_Wall_Right
   index: 3
 
 animations3.png
-size: 4096,4096
+size: 4096,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 player/Female_Punch
   rotate: false
-  xy: 0, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
-player/Female_Punch
-  rotate: false
-  xy: 0, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 5
-player/Female_Punch
-  rotate: false
-  xy: 362, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 6
-player/Female_Run
-  rotate: false
-  xy: 0, 2896
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 1
-player/Female_Run
-  rotate: false
-  xy: 362, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 2
-player/Female_Run
-  rotate: false
-  xy: 724, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 3
-player/Female_Run
-  rotate: false
-  xy: 0, 2534
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
-player/Female_Run
-  rotate: false
-  xy: 362, 2896
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 5
-player/Female_Run
-  rotate: false
-  xy: 724, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 6
-player/Female_Shock
-  rotate: false
-  xy: 1086, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 1
-player/Female_Shock
-  rotate: false
-  xy: 0, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 2
-player/Female_Shock
-  rotate: false
-  xy: 0, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
-player/Female_Shock
-  rotate: false
-  xy: 0, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 6
-player/Female_Shock
-  rotate: false
-  xy: 362, 2534
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 3
-player/Female_Shock
-  rotate: false
-  xy: 362, 2534
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 7
-player/Female_Shock
-  rotate: false
-  xy: 362, 2534
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 5
-player/Female_Shock
-  rotate: false
-  xy: 724, 2896
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 8
-player/Female_Shock
-  rotate: false
-  xy: 1086, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 9
-player/Female_Wall
-  rotate: false
-  xy: 1448, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 1
-player/Female_Wall
-  rotate: false
-  xy: 0, 1810
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 2
-player/Female_Wall
-  rotate: false
-  xy: 362, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 3
-player/Female_Wall
-  rotate: false
-  xy: 724, 2534
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
-player/Female_Wall
-  rotate: false
-  xy: 1086, 2896
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 5
-player/Female_Wall
-  rotate: false
-  xy: 1448, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 6
-player/Female_Wall
-  rotate: false
-  xy: 1810, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 7
-player/Male_Punch
-  rotate: false
   xy: 0, 1448
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 1
-player/Male_Punch
-  rotate: false
-  xy: 362, 1810
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 2
-player/Male_Punch
-  rotate: false
-  xy: 724, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 3
-player/Male_Punch
-  rotate: false
-  xy: 1086, 2534
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
   index: 4
-player/Male_Punch
-  rotate: false
-  xy: 1448, 2896
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 5
-player/Male_Punch
-  rotate: false
-  xy: 1810, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 6
-player/Male_Run
-  rotate: false
-  xy: 2172, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 1
-player/Male_Run
+player/Female_Punch
   rotate: false
   xy: 0, 1086
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 2
-player/Male_Run
+  index: 5
+player/Female_Punch
   rotate: false
   xy: 362, 1448
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 3
-player/Male_Run
-  rotate: false
-  xy: 724, 1810
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
-player/Male_Run
-  rotate: false
-  xy: 1086, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 5
-player/Male_Run
-  rotate: false
-  xy: 1448, 2534
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
   index: 6
-player/Male_Shock
-  rotate: false
-  xy: 1810, 2896
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 1
-player/Male_Shock
-  rotate: false
-  xy: 2172, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 2
-player/Male_Shock
-  rotate: false
-  xy: 2172, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
-player/Male_Shock
-  rotate: false
-  xy: 2172, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 6
-player/Male_Shock
-  rotate: false
-  xy: 2534, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 3
-player/Male_Shock
-  rotate: false
-  xy: 2534, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 5
-player/Male_Shock
-  rotate: false
-  xy: 2534, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 7
-player/Male_Shock
+player/Female_Run
   rotate: false
   xy: 0, 724
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 8
-player/Male_Shock
+  index: 1
+player/Female_Run
   rotate: false
   xy: 362, 1086
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 9
-player/Male_Wall
+  index: 2
+player/Female_Run
   rotate: false
   xy: 724, 1448
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 1
-player/Male_Wall
-  rotate: false
-  xy: 1086, 1810
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 2
-player/Male_Wall
-  rotate: false
-  xy: 1448, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
   index: 3
-player/Male_Wall
-  rotate: false
-  xy: 1810, 2534
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
-player/Male_Wall
-  rotate: false
-  xy: 2172, 2896
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 5
-player/Male_Wall
-  rotate: false
-  xy: 2534, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 6
-player/Male_Wall
-  rotate: false
-  xy: 2896, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 7
-player/Shock
-  rotate: false
-  xy: 0, 362
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 1
-player/Shock
+player/Female_Run
   rotate: false
   xy: 0, 362
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 4
-player/Shock
-  rotate: false
-  xy: 0, 362
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 7
-player/Shock
-  rotate: false
-  xy: 362, 724
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 2
-player/Shock
-  rotate: false
-  xy: 362, 724
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 8
-player/Shock
+player/Female_Run
   rotate: false
   xy: 362, 724
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 5
-player/Shock
-  rotate: false
-  xy: 724, 1086
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 3
-player/Shock
-  rotate: false
-  xy: 724, 1086
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 9
-player/Shock
+player/Female_Run
   rotate: false
   xy: 724, 1086
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 6
-player/Shock
+player/Female_Shock
   rotate: false
   xy: 1086, 1448
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 10
-player/Shock
-  rotate: false
-  xy: 1448, 1810
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 11
-player/Wall
-  rotate: false
-  xy: 1810, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
   index: 1
-player/Wall
+player/Female_Shock
   rotate: false
-  xy: 2172, 2534
+  xy: 0, 0
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 2
-player/Wall
+player/Female_Shock
   rotate: false
-  xy: 2534, 2896
+  xy: 0, 0
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 3
-player/Wall
-  rotate: false
-  xy: 2896, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
-player/Wall
-  rotate: false
-  xy: 3258, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 5
-player/Wall
+  index: 8
+player/Female_Shock
   rotate: false
   xy: 0, 0
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 6
-player/Wall
+player/Female_Shock
+  rotate: false
+  xy: 0, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 4
+player/Female_Shock
   rotate: false
   xy: 362, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 3
+player/Female_Shock
+  rotate: false
+  xy: 362, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 5
+player/Female_Shock
+  rotate: false
+  xy: 362, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 7
+player/Female_Shock
+  rotate: false
+  xy: 362, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 9
+player/Female_Shock
+  rotate: false
+  xy: 724, 724
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 10
+player/Female_Shock
+  rotate: false
+  xy: 1086, 1086
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 11
+player/Female_Wall
+  rotate: false
+  xy: 1448, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 1
+player/Female_Wall
+  rotate: false
+  xy: 362, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 2
+player/Female_Wall
+  rotate: false
+  xy: 724, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 3
+player/Female_Wall
+  rotate: false
+  xy: 1086, 724
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 4
+player/Female_Wall
+  rotate: false
+  xy: 1448, 1086
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 5
+player/Female_Wall
+  rotate: false
+  xy: 1810, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 6
+player/Female_Wall
+  rotate: false
+  xy: 724, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 7
+player/Male_Punch
+  rotate: false
+  xy: 1086, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 1
+player/Male_Punch
+  rotate: false
+  xy: 1448, 724
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 2
+player/Male_Punch
+  rotate: false
+  xy: 1810, 1086
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 3
+player/Male_Punch
+  rotate: false
+  xy: 2172, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 4
+player/Male_Punch
+  rotate: false
+  xy: 1086, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 5
+player/Male_Punch
+  rotate: false
+  xy: 1448, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 6
+player/Male_Run
+  rotate: false
+  xy: 1810, 724
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 1
+player/Male_Run
+  rotate: false
+  xy: 2172, 1086
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 2
+player/Male_Run
+  rotate: false
+  xy: 2534, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 3
+player/Male_Run
+  rotate: false
+  xy: 1448, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 4
+player/Male_Run
+  rotate: false
+  xy: 1810, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 5
+player/Male_Run
+  rotate: false
+  xy: 2172, 724
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 6
+player/Male_Shock
+  rotate: false
+  xy: 2534, 1086
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 1
+player/Male_Shock
+  rotate: false
+  xy: 2896, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 2
+player/Male_Shock
+  rotate: false
+  xy: 2896, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 4
+player/Male_Shock
+  rotate: false
+  xy: 2896, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 8
+player/Male_Shock
+  rotate: false
+  xy: 2896, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 6
+player/Male_Shock
+  rotate: false
+  xy: 1810, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 3
+player/Male_Shock
+  rotate: false
+  xy: 1810, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 7
+player/Male_Shock
+  rotate: false
+  xy: 1810, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 5
+player/Male_Shock
+  rotate: false
+  xy: 1810, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 9
+player/Male_Shock
+  rotate: false
+  xy: 2172, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 10
+player/Male_Shock
+  rotate: false
+  xy: 2534, 724
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 11
+player/Male_Wall
+  rotate: false
+  xy: 2896, 1086
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 1
+player/Male_Wall
+  rotate: false
+  xy: 3258, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 2
+player/Male_Wall
+  rotate: false
+  xy: 2172, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 3
+player/Male_Wall
+  rotate: false
+  xy: 2534, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 4
+player/Male_Wall
+  rotate: false
+  xy: 2896, 724
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 5
+player/Male_Wall
+  rotate: false
+  xy: 3258, 1086
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 6
+player/Male_Wall
+  rotate: false
+  xy: 3620, 1448
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
