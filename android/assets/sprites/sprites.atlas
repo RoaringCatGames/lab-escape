@@ -13,7 +13,7 @@ env/Floor
   index: 1
 env/Floor
   rotate: false
-  xy: 1542, 641
+  xy: 1542, 639
   size: 210, 210
   orig: 210, 210
   offset: 0, 0
@@ -69,23 +69,23 @@ ui/Blue_Warning
   index: -1
 ui/Green_Warning
   rotate: false
-  xy: 1542, 564
+  xy: 1542, 562
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: -1
 ui/Red_Warning
   rotate: false
-  xy: 1754, 776
+  xy: 1754, 774
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: -1
 ui/Warning_BG
   rotate: false
-  xy: 1542, 853
-  size: 390, 133
-  orig: 390, 133
+  xy: 1542, 851
+  size: 390, 135
+  orig: 390, 135
   offset: 0, 0
   index: -1
 ui/energy_bar

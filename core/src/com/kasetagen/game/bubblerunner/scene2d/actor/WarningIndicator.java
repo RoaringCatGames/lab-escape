@@ -20,7 +20,7 @@ public class WarningIndicator extends GenericActor {
 
     private static final float MAX_ALPHA = 1f;
     private static final float MIN_ALPHA = 0.05f;
-    private static final float SHIFT_PER_SECOND = 1f;
+    private static float SHIFT_PER_SECOND = 1f;
 
     private WallPattern pattern;
     private float alpha = MAX_ALPHA;
@@ -31,7 +31,7 @@ public class WarningIndicator extends GenericActor {
 
     public float lifetime = 0f;
 
-    public WarningIndicator(float x, float y, float width, float height, WallPattern pattern, Color color, TextureAtlas spriteAtlas){
+    public WarningIndicator(float x, float y, float width, float height, WallPattern pattern, Color color, TextureAtlas spriteAtlas, float lifetimeSeconds){
     //public WarningIndicator(float x, float y, float width, float height, WallPattern pattern, Color color, Texture texture){
         super(x, y, width, height, null, color);
         this.pattern = pattern;
@@ -58,8 +58,9 @@ public class WarningIndicator extends GenericActor {
 
             indicatorRegions.add(r);
 
+            SHIFT_PER_SECOND = (MAX_ALPHA-MIN_ALPHA)/lifetimeSeconds;
             //We want the lifetime to be one fade out length.
-            lifetime = (MAX_ALPHA/SHIFT_PER_SECOND);
+            lifetime = lifetimeSeconds;//(MAX_ALPHA/SHIFT_PER_SECOND);
         }
     }
 
@@ -102,14 +103,16 @@ public class WarningIndicator extends GenericActor {
 
 
             float buffer = indicatorRegions.size <= 3 ? 15f : 5f;
-            float indicatorSideSize = indicatorRegions.size <= 3 ? 75f : (getWidth() - (buffer*2f*indicatorRegions.size))/indicatorRegions.size;
+
+            float indicatorSideSize = indicatorRegions.size <= 4 ? 75f : (getWidth() - (buffer*2f*indicatorRegions.size))/indicatorRegions.size;
 
             for(int i=0;i<indicatorRegions.size;i++){
                 float leftBuffer = buffer;
                 float x = getX() + leftBuffer + leftBuffer*2f*i;
+                float y = (getY() + getHeight()/2f) - (indicatorSideSize/2f);
                 batch.draw(indicatorRegions.get(i),
                            x + (indicatorSideSize*i),
-                           getY() + buffer,
+                           y,
                            indicatorSideSize,
                            indicatorSideSize);
             }

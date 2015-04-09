@@ -75,8 +75,8 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float COMBO_OSCILATION_INCREASE_RATE = -0.1f;//10f;
 
     //Order of values:  xPos, yPos, width, height
-    private static final float INDICATOR_WIDTH = ViewportUtil.VP_WIDTH/4;
-    private static final float INDICATOR_HEIGHT = ViewportUtil.VP_HEIGHT/4;
+    private static final float INDICATOR_WIDTH = 390f;
+    private static final float INDICATOR_HEIGHT = 133f;
 
     private static String characterSelected = AnimationUtil.CHARACTER_2;
     private static float[] playerDimensions = new float[] { 100f, 100f, 360f, 360f };
@@ -87,7 +87,7 @@ public class BubbleRunnerStage extends BaseStage {
     private static float WALL_HEIGHT = 1440f/2f;
     private static float[] wallDimensions = new float[] { WALL_START_X, WALL_Y, WALL_WIDTH, WALL_HEIGHT };
     private static float[] wallColliderDimensions = new float[] { 40f, ViewportUtil.VP_HEIGHT };
-    private static float[] warningIndicatorDimensions = new float[] {ViewportUtil.VP_WIDTH/2 - (INDICATOR_WIDTH/2), ViewportUtil.VP_HEIGHT/2-(INDICATOR_HEIGHT/2),
+    private static float[] warningIndicatorDimensions = new float[] {ViewportUtil.VP_WIDTH/2 - (INDICATOR_WIDTH/2), ViewportUtil.VP_HEIGHT-(INDICATOR_HEIGHT*1.5f),
                                                                      INDICATOR_WIDTH, INDICATOR_HEIGHT};
 
     private static float SHATTER_WIDTH = 1361f/2f;
@@ -510,7 +510,8 @@ public class BubbleRunnerStage extends BaseStage {
                                                        warningIndicatorDimensions[3],
                                                        wp,
                                                        Color.RED,
-                                                        spriteAtlas);
+                                                        spriteAtlas,
+                                                        (millisBetweenWalls/1000f)*0.9f); //Should warn for 90% of the time in between wall sections.
                                                        //assetManager.get(AssetsUtil.WARNING_INDICATOR, AssetsUtil.TEXTURE));
             //cwarningIndicator.addDecorator(warningShaker);
             addActor(warningIndicator);
