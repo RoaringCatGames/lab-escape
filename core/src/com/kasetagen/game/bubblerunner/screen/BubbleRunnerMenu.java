@@ -14,8 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -28,10 +29,12 @@ import com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericActor;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
+import com.kasetagen.engine.gdx.scenes.scene2d.decorators.PulsingScaleDecorator;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.ShakeDecorator;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
+import com.kasetagen.game.bubblerunner.scene2d.actor.DecoratedUIContainer;
 import com.kasetagen.game.bubblerunner.util.AnimationUtil;
 import com.kasetagen.game.bubblerunner.util.AssetsUtil;
 import com.kasetagen.game.bubblerunner.util.AtlasUtil;
@@ -130,6 +133,9 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
     private AnimatedActor edynCircle;
     private AnimatedActor eddyCircle;
 
+    private PulsingScaleDecorator checkedMenuOptionDecorator;
+    private DecoratedUIContainer startUiContainer;
+    private DecoratedUIContainer optionsUiContainer;
     private int focusIndex = 0;
     private Sound sfx;
     private String charValue;
@@ -168,9 +174,10 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         this.gameProcessor = delegate;
         stage = new BaseStage(delegate);
 
-        bgMusic = delegate.getAssetManager().get(AssetsUtil.MENU_BG_MUSIC, AssetsUtil.MUSIC);
-        bgMusic.setVolume(delegate.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY));
+        bgMusic = gameProcessor.getAssetManager().get(AssetsUtil.MENU_BG_MUSIC, AssetsUtil.MUSIC);
+        bgMusic.setVolume(gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY));
         bgMusic.play();
+        bgMusic.setLooping(true);
         this.gameProcessor.setBGMusic(bgMusic);
 
         bgGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLACK);
@@ -225,6 +232,8 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
                 }
             }
         };
+
+        checkedMenuOptionDecorator = new PulsingScaleDecorator(0.025f, 1f);
 
         float w = stage.getWidth();
         float h = stage.getHeight();
@@ -294,36 +303,36 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
 
         menuGroup.addActor(eyes);
 
-
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = gameProcessor.getAssetManager().get(AssetsUtil.NEUROPOL_48, AssetsUtil.BITMAP_FONT);
-        style.fontColor =  Color.YELLOW;
-        style.overFontColor = Color.RED;
-        style.checkedFontColor = Color.RED;
-        style.downFontColor = Color.GRAY;
-
-
-        //startGameButton = new TextButton("Escape!", style);
         Array<TextureAtlas.AtlasRegion> escapeImgs = atlas.findRegions(AtlasUtil.ANI_TITLE_PLAY_BTN);
         TextureRegionDrawable escapeUp = new TextureRegionDrawable(escapeImgs.get(0));
         TextureRegionDrawable escapeDown = new TextureRegionDrawable(escapeImgs.get(1));
+
         startGameButton = new ImageButton(escapeUp, escapeDown, escapeDown);
         startGameButton.setSize(PLAY_BTN_WIDTH, PLAY_BTN_HEIGHT);
         startGameButton.addListener(listener);
-        startGameButton.setPosition(buttonX, buttonY);
+        //startGameButton.setPosition(buttonX, buttonY);
         startGameButton.setChecked(true);
-        menuGroup.addActor(startGameButton);
 
-        //optionsButton = new TextButton("Options", style);
+        startUiContainer = new DecoratedUIContainer(startGameButton);
+        startUiContainer.setSize(PLAY_BTN_WIDTH, PLAY_BTN_HEIGHT);
+        startUiContainer.setPosition(buttonX, buttonY);
+        startUiContainer.addDecorator(checkedMenuOptionDecorator);
+        menuGroup.addActor(startUiContainer);
+
+
         Array<TextureAtlas.AtlasRegion> optionsImgs = atlas.findRegions(AtlasUtil.ANI_TITLE_OPT_BTN);
         TextureRegionDrawable optionsUp = new TextureRegionDrawable(optionsImgs.get(0));
         TextureRegionDrawable optionsDown = new TextureRegionDrawable(optionsImgs.get(1));
         optionsButton = new ImageButton(optionsUp, optionsDown, optionsDown);
         optionsButton.setSize(OPTS_BTN_WIDTH, OPTS_BTN_HEIGHT);
-        optionsButton.setPosition(buttonX, buttonY - (optionsButton.getHeight()));
-        optionsButton.addListener(listener);
 
-        menuGroup.addActor(optionsButton);
+        //optionsButton.setPosition(buttonX, buttonY - (optionsButton.getHeight()));
+        optionsButton.addListener(listener);
+        optionsUiContainer = new DecoratedUIContainer(optionsButton);
+        optionsUiContainer.setPosition(buttonX, buttonY - (PLAY_BTN_HEIGHT));
+        optionsUiContainer.setSize(OPTS_BTN_WIDTH, OPTS_BTN_HEIGHT);
+        //optUiContainer.addDecorator(checkedMenuOptionDecorator);
+        menuGroup.addActor(optionsUiContainer);
     }
 
     private void assembleOptionsGroup(TextureAtlas atlas){
@@ -358,10 +367,10 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
                 atlas.findRegion(AtlasUtil.ANI_OPTIONS_VOLUMESCAFFOLD), Color.WHITE);
         optionsGroup.addActor(volumeScaffold);
 
-        Animation techAAni = new Animation(1f/4f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_TECH_A));
+        Animation techAAni = new Animation(1f/2f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_TECH_A));
         AnimatedActor techA = new AnimatedActor(TECHA_X, TECHA_Y, TECHA_W, TECHA_H, techAAni, 0f);
         optionsGroup.addActor(techA);
-        Animation techBAni = new Animation(1f/4f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_TECH_B));
+        Animation techBAni = new Animation(1f/2f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_TECH_B));
         AnimatedActor techB = new AnimatedActor(TECHB_X, TECHB_Y, TECHB_W, TECHB_H, techBAni, 0f);
         optionsGroup.addActor(techB);
 
@@ -662,11 +671,18 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
             }else if(keycode == Input.Keys.DOWN){
                 trapped = true;
                 optionsButton.setChecked(true);
+                optionsUiContainer.addDecorator(checkedMenuOptionDecorator);
                 startGameButton.setChecked(false);
+                startUiContainer.removeDecorator(checkedMenuOptionDecorator);
+                startUiContainer.setScale(1f);
+
             }else if(keycode == Input.Keys.UP){
                 trapped = true;
                 startGameButton.setChecked(true);
+                startUiContainer.addDecorator(checkedMenuOptionDecorator);
                 optionsButton.setChecked(false);
+                optionsUiContainer.removeDecorator(checkedMenuOptionDecorator);
+                optionsUiContainer.setScale(1f);
             }
         }else{
             if(keycode == Input.Keys.DOWN){

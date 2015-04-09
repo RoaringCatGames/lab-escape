@@ -978,6 +978,7 @@ public class BubbleRunnerStage extends BaseStage {
         initializeVolumes();
         music = assetManager.get(AssetsUtil.GAME_BG_MUSIC, AssetsUtil.MUSIC);
         music.setVolume(bgVolume);
+        music.setLooping(true);
         this.gameProcessor.setBGMusic(music);
 
         badShieldSound = assetManager.get(AssetsUtil.SND_SHIELD_WRONG, AssetsUtil.SOUND);

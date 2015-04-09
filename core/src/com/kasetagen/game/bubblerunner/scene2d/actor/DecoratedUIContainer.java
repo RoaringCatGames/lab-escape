@@ -10,7 +10,6 @@ import com.kasetagen.engine.gdx.scenes.scene2d.ActorDecorator;
  * User: barry
  * Date: 11/8/14
  * Time: 10:47 PM
- * To change this template use File | Settings | File Templates.
  */
 public class DecoratedUIContainer extends Container {
 
