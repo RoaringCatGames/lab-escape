@@ -512,7 +512,7 @@ public class BubbleRunnerStage extends BaseStage {
                                                        Color.RED,
                                                         spriteAtlas);
                                                        //assetManager.get(AssetsUtil.WARNING_INDICATOR, AssetsUtil.TEXTURE));
-            //warningIndicator.addDecorator(warningShaker);
+            //cwarningIndicator.addDecorator(warningShaker);
             addActor(warningIndicator);
 
 

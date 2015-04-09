@@ -32,8 +32,15 @@ public class AtlasUtil {
     public static final String ANI_OPTIONS_CHARSELECT = "screens/options/Select_Runner";
     public static final String ANI_OPTIONS_RUNNERSCAFFOLD = "screens/options/Runner";
     public static final String ANI_OPTIONS_VOLUMESCAFFOLD = "screens/options/Volume";
+    public static final String ANI_OPTIONS_TECH_A = "screens/options/Tech_A";
+    public static final String ANI_OPTIONS_TECH_B = "screens/options/Tech_B";
+
     public static final String ANI_OPTIONS_EDISON_SELECT = "screens/options/Edison_Select";
     public static final String ANI_OPTIONS_EDYN_SELECT = "screens/options/Edyn_Select";
+    public static final String ANI_OPTIONS_EDISON_SELECT_DFLT = "screens/options/Edison_Select_Default";
+    public static final String ANI_OPTIONS_EDYN_SELECT_DFLT = "screens/options/Edyn_Select_Default";
+    public static final String ANI_OPTIONS_EDISON_EYES = "screens/options/Edison_Eyes";
+    public static final String ANI_OPTIONS_EDYN_EYES = "screens/options/Edyn_Eyes";
     public static final String ANI_OPTIONS_MAINMENU = "screens/options/Main_menu";
     public static final String ANI_OPTIONS_MUSIC = "screens/options/Music";
     public static final String ANI_OPTIONS_SFX = "screens/options/sfx";
@@ -95,7 +102,7 @@ public class AtlasUtil {
     public static final String SPRITE_FLOOR = "env/Floor";
     public static final String SPRITE_HAZARD = "env/Hazard";
 
-    public static final String SPRITE_WARNING_INDICATOR = "ui/warning-indicator";
+    public static final String SPRITE_WARNING_INDICATOR = "ui/Warning_BG";
     public static final String SPRITE_BLUE_INDICATOR = "ui/Blue_Warning";
     public static final String SPRITE_GREEN_INDICATOR = "ui/Green_Warning";
     public static final String SPRITE_RED_INDICATOR = "ui/Red_Warning";

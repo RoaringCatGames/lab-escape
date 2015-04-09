@@ -101,10 +101,30 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
     private static final int MAX_INDEX = 3; //Zero-based index, with 4 controls
     private static final float VOLUME_INCREMENT = 0.1f;
 
-    private static final float CHAR_CIRCLE_SIZE = 200f;
-    private static final float CHAR_CIRCLE_Y = 391f;
-    private static final float EDYN_SELECT_X = 203f;
-    private static final float EDISON_SELECT_X = 516f;
+    private static final float TECHA_X = 40f;
+    private static final float TECHA_Y = 480f;
+    private static final float TECHA_W = 400f;
+    private static final float TECHA_H = 215f;
+
+    private static final float TECHB_X = 480f;
+    private static final float TECHB_Y = 293f;
+    private static final float TECHB_W = 537f;
+    private static final float TECHB_H = 300f;
+
+
+    private static final float CHAR_CIRCLE_SIZE = 250f;
+    private static final float CHAR_CIRCLE_Y = 368f;
+    private static final float EDYN_SELECT_X = 180f;
+    private static final float EDISON_SELECT_X = 494f;
+    private static final float EDYN_CIRCLE_X = 60f;
+    private static final float EDYN_CIRCLE_Y = 368f;
+    private static final float EDYN_CIRCLE_W = 375f;
+    private static final float EDYN_CIRCLE_H = 250f;
+
+    private static final float EDISON_CIRCLE_X = 492f;
+    private static final float EDISON_CIRCLE_Y = 368f;
+    private static final float EDISON_CIRCLE_W = 407f;
+    private static final float EDISON_CIRCLE_H = 250f;
     private static final float MM_X = 900f;
     private static final float MM_Y = 300f;
     private static final float MM_W = 312f;
@@ -113,6 +133,8 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
     private ImageButton edisonSelect;
     private ImageButton edynSelect;
     private ImageButton mainMenuButton;
+    private AnimatedActor edynCircle;
+    private AnimatedActor eddyCircle;
 
     private int focusIndex = 0;
     private Sound sfx;
@@ -342,7 +364,12 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
                 atlas.findRegion(AtlasUtil.ANI_OPTIONS_VOLUMESCAFFOLD), Color.WHITE);
         optionsGroup.addActor(volumeScaffold);
 
-        //TODO: Add Player Select Highlightable
+        Animation techAAni = new Animation(1f/4f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_TECH_A));
+        AnimatedActor techA = new AnimatedActor(TECHA_X, TECHA_Y, TECHA_W, TECHA_H, techAAni, 0f);
+        optionsGroup.addActor(techA);
+        Animation techBAni = new Animation(1f/4f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_TECH_B));
+        AnimatedActor techB = new AnimatedActor(TECHB_X, TECHB_Y, TECHB_W, TECHB_H, techBAni, 0f);
+        optionsGroup.addActor(techB);
 
         /*
          * Add Player Buttons
@@ -352,7 +379,13 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         charIndicator.setTargetKeyFrame(1);
         optionsGroup.addActor(charIndicator);
 
-        Array<TextureAtlas.AtlasRegion> edynImgs = atlas.findRegions(AtlasUtil.ANI_OPTIONS_EDYN_SELECT);
+        Animation edynDefCircleAni = new Animation(0.5f/10f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_EDYN_SELECT), Animation.PlayMode.REVERSED);
+        Animation edynCircleAni = new Animation(0.5f/10f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_EDYN_SELECT));
+        edynCircle = new AnimatedActor(EDYN_CIRCLE_X, EDYN_CIRCLE_Y, EDYN_CIRCLE_W, EDYN_CIRCLE_H, edynDefCircleAni, 0f);
+        edynCircle.addStateAnimation("SELECTED", edynCircleAni);
+        edynCircle.setIsLooping(false);
+        optionsGroup.addActor(edynCircle);
+        Array<TextureAtlas.AtlasRegion> edynImgs = atlas.findRegions(AtlasUtil.ANI_OPTIONS_EDYN_EYES);
         TextureRegionDrawable edynUp = new TextureRegionDrawable(edynImgs.get(0));
         TextureRegionDrawable edynDown = new TextureRegionDrawable(edynImgs.get(1));
         edynSelect = new ImageButton(edynUp, edynDown, edynDown);
@@ -363,7 +396,15 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
         edynSelect.setChecked(AnimationUtil.CHARACTER_2.equals(charValue));
         optionsGroup.addActor(edynSelect);
 
-        Array<TextureAtlas.AtlasRegion> edisonImgs = atlas.findRegions(AtlasUtil.ANI_OPTIONS_EDISON_SELECT);
+
+        Animation eddyDefCircleAni = new Animation(0.5f/10f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_EDISON_SELECT), Animation.PlayMode.REVERSED);
+        Animation eddyCircleAni = new Animation(0.5f/10f, atlas.findRegions(AtlasUtil.ANI_OPTIONS_EDISON_SELECT));
+        eddyCircle = new AnimatedActor(EDISON_CIRCLE_X, EDISON_CIRCLE_Y, EDISON_CIRCLE_W, EDISON_CIRCLE_H, eddyDefCircleAni, 0f);
+        eddyCircle.addStateAnimation("SELECTED", eddyCircleAni);
+        eddyCircle.setIsLooping(false);
+        optionsGroup.addActor(eddyCircle);
+
+        Array<TextureAtlas.AtlasRegion> edisonImgs = atlas.findRegions(AtlasUtil.ANI_OPTIONS_EDISON_EYES);
         TextureRegionDrawable edisonUp = new TextureRegionDrawable(edisonImgs.get(0));
         TextureRegionDrawable edisonDown = new TextureRegionDrawable(edisonImgs.get(1));
         edisonSelect = new ImageButton(edisonUp, edisonDown, edisonDown);
@@ -443,6 +484,8 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
                 sfx.play(sfxVolumeSet.getValue());
             }
         });
+
+        selectCharacter(edynSelect.isChecked());
     }
 
     private void addClouds(TextureAtlas.AtlasRegion cloudRegion, float speed){
@@ -486,10 +529,15 @@ public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
             charValue = AnimationUtil.CHARACTER_2;
             edynSelect.setChecked(true);
             edisonSelect.setChecked(false);
+            eddyCircle.setState(AnimatedActor.DEFAULT_STATE, true);
+            edynCircle.setState("SELECTED", true);
         }else{
             charValue = AnimationUtil.CHARACTER_1;
             edynSelect.setChecked(false);
             edisonSelect.setChecked(true);
+            edynCircle.setState(AnimatedActor.DEFAULT_STATE, true);
+            eddyCircle.setState("SELECTED", true);
+
         }
 
         gameProcessor.saveGameData(charDataSaver);
