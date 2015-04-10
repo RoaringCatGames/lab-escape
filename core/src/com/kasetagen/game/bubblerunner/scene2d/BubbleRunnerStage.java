@@ -195,7 +195,7 @@ public class BubbleRunnerStage extends BaseStage {
         aniAtlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         spriteAtlas = assetManager.get(AssetsUtil.SPRITE_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
-        Animation introAnimation = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_VEDA_SHOCK));
+        Animation introAnimation = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_INTRO));
         cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);
         cinematic.setRequiresContinue(true);
 
@@ -204,7 +204,7 @@ public class BubbleRunnerStage extends BaseStage {
         float startY = -720f;
         float endX = 0f;
         float endY = 0f;
-        float startZoom = 0.8f;
+        float startZoom = 1f;
         float endZoom = 1f;
         CinematicScene scene1 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
         //scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
