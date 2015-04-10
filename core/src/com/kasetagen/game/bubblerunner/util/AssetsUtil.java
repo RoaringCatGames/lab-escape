@@ -31,16 +31,6 @@ public class AssetsUtil {
     //Skin
     public static final String DEFAULT_SKIN = "uiskin.json";
 
-    //Images
-    public static final String WARNING_INDICATOR = "sprites/warning-indicator.png";
-
-    //Font Paths
-//    public static final String REXLIA_64 = "fonts/rexlia-64.fnt";
-//    public static final String REXLIA_48 = "fonts/rexlia-48.fnt";
-//    public static final String REXLIA_32 = "fonts/rexlia-32.fnt";
-//    public static final String REXLIA_24 = "fonts/rexlia-24.fnt";
-//    public static final String REXLIA_16 = "fonts/rexlia-16.fnt";
-
     //Font Paths
     public static final String NEUROPOL_64 = "fonts/neuropol-64.fnt";
     public static final String NEUROPOL_48 = "fonts/neuropol-48.fnt";
@@ -57,12 +47,9 @@ public class AssetsUtil {
     public static final String SND_DEATH_THUD = "audio/deaths/glass-thud.mp3";
     public static final String SND_DEATH_EDYN = "audio/deaths/edyn-scream.mp3";
     public static final String SND_DEATH_EDISON = "audio/deaths/edison-scream.mp3";
+    public static final String SND_DEATH_SHOCK = "audio/deaths/electric-flow.mp3";
+    public static final String SND_DEATH_FIRE = "audio/deaths/flame-whoosh.mp3";
 
-//    public static final String ZAP_SOUND = "audio/zap.mp3";
-//    public static final String EXPLOSION_SOUND = "audio/explosion.mp3";
-//    public static final String POWER_ON_SOUND = "audio/power-on.mp3";
-//    public static final String SCREAM = "audio/scream.mp3";
-//    public static final String FRYING_PAN = "audio/flat-hit.mp3";
 
     public static final String NOT_BAD = "audio/sfx/not-bad_1.mp3";
     public static final String GREAT = "audio/sfx/great_1.mp3";
@@ -71,8 +58,4 @@ public class AssetsUtil {
     //public static final String BONKERS = "audio/sfx/bonkers.mp3";
     public static final String RIDICULOUS = "audio/sfx/ridiculous_1.mp3";
     //public static final String ATOMIC = "audio/sfx/atomic.mp3";
-    
-    //Particle Paths
-//    public static final String BUBBLE_PARTICLE = "particles/bubbleflame_right.p";
-
 }

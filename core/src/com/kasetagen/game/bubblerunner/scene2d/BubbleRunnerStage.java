@@ -146,6 +146,8 @@ public class BubbleRunnerStage extends BaseStage {
     private Sound breakLaserSound;
     private Sound breakGlassSound;
     private Sound dieGlassSound;
+    private Sound dieShockSound;
+    private Sound dieFireSound;
     private Sound dieEdisonSound;
     private Sound dieEdynSound;
 
@@ -193,15 +195,16 @@ public class BubbleRunnerStage extends BaseStage {
         aniAtlas = assetManager.get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         spriteAtlas = assetManager.get(AssetsUtil.SPRITE_ATLAS, AssetsUtil.TEXTURE_ATLAS);
 
-        Animation introAnimation = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_INTRO));
+        Animation introAnimation = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_VEDA_SHOCK));
         cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);
+        cinematic.setRequiresContinue(true);
 
-        float duration = 3f;
+        float duration = 4f;
         float startX = 0f;
         float startY = -720f;
         float endX = 0f;
-        float endY = 720f;
-        float startZoom = 1f;
+        float endY = 0f;
+        float startZoom = 0.8f;
         float endZoom = 1f;
         CinematicScene scene1 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
         //scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
@@ -799,11 +802,19 @@ public class BubbleRunnerStage extends BaseStage {
                     dieGlassSound.play(sfxVolume);
                     break;
                 case LASER:
-                case LIGHTNING:
+                    dieFireSound.play(sfxVolume);
                     if(AnimationUtil.CHARACTER_1.equals(characterSelected)){
-                        dieEdisonSound.play(sfxVolume);
+                        dieEdisonSound.play(sfxVolume/2f);
                     }else{
-                        dieEdynSound.play(sfxVolume);
+                        dieEdynSound.play(sfxVolume/2f);
+                    }
+                    break;
+                case LIGHTNING:
+                    dieShockSound.play(sfxVolume);
+                    if(AnimationUtil.CHARACTER_1.equals(characterSelected)){
+                        dieEdisonSound.play(sfxVolume/2f);
+                    }else{
+                        dieEdynSound.play(sfxVolume/2f);
                     }
                     break;
             }
@@ -984,6 +995,8 @@ public class BubbleRunnerStage extends BaseStage {
         badShieldSound = assetManager.get(AssetsUtil.SND_SHIELD_WRONG, AssetsUtil.SOUND);
         shieldUpSound = assetManager.get(AssetsUtil.SND_SHIELD_ON, AssetsUtil.SOUND);
         dieGlassSound = assetManager.get(AssetsUtil.SND_DEATH_THUD, AssetsUtil.SOUND);
+        dieShockSound = assetManager.get(AssetsUtil.SND_DEATH_SHOCK, AssetsUtil.SOUND);
+        dieFireSound = assetManager.get(AssetsUtil.SND_DEATH_FIRE, AssetsUtil.SOUND);
         dieEdisonSound = assetManager.get(AssetsUtil.SND_DEATH_EDISON, AssetsUtil.SOUND);
         dieEdynSound = assetManager.get(AssetsUtil.SND_DEATH_EDYN, AssetsUtil.SOUND);
         breakElectricSound = assetManager.get(AssetsUtil.SND_WB_ELECTRIC, AssetsUtil.SOUND);
@@ -1222,6 +1235,10 @@ public class BubbleRunnerStage extends BaseStage {
     @Override
     public boolean keyDown(int keyCode) {
 
+        if(!cinematicComplete){
+            cinematic.stop();
+            return false;
+        }
         if(isDead){
             if(Input.Keys.LEFT == keyCode){
                 deathOverlay.markDismissed();
@@ -1263,6 +1280,7 @@ public class BubbleRunnerStage extends BaseStage {
 
     private void hideCinematic() {
         if(cinematic != null && cinematic.isVisible()){
+            cinematic.stop();
             cinematic.setVisible(false);
         }
     }
