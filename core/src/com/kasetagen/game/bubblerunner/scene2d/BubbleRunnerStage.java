@@ -1164,9 +1164,10 @@ public class BubbleRunnerStage extends BaseStage {
 
             animation = new TunnelAnimation(new Animation(1f/3f, aniAtlas.findRegions(AtlasUtil.ANI_NESSIE_WALL)), true, false);
             tunnelGroupHasSpecialTunnel = true;
-        }else if(segment < 3){
+        }else if(segment < 1000){
             //Sassie
-            animation = new TunnelAnimation(new Animation(1f/6f, aniAtlas.findRegions(AtlasUtil.ANI_SASSIE_WALL)), true, false);
+            animation = new TunnelAnimation(new Animation(1f/6f, aniAtlas.findRegions(AtlasUtil.ANI_SASSIE_WALL)), true, true);
+            animation.animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
             tunnelGroupHasSpecialTunnel = true;
         }else if(segment < 150){
             //baldGuy

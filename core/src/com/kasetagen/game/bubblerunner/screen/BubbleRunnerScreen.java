@@ -1,14 +1,7 @@
 package com.kasetagen.game.bubblerunner.screen;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kasetagen.engine.IGameProcessor;
-import com.kasetagen.game.bubblerunner.delegate.IStageManager;
+import com.kasetagen.engine.screen.Kitten2dScreen;
 import com.kasetagen.game.bubblerunner.scene2d.BubbleRunnerStage;
 
 /**
@@ -17,7 +10,7 @@ import com.kasetagen.game.bubblerunner.scene2d.BubbleRunnerStage;
  * Date: 5/27/14
  * Time: 7:55 PM
  */
-public class BubbleRunnerScreen extends ApplicationAdapter implements Screen, InputProcessor, IStageManager {
+public class BubbleRunnerScreen extends Kitten2dScreen {
 
     private float bgMin = 0.3f;
     private float bgMax = 0.4f;
@@ -25,78 +18,14 @@ public class BubbleRunnerScreen extends ApplicationAdapter implements Screen, In
     private float bgCurrent = bgMin;
     private boolean isBgIncreasing = true;
 
-    BubbleRunnerStage stage;
-    IGameProcessor processor;
-
     public BubbleRunnerScreen(IGameProcessor gameProcessor){
-        processor = gameProcessor;
-        stage = new BubbleRunnerStage(processor);
-    }
-
-    //IStageManager
-    @Override
-    public Stage getStage() {
-        return stage;
-    }
-
-    //InputProcessor
-    @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        super(gameProcessor);
+        stage = new BubbleRunnerStage(this.gameProcessor);
     }
 
     //Screen
     @Override
     public void render(float delta) {
-        if(Gdx.graphics.isFullscreen()){
-            Viewport vp = stage.getViewport();
-            int screenW = vp.getScreenWidth();
-            int screenH = vp.getScreenHeight();
-            int leftCrop = vp.getLeftGutterWidth();
-            int bottomCrop = vp.getBottomGutterHeight();
-            int xPos = leftCrop;
-            int yPos = bottomCrop;
-
-            Gdx.gl.glViewport(xPos, yPos, screenW, screenH);
-            Gdx.gl.glClearColor(bgCurrent, bgCurrent, bgCurrent, 1f);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        }
-
         if(isBgIncreasing){
             bgCurrent += bgShift;
         }else{
@@ -109,23 +38,14 @@ public class BubbleRunnerScreen extends ApplicationAdapter implements Screen, In
             isBgIncreasing = true;
         }
 
-        stage.act(delta);
-        stage.draw();
+        super.render(delta);
     }
 
     @Override
     public void show() {
-        stage.resume();
-    }
-
-    @Override
-    public void hide() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        super.resize(width, height);
-        stage.getViewport().update(width, height);
+        super.show();
+        if(stage != null){
+            ((BubbleRunnerStage)stage).resume();
+        }
     }
 }

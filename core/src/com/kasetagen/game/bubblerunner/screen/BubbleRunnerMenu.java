@@ -31,6 +31,7 @@ import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.OscillatingDecorator;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.PulsingScaleDecorator;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.ShakeDecorator;
+import com.kasetagen.engine.screen.Kitten2dScreen;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
@@ -48,7 +49,7 @@ import java.util.Random;
  * Date: 5/25/14
  * Time: 10:59 PM
  */
-public class BubbleRunnerMenu extends BaseBubbleRunnerScreen{
+public class BubbleRunnerMenu extends Kitten2dScreen{
 
     protected IGameProcessor gameProcessor;
 

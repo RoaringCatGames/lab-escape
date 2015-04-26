@@ -15,7 +15,7 @@ public class DesktopLauncher {
         config.addIcon("icon_64x64.png", Files.FileType.Internal);
         config.addIcon("icon_32x32.png", Files.FileType.Internal);
 
-        boolean useController = true;
+        boolean useController = false;
 		new LwjglApplication(new BubbleRunnerGame(useController), config);
 	}
 }
