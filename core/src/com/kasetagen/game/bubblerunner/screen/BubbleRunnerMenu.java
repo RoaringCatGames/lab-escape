@@ -53,12 +53,17 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
 
     protected IGameProcessor gameProcessor;
 
+
+    /*
+     * MAIN MENU SECTION
+     */
     private float buttonX = 175f;
     private float buttonY = 580f;
     private boolean isMenuView = true;
 ;
     private ImageButton startGameButton;
     private ImageButton optionsButton;
+    private ImageButton highScoreButton;
     private ActorDecorator infiniteLeftDecorator;
 
     private static final float MOON_WIDTH = 329f/2f;
@@ -79,6 +84,9 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
     private static final float PLAY_BTN_HEIGHT = 226f/2f;
     private static final float OPTS_BTN_WIDTH = 1205f/2f;
     private static final float OPTS_BTN_HEIGHT = 175f/2f;
+    private static final float HS_BTN_WIDTH = 1200f/2f;
+    private static final float HS_BTN_HEIGHT = 140f/2f;
+
 
     private static final float EDISON_CYCLE_RATE = 1f/5f;
     private static final float EDYN_CYCLE_RATE = 1f/5f;
@@ -92,9 +100,13 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
     private GenericGroup bgGroup;
     private GenericGroup menuGroup;
     private GenericGroup optionsGroup;
+    private GenericGroup highScoreGroup;
 
     private ClickListener listener;
 
+    /*
+     * OPTIONS MENU SECTION
+     */
     private static final int MIN_INDEX = 0;
     private static final int MAX_INDEX = 3; //Zero-based index, with 4 controls
     private static final float VOLUME_INCREMENT = 0.1f;
@@ -137,6 +149,8 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
     private PulsingScaleDecorator checkedMenuOptionDecorator;
     private DecoratedUIContainer startUiContainer;
     private DecoratedUIContainer optionsUiContainer;
+    private DecoratedUIContainer highScoreUiContainer;
+
     private int focusIndex = 0;
     private Sound sfx;
     private String charValue;
@@ -168,6 +182,10 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
     private AnimatedActor sfxIndicator;
     private Slider sfxVolumeSet;
 
+    /*
+     * HIGH SCORE SECTION
+     */
+    private ImageButton closeScoresButton;
 
 
     public BubbleRunnerMenu(IGameProcessor delegate){
@@ -184,9 +202,11 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         bgGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLACK);
         menuGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLACK);
         optionsGroup = new GenericGroup(ViewportUtil.VP_WIDTH, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLACK);
+        highScoreGroup = new GenericGroup(-1f*ViewportUtil.VP_WIDTH, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLACK);
         stage.addActor(bgGroup);
         stage.addActor(menuGroup);
         stage.addActor(optionsGroup);
+        stage.addActor(highScoreGroup);
 
         TextureAtlas atlas = gameProcessor.getAssetManager().get(AssetsUtil.ANIMATION_ATLAS, AssetsUtil.TEXTURE_ATLAS);
         listener = new ClickListener()
@@ -203,12 +223,17 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
                 } else if (btn == optionsButton){
                     showOptionsMenu();
                     //gameProcessor.changeToScreen(BubbleRunnerGame.OPTIONS);
-                } else if (btn == edynSelect){
+                } else if (btn == highScoreButton){
+                    showHighScoreMenu();
+                    //gameProcessor.changeToScreen(BubbleRunnerGame.OPTIONS);
+                }else if (btn == edynSelect){
                     selectCharacter(true);
                 } else if (btn == edisonSelect){
                     selectCharacter(false);
                 } else if(btn == mainMenuButton){
-                    showMainMenu();
+                    showMainMenu(false);
+                } else if(btn == closeScoresButton){
+                    showMainMenu(true);
                 }
             }
         };
@@ -217,6 +242,8 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         assembleMenuGroup(atlas);
 
         assembleOptionsGroup(atlas);
+
+        assembleHighScoreView(atlas);
 
         indicators.add(charIndicator);
         indicators.add(bgIndicator);
@@ -334,6 +361,20 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         optionsUiContainer.setSize(OPTS_BTN_WIDTH, OPTS_BTN_HEIGHT);
         //optUiContainer.addDecorator(checkedMenuOptionDecorator);
         menuGroup.addActor(optionsUiContainer);
+
+
+        Array<TextureAtlas.AtlasRegion> hsImgs = atlas.findRegions(AtlasUtil.ANI_TITLE_HIGHSCORE_BTN);
+        TextureRegionDrawable hsUp = new TextureRegionDrawable(hsImgs.get(0));
+        TextureRegionDrawable hsDown = new TextureRegionDrawable(hsImgs.get(1));
+
+        highScoreButton = new ImageButton(hsUp, hsDown, hsDown);
+        highScoreButton.setSize(HS_BTN_WIDTH, HS_BTN_HEIGHT);
+        highScoreButton.addListener(listener);
+
+        highScoreUiContainer = new DecoratedUIContainer(highScoreButton);
+        highScoreUiContainer.setSize(HS_BTN_WIDTH, HS_BTN_HEIGHT);
+        highScoreUiContainer.setPosition(buttonX, optionsUiContainer.getY() - HS_BTN_HEIGHT);
+        menuGroup.addActor(highScoreUiContainer);
     }
 
     private void assembleOptionsGroup(TextureAtlas atlas){
@@ -492,6 +533,22 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         selectCharacter(edynSelect.isChecked());
     }
 
+    private void assembleHighScoreView(TextureAtlas atlas){
+        GenericActor highScoreScaffold = new GenericActor(0f, 0f, stage.getWidth(), stage.getHeight(), atlas.findRegion(AtlasUtil.ANI_HIGH_SCORE_BG), Color.BLACK);
+        highScoreGroup.addActor(highScoreScaffold);
+
+         /*
+         * Add Main Menu Button
+         */
+        Array<TextureAtlas.AtlasRegion> mmImgs = atlas.findRegions(AtlasUtil.ANI_OPTIONS_MAINMENU);
+        TextureRegionDrawable mmDown = new TextureRegionDrawable(mmImgs.get(1));
+        closeScoresButton = new ImageButton(new TextureRegionDrawable(mmImgs.get(0)), mmDown, mmDown);
+        closeScoresButton.setSize(MM_W, MM_H);
+        closeScoresButton.setPosition(MM_X, MM_Y);
+        closeScoresButton.addListener(listener);
+        highScoreGroup.addActor(closeScoresButton);
+    }
+
     private void addClouds(TextureAtlas.AtlasRegion cloudRegion, float speed){
         GenericActor c1 = new GenericActor(0f, 0f, CLOUD_WIDTH, CLOUD_HEIGHT, cloudRegion, Color.BLACK);
         c1.velocity.x = speed;
@@ -516,9 +573,23 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
                 })));
     }
 
-    private void showMainMenu(){
-        optionsGroup.addAction(Actions.sequence(
-                Actions.moveTo(1280f, 0f, 1f, Interpolation.swingIn),
+    private void showHighScoreMenu(){
+        menuGroup.addAction(Actions.sequence(
+                Actions.moveTo(1280f, 0f, 1f, Interpolation.fade),
+                Actions.run(new Runnable() {
+                    @Override
+                    public void run() {
+                        highScoreGroup.addAction(Actions.moveTo(0f, 0f, 1f, Interpolation.swingOut));
+                        isMenuView = false;
+                    }
+                })));
+    }
+
+    private void showMainMenu(final boolean isFromHighScore){
+        GenericGroup targetGroup = isFromHighScore ? highScoreGroup : optionsGroup;
+        float targetX = isFromHighScore? -1280f : 1280f;
+        targetGroup.addAction(Actions.sequence(
+                Actions.moveTo(targetX, 0f, 1f, Interpolation.swingIn),
                 Actions.run(new Runnable() {
                     @Override
                     public void run() {
@@ -709,7 +780,7 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
             }else if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER){
                 trapped = true;
                 //if return button go home.
-                showMainMenu();
+                showMainMenu(false);
             }
         }
 

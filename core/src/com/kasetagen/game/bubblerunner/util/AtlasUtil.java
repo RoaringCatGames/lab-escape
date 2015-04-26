@@ -28,6 +28,7 @@ public class AtlasUtil {
     public static final String ANI_TITLE_EDYN_EYES = "screens/Edyn/Eyes";
     public static final String ANI_TITLE_PLAY_BTN = "screens/Escape";
     public static final String ANI_TITLE_OPT_BTN = "screens/Options";
+    public static final String ANI_TITLE_HIGHSCORE_BTN = "screens/HighScore";
 
     public static final String ANI_OPTIONS_CHARSELECT = "screens/options/Select_Runner";
     public static final String ANI_OPTIONS_RUNNERSCAFFOLD = "screens/options/Runner";
@@ -44,6 +45,8 @@ public class AtlasUtil {
     public static final String ANI_OPTIONS_MAINMENU = "screens/options/Main_menu";
     public static final String ANI_OPTIONS_MUSIC = "screens/options/Music";
     public static final String ANI_OPTIONS_SFX = "screens/options/sfx";
+
+    public static final String ANI_HIGH_SCORE_BG = "screens/HighScore_BG";
 
 
     //Veda Animations
