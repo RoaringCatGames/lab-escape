@@ -1290,15 +1290,7 @@ public class BubbleRunnerStage extends BaseStage {
     private void initializeButtonControls(){
 
         // BLUE
-        Animation blueDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_BLUE_DEF));
-        Animation bluePressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_BLUE_PRESSED));
-        Animation greenDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_GREEN_DEF));
-        Animation greenPressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_GREEN_PRESSED));
-        Animation redDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_RED_DEF));
-        Animation redPressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_RED_PRESSED));
 
-        leftControls = new ControlGroup(30f, 100f, 100f, getHeight(), Color.CYAN);
-        rightControls = new ControlGroup(ViewportUtil.VP_WIDTH - 155f, 100f, 100f, getHeight(), Color.CYAN);
 
 
         if(true || Gdx.app.getType() != Application.ApplicationType.Desktop){
@@ -1325,14 +1317,31 @@ public class BubbleRunnerStage extends BaseStage {
                 }
             };
 
-            float leftRotation = -90f, rightRotation = 135f;
-            leftControls.addButton(ForceFieldType.LIGHTNING, blistener, blueDefAni, bluePressedAni, leftRotation);
-            leftControls.addButton(ForceFieldType.PLASMA, glistener, greenDefAni, greenPressedAni, leftRotation);
-            leftControls.addButton(ForceFieldType.LASER, rlistener, redDefAni, redPressedAni, leftRotation);
+            Animation blueDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_BLUE_DEF));
+            Animation bluePressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_BLUE_PRESSED));
+            Animation greenDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_GREEN_DEF));
+            Animation greenPressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_GREEN_PRESSED));
+            Animation redDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_RED_DEF));
+            Animation redPressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_RED_PRESSED));
 
-            rightControls.addButton(ForceFieldType.LIGHTNING, blistener, blueDefAni, bluePressedAni, rightRotation);
-            rightControls.addButton(ForceFieldType.PLASMA, glistener, greenDefAni, greenPressedAni, rightRotation);
-            rightControls.addButton(ForceFieldType.LASER, rlistener, redDefAni, redPressedAni, rightRotation);
+            leftControls = new ControlGroup(30f, 30f, 100f, getHeight(), Color.CYAN);
+            rightControls = new ControlGroup(ViewportUtil.VP_WIDTH - 155f, 30f, 100f, getHeight(), Color.CYAN);
+
+            float rotation = -90f;
+            leftControls.addButton(ForceFieldType.LIGHTNING, blistener, blueDefAni, bluePressedAni, rotation, false);
+            leftControls.addButton(ForceFieldType.PLASMA, glistener, greenDefAni, greenPressedAni, rotation, false);
+            leftControls.addButton(ForceFieldType.LASER, rlistener, redDefAni, redPressedAni, rotation, false);
+
+            // Right Side
+            Animation rblueDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_BLUE_DEF));
+            Animation rbluePressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_BLUE_PRESSED));
+            Animation rgreenDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_GREEN_DEF));
+            Animation rgreenPressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_GREEN_PRESSED));
+            Animation rredDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_RED_DEF));
+            Animation rredPressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_RED_PRESSED));
+            rightControls.addButton(ForceFieldType.LIGHTNING, blistener, rblueDefAni, rbluePressedAni, rotation, true);
+            rightControls.addButton(ForceFieldType.PLASMA, glistener, rgreenDefAni, rgreenPressedAni, rotation, true);
+            rightControls.addButton(ForceFieldType.LASER, rlistener, rredDefAni, rredPressedAni, rotation, true);
         }
 
         addActor(leftControls);

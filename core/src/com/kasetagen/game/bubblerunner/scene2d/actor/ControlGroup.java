@@ -26,7 +26,6 @@ public class ControlGroup extends GenericGroup {
     private static final float BUTTON_WIDTH = 260f/2f;
     private static final float BUTTON_HEIGHT = 475f/2f;
     private static final float BUTTON_PADDING = 30f;
-    private static final float TRANSPARENCY_ADJUST = 0.5f;
     private int buttonCount = 0;
 
     private Array<ForceFieldImageButton> buttons;
@@ -54,12 +53,12 @@ public class ControlGroup extends GenericGroup {
         }
     }
 
-    public void addButton(ForceFieldType fft, EventListener listener, Animation defaultAni, Animation pressedAni, float rotation){
+    public void addButton(ForceFieldType fft, EventListener listener, Animation defaultAni, Animation pressedAni, float rotation, boolean isFlipped){
         Vector2 buttonPos = getButtonPosition(buttonCount);
-        Gdx.app.log("BUTTON POSITION", "X: " + buttonPos.x + " Y: " + buttonPos.y);
         ForceFieldImageButton btn = new ForceFieldImageButton(buttonPos.x, buttonPos.y, BUTTON_WIDTH, BUTTON_HEIGHT, defaultAni, fft);
-        btn.setRotation(rotation);
         btn.addStateAnimation("PRESSED", pressedAni);
+        btn.flipTextureRegion(false, isFlipped);
+        btn.setRotation(rotation);
         btn.addListener(listener);
         btn.setIsLooping(false);
         addActor(btn);
@@ -80,22 +79,5 @@ public class ControlGroup extends GenericGroup {
                 b.setState(AnimatedActor.DEFAULT_STATE, true);
             }
         }
-    }
-
-    @Override
-    protected void drawBefore(Batch batch, float parentAlpha) {
-        super.drawBefore(batch, parentAlpha);
-        Color c = new Color(batch.getColor());
-        c.a *= TRANSPARENCY_ADJUST;
-        batch.setColor(c);
-    }
-
-    @Override
-    protected void drawAfter(Batch batch, float parentAlpha) {
-        super.drawAfter(batch, parentAlpha);
-        Color c = new Color(batch.getColor());
-        c.a /= TRANSPARENCY_ADJUST;
-        batch.setColor(c);
-
     }
 }
