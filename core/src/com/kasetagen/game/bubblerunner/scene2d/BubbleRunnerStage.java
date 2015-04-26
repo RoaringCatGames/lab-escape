@@ -28,13 +28,11 @@ import com.kasetagen.engine.gdx.scenes.scene2d.ICameraModifier;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.*;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.ShakeDecorator;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
-import com.kasetagen.game.bubblerunner.data.GameOptions;
-import com.kasetagen.game.bubblerunner.data.GameStats;
-import com.kasetagen.game.bubblerunner.data.TunnelAnimation;
-import com.kasetagen.game.bubblerunner.data.WallPattern;
+import com.kasetagen.game.bubblerunner.data.*;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
 import com.kasetagen.game.bubblerunner.util.*;
 
+import javax.annotation.Resource;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -56,6 +54,8 @@ public class BubbleRunnerStage extends BaseStage {
 //    private static final int[] COMBO_THRESHOLDS = new int[] {5, 10, 12, 15, 18, 20, 21};
 
     private static final float HUD_HEIGHT = 40f;
+
+    private static final int MAXIMUM_BODY_LIMIT = 40;
 
     private static final int SECONDS_BETWEEN_DIFF_SHIFT = 20;
     private static final long BASE_TIME_BETWEEN_WALLS = 4000L;
@@ -134,7 +134,9 @@ public class BubbleRunnerStage extends BaseStage {
     public GameInfo info;
     public Overlay deathOverlay;
     public Overlay alarmOverlay;
-    public ControlGroup controls;
+    public ControlGroup leftControls;
+    public ControlGroup rightControls;
+    public ResourceLimitation bodyLimit;
 
     //Ambiance (Music and Effects
     //private ShakeDecorator warningShaker;
@@ -251,6 +253,7 @@ public class BubbleRunnerStage extends BaseStage {
         highestCombo = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
         characterSelected = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY, AnimationUtil.CHARACTER_2);
 
+        bodyLimit = new ResourceLimitation(MAXIMUM_BODY_LIMIT);
         //SET WALL VELOCITY
         wallAndFloorVelocity = -1f*(getWidth()/2f);
 
@@ -361,7 +364,8 @@ public class BubbleRunnerStage extends BaseStage {
             int index = getActors().size - 1;
             cinematic.setZIndex(index--);
             deathOverlay.setZIndex(index--);
-            controls.setZIndex(index--);
+            leftControls.setZIndex(index--);
+            rightControls.setZIndex(index--);
             comboLabel.setZIndex(index--);
             info.setZIndex(index--);
             alarmOverlay.setZIndex(index--);
@@ -434,7 +438,7 @@ public class BubbleRunnerStage extends BaseStage {
                         playComboSoundEffect();
                         breakVolume /= 2;
                         //On going up a combo level, we will clear all resource usage
-                        regenResources(controls.getResourceLevel());
+                        regenResources(bodyLimit.getResourceLevel());
                     }
 
                     switch(w.forceFieldType){
@@ -905,7 +909,7 @@ public class BubbleRunnerStage extends BaseStage {
 
             setEnvVelocity(wallAndFloorVelocity);
 
-            controls.restoreAllResourceLevels();
+            bodyLimit.restoreAllResourceLevels();
             music.play();
         }
     }
@@ -938,13 +942,13 @@ public class BubbleRunnerStage extends BaseStage {
         }
 
         boolean wasAdded = false;
-        int resLevel = controls.getResourceLevel(fft);
-        if((controls.getHeatMax() - resLevel) >= shields.resourceUsage){
+        int resLevel = bodyLimit.getResourceLevel();
+        if((bodyLimit.getHeatMax() - resLevel) >= shields.resourceUsage){
             //Yuck, I don't like this, but I can't come up with an
             //  argument for not doing this. The Stage manages the
             //  state and performs the corresponding actions.
             shields.addField(fft);
-            controls.incrementHeat(shields.resourceUsage);
+            bodyLimit.incrementHeat(shields.resourceUsage);
             wasAdded = true;
         }
         if(wasAdded){
@@ -958,22 +962,25 @@ public class BubbleRunnerStage extends BaseStage {
 
     private void addLightningField(){
         addField(ForceFieldType.LIGHTNING);
-        controls.setPressed(ForceFieldType.LIGHTNING);
+        leftControls.setPressed(ForceFieldType.LIGHTNING);
+        rightControls.setPressed(ForceFieldType.LIGHTNING);
     }
 
     private void addPlasmaField(){
         addField(ForceFieldType.PLASMA);
-        controls.setPressed(ForceFieldType.PLASMA);
+        leftControls.setPressed(ForceFieldType.PLASMA);
+        rightControls.setPressed(ForceFieldType.PLASMA);
     }
 
     private void addLaserField(){
         addField(ForceFieldType.LASER);
-        controls.setPressed(ForceFieldType.LASER);
+        leftControls.setPressed(ForceFieldType.LASER);
+        rightControls.setPressed(ForceFieldType.LASER);
     }
 
 
     public void regenResources(int increment){
-        controls.incrementHeat(-increment);
+        bodyLimit.incrementHeat(-increment);
     }
 
 ////
@@ -1161,10 +1168,9 @@ public class BubbleRunnerStage extends BaseStage {
         TunnelAnimation animation;
         if(segment < 2){
             //nessie
-
             animation = new TunnelAnimation(new Animation(1f/3f, aniAtlas.findRegions(AtlasUtil.ANI_NESSIE_WALL)), true, false);
             tunnelGroupHasSpecialTunnel = true;
-        }else if(segment < 1000){
+        }else if(segment < 3){
             //Sassie
             animation = new TunnelAnimation(new Animation(1f/6f, aniAtlas.findRegions(AtlasUtil.ANI_SASSIE_WALL)), true, true);
             animation.animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
@@ -1197,14 +1203,11 @@ public class BubbleRunnerStage extends BaseStage {
         int currentTunnelCount = tunnelGroup.getChildren().size;
         float nextPos = currentTunnelCount == 0 ? 0f : tunnelGroup.getChildren().get(currentTunnelCount-1).getRight();
         TunnelAnimation ani = buildAnimationForTunnel();
-        //ani.animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
-        //GenericActor tunnel = new GenericActor(nextPos, TNL_Y, TNL_WIDTH, TNL_HEIGHT, getTunnelTextureRegion(), Color.GRAY);
         TunnelSegment tunnel = new TunnelSegment(nextPos, TNL_Y, TNL_WIDTH, TNL_HEIGHT, ani.animation, 0f);
         tunnel.setSpecial(ani.isSpecial);
         tunnel.velocity.x = wallAndFloorVelocity;
         tunnel.addDecorator(offScreenDecorator);
         tunnel.setIsLooping(ani.shouldLoop);
-        //tunnel.setIsLooping(false);
         tunnel.pause();
         tunnel.addDecorator(resumeAnimationOnScreenDecorator);
         tunnelGroup.addActor(tunnel);
@@ -1229,7 +1232,7 @@ public class BubbleRunnerStage extends BaseStage {
         float infoY = ViewportUtil.VP_HEIGHT - HUD_HEIGHT;
         float infoWidth = getWidth();
         float infoHeight = HUD_HEIGHT;
-        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.NEUROPOL_32, AssetsUtil.BITMAP_FONT), controls);
+        info = new GameInfo(infoX, infoY, infoWidth, infoHeight, assetManager.get(AssetsUtil.NEUROPOL_32, AssetsUtil.BITMAP_FONT));
         addActor(info);
     }
 
@@ -1267,9 +1270,7 @@ public class BubbleRunnerStage extends BaseStage {
         } else if (Input.Keys.ESCAPE == keyCode) {
             gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
         }
-//        else if (Input.Keys.TAB == keyCode) {
-//            KasetagenStateUtil.setDebugMode(!KasetagenStateUtil.isDebugMode());
-//        }
+
         return super.keyDown(keyCode);
     }
 
@@ -1296,7 +1297,8 @@ public class BubbleRunnerStage extends BaseStage {
         Animation redDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_RED_DEF));
         Animation redPressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_RED_PRESSED));
 
-        controls = new ControlGroup(0, 0, getWidth(), 60f, Color.CYAN);
+        leftControls = new ControlGroup(30f, 100f, 100f, getHeight(), Color.CYAN);
+        rightControls = new ControlGroup(ViewportUtil.VP_WIDTH - 155f, 100f, 100f, getHeight(), Color.CYAN);
 
 
         if(true || Gdx.app.getType() != Application.ApplicationType.Desktop){
@@ -1323,13 +1325,18 @@ public class BubbleRunnerStage extends BaseStage {
                 }
             };
 
-            controls.addButton(ForceFieldType.LIGHTNING, blistener, blueDefAni, bluePressedAni);
-            controls.addButton(ForceFieldType.PLASMA, glistener, greenDefAni, greenPressedAni);
-            controls.addButton(ForceFieldType.LASER, rlistener, redDefAni, redPressedAni);
+            float leftRotation = -90f, rightRotation = 135f;
+            leftControls.addButton(ForceFieldType.LIGHTNING, blistener, blueDefAni, bluePressedAni, leftRotation);
+            leftControls.addButton(ForceFieldType.PLASMA, glistener, greenDefAni, greenPressedAni, leftRotation);
+            leftControls.addButton(ForceFieldType.LASER, rlistener, redDefAni, redPressedAni, leftRotation);
+
+            rightControls.addButton(ForceFieldType.LIGHTNING, blistener, blueDefAni, bluePressedAni, rightRotation);
+            rightControls.addButton(ForceFieldType.PLASMA, glistener, greenDefAni, greenPressedAni, rightRotation);
+            rightControls.addButton(ForceFieldType.LASER, rlistener, redDefAni, redPressedAni, rightRotation);
         }
 
-        controls.setEnergyBar(spriteAtlas.findRegion(AtlasUtil.SPRITE_ENERGY_BAR));
-        addActor(controls);
+        addActor(leftControls);
+        addActor(rightControls);
     }
 
     public void resume(){

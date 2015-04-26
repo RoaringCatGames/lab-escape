@@ -1,5 +1,6 @@
 package com.kasetagen.game.bubblerunner.screen;
 
+import com.badlogic.gdx.Gdx;
 import com.kasetagen.engine.IGameProcessor;
 import com.kasetagen.engine.screen.Kitten2dScreen;
 import com.kasetagen.game.bubblerunner.scene2d.BubbleRunnerStage;
@@ -21,6 +22,7 @@ public class BubbleRunnerScreen extends Kitten2dScreen {
     public BubbleRunnerScreen(IGameProcessor gameProcessor){
         super(gameProcessor);
         stage = new BubbleRunnerStage(this.gameProcessor);
+        this.enableDebugRender = true;
     }
 
     //Screen

@@ -1,10 +1,12 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -21,13 +23,12 @@ import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
 public class ControlGroup extends GenericGroup {
 
 
-    private static final float BUTTON_WIDTH = 260f/2f;//150f;
-    private static final float BUTTON_HEIGHT = 475f/2f;//150f;
+    private static final float BUTTON_WIDTH = 260f/2f;
+    private static final float BUTTON_HEIGHT = 475f/2f;
     private static final float BUTTON_PADDING = 10f;
 
     private static final float BAR_START = BUTTON_WIDTH * 4f;
 
-    private static int RESOURCE_MAX = 20;
     private static int OVERHEAT_POINT = 40;
 
     //public ObjectMap<ForceFieldType, Integer> resourceLevels;
@@ -39,13 +40,19 @@ public class ControlGroup extends GenericGroup {
 
     private Array<ForceFieldImageButton> buttons;
 
-    private float getButtonX(int buttonPos){
-        return (BUTTON_WIDTH + BUTTON_PADDING) * buttonPos;
-    }
-
     public ControlGroup(float x, float y, float width, float height, Color color){
         super(x, y, width, height, null, color);
         buttons = new Array<ForceFieldImageButton>();
+    }
+
+    /**
+     *  Returns the target position of a butotn at the given index.
+     *
+     * @param buttonIndex - 1-based button index
+     * @return
+     */
+    private Vector2 getButtonPosition(int buttonIndex){
+        return new Vector2(0f, (BUTTON_WIDTH + BUTTON_PADDING) * buttonIndex);
     }
 
     public void setPressed(ForceFieldType fft){
@@ -56,8 +63,11 @@ public class ControlGroup extends GenericGroup {
         }
     }
 
-    public void addButton(ForceFieldType fft, EventListener listener, Animation defaultAni, Animation pressedAni){
-        ForceFieldImageButton btn = new ForceFieldImageButton(getButtonX(buttonCount), -30f, BUTTON_WIDTH, BUTTON_HEIGHT, defaultAni, fft);
+    public void addButton(ForceFieldType fft, EventListener listener, Animation defaultAni, Animation pressedAni, float rotation){
+        Vector2 buttonPos = getButtonPosition(buttonCount);
+        Gdx.app.log("BUTTON POSITION", "X: " + buttonPos.x + " Y: " + buttonPos.y);
+        ForceFieldImageButton btn = new ForceFieldImageButton(buttonPos.x, buttonPos.y, BUTTON_WIDTH, BUTTON_HEIGHT, defaultAni, fft);
+        btn.setRotation(rotation);
         btn.addStateAnimation("PRESSED", pressedAni);
         btn.addListener(listener);
         btn.setIsLooping(false);
@@ -68,33 +78,7 @@ public class ControlGroup extends GenericGroup {
         buttonCount++;
     }
 
-    public void setEnergyBar(TextureRegion barTexture){
-        energyBar = barTexture;
-    }
 
-
-    public int getResourceLevel(){
-        return heatScore;
-    }
-
-    public int getResourceLevel(ForceFieldType fft){
-        return heatScore;
-    }
-
-    public int getHeatMax(){
-        return OVERHEAT_POINT;
-    }
-
-    public void incrementHeat(int increment){
-        heatScore += increment;
-        if(heatScore < 0){
-            heatScore = 0;
-        }
-    }
-
-    public void restoreAllResourceLevels(){
-        heatScore = 0;
-    }
 
     @Override
     public void act(float delta) {

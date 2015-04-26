@@ -1282,6 +1282,13 @@ player/Female_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
+  index: 4
+player/Female_Shock
+  rotate: false
+  xy: 362, 1303
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
   index: 8
 player/Female_Shock
   rotate: false
@@ -1290,13 +1297,6 @@ player/Female_Shock
   orig: 360, 360
   offset: 0, 0
   index: 6
-player/Female_Shock
-  rotate: false
-  xy: 362, 1303
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
 player/Female_Shock
   rotate: false
   xy: 724, 1665
@@ -1499,14 +1499,14 @@ player/Male_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 4
+  index: 8
 player/Male_Shock
   rotate: false
   xy: 2172, 1303
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 8
+  index: 4
 player/Male_Shock
   rotate: false
   xy: 2534, 1665

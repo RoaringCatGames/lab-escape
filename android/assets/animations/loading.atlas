@@ -6,115 +6,85 @@ filter: Nearest,Nearest
 repeat: none
 Lab_Loading
   rotate: false
-  xy: 0, 1442
-  size: 2560, 1440
-  orig: 2560, 1440
+  xy: 0, 2888
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: 1
 Lab_Loading
   rotate: false
-  xy: 0, 0
-  size: 2560, 1440
-  orig: 2560, 1440
+  xy: 0, 2166
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: 2
-
-loading2.png
-size: 4096,4096
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 Lab_Loading
   rotate: false
-  xy: 0, 1442
-  size: 2560, 1440
-  orig: 2560, 1440
+  xy: 1282, 2888
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: 3
 Lab_Loading
   rotate: false
-  xy: 0, 0
-  size: 2560, 1440
-  orig: 2560, 1440
+  xy: 0, 1444
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: 4
-
-loading3.png
-size: 4096,4096
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 Lab_Loading
   rotate: false
-  xy: 0, 1442
-  size: 2560, 1440
-  orig: 2560, 1440
+  xy: 1282, 2166
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: 5
 Lab_Loading
   rotate: false
-  xy: 0, 0
-  size: 2560, 1440
-  orig: 2560, 1440
+  xy: 2564, 2888
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: 6
-
-loading4.png
-size: 4096,4096
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 Lab_Loading
   rotate: false
-  xy: 0, 1442
-  size: 2560, 1440
-  orig: 2560, 1440
+  xy: 0, 722
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: 7
 Lab_Loading
   rotate: false
-  xy: 0, 0
-  size: 2560, 1440
-  orig: 2560, 1440
+  xy: 1282, 1444
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: 8
-
-loading5.png
-size: 4096,4096
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 Lab_Loading
   rotate: false
-  xy: 0, 1442
-  size: 2560, 1440
-  orig: 2560, 1440
+  xy: 2564, 2166
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: 9
 Lab_Loading
   rotate: false
   xy: 0, 0
-  size: 2560, 1440
-  orig: 2560, 1440
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: 10
-
-loading6.png
-size: 4096,4096
-format: RGBA8888
-filter: Nearest,Nearest
-repeat: none
 Lab_Loading
   rotate: false
-  xy: 0, 1442
-  size: 2560, 1440
-  orig: 2560, 1440
+  xy: 1282, 722
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: 11
 Lab_Loading
   rotate: false
-  xy: 0, 0
-  size: 2560, 1440
-  orig: 2560, 1440
+  xy: 2564, 1444
+  size: 1280, 720
+  orig: 1280, 720
   offset: 0, 0
   index: 12

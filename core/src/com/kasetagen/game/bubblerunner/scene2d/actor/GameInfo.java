@@ -33,7 +33,7 @@ public class GameInfo extends GenericGroup {
 
     //private ControlGroup controls;
 
-    public GameInfo(float x, float y, float width, float height, BitmapFont font, ControlGroup player) {
+    public GameInfo(float x, float y, float width, float height, BitmapFont font) {
         super(x, y, width, height, null, Color.DARK_GRAY);
 
         //controls = player;
