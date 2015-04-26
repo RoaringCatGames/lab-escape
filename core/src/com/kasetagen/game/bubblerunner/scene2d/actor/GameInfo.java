@@ -41,17 +41,25 @@ public class GameInfo extends GenericGroup {
         LabelStyle style = new LabelStyle(font, Color.YELLOW);//getColor());
         style.font.setScale(1f);
         scoreLabel = new Label(SCORE_PREFIX + score, style);
-        scoreLabel.setPosition(0, 0);
-        addActor(scoreLabel);
-
         missesLabel = new Label(MISSES_PREFIX + misses, style);
-        missesLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING, 0);
-        addActor(missesLabel);
-
         maxFieldsLabel = new Label(FIELD_PREFIX + maxFields, style);
-        maxFieldsLabel.setPosition(scoreLabel.getWidth() + TEXT_PADDING +
-                                   missesLabel.getWidth() + TEXT_PADDING, 0);
+
+        positionLabels();
+        addActor(scoreLabel);
+        addActor(missesLabel);
         addActor(maxFieldsLabel);
+    }
+
+    private void positionLabels() {
+        float totalWidth = scoreLabel.getWidth();
+        totalWidth += TEXT_PADDING + missesLabel.getWidth();
+        totalWidth += TEXT_PADDING + maxFieldsLabel.getWidth();
+        float targetStartingX = (getWidth()/2f) - (totalWidth/2f);
+
+
+        scoreLabel.setPosition(targetStartingX, 0);
+        missesLabel.setPosition(scoreLabel.getRight() + TEXT_PADDING, 0);
+        maxFieldsLabel.setPosition(missesLabel.getRight() + TEXT_PADDING, 0);
     }
 
 
@@ -62,6 +70,7 @@ public class GameInfo extends GenericGroup {
         scoreLabel.setText(SCORE_PREFIX + score);
         missesLabel.setText(MISSES_PREFIX + misses);
         maxFieldsLabel.setText(FIELD_PREFIX + maxFields);
+        positionLabels();
     }
 
     @Override

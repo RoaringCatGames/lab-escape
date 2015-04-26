@@ -300,9 +300,9 @@ public class BubbleRunnerStage extends BaseStage {
 
 
         comboContainer = new DecoratedUIContainer(comboLabel);
-        comboContainer.setPosition(player.getX() + (comboLabel.getWidth() / 2), player.getTop() + HUD_HEIGHT);
+        comboContainer.setPosition((getWidth()/2f), player.getTop() + HUD_HEIGHT);
 
-        comboDecorator = new ShakeDecorator(5f, 10f, 0.5f, 1f);//new OscillatingDecorator(-3f, 3f, 40f);
+        comboDecorator = new ShakeDecorator(5f, 10f, 0.5f, 1f);
         comboContainer.addDecorator(comboDecorator);
         addActor(comboContainer);
 

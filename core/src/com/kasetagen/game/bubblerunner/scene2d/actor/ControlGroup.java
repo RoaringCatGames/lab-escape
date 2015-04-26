@@ -25,18 +25,9 @@ public class ControlGroup extends GenericGroup {
 
     private static final float BUTTON_WIDTH = 260f/2f;
     private static final float BUTTON_HEIGHT = 475f/2f;
-    private static final float BUTTON_PADDING = 10f;
-
-    private static final float BAR_START = BUTTON_WIDTH * 4f;
-
-    private static int OVERHEAT_POINT = 40;
-
-    //public ObjectMap<ForceFieldType, Integer> resourceLevels;
+    private static final float BUTTON_PADDING = 30f;
+    private static final float TRANSPARENCY_ADJUST = 0.5f;
     private int buttonCount = 0;
-
-    private int heatScore = 0;
-
-    private TextureRegion energyBar = null;
 
     private Array<ForceFieldImageButton> buttons;
 
@@ -92,29 +83,19 @@ public class ControlGroup extends GenericGroup {
     }
 
     @Override
+    protected void drawBefore(Batch batch, float parentAlpha) {
+        super.drawBefore(batch, parentAlpha);
+        Color c = new Color(batch.getColor());
+        c.a *= TRANSPARENCY_ADJUST;
+        batch.setColor(c);
+    }
+
+    @Override
     protected void drawAfter(Batch batch, float parentAlpha) {
         super.drawAfter(batch, parentAlpha);
+        Color c = new Color(batch.getColor());
+        c.a /= TRANSPARENCY_ADJUST;
+        batch.setColor(c);
 
-        if(energyBar != null){
-            float barTotalLength = getWidth() - BAR_START;
-            float barLength = barTotalLength*((float)heatScore/(float)OVERHEAT_POINT);
-            float yPos = getY()+(getHeight()/4)+4;
-            float height = (getHeight()/2)-6;
-            Color c = heatScore >= OVERHEAT_POINT ? Color.RED : Color.ORANGE;
-
-
-            batch.end();
-            batch.begin();
-            debugRenderer.setProjectionMatrix(getStage().getCamera().combined);
-            debugRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            debugRenderer.setColor(c);
-            debugRenderer.rect(BAR_START, yPos, barLength, height);
-            //End our shapeRenderer, flush the batch, and re-open it for future use as it was open
-            // coming in.
-            debugRenderer.end();
-            batch.end();
-            batch.begin();
-            batch.draw(energyBar, BAR_START, getY()+(getHeight()/4), getWidth()-BAR_START, getHeight()/2);
-        }
     }
 }
