@@ -1324,10 +1324,17 @@ public class BubbleRunnerStage extends BaseStage {
             Animation redDefAni = new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_RED_DEF));
             Animation redPressedAni = new Animation(0.5f/3f, aniAtlas.findRegions(AtlasUtil.ANI_BUTTON_RED_PRESSED));
 
-            leftControls = new ControlGroup(30f, 30f, 100f, getHeight(), Color.CYAN);
-            rightControls = new ControlGroup(ViewportUtil.VP_WIDTH - 155f, 30f, 100f, getHeight(), Color.CYAN);
+            float leftX, rightX, y, width, height;
+            leftX = 0f;
+            rightX = getWidth() - 240f;
+            y = 80f;
+            width = 100f;
+            height = getHeight();
+            leftControls = new ControlGroup(leftX, y, width, height, Color.CYAN);
+            rightControls = new ControlGroup(rightX, y, width, height, Color.CYAN);
 
-            float rotation = -90f;
+            float rotation = 0f;
+
             leftControls.addButton(ForceFieldType.LIGHTNING, blistener, blueDefAni, bluePressedAni, rotation, false);
             leftControls.addButton(ForceFieldType.PLASMA, glistener, greenDefAni, greenPressedAni, rotation, false);
             leftControls.addButton(ForceFieldType.LASER, rlistener, redDefAni, redPressedAni, rotation, false);

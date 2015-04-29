@@ -8,7 +8,7 @@ package com.kasetagen.game.bubblerunner.util;
  */
 public class AtlasUtil {
 
-    public static final String ANI_INTRO = "screens/Instruction-Screen";
+    public static final String ANI_INTRO = "screens/Instruction_Screen";
 
     //INTRO
     public static final String ANI_TITLE_BG = "screens/Background";

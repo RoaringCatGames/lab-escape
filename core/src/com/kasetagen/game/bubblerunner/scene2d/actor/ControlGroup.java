@@ -23,8 +23,8 @@ import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
 public class ControlGroup extends GenericGroup {
 
 
-    private static final float BUTTON_WIDTH = 260f/2f;
-    private static final float BUTTON_HEIGHT = 475f/2f;
+    private static final float BUTTON_HEIGHT = 260f/2f;
+    private static final float BUTTON_WIDTH = 475f/2f;
     private static final float BUTTON_PADDING = 30f;
     private int buttonCount = 0;
 
@@ -42,7 +42,7 @@ public class ControlGroup extends GenericGroup {
      * @return
      */
     private Vector2 getButtonPosition(int buttonIndex){
-        return new Vector2(0f, (BUTTON_WIDTH + BUTTON_PADDING) * buttonIndex);
+        return new Vector2(0f, (BUTTON_HEIGHT + BUTTON_PADDING) * buttonIndex);
     }
 
     public void setPressed(ForceFieldType fft){
@@ -57,7 +57,7 @@ public class ControlGroup extends GenericGroup {
         Vector2 buttonPos = getButtonPosition(buttonCount);
         ForceFieldImageButton btn = new ForceFieldImageButton(buttonPos.x, buttonPos.y, BUTTON_WIDTH, BUTTON_HEIGHT, defaultAni, fft);
         btn.addStateAnimation("PRESSED", pressedAni);
-        btn.flipTextureRegion(false, isFlipped);
+        btn.flipTextureRegion(isFlipped, false);
         btn.setRotation(rotation);
         btn.addListener(listener);
         btn.setIsLooping(false);
