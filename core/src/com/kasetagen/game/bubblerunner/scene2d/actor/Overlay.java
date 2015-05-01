@@ -74,10 +74,9 @@ public class Overlay extends GenericGroup {
         if(!"".equals(mainText)){
             TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
             style.font = mainFont;
-            style.fontColor =  Color.YELLOW;
-            style.overFontColor = Color.RED;
-            style.checkedFontColor = Color.RED;
-            style.downFontColor = Color.GRAY;
+            style.fontColor =  Color.CYAN;
+            style.overFontColor = Color.PURPLE;
+            style.downFontColor = Color.PURPLE;
 
             dismissButton = new TextButton("Replay", style);
             dismissButton.setChecked(true);

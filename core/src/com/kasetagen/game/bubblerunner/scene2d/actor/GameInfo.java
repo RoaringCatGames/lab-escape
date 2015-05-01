@@ -27,7 +27,7 @@ public class GameInfo extends GenericGroup {
     public GameInfo(float x, float y, float width, float height, BitmapFont font) {
         super(x, y, width, height, null, Color.DARK_GRAY);
 
-        LabelStyle style = new LabelStyle(font, Color.YELLOW);
+        LabelStyle style = new LabelStyle(font, Color.CYAN);
         style.font.setScale(1f);
         scoreLabel = new Label(SCORE_PREFIX + score, style);
         missesLabel = new Label(MISSES_PREFIX + misses, style);

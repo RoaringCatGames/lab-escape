@@ -206,7 +206,7 @@ public class BubbleRunnerStage extends BaseStage {
         cinematic = new Cinematic(0f, 0f, getWidth(), getHeight(), introAnimation, false, Color.DARK_GRAY);
         cinematic.setRequiresContinue(true);
 
-        float duration = 4f;
+        float duration = 2f;
         float startX = 0f;
         float startY = -720f;
         float endX = 0f;
@@ -214,13 +214,11 @@ public class BubbleRunnerStage extends BaseStage {
         float startZoom = 1f;
         float endZoom = 1f;
         CinematicScene scene1 = new CinematicScene(duration, startX, startY, endX, endY, startZoom, endZoom);
-        //scene1.music = assetManager.get(AssetsUtil.ZAP_SOUND, AssetsUtil.SOUND);
         cinematic.addScene(scene1);
 
         addActor(cinematic);
         cinematic.start();
 
-        //warningShaker = new ShakeDecorator(10f, 0f, 0.2f);
         origPos = new Vector3(getCamera().position);
 
 
@@ -944,7 +942,9 @@ public class BubbleRunnerStage extends BaseStage {
             setEnvVelocity(wallAndFloorVelocity);
 
             bodyLimit.restoreAllResourceLevels();
-            music.play();
+            if(cinematicComplete){
+                music.play();
+            }
         }
     }
 
@@ -1391,9 +1391,11 @@ public class BubbleRunnerStage extends BaseStage {
 
     public void resume(){
         initializeVolumes();
-        if(music != null){
-            music.setVolume(bgVolume);
-        }
+        cinematicComplete = false;
+        resetGame();
+        cinematic.setVisible(true);
+        cinematic.start();
+
     }
 
 }

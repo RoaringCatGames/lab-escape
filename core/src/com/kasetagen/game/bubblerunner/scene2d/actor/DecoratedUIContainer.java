@@ -36,4 +36,8 @@ public class DecoratedUIContainer extends Container {
     public void removeDecorator(ActorDecorator d){
         this.decorations.removeValue(d, true);
     }
+
+    public boolean hasDecorator(ActorDecorator d){
+        return this.decorations.contains(d, true);
+    }
 }

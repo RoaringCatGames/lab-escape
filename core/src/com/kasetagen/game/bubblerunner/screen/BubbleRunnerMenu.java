@@ -14,9 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -34,6 +32,7 @@ import com.kasetagen.engine.gdx.scenes.scene2d.decorators.ShakeDecorator;
 import com.kasetagen.engine.screen.Kitten2dScreen;
 import com.kasetagen.game.bubblerunner.BubbleRunnerGame;
 import com.kasetagen.game.bubblerunner.data.GameOptions;
+import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
 import com.kasetagen.game.bubblerunner.scene2d.actor.DecoratedUIContainer;
 import com.kasetagen.game.bubblerunner.util.AnimationUtil;
@@ -185,7 +184,13 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
     /*
      * HIGH SCORE SECTION
      */
-    private ImageButton closeScoresButton;
+    private TextButton closeScoresButton;
+    private TextButton clearScoresButton;
+    private Label highScoreLabel;
+    private Label highComboLabel;
+    private int scoreValue;
+    private int comboValue;
+
 
 
     public BubbleRunnerMenu(IGameProcessor delegate){
@@ -198,6 +203,9 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         bgMusic.play();
         bgMusic.setLooping(true);
         this.gameProcessor.setBGMusic(bgMusic);
+
+        scoreValue = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
+        comboValue = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
 
         bgGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLACK);
         menuGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLACK);
@@ -218,10 +226,15 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
 
                 if(btn == startGameButton){
                     bgMusic.stop();
+                    clearMainButtonSettings();
+                    startGameButton.setChecked(true);
+                    if(!startUiContainer.hasDecorator(checkedMenuOptionDecorator)){
+                        startUiContainer.addDecorator(checkedMenuOptionDecorator);
+                    }
                     gameProcessor.changeToScreen(BubbleRunnerGame.RUNNER);
-
                 } else if (btn == optionsButton){
                     showOptionsMenu();
+
                     //gameProcessor.changeToScreen(BubbleRunnerGame.OPTIONS);
                 } else if (btn == highScoreButton){
                     showHighScoreMenu();
@@ -373,7 +386,7 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
 
         highScoreUiContainer = new DecoratedUIContainer(highScoreButton);
         highScoreUiContainer.setSize(HS_BTN_WIDTH, HS_BTN_HEIGHT);
-        highScoreUiContainer.setPosition(buttonX, optionsUiContainer.getY() - HS_BTN_HEIGHT);
+        highScoreUiContainer.setPosition(buttonX, optionsUiContainer.getY() - (PLAY_BTN_HEIGHT));
         menuGroup.addActor(highScoreUiContainer);
     }
 
@@ -533,20 +546,81 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         selectCharacter(edynSelect.isChecked());
     }
 
+    private String convertScoreToString(int maxDigits, int score){
+        StringBuilder sb = new StringBuilder("");
+        int currentDigits = String.valueOf(score).length();
+        while(currentDigits < maxDigits){
+            currentDigits++;
+            sb.append("0");
+        }
+        sb.append(score);
+        return sb.toString();
+    }
+
     private void assembleHighScoreView(TextureAtlas atlas){
         GenericActor highScoreScaffold = new GenericActor(0f, 0f, stage.getWidth(), stage.getHeight(), atlas.findRegion(AtlasUtil.ANI_HIGH_SCORE_BG), Color.BLACK);
         highScoreGroup.addActor(highScoreScaffold);
+
+        /*
+         * Add Labels
+         */
+        Label.LabelStyle style = new Label.LabelStyle();
+        style.font = gameProcessor.getAssetManager().get(AssetsUtil.NEUROPOL_64, AssetsUtil.BITMAP_FONT);
+        highScoreLabel = new Label("High Score: 0000", style);
+        highComboLabel = new Label("High Combo:  000", style);
+        adjustHighScores(scoreValue, comboValue);
+        highScoreGroup.addActor(highScoreLabel);
+        highScoreGroup.addActor(highComboLabel);
+
+        /*
+         * Add Clear Button
+         */
+        TextButton.TextButtonStyle tbStyle = new TextButton.TextButtonStyle();
+        tbStyle.font = gameProcessor.getAssetManager().get(AssetsUtil.NEUROPOL_64, AssetsUtil.BITMAP_FONT);
+        tbStyle.fontColor = Color.WHITE;
+        tbStyle.downFontColor = Color.CYAN;
+        float tbXPadding = 100f;
+        float tbYPadding = 50f;
+        clearScoresButton = new TextButton("Clear Scores", tbStyle);
+        clearScoresButton.addListener(new ClickListener(){
+            IDataSaver scoreClearer = new IDataSaver() {
+                @Override
+                public void updatePreferences(Preferences preferences) {
+                    preferences.putInteger(GameStats.HIGH_SCORE_KEY, 0);
+                    preferences.putInteger(GameStats.HIGH_COMBO_KEY, 0);
+                    preferences.putInteger(GameStats.MOST_MISSES_KEY, 0);
+                }
+            };
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameProcessor.saveGameData(scoreClearer);
+                adjustHighScores(0, 0);
+            }
+        });
+        clearScoresButton.setPosition(tbXPadding, tbYPadding);
+        highScoreGroup.addActor(clearScoresButton);
 
          /*
          * Add Main Menu Button
          */
         Array<TextureAtlas.AtlasRegion> mmImgs = atlas.findRegions(AtlasUtil.ANI_OPTIONS_MAINMENU);
         TextureRegionDrawable mmDown = new TextureRegionDrawable(mmImgs.get(1));
-        closeScoresButton = new ImageButton(new TextureRegionDrawable(mmImgs.get(0)), mmDown, mmDown);
-        closeScoresButton.setSize(MM_W, MM_H);
-        closeScoresButton.setPosition(MM_X, MM_Y);
+        closeScoresButton = new TextButton("Main Menu", tbStyle);
+        //closeScoresButton.setSize(300f, 100f);
+        closeScoresButton.setPosition(highScoreGroup.getWidth()-(closeScoresButton.getWidth()+tbXPadding), tbYPadding);
         closeScoresButton.addListener(listener);
         highScoreGroup.addActor(closeScoresButton);
+    }
+
+    private void adjustHighScores(int newScoreValue, int newComboValue) {
+        String scoreDisplay = convertScoreToString(4, newScoreValue);
+        String comboDisplay = convertScoreToString(3, newComboValue);
+        highScoreLabel.setText("High Score: " + scoreDisplay);
+        highComboLabel.setText("High Combo:  " + comboDisplay);
+        float totalHeight = highScoreLabel.getHeight() + highComboLabel.getHeight();
+        float yStart = (highScoreGroup.getHeight()/2f) + (totalHeight/2f);
+        highScoreLabel.setPosition(highScoreGroup.getWidth()/2f - (highScoreLabel.getWidth()/2f), yStart);
+        highComboLabel.setPosition(highScoreGroup.getWidth() / 2f - (highComboLabel.getWidth() / 2f), highScoreLabel.getY() - highComboLabel.getHeight());
     }
 
     private void addClouds(TextureAtlas.AtlasRegion cloudRegion, float speed){
@@ -561,7 +635,28 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         bgGroup.addActor(c2);
     }
 
+    private void clearMainButtonSettings(){
+        startGameButton.setChecked(false);
+        startUiContainer.removeDecorator(checkedMenuOptionDecorator);
+        startUiContainer.setScale(1f);
+        optionsButton.setChecked(false);
+        optionsUiContainer.removeDecorator(checkedMenuOptionDecorator);
+        optionsUiContainer.setScale(1f);
+        highScoreButton.setChecked(false);
+        highScoreUiContainer.removeDecorator(checkedMenuOptionDecorator);
+        highScoreUiContainer.setScale(1f);
+    }
+
     private void showOptionsMenu() {
+
+        clearMainButtonSettings();
+
+        optionsButton.setChecked(true);
+        if(!optionsUiContainer.hasDecorator(checkedMenuOptionDecorator)){
+            optionsUiContainer.addDecorator(checkedMenuOptionDecorator);
+        }
+
+
         menuGroup.addAction(Actions.sequence(
                 Actions.moveTo(-1280f, 0f, 1f, Interpolation.fade),
                 Actions.run(new Runnable() {
@@ -574,6 +669,14 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
     }
 
     private void showHighScoreMenu(){
+
+        clearMainButtonSettings();
+
+        highScoreButton.setChecked(true);
+        if(!highScoreUiContainer.hasDecorator(checkedMenuOptionDecorator)){
+            highScoreUiContainer.addDecorator(checkedMenuOptionDecorator);
+        }
+
         menuGroup.addAction(Actions.sequence(
                 Actions.moveTo(1280f, 0f, 1f, Interpolation.fade),
                 Actions.run(new Runnable() {
@@ -604,15 +707,22 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
             charValue = AnimationUtil.CHARACTER_2;
             edynSelect.setChecked(true);
             edisonSelect.setChecked(false);
-            eddyCircle.setState(AnimatedActor.DEFAULT_STATE, true);
-            edynCircle.setState("SELECTED", true);
+            if(!AnimatedActor.DEFAULT_STATE.equals(eddyCircle.getCurrentState())){
+                eddyCircle.setState(AnimatedActor.DEFAULT_STATE, true);
+            }
+            if(!"SELECTED".equals(edynCircle.getCurrentState())){
+                edynCircle.setState("SELECTED", true);
+            }
         }else{
             charValue = AnimationUtil.CHARACTER_1;
             edynSelect.setChecked(false);
             edisonSelect.setChecked(true);
-            edynCircle.setState(AnimatedActor.DEFAULT_STATE, true);
-            eddyCircle.setState("SELECTED", true);
-
+            if(!AnimatedActor.DEFAULT_STATE.equals(edynCircle.getCurrentState())){
+                edynCircle.setState(AnimatedActor.DEFAULT_STATE, true);
+            }
+            if(!"SELECTED".equals(eddyCircle.getCurrentState())){
+                eddyCircle.setState("SELECTED", true);
+            }
         }
 
         gameProcessor.saveGameData(charDataSaver);
@@ -704,6 +814,10 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         if(!bgMusic.isPlaying())
             bgMusic.play();
         gameProcessor.setBGMusic(bgMusic);
+
+        scoreValue = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
+        comboValue = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
+        adjustHighScores(scoreValue, comboValue);
     }
 
     @Override
@@ -729,6 +843,10 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
     @Override
     public boolean keyDown(int keycode) {
 
+        /*
+         * THIS CODE IS WRONG FOR HIGHLIGHTING OPTIONS, but is also unused on
+         * touch devices.
+         */
         boolean trapped = false;
         if(isMenuView){
             if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER){
