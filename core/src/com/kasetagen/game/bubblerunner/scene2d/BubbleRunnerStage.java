@@ -32,7 +32,6 @@ import com.kasetagen.game.bubblerunner.data.*;
 import com.kasetagen.game.bubblerunner.scene2d.actor.*;
 import com.kasetagen.game.bubblerunner.util.*;
 
-import javax.annotation.Resource;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -93,6 +92,12 @@ public class BubbleRunnerStage extends BaseStage {
     private static ForceFieldType[] wallTypes = new ForceFieldType[] { ForceFieldType.LIGHTNING, ForceFieldType.PLASMA, ForceFieldType.LASER};
 
     private static Vector3 origPos;
+
+    public static final int DEFAULT_MIN_FIELDS = 1;
+    public static final int DEFAULT_MAX_FIELDS = 2;
+    private static int MIN_FIELDS = DEFAULT_MIN_FIELDS;
+    private static int MAX_FIELDS = DEFAULT_MAX_FIELDS;
+
 
     //Delegates
 	private IGameProcessor gameProcessor;
@@ -273,7 +278,7 @@ public class BubbleRunnerStage extends BaseStage {
         //bgGroup.addActor(new GenericActor(0, 0, 1280, 720, spriteAtlas.findRegion(AtlasUtil.SPRITE_BG), Color.GRAY));
 
         //Add Player
-        initializePlayer(GameInfo.DEFAULT_MAX_FIELDS);
+        initializePlayer();
         rightWallGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.GREEN);
         addActor(rightWallGroup);
 
@@ -410,17 +415,30 @@ public class BubbleRunnerStage extends BaseStage {
         }
     }
 
-    private void processWallCollisions() {
-        ForceField outerField = shields.getOuterForceField();
-        for(Wall w:walls){
+    private ForceField findCollidingForceField(Wall w){
+        ForceField foundField = null;
+        if(w != null){
+            for(ForceField f : shields.getFields()){
+                if(w.collider.overlaps(f.collider)){
+                    foundField = f;
+                    break;
+                }
+            }
+        }
 
+        return foundField;
+    }
+
+    private void processWallCollisions() {
+        for(Wall w:walls){
+            ForceField collidingField = findCollidingForceField(w);
             if("BREAKING".equals(w.getCurrentState())){
                 //Do nothing, let it slide around us
-            }else if(outerField != null && w.collider.overlaps(outerField.collider)){
+            }else if(collidingField != null){
 
                 //WHEN OUTERFIELD == WALL we Destroy Both
                 //  and increment the score
-                if(w.forceFieldType == outerField.forceFieldType){
+                if(w.forceFieldType == collidingField.forceFieldType){
                     w.setState("BREAKING", true);
                     if(w.forceFieldType == ForceFieldType.PLASMA){
                         w.setIsLooping(false);
@@ -453,30 +471,7 @@ public class BubbleRunnerStage extends BaseStage {
                             break;
                     }
 
-                    addCameraMod(new ICameraModifier() {
-                        private float duration = 0.5f;
-                        private float elapsedTime = 0f;
-                        private float shakeRadius = 5f;
-                        private float shakeRate = 720f / 0.5f;
-
-
-                        @Override
-                        public void modify(Camera camera, float delta) {
-                            this.elapsedTime += delta;
-                            if (!isComplete()) {
-                                float x = (float) (shakeRadius * Math.cos(elapsedTime * shakeRate) + origPos.x);
-                                float y = (float) (shakeRadius * Math.sin(elapsedTime * shakeRate) + origPos.y);
-                                camera.position.set(x, y, camera.position.z);
-                            } else {
-                                camera.position.set(origPos);
-                            }
-                        }
-
-                        @Override
-                        public boolean isComplete() {
-                            return elapsedTime >= duration;
-                        }
-                    });
+                    applyCameraShake();
 
                 }else{
                     //If we hit a bad wall, we reduce your score
@@ -492,18 +487,55 @@ public class BubbleRunnerStage extends BaseStage {
 
                 //Destroy the forcefield if it collides with a wall
                 //  The point and wall descrution is calculated above
-                shields.removeField(outerField);
-
+                shields.removeField(collidingField);
             }else if(player.collider.overlaps(w.collider)){
                 processDeath(w);
             }
 
+            //THIS IS UGLY
             if(w.getX() <= (0f-w.getWidth())){
                 w.setIsRemovable(true);
             }
+
+            Array<ForceField> fields = new Array<ForceField>();
+            for(ForceField f : shields.getFields()){
+                if(f.getX() > ViewportUtil.VP_WIDTH){
+                    fields.add(f);
+                }
+            }
+            for(ForceField f:fields){
+                shields.removeField(f);
+            }
         }
     }
-    
+
+    private void applyCameraShake() {
+        addCameraMod(new ICameraModifier() {
+            private float duration = 0.5f;
+            private float elapsedTime = 0f;
+            private float shakeRadius = 5f;
+            private float shakeRate = 720f / 0.5f;
+
+
+            @Override
+            public void modify(Camera camera, float delta) {
+                this.elapsedTime += delta;
+                if (!isComplete()) {
+                    float x = (float) (shakeRadius * Math.cos(elapsedTime * shakeRate) + origPos.x);
+                    float y = (float) (shakeRadius * Math.sin(elapsedTime * shakeRate) + origPos.y);
+                    camera.position.set(x, y, camera.position.z);
+                } else {
+                    camera.position.set(origPos);
+                }
+            }
+
+            @Override
+            public boolean isComplete() {
+                return elapsedTime >= duration;
+            }
+        });
+    }
+
     private void generateEnvironment(){
         if(floorGroup.getChildren().size < floorCount){
             generateNextFloor();
@@ -684,9 +716,9 @@ public class BubbleRunnerStage extends BaseStage {
         WallPattern p = new WallPattern(20f);
         Random r = new Random(System.currentTimeMillis());
         //Based on the Max Fields, we generated a new pattern
-        int numFields = r.nextInt(info.maxFields) + 1;
-        if(numFields < info.minFields){
-            numFields = info.minFields;
+        int numFields = r.nextInt(MAX_FIELDS) + 1;
+        if(numFields < MIN_FIELDS){
+            numFields = MIN_FIELDS;
         }
         while(numFields > 0){
             ForceFieldType fft = wallTypes[r.nextInt(wallTypes.length)];
@@ -893,6 +925,8 @@ public class BubbleRunnerStage extends BaseStage {
             player.setIsDead(false);
             deathOverlay.setVisible(false);
             info.reset();
+            MAX_FIELDS = DEFAULT_MAX_FIELDS;
+            MIN_FIELDS = DEFAULT_MIN_FIELDS;
 
             currentComboLevel = ComboLevels.NONE;
             currentCombo = 0;
@@ -905,7 +939,7 @@ public class BubbleRunnerStage extends BaseStage {
             millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
             isDead = false;
 
-            shields.maxFields = info.maxFields;
+            //  shields.maxFields = info.maxFields;
 
             setEnvVelocity(wallAndFloorVelocity);
 
@@ -929,10 +963,10 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private void incrementMaxFields(){
-        info.maxFields += 1;
-        shields.maxFields = info.maxFields;
-        if(info.maxFields > 3 && info.maxFields %2 == 0){
-            info.minFields += 1;
+        MAX_FIELDS += 1;
+        //shields.maxFields = info.maxFields;
+        if(MAX_FIELDS > 3 && MAX_FIELDS %2 == 0){
+            MIN_FIELDS += 1;
         }
     }
 
@@ -1086,7 +1120,7 @@ public class BubbleRunnerStage extends BaseStage {
             player.addStateAnimation(PlayerStates.WALL_DEATH, wallAni);
         }
     }
-    private void initializePlayer(int maxFields) {
+    private void initializePlayer() {
 
 
         player = new Player(playerDimensions[0],
@@ -1108,7 +1142,7 @@ public class BubbleRunnerStage extends BaseStage {
         shields.setShieldAnimation(ForceFieldType.PLASMA, greenShield);
         Animation blueShield = new Animation(AnimationUtil.SHIELD_CYCLE_RATE, aniAtlas.findRegions(AtlasUtil.ANI_SHIELD_BLUE));
         shields.setShieldAnimation(ForceFieldType.LIGHTNING, blueShield);
-        shields.maxFields = maxFields;
+        //shields.maxFields = maxFields;
         addActor(shields);
     }
 

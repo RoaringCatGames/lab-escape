@@ -21,7 +21,6 @@ public class ShieldGroup extends GenericGroup {
     private static final float FIELD_ADJUST_Y = 175f;
 
     private Array<ForceField> fields;
-    public int maxFields = 1;
     public int resourceUsage = 1;
     private ObjectMap<ForceFieldType, Animation> shieldAnimations;
 
@@ -40,14 +39,6 @@ public class ShieldGroup extends GenericGroup {
 
     public void addField(ForceFieldType ff){
 
-        if(fields.size == maxFields){
-            //Remove the forcefield
-            ForceField f = fields.get(0);
-            this.removeActor(f);
-            fields.removeIndex(0);
-        }
-
-
         float x = getWidth() - (SHIELD_SIZE/4);
         if(fields.size > 0){
             x -= (fields.get(fields.size-1).getX()-x);
@@ -60,35 +51,11 @@ public class ShieldGroup extends GenericGroup {
         }
         this.addActor(field);
         fields.add(field);
-
-
     }
 
     public void removeField(ForceField ff){
         this.removeActor(ff);
         fields.removeValue(ff, true);
-    }
-
-    public void removeField(ForceFieldType ff){
-        int removeIndex = -1;
-        for(int i=0;i<fields.size;i++){
-            if(ff.equals(fields.get(i).forceFieldType)){
-                removeIndex = i;
-                break;
-            }
-        }
-
-        if(removeIndex >= 0){
-            ForceField f = fields.get(removeIndex);
-            this.removeActor(f);
-            fields.removeIndex(removeIndex);
-        }
-
-        //When we remove a forcefield, we need to readjust all of the remaining
-        //  fields into the proper positions.
-        for(int i=0;i<fields.size;i++){
-            fields.get(i).targetX = getWidth() + (FIELD_ADJUST_X * (fields.size-i-1));
-        }
     }
 
     public void clearFields(){
@@ -99,11 +66,7 @@ public class ShieldGroup extends GenericGroup {
         fields.clear();
     }
 
-    public ForceField getOuterForceField(){
-        ForceField ff = null;
-        if(fields.size > 0){
-            ff = fields.get(0);
-        }
-        return ff;
+    public Array<ForceField> getFields(){
+        return fields;
     }
 }

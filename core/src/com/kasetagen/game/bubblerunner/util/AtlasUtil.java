@@ -109,6 +109,4 @@ public class AtlasUtil {
     public static final String SPRITE_BLUE_INDICATOR = "ui/Blue_Warning";
     public static final String SPRITE_GREEN_INDICATOR = "ui/Green_Warning";
     public static final String SPRITE_RED_INDICATOR = "ui/Red_Warning";
-
-    public static final String SPRITE_ENERGY_BAR  = "ui/energy_bar";
 }

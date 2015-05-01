@@ -19,7 +19,6 @@ public class Player extends AnimatedActor {
     private static final int NUM_SHIELD_FRAMES = 2;
 
     private float keyFrameTime = 0f;
-    private Animation deathAnimation;
     private Animation shieldAnimation;
     private boolean isDead = false;
     private boolean isShielding = false;

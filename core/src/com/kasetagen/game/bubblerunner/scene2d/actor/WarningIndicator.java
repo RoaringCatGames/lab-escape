@@ -25,17 +25,16 @@ public class WarningIndicator extends GenericActor {
     private WallPattern pattern;
     private float alpha = MAX_ALPHA;
     private boolean isDecreasing = true;
-    //private Texture texture;
     private Array<TextureRegion> indicatorRegions;
     private float timeAlive = 0f;
 
     public float lifetime = 0f;
 
     public WarningIndicator(float x, float y, float width, float height, WallPattern pattern, Color color, TextureAtlas spriteAtlas, float lifetimeSeconds){
-    //public WarningIndicator(float x, float y, float width, float height, WallPattern pattern, Color color, Texture texture){
+
         super(x, y, width, height, null, color);
         this.pattern = pattern;
-        //this.texture = texture;
+
         this.textureRegion = spriteAtlas.findRegion(AtlasUtil.SPRITE_WARNING_INDICATOR);//new TextureRegion(this.texture, texture.getWidth(), 180);
 
         indicatorRegions = new Array<TextureRegion>();
@@ -43,7 +42,7 @@ public class WarningIndicator extends GenericActor {
             TextureRegion r;
             switch (fft){
                 case LASER:
-                    r = spriteAtlas.findRegion(AtlasUtil.SPRITE_RED_INDICATOR);//new TextureRegion(this.texture, 0, 180, 90, 90);
+                    r = spriteAtlas.findRegion(AtlasUtil.SPRITE_RED_INDICATOR);
                     break;
                 case PLASMA:
                     r = spriteAtlas.findRegion(AtlasUtil.SPRITE_GREEN_INDICATOR);
@@ -60,7 +59,7 @@ public class WarningIndicator extends GenericActor {
 
             SHIFT_PER_SECOND = (MAX_ALPHA-MIN_ALPHA)/lifetimeSeconds;
             //We want the lifetime to be one fade out length.
-            lifetime = lifetimeSeconds;//(MAX_ALPHA/SHIFT_PER_SECOND);
+            lifetime = lifetimeSeconds;
         }
     }
 
