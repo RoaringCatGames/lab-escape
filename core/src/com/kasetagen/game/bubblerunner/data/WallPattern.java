@@ -8,7 +8,6 @@ import com.kasetagen.game.bubblerunner.scene2d.actor.ForceFieldType;
  * User: barry
  * Date: 7/5/14
  * Time: 12:54 PM
- * To change this template use File | Settings | File Templates.
  */
 public class WallPattern {
 
