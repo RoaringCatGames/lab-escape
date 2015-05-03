@@ -145,6 +145,7 @@ public class BubbleRunnerStage extends BaseStage {
 
     //Ambiance (Music and Effects
     //private ShakeDecorator warningShaker;
+    private Array<Indicator> indicators;
     private WarningIndicator warningIndicator;
     private Music music;
     private Sound shieldUpSound;

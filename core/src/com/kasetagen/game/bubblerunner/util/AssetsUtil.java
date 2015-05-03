@@ -47,7 +47,7 @@ public class AssetsUtil {
     public static final String SND_DEATH_THUD = "audio/deaths/glass-thud.mp3";
     public static final String SND_DEATH_EDYN = "audio/deaths/edyn-scream.mp3";
     public static final String SND_DEATH_EDISON = "audio/deaths/edison-scream.mp3";
-    public static final String SND_DEATH_SHOCK = "audio/deaths/electric-flow.mp3";
+    public static final String SND_DEATH_SHOCK = "audio/deaths/electric-w-sparks.mp3";
     public static final String SND_DEATH_FIRE = "audio/deaths/flame-whoosh.mp3";
 
 

@@ -1338,7 +1338,7 @@ player/Female_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 6
+  index: 12
 player/Female_Shock
   rotate: false
   xy: 724, 2641
@@ -1352,7 +1352,28 @@ player/Female_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
+  index: 14
+player/Female_Shock
+  rotate: false
+  xy: 724, 2641
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 10
+player/Female_Shock
+  rotate: false
+  xy: 724, 2641
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
   index: 8
+player/Female_Shock
+  rotate: false
+  xy: 724, 2641
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 6
 player/Female_Shock
   rotate: false
   xy: 1086, 3003
@@ -1373,7 +1394,21 @@ player/Female_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
+  index: 15
+player/Female_Shock
+  rotate: false
+  xy: 1086, 3003
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
   index: 5
+player/Female_Shock
+  rotate: false
+  xy: 1086, 3003
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 11
 player/Female_Shock
   rotate: false
   xy: 1086, 3003
@@ -1383,18 +1418,25 @@ player/Female_Shock
   index: 9
 player/Female_Shock
   rotate: false
+  xy: 1086, 3003
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 13
+player/Female_Shock
+  rotate: false
   xy: 1448, 3365
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 10
+  index: 16
 player/Female_Shock
   rotate: false
   xy: 1810, 3727
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 11
+  index: 17
 player/Female_Wall
   rotate: false
   xy: 0, 1555
@@ -1548,7 +1590,7 @@ player/Male_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 6
+  index: 4
 player/Male_Shock
   rotate: false
   xy: 1810, 2641
@@ -1562,7 +1604,28 @@ player/Male_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 4
+  index: 6
+player/Male_Shock
+  rotate: false
+  xy: 1810, 2641
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 14
+player/Male_Shock
+  rotate: false
+  xy: 1810, 2641
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 12
+player/Male_Shock
+  rotate: false
+  xy: 1810, 2641
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 10
 player/Male_Shock
   rotate: false
   xy: 2172, 3003
@@ -1576,7 +1639,14 @@ player/Male_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 7
+  index: 9
+player/Male_Shock
+  rotate: false
+  xy: 2172, 3003
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 13
 player/Male_Shock
   rotate: false
   xy: 2172, 3003
@@ -1590,21 +1660,35 @@ player/Male_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 9
+  index: 15
+player/Male_Shock
+  rotate: false
+  xy: 2172, 3003
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 7
+player/Male_Shock
+  rotate: false
+  xy: 2172, 3003
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 11
 player/Male_Shock
   rotate: false
   xy: 2534, 3365
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 10
+  index: 16
 player/Male_Shock
   rotate: false
   xy: 2896, 3727
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 11
+  index: 17
 player/Male_Wall
   rotate: false
   xy: 0, 469

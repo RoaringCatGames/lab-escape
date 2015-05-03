@@ -6,71 +6,64 @@ filter: Nearest,Nearest
 repeat: none
 env/Floor
   rotate: false
-  xy: 1082, 8
+  xy: 502, 0
   size: 210, 210
   orig: 210, 210
   offset: 0, 0
   index: 1
 env/Floor
   rotate: false
-  xy: 1294, 8
+  xy: 714, 0
   size: 210, 210
   orig: 210, 210
   offset: 0, 0
   index: 2
 env/Floor
   rotate: false
-  xy: 1506, 8
+  xy: 926, 0
   size: 210, 210
   orig: 210, 210
   offset: 0, 0
   index: 3
 env/Hazard
   rotate: false
-  xy: 0, 137
+  xy: 0, 181
   size: 500, 29
   orig: 500, 29
   offset: 0, 0
   index: 1
 env/Hazard
   rotate: false
-  xy: 580, 189
+  xy: 0, 150
   size: 500, 29
   orig: 500, 29
   offset: 0, 0
   index: 2
 ui/Blue_Warning
   rotate: false
-  xy: 392, 60
+  xy: 392, 73
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: -1
 ui/Green_Warning
   rotate: false
-  xy: 1718, 143
+  xy: 1138, 135
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: -1
 ui/Red_Warning
   rotate: false
-  xy: 1718, 66
+  xy: 1138, 58
   size: 75, 75
   orig: 75, 75
   offset: 0, 0
   index: -1
 ui/Warning_BG
   rotate: false
-  xy: 0, 0
+  xy: 0, 13
   size: 390, 135
   orig: 390, 135
-  offset: 0, 0
-  index: -1
-ui/energy_bar
-  rotate: false
-  xy: 0, 168
-  size: 578, 50
-  orig: 578, 50
   offset: 0, 0
   index: -1
