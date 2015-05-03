@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
  */
 public class AssetsUtil {
 
+
     public static Class<BitmapFont> BITMAP_FONT = BitmapFont.class;
     public static Class<Texture> TEXTURE = Texture.class;
     public static Class<Sound> SOUND = Sound.class;
@@ -49,6 +50,8 @@ public class AssetsUtil {
     public static final String SND_DEATH_EDISON = "audio/deaths/edison-scream.mp3";
     public static final String SND_DEATH_SHOCK = "audio/deaths/electric-w-sparks.mp3";
     public static final String SND_DEATH_FIRE = "audio/deaths/flame-whoosh.mp3";
+    public static final String SND_SICK_EDYN = "audio/edyn-sick.mp3";
+    public static final String SND_SICK_EDISON = "audio/edison-sick.mp3";
 
 
     public static final String NOT_BAD = "audio/sfx/not-bad_1.mp3";

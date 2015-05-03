@@ -49,12 +49,15 @@ public class AtlasUtil {
     public static final String ANI_HIGH_SCORE_BG = "screens/HighScore_BG";
 
 
+    public static final String ANI_PUKE = "player/Puke";
+
     //Veda Animations
     public static final String ANI_VEDA_RUN = "player/Female_Run";
     public static final String ANI_VEDA_PUNCH = "player/Female_Punch";
     public static final String ANI_VEDA_SHOCK = "player/Female_Shock";
     public static final String ANI_VEDA_WALL = "player/Female_Wall";
     public static final String ANI_VEDA_FIRE = "player/FIRE";
+    public static final String ANI_VEDA_PUKE = "player/Female_Puke";
 
     //Fredrick Animations
     public static final String ANI_FRED_RUN = "player/Male_Run";
@@ -62,6 +65,7 @@ public class AtlasUtil {
     public static final String ANI_FRED_SHOCK = "player/Male_Shock";
     public static final String ANI_FRED_WALL = "player/Male_Wall";
     public static final String ANI_FRED_FIRE = "player/FIRE";
+    public static final String ANI_FRED_PUKE = "player/Male_Puke";
 
     public static final String ANI_SHIELD_RED = "Shields/Red";
     public static final String ANI_SHIELD_GREEN = "Shields/Green";

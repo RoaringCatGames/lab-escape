@@ -113,6 +113,8 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
         assetManager.load(AssetsUtil.SND_DEATH_EDISON, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.SND_DEATH_SHOCK, AssetsUtil.SOUND);
         assetManager.load(AssetsUtil.SND_DEATH_FIRE, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.SND_SICK_EDYN, AssetsUtil.SOUND);
+        assetManager.load(AssetsUtil.SND_SICK_EDISON, AssetsUtil.SOUND);
 
 
         assetManager.load(AssetsUtil.NOT_BAD, AssetsUtil.SOUND);

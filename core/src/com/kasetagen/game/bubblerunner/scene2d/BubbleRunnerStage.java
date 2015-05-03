@@ -72,11 +72,15 @@ public class BubbleRunnerStage extends BaseStage {
     private static final float COMBO_OSCILATION_INCREASE_RATE = -0.1f;//10f;
 
     //Order of values:  xPos, yPos, width, height
-    private static final float INDICATOR_WIDTH = 390f;
-    private static final float INDICATOR_HEIGHT = 133f;
 
     private static String characterSelected = AnimationUtil.CHARACTER_2;
     private static float[] playerDimensions = new float[] { 100f, 100f, 360f, 360f };
+    private static float PUKE_W = 425f/2f;
+    private static float PUKE_H = 225f/2f;
+    private static float PUKE_M_X = playerDimensions[0] + 42f;
+    private static float PUKE_M_Y = playerDimensions[1] + 183f;
+    private static float PUKE_F_X = playerDimensions[0] + 40f;
+    private static float PUKE_F_Y = playerDimensions[1] + 175f;
 
     private static float WALL_START_X = ViewportUtil.VP_WIDTH + 700f;//160f;
     private static float WALL_Y = 0f;
@@ -84,8 +88,6 @@ public class BubbleRunnerStage extends BaseStage {
     private static float WALL_HEIGHT = 1440f/2f;
     private static float[] wallDimensions = new float[] { WALL_START_X, WALL_Y, WALL_WIDTH, WALL_HEIGHT };
     private static float[] wallColliderDimensions = new float[] { 40f, ViewportUtil.VP_HEIGHT };
-//    private static float[] warningIndicatorDimensions = new float[] {ViewportUtil.VP_WIDTH/2 - (INDICATOR_WIDTH/2), ViewportUtil.VP_HEIGHT-(INDICATOR_HEIGHT*1.5f),
-//                                                                     INDICATOR_WIDTH, INDICATOR_HEIGHT};
 
     private static float SHATTER_WIDTH = 1361f/2f;
     private static float SHATTER_HEIGHT = 1224f/2f;
@@ -134,6 +136,7 @@ public class BubbleRunnerStage extends BaseStage {
 
     //Actors
     public Player player;
+    public AnimatedActor puke;
     public ShieldGroup shields;
     public Array<Wall> walls;
     public Wall collidedWall = null;
@@ -150,6 +153,8 @@ public class BubbleRunnerStage extends BaseStage {
     private IActorDisposer indicatorDisposer;
     private WarningIndicator warningIndicator;
     private Music music;
+    private Sound edisonSickSound;
+    private Sound edynSickSound;
     private Sound shieldUpSound;
     private Sound badShieldSound;
     private Sound breakElectricSound;
@@ -160,7 +165,6 @@ public class BubbleRunnerStage extends BaseStage {
     private Sound dieFireSound;
     private Sound dieEdisonSound;
     private Sound dieEdynSound;
-
 
     private ObjectMap<ComboLevels, Sound> comboSfx;
 
@@ -381,6 +385,9 @@ public class BubbleRunnerStage extends BaseStage {
             }
 
             //Adjust Resource Levels
+            if(puke.isVisible() && puke.isAnimationComplete()){
+                puke.setVisible(false);
+            }
 
             int index = getActors().size - 1;
             cinematic.setZIndex(index--);
@@ -396,6 +403,7 @@ public class BubbleRunnerStage extends BaseStage {
             }
             rightWallGroup.setZIndex(index--);
             shields.setZIndex(index--);
+            puke.setZIndex(index--);
             player.setZIndex(index--);
             leftWallGroup.setZIndex(index--);
             floorAccentGroup.setZIndex(index--);
@@ -850,6 +858,10 @@ public class BubbleRunnerStage extends BaseStage {
     }
 
     private void processDeath(Wall w) {
+        if(puke.isVisible()){
+            puke.setVisible(false);
+        }
+
         //Checking so we only sound once for now
         switch(w.forceFieldType){
             case LIGHTNING:
@@ -1022,6 +1034,11 @@ public class BubbleRunnerStage extends BaseStage {
 
         boolean wasAdded = false;
         int resLevel = bodyLimit.getResourceLevel();
+        boolean isPuking = puke.isVisible() && !puke.isAnimationComplete();
+        if(isPuking){
+            return;
+        }
+
         if((bodyLimit.getHeatMax() - resLevel) >= shields.resourceUsage){
             //Yuck, I don't like this, but I can't come up with an
             //  argument for not doing this. The Stage manages the
@@ -1038,7 +1055,14 @@ public class BubbleRunnerStage extends BaseStage {
             shieldUpSound.play(sfxVolume);
             player.startShield();
         }else{
-            badShieldSound.play(sfxVolume);
+            if(characterSelected.equals(AnimationUtil.CHARACTER_2)){
+                edynSickSound.play(sfxVolume);
+            }else{
+                edisonSickSound.play(sfxVolume);
+            }
+            player.startPuking();
+            puke.restart();
+            puke.setVisible(true);
         }
 
     }
@@ -1083,6 +1107,8 @@ public class BubbleRunnerStage extends BaseStage {
         this.gameProcessor.setBGMusic(music);
 
         badShieldSound = assetManager.get(AssetsUtil.SND_SHIELD_WRONG, AssetsUtil.SOUND);
+        edisonSickSound = assetManager.get(AssetsUtil.SND_SICK_EDISON, AssetsUtil.SOUND);
+        edynSickSound = assetManager.get(AssetsUtil.SND_SICK_EDYN, AssetsUtil.SOUND);
         shieldUpSound = assetManager.get(AssetsUtil.SND_SHIELD_ON, AssetsUtil.SOUND);
         dieGlassSound = assetManager.get(AssetsUtil.SND_DEATH_THUD, AssetsUtil.SOUND);
         dieShockSound = assetManager.get(AssetsUtil.SND_DEATH_SHOCK, AssetsUtil.SOUND);
@@ -1127,7 +1153,7 @@ public class BubbleRunnerStage extends BaseStage {
         String subText = "Score: 0\n Best Score: 0" +
                          "\n\nMisses: 0\n Most Misses: 0" +
                          "\n\nRun Top Combo: 0\n Highest Combo: 0";
-        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.DARK_GRAY, Color.WHITE, mainFont, subFont, "You Failed to Escape!", subText, 0.6f);
+        deathOverlay = new Overlay(0, 0, getWidth(), getHeight(), Color.PURPLE, Color.WHITE, mainFont, subFont, "You Failed to Escape!", subText, 0.4f);
 
         deathOverlay.setVisible(false);
 
@@ -1152,6 +1178,7 @@ public class BubbleRunnerStage extends BaseStage {
         if(player != null){
             String aniName = AnimationUtil.getPlayerAnimationName(characterSelected);
             String shieldAniName = AnimationUtil.getPlayerShieldingAnimationName(characterSelected);
+            String sickAniName = AnimationUtil.getPlayerSickAnimationName(characterSelected);
             String electroName = AnimationUtil.getPlayerElectroAnimationName(characterSelected);
             String wallName = AnimationUtil.getPlayerWallAnimationName(characterSelected);
             String fireName = AnimationUtil.getPlayerFireAnimationName(characterSelected);
@@ -1159,27 +1186,41 @@ public class BubbleRunnerStage extends BaseStage {
             Animation defaultPlayerAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, aniAtlas.findRegions(aniName));
             player.resetAnimation(defaultPlayerAnimation);
             player.addStateAnimation(PlayerStates.DEFAULT, defaultPlayerAnimation);
+
             Animation shieldingAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, aniAtlas.findRegions(shieldAniName));
             player.setShieldingAnimation(shieldingAnimation);
+            Animation sickPlayerAnimation = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, aniAtlas.findRegions(sickAniName));
+            player.setPukingAnimation(sickPlayerAnimation);
+
             Animation electroAni = new Animation(AnimationUtil.RUNNER_ELECTRO_CYCLE_RATE, aniAtlas.findRegions(electroName));
             player.addStateAnimation(PlayerStates.ELECTRO_DEATH, electroAni);
             Animation fireAni = new Animation(AnimationUtil.RUNNER_FIRE_CYCLE_RATE, aniAtlas.findRegions(fireName));
             player.addStateAnimation(PlayerStates.FIRE_DEATH, fireAni);
             Animation wallAni = new Animation(AnimationUtil.RUNNER_WALL_CYCLE_RATE, aniAtlas.findRegions(wallName));
             player.addStateAnimation(PlayerStates.WALL_DEATH, wallAni);
+
+            float px = characterSelected.equals(AnimationUtil.CHARACTER_2) ? PUKE_F_X : PUKE_M_X;
+            float py = characterSelected.equals(AnimationUtil.CHARACTER_2) ? PUKE_F_Y : PUKE_M_Y;
+            Animation ani = new Animation(AnimationUtil.RUNNER_CYCLE_RATE, aniAtlas.findRegions(AtlasUtil.ANI_PUKE));
+            puke = new AnimatedActor(px, py, PUKE_W, PUKE_H, ani, 0f);
+            addActor(puke);
+            puke.flipTextureRegion(true, false);
+            puke.setIsLooping(false);
+            puke.setVisible(false);
+            puke.pause();
         }
     }
     private void initializePlayer() {
-
 
         player = new Player(playerDimensions[0],
                 playerDimensions[1],
                 playerDimensions[2],
                 playerDimensions[3],
                 null);
-        //player.maxFields = maxFields;
         setPlayerAnimations();
         addActor(player);
+
+        //player.setPukingFlourish(puke);
 
         shields = new ShieldGroup(playerDimensions[0],
                                   playerDimensions[1],
@@ -1191,7 +1232,6 @@ public class BubbleRunnerStage extends BaseStage {
         shields.setShieldAnimation(ForceFieldType.PLASMA, greenShield);
         Animation blueShield = new Animation(AnimationUtil.SHIELD_CYCLE_RATE, aniAtlas.findRegions(AtlasUtil.ANI_SHIELD_BLUE));
         shields.setShieldAnimation(ForceFieldType.LIGHTNING, blueShield);
-        //shields.maxFields = maxFields;
         addActor(shields);
     }
 

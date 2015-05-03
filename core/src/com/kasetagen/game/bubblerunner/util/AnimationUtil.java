@@ -23,7 +23,9 @@ public class AnimationUtil {
     public static String getPlayerAnimationName(String characterSelected) {
         return characterSelected.equals(AnimationUtil.CHARACTER_2) ? AtlasUtil.ANI_VEDA_RUN : AtlasUtil.ANI_FRED_RUN;
     }
-
+    public static String getPlayerSickAnimationName(String characterSelected){
+        return characterSelected.equals(AnimationUtil.CHARACTER_2) ? AtlasUtil.ANI_VEDA_PUKE : AtlasUtil.ANI_FRED_PUKE;
+    }
     public static String getPlayerShieldingAnimationName(String characterSelected){
         return characterSelected.equals(AnimationUtil.CHARACTER_2) ? AtlasUtil.ANI_VEDA_PUNCH : AtlasUtil.ANI_FRED_PUNCH;
     }

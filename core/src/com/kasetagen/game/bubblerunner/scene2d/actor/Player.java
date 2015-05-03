@@ -1,6 +1,5 @@
 package com.kasetagen.game.bubblerunner.scene2d.actor;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,12 +16,18 @@ import com.kasetagen.engine.gdx.scenes.scene2d.actors.AnimatedActor;
 public class Player extends AnimatedActor {
 
     private static final int NUM_SHIELD_FRAMES = 2;
+    private static final int NUM_SICK_FRAMES = 4;
 
     private float keyFrameTime = 0f;
     private Animation shieldAnimation;
+    private Animation sickAnimation;
     private boolean isDead = false;
     private boolean isShielding = false;
+    private boolean isSick = false;
     private int shieldFramesRun = 0;
+    private int sickFramesRun = 0;
+
+    private AnimatedActor flourishing;
 
     public Player(float x, float y, float width, float height, Animation defaultAnimation){
         super(x, y, width, height, defaultAnimation, 0);
@@ -35,6 +40,24 @@ public class Player extends AnimatedActor {
 
     public void setShieldingAnimation(Animation ani){
         shieldAnimation = ani;
+    }
+
+    public void setPukingAnimation(Animation ani){
+        sickAnimation = ani;
+    }
+
+    public void setPukingFlourish(AnimatedActor actor){
+        flourishing = actor;
+    }
+
+    public void startPuking(){
+        if(!isSick){
+            isSick = true;
+//            if(flourishing != null){
+//                flourishing.setVisible(true);
+//                flourishing.restart();
+//            }
+        }
     }
 
     public void startShield(){
@@ -55,7 +78,22 @@ public class Player extends AnimatedActor {
 
         keyFrameTime += delta;
         if(!isDead){
-            if(isShielding && shieldAnimation != null){
+            if(isSick && sickAnimation != null){
+                //We only want to run 2 frames of the shielding Animation that matchup to
+                //  the running animations. So we keep track of the # of times we have swapped frames.
+                TextureRegion prevFrame = sickAnimation.getKeyFrame(prevKeyFrameTime, true);
+                TextureRegion currentFrame = sickAnimation.getKeyFrame(keyFrameTime, true);
+
+                if(prevFrame != currentFrame){
+                    sickFramesRun++;
+                }
+
+                textureRegion = currentFrame;
+                if(sickFramesRun >= NUM_SICK_FRAMES){
+                    isSick = false;
+                    sickFramesRun = 0;
+                }
+            }else if(isShielding && shieldAnimation != null){
 
                 //We only want to run 2 frames of the shielding Animation that matchup to
                 //  the running animations. So we keep track of the # of times we have swapped frames.
