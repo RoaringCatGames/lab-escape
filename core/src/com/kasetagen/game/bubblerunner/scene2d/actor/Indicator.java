@@ -16,9 +16,19 @@ public class Indicator extends GenericActor {
     private static final float ALPHA_ADJUST = 0.5f;
 
     private boolean isCovered;
-    public Indicator(float x, float y, float width, float height, TextureRegion textureRegion) {
+    public final ForceFieldType forceFieldType;
+    public Indicator(float x, float y, float width, float height, TextureRegion textureRegion, ForceFieldType fft) {
         super(x, y, width, height, textureRegion, Color.DARK_GRAY);
         isCovered = false;
+        forceFieldType = fft;
+    }
+
+    public void setCovered(boolean isCovered){
+        this.isCovered = isCovered;
+    }
+
+    public boolean isCovered(){
+        return isCovered;
     }
 
     @Override
@@ -27,6 +37,7 @@ public class Indicator extends GenericActor {
         if(isCovered){
             Color c = batch.getColor();
             c.a = c.a*ALPHA_ADJUST;
+            batch.setColor(c);
         }
     }
 
@@ -36,6 +47,7 @@ public class Indicator extends GenericActor {
         if(isCovered){
             Color c = batch.getColor();
             c.a = c.a/ALPHA_ADJUST;
+            batch.setColor(c);
         }
     }
 }

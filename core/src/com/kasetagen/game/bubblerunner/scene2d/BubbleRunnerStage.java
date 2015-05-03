@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.kasetagen.engine.IDataSaver;
 import com.kasetagen.engine.IGameProcessor;
 import com.kasetagen.engine.gdx.scenes.scene2d.ActorDecorator;
+import com.kasetagen.engine.gdx.scenes.scene2d.IActorDisposer;
 import com.kasetagen.engine.gdx.scenes.scene2d.ICameraModifier;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.*;
 import com.kasetagen.engine.gdx.scenes.scene2d.decorators.ShakeDecorator;
@@ -77,14 +78,14 @@ public class BubbleRunnerStage extends BaseStage {
     private static String characterSelected = AnimationUtil.CHARACTER_2;
     private static float[] playerDimensions = new float[] { 100f, 100f, 360f, 360f };
 
-    private static float WALL_START_X = ViewportUtil.VP_WIDTH + 160f;
+    private static float WALL_START_X = ViewportUtil.VP_WIDTH + 700f;//160f;
     private static float WALL_Y = 0f;
     private static float WALL_WIDTH = 525f/2f;
     private static float WALL_HEIGHT = 1440f/2f;
     private static float[] wallDimensions = new float[] { WALL_START_X, WALL_Y, WALL_WIDTH, WALL_HEIGHT };
     private static float[] wallColliderDimensions = new float[] { 40f, ViewportUtil.VP_HEIGHT };
-    private static float[] warningIndicatorDimensions = new float[] {ViewportUtil.VP_WIDTH/2 - (INDICATOR_WIDTH/2), ViewportUtil.VP_HEIGHT-(INDICATOR_HEIGHT*1.5f),
-                                                                     INDICATOR_WIDTH, INDICATOR_HEIGHT};
+//    private static float[] warningIndicatorDimensions = new float[] {ViewportUtil.VP_WIDTH/2 - (INDICATOR_WIDTH/2), ViewportUtil.VP_HEIGHT-(INDICATOR_HEIGHT*1.5f),
+//                                                                     INDICATOR_WIDTH, INDICATOR_HEIGHT};
 
     private static float SHATTER_WIDTH = 1361f/2f;
     private static float SHATTER_HEIGHT = 1224f/2f;
@@ -146,6 +147,7 @@ public class BubbleRunnerStage extends BaseStage {
     //Ambiance (Music and Effects
     //private ShakeDecorator warningShaker;
     private Array<Indicator> indicators;
+    private IActorDisposer indicatorDisposer;
     private WarningIndicator warningIndicator;
     private Music music;
     private Sound shieldUpSound;
@@ -284,6 +286,14 @@ public class BubbleRunnerStage extends BaseStage {
         initializeStartingScene();
 
         //Initialize Walls
+        indicatorDisposer = new IActorDisposer() {
+            @Override
+            public void dispose(Actor actor) {
+                indicators.removeValue((Indicator)actor, true);
+            }
+        };
+
+        indicators = new Array<Indicator>();
         walls = new Array<Wall>();
 
         //Setup Background Music
@@ -363,6 +373,13 @@ public class BubbleRunnerStage extends BaseStage {
             //Increment our obstacle speed
             adjustDifficulty();
 
+            //Mark any indicators as removable
+            for(Indicator i:indicators){
+                if(i.getRight() < 0){
+                    i.setIsRemovable(true);
+                }
+            }
+
             //Adjust Resource Levels
 
             int index = getActors().size - 1;
@@ -394,6 +411,10 @@ public class BubbleRunnerStage extends BaseStage {
         }else if(walls != null){
             for(Wall w:walls){
                 w.setXVelocity(0f);
+            }
+
+            for(Indicator i:indicators){
+                i.velocity.x = 0f;
             }
         }
 
@@ -556,36 +577,35 @@ public class BubbleRunnerStage extends BaseStage {
             if(warningIndicator != null){
                 warningIndicator.remove();
             }
-            warningIndicator = new WarningIndicator(warningIndicatorDimensions[0],
-                                                       warningIndicatorDimensions[1],
-                                                       warningIndicatorDimensions[2],
-                                                       warningIndicatorDimensions[3],
-                                                       wp,
-                                                       Color.RED,
-                                                        spriteAtlas,
-                                                        (millisBetweenWalls/1000f)*0.9f); //Should warn for 90% of the time in between wall sections.
-                                                       //assetManager.get(AssetsUtil.WARNING_INDICATOR, AssetsUtil.TEXTURE));
-            //cwarningIndicator.addDecorator(warningShaker);
-            addActor(warningIndicator);
 
 
+            float xPos = getWidth();
+            if(indicators.size > 0){
+                float lastIndicatorRight = indicators.get(indicators.size -1).getRight();
+                if(xPos <= lastIndicatorRight){
+                    xPos = lastIndicatorRight + 10f;
+                }
+            }
+            float yPos = 600f;
+
+            float x, y, w, h;
+            x = wallDimensions[0];
+            //If X is < endingWall.getRight() Adjust
+            if(walls.size > 0){
+                float lastWallRight = walls.get(walls.size - 1).getRight();
+                if(x <= lastWallRight){
+                    //x += wp.wallPadding;
+                    x = lastWallRight + wp.wallPadding;
+                }
+            }
+            y = wallDimensions[1];
+            w = wallDimensions[2];
+            h = wallDimensions[3];
+            float timeBeforeWallHitsPlayer = (((x+w)-player.getRight())/wallAndFloorVelocity);
+            float indicatorSpeed = xPos / timeBeforeWallHitsPlayer;
             for(int i=0;i<wp.wallCount;i++){
                 ForceFieldType fft = wp.forceFields.get(i);
 
-                //FORMULA:  xPos = startX + (N * (wallWidth + wallPadding)
-                //          - Where N = NumberOfWalls-1
-                float x, y, w, h;
-                x = wallDimensions[0];
-                //If X is < endingWall.getRight() Adjust
-                if(walls.size > 0){
-                    float lastWallRight = walls.get(walls.size - 1).getRight();
-                    if(x <= lastWallRight){
-                        x += wp.wallPadding;
-                    }
-                }
-                y = wallDimensions[1];
-                w = wallDimensions[2];
-                h = wallDimensions[3];
                 float keyFrame = rand.nextInt(5000) * WALL_CYCLE_RATE;
                 float cycleRate = getAnimationCycleRateForForceFieldType(fft, false);
                 Animation leftAni = new Animation(cycleRate, aniAtlas.findRegions(getAnimationNameForForceFieldType(fft, true, false)));
@@ -627,10 +647,32 @@ public class BubbleRunnerStage extends BaseStage {
                 wall.setXVelocity(wallAndFloorVelocity);
 
                 walls.add(wall);
+
+                //Add The Indicator
+                TextureRegion region = fft == ForceFieldType.LASER ? spriteAtlas.findRegion(AtlasUtil.SPRITE_RED_INDICATOR) :
+                        fft == ForceFieldType.PLASMA ? spriteAtlas.findRegion(AtlasUtil.SPRITE_GREEN_INDICATOR) :
+                                spriteAtlas.findRegion(AtlasUtil.SPRITE_BLUE_INDICATOR);
+                Indicator indicator = new Indicator(xPos, yPos, 75f, 75f, region, fft);
+                indicator.velocity.x = indicatorSpeed;
+                indicator.setDisposer(indicatorDisposer);
+                rightWallGroup.addActor(indicator);
+                indicators.add(indicator);
+                xPos += indicator.getWidth() + 10f;
             }
 
             nextGeneration += millisBetweenWalls;
         }
+    }
+
+    private Indicator getFirstIndicatorNotCovered(){
+        Indicator i = null;
+        for(Indicator indicator:indicators){
+            if(!indicator.isCovered()){
+                i = indicator;
+                break;
+            }
+        }
+        return i;
     }
 
     private float getAnimationCycleRateForForceFieldType(ForceFieldType fft, boolean isBreaking){
@@ -934,6 +976,9 @@ public class BubbleRunnerStage extends BaseStage {
             for(Wall w: walls){
                 w.setIsRemovable(true);
             }
+            for(Indicator i:indicators){
+                i.setIsRemovable(true);
+            }
             shields.clearFields();
             millisBetweenWalls = BASE_TIME_BETWEEN_WALLS;
             isDead = false;
@@ -965,7 +1010,6 @@ public class BubbleRunnerStage extends BaseStage {
 
     private void incrementMaxFields(){
         MAX_FIELDS += 1;
-        //shields.maxFields = info.maxFields;
         if(MAX_FIELDS > 3 && MAX_FIELDS %2 == 0){
             MIN_FIELDS += 1;
         }
@@ -987,6 +1031,10 @@ public class BubbleRunnerStage extends BaseStage {
             wasAdded = true;
         }
         if(wasAdded){
+            Indicator firstIndicator = getFirstIndicatorNotCovered();
+            if(firstIndicator != null && firstIndicator.forceFieldType == fft){
+                firstIndicator.setCovered(true);
+            }
             shieldUpSound.play(sfxVolume);
             player.startShield();
         }else{
