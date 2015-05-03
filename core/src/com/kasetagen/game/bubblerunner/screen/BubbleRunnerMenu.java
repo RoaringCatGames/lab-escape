@@ -388,22 +388,6 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         highScoreUiContainer.setSize(HS_BTN_WIDTH, HS_BTN_HEIGHT);
         highScoreUiContainer.setPosition(buttonX, optionsUiContainer.getY() - (PLAY_BTN_HEIGHT));
         menuGroup.addActor(highScoreUiContainer);
-
-        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
-        style.font = gameProcessor.getAssetManager().get(AssetsUtil.NEUROPOL_32, AssetsUtil.BITMAP_FONT);
-        style.fontColor = Color.PURPLE;
-
-        TextButton credits = new TextButton("Music By DST under Creative Commons License", style);
-
-        credits.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                Gdx.net.openURI("http://creativecommons.org/licenses/by/3.0/legalcode");
-                Gdx.net.openURI("http://www.nosoapradio.us/");
-            }
-        });
-        credits.setPosition(menuGroup.getWidth()/2 - (credits.getWidth()/2), 10f);
-        menuGroup.addActor(credits);
     }
 
     private void assembleOptionsGroup(TextureAtlas atlas){
@@ -560,6 +544,22 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         });
 
         selectCharacter(edynSelect.isChecked());
+
+        TextButton.TextButtonStyle style = new TextButton.TextButtonStyle();
+        style.font = gameProcessor.getAssetManager().get(AssetsUtil.NEUROPOL_32, AssetsUtil.BITMAP_FONT);
+        style.fontColor = Color.CYAN;
+
+        TextButton credits = new TextButton("BG Music By DST under Creative Commons License", style);
+
+        credits.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.net.openURI("http://creativecommons.org/licenses/by/3.0/legalcode");
+                Gdx.net.openURI("http://www.nosoapradio.us/");
+            }
+        });
+        credits.setPosition(optionsGroup.getWidth()/2 - (credits.getWidth()/2), 0f);
+        optionsGroup.addActor(credits);
     }
 
     private String convertScoreToString(int maxDigits, int score){
