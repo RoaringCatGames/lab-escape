@@ -1286,29 +1286,29 @@ public class BubbleRunnerStage extends BaseStage {
     public TunnelAnimation buildAnimationForTunnel(){
         int segment = rand.nextInt(1000);
         if(tunnelGroupHasSpecialTunnel){
-            segment += 550; //skip the specials, and increase Basic chances
+            segment += 150; //skip the specials, and increase Basic chances
         }
         TunnelAnimation animation;
-        if(segment < 2){
+        if(segment < 5){
             //nessie
             animation = new TunnelAnimation(new Animation(1f/3f, aniAtlas.findRegions(AtlasUtil.ANI_NESSIE_WALL)), true, false);
             tunnelGroupHasSpecialTunnel = true;
-        }else if(segment < 3){
+        }else if(segment < 10){
             //Sassie
             animation = new TunnelAnimation(new Animation(1f/6f, aniAtlas.findRegions(AtlasUtil.ANI_SASSIE_WALL)), true, true);
             animation.animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
             tunnelGroupHasSpecialTunnel = true;
-        }else if(segment < 150){
+        }else if(segment < 80){
             //baldGuy
             animation = new TunnelAnimation(new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_GUY_WALL)), true);
             animation.animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
             tunnelGroupHasSpecialTunnel = true;
-        }else if(segment < 350){
+        }else if(segment < 150){
             //labLady
             animation = new TunnelAnimation(new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_LADY_WALL)), true);
             animation.animation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
             tunnelGroupHasSpecialTunnel = true;
-        }else if(segment < 550){
+        }else if(segment < 450){
             //cracked
             animation = new TunnelAnimation(new Animation(1f, aniAtlas.findRegions(AtlasUtil.ANI_CRACKED_WALL)), false);
         }else if(segment < 750){
