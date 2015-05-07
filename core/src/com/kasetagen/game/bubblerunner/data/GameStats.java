@@ -11,6 +11,9 @@ public class GameStats {
     public static final String HIGH_SCORE_KEY = "HIGH_SCORE";
     public static final String MOST_MISSES_KEY = "MOST_MISSES";
     public static final String HIGH_COMBO_KEY = "HIGHEST_COMBO";
+    public static final int MAX_SCORE_DIGITS = 6;
+    public static final int MAX_MISSES_DIGITS = 4;
+    public static final int MAX_COMBO_DIGITS = 5;
 
     public int score = 0;
     public int maxFields = 3;

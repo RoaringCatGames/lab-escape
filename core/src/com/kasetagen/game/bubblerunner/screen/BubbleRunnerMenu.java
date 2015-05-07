@@ -1,5 +1,6 @@
 package com.kasetagen.game.bubblerunner.screen;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
@@ -35,10 +36,7 @@ import com.kasetagen.game.bubblerunner.data.GameOptions;
 import com.kasetagen.game.bubblerunner.data.GameStats;
 import com.kasetagen.game.bubblerunner.scene2d.BaseStage;
 import com.kasetagen.game.bubblerunner.scene2d.actor.DecoratedUIContainer;
-import com.kasetagen.game.bubblerunner.util.AnimationUtil;
-import com.kasetagen.game.bubblerunner.util.AssetsUtil;
-import com.kasetagen.game.bubblerunner.util.AtlasUtil;
-import com.kasetagen.game.bubblerunner.util.ViewportUtil;
+import com.kasetagen.game.bubblerunner.util.*;
 
 import java.util.Random;
 
@@ -562,17 +560,6 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         optionsGroup.addActor(credits);
     }
 
-    private String convertScoreToString(int maxDigits, int score){
-        StringBuilder sb = new StringBuilder("");
-        int currentDigits = String.valueOf(score).length();
-        while(currentDigits < maxDigits){
-            currentDigits++;
-            sb.append("0");
-        }
-        sb.append(score);
-        return sb.toString();
-    }
-
     private void assembleHighScoreView(TextureAtlas atlas){
         GenericActor highScoreScaffold = new GenericActor(0f, 0f, stage.getWidth(), stage.getHeight(), atlas.findRegion(AtlasUtil.ANI_HIGH_SCORE_BG), Color.BLACK);
         highScoreGroup.addActor(highScoreScaffold);
@@ -582,8 +569,8 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
          */
         Label.LabelStyle style = new Label.LabelStyle();
         style.font = gameProcessor.getAssetManager().get(AssetsUtil.NEUROPOL_64, AssetsUtil.BITMAP_FONT);
-        highScoreLabel = new Label("High Score: 0000", style);
-        highComboLabel = new Label("High Combo:  000", style);
+        highScoreLabel = new Label("High Score: " + UIUtil.convertIntToDigitsString(GameStats.MAX_SCORE_DIGITS, 0), style);
+        highComboLabel = new Label("High Combo: " + UIUtil.convertIntToDigitsString(GameStats.MAX_COMBO_DIGITS, 0), style);
         adjustHighScores(scoreValue, comboValue);
         highScoreGroup.addActor(highScoreLabel);
         highScoreGroup.addActor(highComboLabel);
@@ -629,8 +616,8 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
     }
 
     private void adjustHighScores(int newScoreValue, int newComboValue) {
-        String scoreDisplay = convertScoreToString(4, newScoreValue);
-        String comboDisplay = convertScoreToString(3, newComboValue);
+        String scoreDisplay = UIUtil.convertIntToDigitsString(GameStats.MAX_SCORE_DIGITS, newScoreValue);
+        String comboDisplay = UIUtil.convertIntToDigitsString(GameStats.MAX_COMBO_DIGITS, newComboValue);
         highScoreLabel.setText("High Score: " + scoreDisplay);
         highComboLabel.setText("High Combo:  " + comboDisplay);
         float totalHeight = highScoreLabel.getHeight() + highComboLabel.getHeight();

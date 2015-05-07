@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.kasetagen.engine.gdx.scenes.scene2d.actors.GenericGroup;
+import com.kasetagen.game.bubblerunner.data.GameStats;
+import com.kasetagen.game.bubblerunner.util.UIUtil;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,9 +30,8 @@ public class GameInfo extends GenericGroup {
         super(x, y, width, height, null, Color.DARK_GRAY);
 
         LabelStyle style = new LabelStyle(font, Color.CYAN);
-        style.font.setScale(1f);
-        scoreLabel = new Label(SCORE_PREFIX + score, style);
-        missesLabel = new Label(MISSES_PREFIX + misses, style);
+        scoreLabel = new Label(SCORE_PREFIX + UIUtil.convertIntToDigitsString(GameStats.MAX_SCORE_DIGITS, score), style);
+        missesLabel = new Label(MISSES_PREFIX + UIUtil.convertIntToDigitsString(GameStats.MAX_MISSES_DIGITS, misses), style);
 
         positionLabels();
         addActor(scoreLabel);
@@ -52,8 +53,8 @@ public class GameInfo extends GenericGroup {
     public void act(float delta) {
         super.act(delta);
 
-        scoreLabel.setText(SCORE_PREFIX + score);
-        missesLabel.setText(MISSES_PREFIX + misses);
+        scoreLabel.setText(SCORE_PREFIX + UIUtil.convertIntToDigitsString(GameStats.MAX_SCORE_DIGITS, score));
+        missesLabel.setText(MISSES_PREFIX + UIUtil.convertIntToDigitsString(GameStats.MAX_MISSES_DIGITS, misses));
         positionLabels();
     }
 
