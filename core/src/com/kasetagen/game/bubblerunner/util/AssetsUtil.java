@@ -53,12 +53,14 @@ public class AssetsUtil {
     public static final String SND_SICK_EDYN = "audio/edyn-sick.mp3";
     public static final String SND_SICK_EDISON = "audio/edison-sick.mp3";
 
+    public static final String SND_EDISON_READY = "audio/edison-ready.mp3";
+    public static final String SND_EDYN_READY = "audio/edyn-ready.mp3";
 
     public static final String NOT_BAD = "audio/sfx/not-bad_1.mp3";
     public static final String GREAT = "audio/sfx/great_1.mp3";
     public static final String AWESOME = "audio/sfx/awesome_1.mp3";
     public static final String AMAZING = "audio/sfx/amazing_1.mp3";
-    //public static final String BONKERS = "audio/sfx/bonkers.mp3";
-    public static final String RIDICULOUS = "audio/sfx/ridiculous_1.mp3";
-    //public static final String ATOMIC = "audio/sfx/atomic.mp3";
+    public static final String UNBELIEVABLE = "audio/sfx/unbelievable.mp3";
+    public static final String PERFECT = "audio/sfx/perfect.mp3";
+    public static final String UNSTOPPABLE = "audio/sfx/unstoppable.mp3";
 }

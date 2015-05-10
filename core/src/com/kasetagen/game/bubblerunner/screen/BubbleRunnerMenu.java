@@ -94,6 +94,8 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
 
 
     private Music bgMusic;
+    private Sound edynReady;
+    private Sound edisonReady;
     private GenericGroup bgGroup;
     private GenericGroup menuGroup;
     private GenericGroup optionsGroup;
@@ -202,8 +204,11 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         bgMusic.setLooping(true);
         this.gameProcessor.setBGMusic(bgMusic);
 
-        scoreValue = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
-        comboValue = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
+        assignScoreValues();
+
+
+        edynReady = gameProcessor.getAssetManager().get(AssetsUtil.SND_EDYN_READY, AssetsUtil.SOUND);
+        edisonReady = gameProcessor.getAssetManager().get(AssetsUtil.SND_EDISON_READY, AssetsUtil.SOUND);
 
         bgGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLACK);
         menuGroup = new GenericGroup(0f, 0f, ViewportUtil.VP_WIDTH, ViewportUtil.VP_HEIGHT, null, Color.BLACK);
@@ -259,6 +264,17 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         indicators.add(charIndicator);
         indicators.add(bgIndicator);
         indicators.add(sfxIndicator);
+    }
+
+    private void assignScoreValues() {
+        scoreValue = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
+        comboValue = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
+        if(scoreValue < 0){
+            scoreValue = 0;
+        }
+        if(comboValue < 0){
+            comboValue = 0;
+        }
     }
 
     private void assembleMenuGroup(TextureAtlas atlas) {
@@ -715,6 +731,8 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
             }
             if(!"SELECTED".equals(edynCircle.getCurrentState())){
                 edynCircle.setState("SELECTED", true);
+                if(!isMenuView)
+                    edynReady.play(sfxVolumeSet.getValue());
             }
         }else{
             charValue = AnimationUtil.CHARACTER_1;
@@ -725,6 +743,8 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
             }
             if(!"SELECTED".equals(eddyCircle.getCurrentState())){
                 eddyCircle.setState("SELECTED", true);
+                if(!isMenuView)
+                    edisonReady.play(sfxVolumeSet.getValue());
             }
         }
 
@@ -818,8 +838,7 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
             bgMusic.play();
         gameProcessor.setBGMusic(bgMusic);
 
-        scoreValue = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
-        comboValue = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
+        assignScoreValues();
         adjustHighScores(scoreValue, comboValue);
     }
 

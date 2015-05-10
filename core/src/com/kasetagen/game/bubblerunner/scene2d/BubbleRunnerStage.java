@@ -46,12 +46,12 @@ import java.util.Random;
 public class BubbleRunnerStage extends BaseStage {
 
     private enum ComboLevels {
-        NONE, NOT_BAD, GREAT, AWESOME, AMAZING, BONKERS, RIDICULOUS, ATOMIC
+        NONE, NOT_BAD, GREAT, AWESOME, AMAZING, UNBELIEVABLE, PERFECT, UNSTOPPABLE
     }
 
     private static final long[] shockPulseTimings = new long[] { 0, 100, 100, 100, 100, 100, 100 };
     private static final int[] COMBO_THRESHOLDS = new int[] {10, 20, 30, 50, 70, 100, 150};
-//    private static final int[] COMBO_THRESHOLDS = new int[] {5, 10, 12, 15, 18, 20, 21};
+    //private static final int[] COMBO_THRESHOLDS = new int[] {5, 10, 12, 15, 18, 20, 21};
 
     private static final float HUD_HEIGHT = 40f;
 
@@ -330,9 +330,9 @@ public class BubbleRunnerStage extends BaseStage {
         comboSfx.put(ComboLevels.GREAT, assetManager.get(AssetsUtil.GREAT, AssetsUtil.SOUND));
         comboSfx.put(ComboLevels.AWESOME, assetManager.get(AssetsUtil.AWESOME, AssetsUtil.SOUND));
         comboSfx.put(ComboLevels.AMAZING, assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND));
-        comboSfx.put(ComboLevels.BONKERS, assetManager.get(AssetsUtil.GREAT, AssetsUtil.SOUND));
-        comboSfx.put(ComboLevels.RIDICULOUS, assetManager.get(AssetsUtil.RIDICULOUS, AssetsUtil.SOUND));
-        comboSfx.put(ComboLevels.ATOMIC, assetManager.get(AssetsUtil.AMAZING, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.UNBELIEVABLE, assetManager.get(AssetsUtil.UNBELIEVABLE, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.PERFECT, assetManager.get(AssetsUtil.PERFECT, AssetsUtil.SOUND));
+        comboSfx.put(ComboLevels.UNSTOPPABLE, assetManager.get(AssetsUtil.UNSTOPPABLE, AssetsUtil.SOUND));
 
 
         super.onCinematicComplete();
@@ -820,16 +820,16 @@ public class BubbleRunnerStage extends BaseStage {
             currentComboLevel = ComboLevels.AWESOME;
             wasChanged = true;
         }else if(latestCombo == COMBO_THRESHOLDS[3]){
-            currentComboLevel = ComboLevels.AMAZING;
+            currentComboLevel = ComboLevels.PERFECT;
             wasChanged = true;
         }else if(latestCombo == COMBO_THRESHOLDS[4]){
-            currentComboLevel = ComboLevels.BONKERS;
+            currentComboLevel = ComboLevels.UNBELIEVABLE;
             wasChanged = true;
         }else if(latestCombo == COMBO_THRESHOLDS[5]){
-            currentComboLevel = ComboLevels.RIDICULOUS;
+            currentComboLevel = ComboLevels.AMAZING;
             wasChanged = true;
         }else if(latestCombo == COMBO_THRESHOLDS[6]){
-            currentComboLevel = ComboLevels.ATOMIC;
+            currentComboLevel = ComboLevels.UNSTOPPABLE;
             wasChanged = true;
         }
         return wasChanged;
