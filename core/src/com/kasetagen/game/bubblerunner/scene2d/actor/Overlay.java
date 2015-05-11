@@ -80,20 +80,19 @@ public class Overlay extends GenericGroup {
 
             dismissButton = new TextButton("Replay", style);
             dismissButton.setChecked(true);
-            homeButton = new TextButton("Back to Menu", style);
+            homeButton = new TextButton("Main Menu", style);
 
 
             float buttonTotalWidth = dismissButton.getWidth() + HORIZONTAL_PADDING + homeButton.getWidth();
-            float dismissX = (getWidth() - buttonTotalWidth)/2;
+            float homeX = (getWidth() - buttonTotalWidth)/2;
             float buttonY = subLabel.getY() - dismissButton.getHeight() - VERTICAL_PADDING;
 
-            float homeX = dismissX + dismissButton.getWidth() + HORIZONTAL_PADDING;
+            float dismissX = homeX + homeButton.getWidth() + HORIZONTAL_PADDING;
 
+            homeButton.setPosition(homeX, buttonY);
+            addActor(homeButton);
             dismissButton.setPosition(dismissX, buttonY);
             addActor(dismissButton);
-            homeButton.setPosition(homeX, buttonY);
-            homeButton.setVisible(false);
-            addActor(homeButton);
         }
     }
 

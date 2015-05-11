@@ -60,5 +60,7 @@ nb-configuration.xml
 build/
 
 ##Mac OS
-
 **/*.DS_Store
+
+#RoboVM
+ios/robovm-build
