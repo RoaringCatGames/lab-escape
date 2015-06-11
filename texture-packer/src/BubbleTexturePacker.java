@@ -27,8 +27,8 @@ public class BubbleTexturePacker {
         settings.paddingX = 2;
         settings.paddingY = 2;
         settings.edgePadding = false;
-        settings.maxWidth = 4096;
-        settings.maxHeight = 4096;
+        settings.maxWidth = 2048;//4096;
+        settings.maxHeight = 2048;//4096;
 
         // pack the images
         settings.combineSubdirectories = true;

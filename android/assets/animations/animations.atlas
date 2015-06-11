@@ -1,1802 +1,1906 @@
 
 animations.png
-size: 4096,4096
+size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-buttons/Blue
-  rotate: false
-  xy: 2063, 70
-  size: 238, 130
-  orig: 238, 130
-  offset: 0, 0
-  index: 1
-buttons/Blue_Default
-  rotate: false
-  xy: 2063, 70
-  size: 238, 130
-  orig: 238, 130
-  offset: 0, 0
-  index: 1
-buttons/Blue
-  rotate: false
-  xy: 2303, 70
-  size: 238, 130
-  orig: 238, 130
-  offset: 0, 0
-  index: 2
-buttons/Blue
-  rotate: false
-  xy: 602, 60
-  size: 238, 130
-  orig: 238, 130
-  offset: 0, 0
-  index: 3
-buttons/Green
-  rotate: false
-  xy: 842, 38
-  size: 238, 130
-  orig: 238, 130
-  offset: 0, 0
-  index: 1
-buttons/Green_Default
-  rotate: false
-  xy: 842, 38
-  size: 238, 130
-  orig: 238, 130
-  offset: 0, 0
-  index: 1
-buttons/Green
-  rotate: false
-  xy: 2543, 16
-  size: 238, 130
-  orig: 238, 130
-  offset: 0, 0
-  index: 2
-buttons/Green
-  rotate: false
-  xy: 2783, 16
-  size: 238, 130
-  orig: 238, 130
-  offset: 0, 0
-  index: 3
-screens/Background
-  rotate: false
-  xy: 0, 1144
-  size: 1275, 720
-  orig: 1275, 720
-  offset: 0, 0
-  index: -1
 screens/C1
   rotate: false
-  xy: 0, 3592
+  xy: 0, 1506
   size: 2000, 500
   orig: 2000, 500
   offset: 0, 0
   index: -1
 screens/C2
   rotate: false
-  xy: 0, 3090
+  xy: 0, 1004
   size: 2000, 500
   orig: 2000, 500
   offset: 0, 0
   index: -1
 screens/C3
   rotate: false
-  xy: 2002, 3592
+  xy: 0, 502
   size: 2000, 500
   orig: 2000, 500
   offset: 0, 0
   index: -1
 screens/C4
   rotate: false
-  xy: 0, 2588
+  xy: 0, 0
   size: 2000, 500
   orig: 2000, 500
   offset: 0, 0
   index: -1
-screens/C5
+walls/Glass_Shatter
   rotate: false
-  xy: 2002, 3090
-  size: 2000, 500
-  orig: 2000, 500
+  xy: 2002, 2005
+  size: 1, 1
+  orig: 1, 1
   offset: 0, 0
-  index: -1
-screens/Edison/Edison
+  index: 5
+
+animations2.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+player/Puke
   rotate: false
-  xy: 3831, 1032
-  size: 200, 720
-  orig: 200, 720
+  xy: 1817, 191
+  size: 213, 113
+  orig: 213, 113
   offset: 0, 0
   index: 1
-screens/Edyn/Edyn
+player/Puke
   rotate: false
-  xy: 3242, 1646
-  size: 400, 720
-  orig: 400, 720
-  offset: 0, 0
-  index: 1
-screens/Edyn/Edyn
-  rotate: false
-  xy: 3644, 1754
-  size: 400, 720
-  orig: 400, 720
+  xy: 1817, 76
+  size: 213, 113
+  orig: 213, 113
   offset: 0, 0
   index: 2
-screens/Escape
+screens/Background
   rotate: false
-  xy: 0, 5
-  size: 526, 113
-  orig: 526, 113
-  offset: 0, 0
-  index: 1
-screens/Escape
-  rotate: false
-  xy: 1282, 1769
-  size: 526, 113
-  orig: 526, 113
-  offset: 0, 0
-  index: 2
-screens/Fannie_Moon
-  rotate: false
-  xy: 1082, 2
-  size: 165, 166
-  orig: 165, 166
-  offset: 0, 0
-  index: -1
-screens/HighScore
-  rotate: false
-  xy: 0, 120
-  size: 600, 70
-  orig: 600, 70
-  offset: 0, 0
-  index: 1
-screens/HighScore
-  rotate: false
-  xy: 3159, 238
-  size: 600, 70
-  orig: 600, 70
-  offset: 0, 0
-  index: 2
-screens/HighScore_BG
-  rotate: false
-  xy: 0, 422
+  xy: 0, 90
   size: 1275, 720
   orig: 1275, 720
   offset: 0, 0
   index: -1
+screens/C5
+  rotate: false
+  xy: 0, 1534
+  size: 2000, 500
+  orig: 2000, 500
+  offset: 0, 0
+  index: -1
 screens/Instruction_Screen
   rotate: false
-  xy: 0, 1866
+  xy: 0, 812
   size: 1280, 720
   orig: 1280, 720
   offset: 0, 0
   index: -1
 screens/Options
   rotate: false
-  xy: 1282, 1884
+  xy: 0, 0
   size: 603, 88
   orig: 603, 88
   offset: 0, 0
   index: 1
 screens/Options
   rotate: false
-  xy: 2554, 220
+  xy: 605, 0
   size: 603, 88
   orig: 603, 88
   offset: 0, 0
   index: 2
-screens/Platform
-  rotate: false
-  xy: 2002, 2368
-  size: 1275, 720
-  orig: 1275, 720
-  offset: 0, 0
-  index: -1
-screens/Skyline1
-  rotate: false
-  xy: 1277, 924
-  size: 1275, 720
-  orig: 1275, 720
-  offset: 0, 0
-  index: -1
-screens/Skyline2
-  rotate: false
-  xy: 1277, 202
-  size: 1275, 720
-  orig: 1275, 720
-  offset: 0, 0
-  index: -1
-screens/Title
-  rotate: false
-  xy: 0, 192
-  size: 876, 228
-  orig: 876, 228
-  offset: 0, 0
-  index: -1
-screens/options/Edison_Eyes
-  rotate: false
-  xy: 1255, 0
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: 1
-screens/options/Edison_Eyes
-  rotate: false
-  xy: 1457, 0
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: 2
-screens/options/Edyn_Eyes
-  rotate: false
-  xy: 1659, 0
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: 1
-screens/options/Edyn_Eyes
-  rotate: false
-  xy: 1861, 0
-  size: 200, 200
-  orig: 200, 200
-  offset: 0, 0
-  index: 2
-screens/options/Edyn_Select
-  rotate: false
-  xy: 878, 170
-  size: 375, 250
-  orig: 375, 250
-  offset: 0, 0
-  index: 1
-screens/options/Edyn_Select_Default
-  rotate: false
-  xy: 878, 170
-  size: 375, 250
-  orig: 375, 250
-  offset: 0, 0
-  index: 1
-screens/options/MainMenu
-  rotate: false
-  xy: 1277, 1657
-  size: 312, 38
-  orig: 312, 38
-  offset: 0, 0
-  index: -1
-screens/options/Main_menu
-  rotate: false
-  xy: 3279, 2424
-  size: 313, 50
-  orig: 313, 50
-  offset: 0, 0
-  index: 1
-screens/options/Main_menu
-  rotate: false
-  xy: 2063, 18
-  size: 313, 50
-  orig: 313, 50
-  offset: 0, 0
-  index: 2
 screens/options/Music
   rotate: false
-  xy: 3761, 245
+  xy: 1817, 11
   size: 213, 63
   orig: 213, 63
   offset: 0, 0
   index: 1
-screens/options/Runner
+screens/options/Tech_B
   rotate: false
-  xy: 1965, 1646
-  size: 1275, 720
-  orig: 1275, 720
-  offset: 0, 0
-  index: -1
-screens/options/Select_Runner
-  rotate: false
-  xy: 1277, 1697
-  size: 505, 70
-  orig: 505, 70
+  xy: 1277, 4
+  size: 538, 300
+  orig: 538, 300
   offset: 0, 0
   index: 1
-screens/options/Select_Runner
-  rotate: false
-  xy: 2554, 148
-  size: 505, 70
-  orig: 505, 70
-  offset: 0, 0
-  index: 2
-screens/options/Tech_A
-  rotate: false
-  xy: 3159, 21
-  size: 400, 215
-  orig: 400, 215
-  offset: 0, 0
-  index: 1
-screens/options/Tech_A
-  rotate: false
-  xy: 3561, 21
-  size: 400, 215
-  orig: 400, 215
-  offset: 0, 0
-  index: 2
-screens/options/Volume
-  rotate: false
-  xy: 2554, 924
-  size: 1275, 720
-  orig: 1275, 720
-  offset: 0, 0
-  index: -1
-screens/options/sfx
-  rotate: false
-  xy: 3644, 1689
-  size: 150, 63
-  orig: 150, 63
-  offset: 0, 0
-  index: 1
-screens/options/sfx
-  rotate: false
-  xy: 2378, 5
-  size: 150, 63
-  orig: 150, 63
-  offset: 0, 0
-  index: 2
 walls/Glass_Shatter
   rotate: false
-  xy: 3279, 2476
+  xy: 1282, 920
   size: 681, 612
   orig: 681, 612
   offset: 0, 0
   index: 1
 walls/Glass_Shatter
   rotate: false
-  xy: 1282, 1974
+  xy: 1282, 306
   size: 681, 612
   orig: 681, 612
   offset: 0, 0
   index: 2
-walls/Glass_Shatter
-  rotate: false
-  xy: 2554, 310
-  size: 681, 612
-  orig: 681, 612
-  offset: 0, 0
-  index: 3
-walls/Glass_Shatter
-  rotate: false
-  xy: 3237, 310
-  size: 681, 612
-  orig: 681, 612
-  offset: 0, 0
-  index: 4
-walls/Glass_Shatter
-  rotate: false
-  xy: 1965, 2585
-  size: 1, 1
-  orig: 1, 1
-  offset: 0, 0
-  index: 5
-walls/Glass_Wall_Break_Left
-  rotate: false
-  xy: 3920, 310
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 1
 
-animations2.png
-size: 4096,4096
+animations3.png
+size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-Shields/Blue
+buttons/Blue
   rotate: false
-  xy: 3808, 375
-  size: 175, 175
-  orig: 175, 175
-  offset: 0, 0
-  index: 1
-Shields/Blue
-  rotate: false
-  xy: 3808, 198
-  size: 175, 175
-  orig: 175, 175
-  offset: 0, 0
-  index: 2
-Shields/Blue
-  rotate: false
-  xy: 3740, 2123
-  size: 175, 175
-  orig: 175, 175
-  offset: 0, 0
-  index: 3
-Shields/Green
-  rotate: false
-  xy: 3917, 2123
-  size: 175, 175
-  orig: 175, 175
-  offset: 0, 0
-  index: 1
-Shields/Green
-  rotate: false
-  xy: 3740, 1946
-  size: 175, 175
-  orig: 175, 175
-  offset: 0, 0
-  index: 2
-Shields/Green
-  rotate: false
-  xy: 3917, 1946
-  size: 175, 175
-  orig: 175, 175
-  offset: 0, 0
-  index: 3
-Shields/Red
-  rotate: false
-  xy: 3740, 1769
-  size: 175, 175
-  orig: 175, 175
-  offset: 0, 0
-  index: 1
-Shields/Red
-  rotate: false
-  xy: 3917, 1769
-  size: 175, 175
-  orig: 175, 175
-  offset: 0, 0
-  index: 2
-Shields/Red
-  rotate: false
-  xy: 3740, 1592
-  size: 175, 175
-  orig: 175, 175
-  offset: 0, 0
-  index: 3
-buttons/Red
-  rotate: false
-  xy: 0, 44
+  xy: 1028, 466
   size: 238, 130
   orig: 238, 130
   offset: 0, 0
   index: 1
-buttons/Red_Default
+buttons/Blue_Default
   rotate: false
-  xy: 0, 44
+  xy: 1028, 466
   size: 238, 130
   orig: 238, 130
   offset: 0, 0
   index: 1
-buttons/Red
+buttons/Blue
   rotate: false
-  xy: 1900, 162
+  xy: 1028, 334
   size: 238, 130
   orig: 238, 130
   offset: 0, 0
   index: 2
-buttons/Red
+buttons/Blue
   rotate: false
-  xy: 1900, 30
+  xy: 1028, 202
   size: 238, 130
   orig: 238, 130
   offset: 0, 0
   index: 3
 player/FIRE
   rotate: false
-  xy: 3404, 1166
+  xy: 1679, 1680
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 1
 player/FIRE
   rotate: false
-  xy: 3404, 804
+  xy: 1679, 1318
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 2
-player/FIRE
-  rotate: false
-  xy: 3446, 190
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 3
-player/Puke
-  rotate: false
-  xy: 240, 61
-  size: 213, 113
-  orig: 213, 113
-  offset: 0, 0
-  index: 1
-player/Puke
-  rotate: false
-  xy: 455, 61
-  size: 213, 113
-  orig: 213, 113
-  offset: 0, 0
-  index: 2
-player/Puke
-  rotate: false
-  xy: 670, 61
-  size: 213, 113
-  orig: 213, 113
-  offset: 0, 0
-  index: 3
-player/Puke
-  rotate: false
-  xy: 3370, 75
-  size: 213, 113
-  orig: 213, 113
-  offset: 0, 0
-  index: 4
-player/Puke
-  rotate: false
-  xy: 3585, 75
-  size: 213, 113
-  orig: 213, 113
-  offset: 0, 0
-  index: 5
-player/Puke
-  rotate: false
-  xy: 3766, 1477
-  size: 213, 113
-  orig: 213, 113
-  offset: 0, 0
-  index: 6
-screens/Edison/Edison
-  rotate: false
-  xy: 3776, 2644
-  size: 200, 720
-  orig: 200, 720
-  offset: 0, 0
-  index: 2
-screens/Edison/Edison
-  rotate: false
-  xy: 3776, 2644
-  size: 200, 720
-  orig: 200, 720
-  offset: 0, 0
-  index: 12
-screens/Edison/Edison
-  rotate: false
-  xy: 530, 478
-  size: 200, 720
-  orig: 200, 720
-  offset: 0, 0
-  index: 3
-screens/Edison/Edison
-  rotate: false
-  xy: 530, 478
-  size: 200, 720
-  orig: 200, 720
-  offset: 0, 0
-  index: 11
-screens/Edison/Edison
-  rotate: false
-  xy: 732, 478
-  size: 200, 720
-  orig: 200, 720
-  offset: 0, 0
-  index: 4
-screens/Edison/Edison
-  rotate: false
-  xy: 732, 478
-  size: 200, 720
-  orig: 200, 720
-  offset: 0, 0
-  index: 10
-screens/Edison/Edison
-  rotate: false
-  xy: 932, 1200
-  size: 200, 720
-  orig: 200, 720
-  offset: 0, 0
-  index: 5
-screens/Edison/Edison
-  rotate: false
-  xy: 932, 1200
-  size: 200, 720
-  orig: 200, 720
-  offset: 0, 0
-  index: 9
-screens/Edison/Edison
-  rotate: false
-  xy: 934, 478
-  size: 200, 720
-  orig: 200, 720
-  offset: 0, 0
-  index: 6
-screens/Edison/Edison
-  rotate: false
-  xy: 934, 478
-  size: 200, 720
-  orig: 200, 720
-  offset: 0, 0
-  index: 8
-screens/Edison/Edison
-  rotate: false
-  xy: 1134, 1318
-  size: 200, 720
-  orig: 200, 720
-  offset: 0, 0
-  index: 7
 screens/Edyn/Edyn
   rotate: false
-  xy: 0, 3366
-  size: 400, 720
-  orig: 400, 720
-  offset: 0, 0
-  index: 3
-screens/Edyn/Edyn
-  rotate: false
-  xy: 0, 2644
-  size: 400, 720
-  orig: 400, 720
-  offset: 0, 0
-  index: 4
-screens/Edyn/Edyn
-  rotate: false
-  xy: 402, 3366
-  size: 400, 720
-  orig: 400, 720
-  offset: 0, 0
-  index: 5
-screens/Edyn/Edyn
-  rotate: false
-  xy: 0, 1922
-  size: 400, 720
-  orig: 400, 720
-  offset: 0, 0
-  index: 6
-screens/Edyn/Edyn
-  rotate: false
-  xy: 402, 2644
-  size: 400, 720
-  orig: 400, 720
-  offset: 0, 0
-  index: 7
-screens/Edyn/Eyes
-  rotate: false
-  xy: 804, 3366
+  xy: 1277, 1320
   size: 400, 720
   orig: 400, 720
   offset: 0, 0
   index: 1
-screens/Edyn/Eyes
+screens/HighScore
   rotate: false
-  xy: 0, 1200
-  size: 400, 720
-  orig: 400, 720
-  offset: 0, 0
-  index: 2
-screens/Edyn/Eyes
-  rotate: false
-  xy: 402, 1922
-  size: 400, 720
-  orig: 400, 720
-  offset: 0, 0
-  index: 3
-screens/Edyn/Eyes
-  rotate: false
-  xy: 804, 2644
-  size: 400, 720
-  orig: 400, 720
-  offset: 0, 0
-  index: 4
-screens/options/Edison_Select
-  rotate: false
-  xy: 2216, 252
-  size: 408, 250
-  orig: 408, 250
+  xy: 1230, 18
+  size: 600, 70
+  orig: 600, 70
   offset: 0, 0
   index: 1
-screens/options/Edison_Select_Default
+screens/HighScore
   rotate: false
-  xy: 2216, 252
-  size: 408, 250
-  orig: 408, 250
+  xy: 0, 14
+  size: 600, 70
+  orig: 600, 70
+  offset: 0, 0
+  index: 2
+screens/HighScore_BG
+  rotate: false
+  xy: 0, 1320
+  size: 1275, 720
+  orig: 1275, 720
+  offset: 0, 0
+  index: -1
+screens/Platform
+  rotate: false
+  xy: 0, 598
+  size: 1275, 720
+  orig: 1275, 720
+  offset: 0, 0
+  index: -1
+screens/options/Edison_Eyes
+  rotate: false
+  xy: 1028, 0
+  size: 200, 200
+  orig: 200, 200
   offset: 0, 0
   index: 1
-screens/options/Edison_Select
-  rotate: false
-  xy: 2626, 252
-  size: 408, 250
-  orig: 408, 250
-  offset: 0, 0
-  index: 2
-screens/options/Edison_Select
-  rotate: false
-  xy: 3296, 552
-  size: 408, 250
-  orig: 408, 250
-  offset: 0, 0
-  index: 3
-screens/options/Edison_Select
-  rotate: false
-  xy: 3036, 252
-  size: 408, 250
-  orig: 408, 250
-  offset: 0, 0
-  index: 4
-screens/options/Edison_Select
-  rotate: false
-  xy: 1080, 42
-  size: 408, 250
-  orig: 408, 250
-  offset: 0, 0
-  index: 5
-screens/options/Edison_Select
-  rotate: false
-  xy: 1490, 42
-  size: 408, 250
-  orig: 408, 250
-  offset: 0, 0
-  index: 6
-screens/options/Edison_Select
-  rotate: false
-  xy: 2140, 0
-  size: 408, 250
-  orig: 408, 250
-  offset: 0, 0
-  index: 7
-screens/options/Edison_Select
-  rotate: false
-  xy: 2550, 0
-  size: 408, 250
-  orig: 408, 250
-  offset: 0, 0
-  index: 8
-screens/options/Edison_Select
-  rotate: false
-  xy: 2960, 0
-  size: 408, 250
-  orig: 408, 250
-  offset: 0, 0
-  index: 9
-screens/options/Edyn_Select
-  rotate: false
-  xy: 3717, 2300
-  size: 375, 250
-  orig: 375, 250
-  offset: 0, 0
-  index: 2
-screens/options/Edyn_Select
-  rotate: false
-  xy: 3706, 552
-  size: 375, 250
-  orig: 375, 250
-  offset: 0, 0
-  index: 3
 screens/options/Music
   rotate: false
-  xy: 3776, 2579
+  xy: 602, 21
   size: 213, 63
   orig: 213, 63
   offset: 0, 0
   index: 2
-screens/options/Tech_B
+screens/options/sfx
   rotate: false
-  xy: 0, 176
-  size: 538, 300
-  orig: 538, 300
+  xy: 817, 21
+  size: 150, 63
+  orig: 150, 63
   offset: 0, 0
   index: 1
-screens/options/Tech_B
+screens/options/sfx
   rotate: false
-  xy: 2097, 2250
-  size: 538, 300
-  orig: 538, 300
+  xy: 1832, 25
+  size: 150, 63
+  orig: 150, 63
   offset: 0, 0
   index: 2
-screens/options/Tech_B
-  rotate: false
-  xy: 540, 176
-  size: 538, 300
-  orig: 538, 300
-  offset: 0, 0
-  index: 3
-screens/options/Tech_B
-  rotate: false
-  xy: 2637, 2250
-  size: 538, 300
-  orig: 538, 300
-  offset: 0, 0
-  index: 4
-screens/options/Tech_B
-  rotate: false
-  xy: 3177, 2250
-  size: 538, 300
-  orig: 538, 300
-  offset: 0, 0
-  index: 5
-screens/options/Tech_B
-  rotate: false
-  xy: 1136, 294
-  size: 538, 300
-  orig: 538, 300
-  offset: 0, 0
-  index: 6
-screens/options/Tech_B
-  rotate: false
-  xy: 1676, 294
-  size: 538, 300
-  orig: 538, 300
-  offset: 0, 0
-  index: 7
-screens/options/Tech_B
-  rotate: false
-  xy: 2216, 504
-  size: 538, 300
-  orig: 538, 300
-  offset: 0, 0
-  index: 8
-screens/options/Tech_B
-  rotate: false
-  xy: 2756, 504
-  size: 538, 300
-  orig: 538, 300
-  offset: 0, 0
-  index: 9
 tunnel/Wall_Basic
   rotate: false
-  xy: 1206, 3576
+  xy: 0, 86
   size: 512, 510
   orig: 512, 510
   offset: 0, 0
   index: 1
 tunnel/Wall_Crack
   rotate: false
-  xy: 1206, 3064
+  xy: 514, 86
   size: 512, 510
   orig: 512, 510
   offset: 0, 0
   index: 2
+walls/Glass_Shatter
+  rotate: false
+  xy: 1277, 704
+  size: 681, 612
+  orig: 681, 612
+  offset: 0, 0
+  index: 3
+walls/Glass_Shatter
+  rotate: false
+  xy: 1277, 90
+  size: 681, 612
+  orig: 681, 612
+  offset: 0, 0
+  index: 4
+
+animations4.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+buttons/Green
+  rotate: false
+  xy: 1028, 468
+  size: 238, 130
+  orig: 238, 130
+  offset: 0, 0
+  index: 1
+buttons/Green_Default
+  rotate: false
+  xy: 1028, 468
+  size: 238, 130
+  orig: 238, 130
+  offset: 0, 0
+  index: 1
+buttons/Green
+  rotate: false
+  xy: 1028, 336
+  size: 238, 130
+  orig: 238, 130
+  offset: 0, 0
+  index: 2
+buttons/Green
+  rotate: false
+  xy: 1028, 204
+  size: 238, 130
+  orig: 238, 130
+  offset: 0, 0
+  index: 3
+buttons/Red
+  rotate: false
+  xy: 1028, 72
+  size: 238, 130
+  orig: 238, 130
+  offset: 0, 0
+  index: 1
+buttons/Red_Default
+  rotate: false
+  xy: 1028, 72
+  size: 238, 130
+  orig: 238, 130
+  offset: 0, 0
+  index: 1
+player/FIRE
+  rotate: false
+  xy: 1679, 1682
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 3
+player/FIRE
+  rotate: false
+  xy: 1679, 1320
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 4
+player/Puke
+  rotate: false
+  xy: 1817, 483
+  size: 213, 113
+  orig: 213, 113
+  offset: 0, 0
+  index: 3
+player/Puke
+  rotate: false
+  xy: 1817, 368
+  size: 213, 113
+  orig: 213, 113
+  offset: 0, 0
+  index: 4
+player/Puke
+  rotate: false
+  xy: 1808, 253
+  size: 213, 113
+  orig: 213, 113
+  offset: 0, 0
+  index: 5
+player/Puke
+  rotate: false
+  xy: 1808, 138
+  size: 213, 113
+  orig: 213, 113
+  offset: 0, 0
+  index: 6
+screens/Edyn/Edyn
+  rotate: false
+  xy: 1277, 1322
+  size: 400, 720
+  orig: 400, 720
+  offset: 0, 0
+  index: 2
+screens/Skyline1
+  rotate: false
+  xy: 0, 600
+  size: 1275, 720
+  orig: 1275, 720
+  offset: 0, 0
+  index: -1
+screens/options/MainMenu
+  rotate: false
+  xy: 1137, 0
+  size: 312, 38
+  orig: 312, 38
+  offset: 0, 0
+  index: -1
+screens/options/Main_menu
+  rotate: false
+  xy: 507, 36
+  size: 313, 50
+  orig: 313, 50
+  offset: 0, 0
+  index: 1
+screens/options/Main_menu
+  rotate: false
+  xy: 822, 20
+  size: 313, 50
+  orig: 313, 50
+  offset: 0, 0
+  index: 2
+screens/options/Runner
+  rotate: false
+  xy: 0, 1322
+  size: 1275, 720
+  orig: 1275, 720
+  offset: 0, 0
+  index: -1
+screens/options/Select_Runner
+  rotate: false
+  xy: 1268, 40
+  size: 505, 70
+  orig: 505, 70
+  offset: 0, 0
+  index: 1
+screens/options/Select_Runner
+  rotate: false
+  xy: 0, 16
+  size: 505, 70
+  orig: 505, 70
+  offset: 0, 0
+  index: 2
+screens/options/Tech_B
+  rotate: false
+  xy: 1277, 1018
+  size: 538, 300
+  orig: 538, 300
+  offset: 0, 0
+  index: 2
+screens/options/Tech_B
+  rotate: false
+  xy: 1277, 716
+  size: 538, 300
+  orig: 538, 300
+  offset: 0, 0
+  index: 3
+screens/options/Tech_B
+  rotate: false
+  xy: 1277, 414
+  size: 538, 300
+  orig: 538, 300
+  offset: 0, 0
+  index: 4
+screens/options/Tech_B
+  rotate: false
+  xy: 1268, 112
+  size: 538, 300
+  orig: 538, 300
+  offset: 0, 0
+  index: 5
 tunnel/Wall_Stain
   rotate: false
-  xy: 1720, 3576
+  xy: 0, 88
   size: 512, 510
   orig: 512, 510
   offset: 0, 0
   index: 3
 tunnel/Wall_Window_Female
   rotate: false
-  xy: 1720, 3064
+  xy: 514, 88
   size: 512, 510
   orig: 512, 510
   offset: 0, 0
   index: 1
-tunnel/Wall_Window_Female
-  rotate: false
-  xy: 2234, 3576
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 2
-tunnel/Wall_Window_Male
-  rotate: false
-  xy: 2234, 3064
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 1
-tunnel/Wall_Window_Male
-  rotate: false
-  xy: 2748, 3576
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 2
-tunnel/Wall_Window_Nessie
-  rotate: false
-  xy: 2748, 3064
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 1
-tunnel/Wall_Window_Nessie
-  rotate: false
-  xy: 3262, 3576
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 2
-tunnel/Wall_Window_Nessie
-  rotate: false
-  xy: 3262, 3064
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 3
-tunnel/Wall_Window_Nessie
-  rotate: false
-  xy: 1206, 2552
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 4
-tunnel/Wall_Window_Nessie
-  rotate: false
-  xy: 1720, 2552
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 5
-tunnel/Wall_Window_Sassie
-  rotate: false
-  xy: 2234, 2552
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 1
-tunnel/Wall_Window_Sassie
-  rotate: false
-  xy: 2748, 2552
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 2
-tunnel/Wall_Window_Sassie
-  rotate: false
-  xy: 3262, 2552
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 3
-tunnel/Wall_Window_Sassie
-  rotate: false
-  xy: 1069, 2040
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 4
-tunnel/Wall_Window_Sassie
-  rotate: false
-  xy: 1583, 2040
-  size: 512, 510
-  orig: 512, 510
-  offset: 0, 0
-  index: 5
-walls/Glass_Wall
-  rotate: false
-  xy: 0, 478
-  size: 263, 720
-  orig: 263, 720
-  offset: 0, 0
-  index: 1
-walls/Glass_Wall
-  rotate: false
-  xy: 402, 1200
-  size: 263, 720
-  orig: 263, 720
-  offset: 0, 0
-  index: 2
-walls/Glass_Wall
-  rotate: false
-  xy: 804, 1922
-  size: 263, 720
-  orig: 263, 720
-  offset: 0, 0
-  index: 3
 walls/Glass_Wall_Break_Left
   rotate: false
-  xy: 1336, 1318
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 2
-walls/Glass_Wall_Break_Left
-  rotate: false
-  xy: 1470, 1318
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 3
-walls/Glass_Wall_Break_Right
-  rotate: false
-  xy: 2006, 1318
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 1
-walls/Glass_Wall_Break_Right
-  rotate: false
-  xy: 2074, 596
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 2
-walls/Glass_Wall_Break_Right
-  rotate: false
-  xy: 2809, 1528
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 3
-walls/Glass_Wall_Left
-  rotate: false
-  xy: 1604, 1318
+  xy: 1817, 598
   size: 132, 720
   orig: 132, 720
   offset: 0, 0
   index: 1
-walls/Glass_Wall_Left
-  rotate: false
-  xy: 1738, 1318
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 2
-walls/Glass_Wall_Left
-  rotate: false
-  xy: 1872, 1318
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 3
-walls/Glass_Wall_Right
-  rotate: false
-  xy: 2942, 1528
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 1
-walls/Glass_Wall_Right
-  rotate: false
-  xy: 3075, 1528
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 2
-walls/Glass_Wall_Right
-  rotate: false
-  xy: 3208, 1528
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 3
-walls/Glass_Wall_break
-  rotate: false
-  xy: 3776, 3366
-  size: 263, 720
-  orig: 263, 720
-  offset: 0, 0
-  index: 1
-walls/Glass_Wall_break
-  rotate: false
-  xy: 265, 478
-  size: 263, 720
-  orig: 263, 720
-  offset: 0, 0
-  index: 2
-walls/Glass_Wall_break
-  rotate: false
-  xy: 667, 1200
-  size: 263, 720
-  orig: 263, 720
-  offset: 0, 0
-  index: 3
-walls/Laser_Wall_Break_Left
-  rotate: false
-  xy: 1136, 596
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 1
-walls/Laser_Wall_Break_Left
-  rotate: false
-  xy: 1270, 596
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 2
-walls/Laser_Wall_Break_Left
-  rotate: false
-  xy: 1404, 596
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 3
-walls/Laser_Wall_Break_Right
-  rotate: false
-  xy: 3341, 1528
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 1
-walls/Laser_Wall_Break_Right
-  rotate: false
-  xy: 3474, 1528
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 2
-walls/Laser_Wall_Break_Right
-  rotate: false
-  xy: 3607, 1528
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 3
-walls/Laser_Wall_Left
-  rotate: false
-  xy: 1538, 596
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 1
-walls/Laser_Wall_Left
-  rotate: false
-  xy: 1672, 596
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 2
-walls/Laser_Wall_Left
-  rotate: false
-  xy: 1806, 596
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 3
-walls/Laser_Wall_Right
-  rotate: false
-  xy: 2207, 806
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 1
-walls/Laser_Wall_Right
-  rotate: false
-  xy: 2340, 806
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 2
-walls/Laser_Wall_Right
-  rotate: false
-  xy: 2473, 806
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 3
-walls/Tesla_Wall_Break_Left
-  rotate: false
-  xy: 1940, 596
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 1
-walls/Tesla_Wall_Break_Left
-  rotate: false
-  xy: 2139, 1528
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 2
-walls/Tesla_Wall_Break_Left
-  rotate: false
-  xy: 2273, 1528
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 3
-walls/Tesla_Wall_Break_Right
-  rotate: false
-  xy: 2606, 806
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 1
-walls/Tesla_Wall_Break_Right
-  rotate: false
-  xy: 2739, 806
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 2
-walls/Tesla_Wall_Break_Right
-  rotate: false
-  xy: 2872, 806
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 3
-walls/Tesla_Wall_Left
-  rotate: false
-  xy: 2407, 1528
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 1
-walls/Tesla_Wall_Left
-  rotate: false
-  xy: 2541, 1528
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 2
-walls/Tesla_Wall_Left
-  rotate: false
-  xy: 2675, 1528
-  size: 132, 720
-  orig: 132, 720
-  offset: 0, 0
-  index: 3
-walls/Tesla_Wall_Right
-  rotate: false
-  xy: 3005, 806
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 1
-walls/Tesla_Wall_Right
-  rotate: false
-  xy: 3138, 806
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 2
-walls/Tesla_Wall_Right
-  rotate: false
-  xy: 3271, 806
-  size: 131, 720
-  orig: 131, 720
-  offset: 0, 0
-  index: 3
 
-animations3.png
-size: 4096,4096
+animations5.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Shields/Blue
+  rotate: false
+  xy: 1813, 20
+  size: 175, 175
+  orig: 175, 175
+  offset: 0, 0
+  index: 1
+buttons/Red
+  rotate: false
+  xy: 1028, 469
+  size: 238, 130
+  orig: 238, 130
+  offset: 0, 0
+  index: 2
+buttons/Red
+  rotate: false
+  xy: 1028, 337
+  size: 238, 130
+  orig: 238, 130
+  offset: 0, 0
+  index: 3
+screens/Edison/Edison
+  rotate: false
+  xy: 1817, 1323
+  size: 200, 720
+  orig: 200, 720
+  offset: 0, 0
+  index: 1
+screens/Edison/Edison
+  rotate: false
+  xy: 1817, 601
+  size: 200, 720
+  orig: 200, 720
+  offset: 0, 0
+  index: 2
+screens/Edison/Edison
+  rotate: false
+  xy: 1817, 601
+  size: 200, 720
+  orig: 200, 720
+  offset: 0, 0
+  index: 12
+screens/Edyn/Edyn
+  rotate: false
+  xy: 1277, 0
+  size: 400, 720
+  orig: 400, 720
+  offset: 0, 0
+  index: 3
+screens/Escape
+  rotate: false
+  xy: 1277, 722
+  size: 526, 113
+  orig: 526, 113
+  offset: 0, 0
+  index: 1
+screens/Skyline2
+  rotate: false
+  xy: 0, 1323
+  size: 1275, 720
+  orig: 1275, 720
+  offset: 0, 0
+  index: -1
+screens/options/Edison_Eyes
+  rotate: false
+  xy: 1813, 399
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 2
+screens/options/Edyn_Eyes
+  rotate: false
+  xy: 1813, 197
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 1
+screens/options/Edyn_Eyes
+  rotate: false
+  xy: 1028, 135
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: 2
+screens/options/Tech_B
+  rotate: false
+  xy: 1277, 1743
+  size: 538, 300
+  orig: 538, 300
+  offset: 0, 0
+  index: 6
+screens/options/Tech_B
+  rotate: false
+  xy: 1277, 1441
+  size: 538, 300
+  orig: 538, 300
+  offset: 0, 0
+  index: 7
+screens/options/Tech_B
+  rotate: false
+  xy: 1277, 1139
+  size: 538, 300
+  orig: 538, 300
+  offset: 0, 0
+  index: 8
+screens/options/Tech_B
+  rotate: false
+  xy: 1277, 837
+  size: 538, 300
+  orig: 538, 300
+  offset: 0, 0
+  index: 9
+screens/options/Volume
+  rotate: false
+  xy: 0, 601
+  size: 1275, 720
+  orig: 1275, 720
+  offset: 0, 0
+  index: -1
+tunnel/Wall_Window_Female
+  rotate: false
+  xy: 0, 89
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 2
+tunnel/Wall_Window_Male
+  rotate: false
+  xy: 514, 89
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 1
+walls/Glass_Wall_Break_Left
+  rotate: false
+  xy: 1679, 0
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 2
+
+animations6.png
+size: 2048,2048
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 player/FIRE
   rotate: false
-  xy: 0, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
-player/FIRE
-  rotate: false
-  xy: 0, 3258
+  xy: 0, 0
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 5
 player/FIRE
   rotate: false
-  xy: 362, 3620
+  xy: 362, 0
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 6
+screens/Edyn/Edyn
+  rotate: false
+  xy: 0, 1314
+  size: 400, 720
+  orig: 400, 720
+  offset: 0, 0
+  index: 4
+screens/Edyn/Edyn
+  rotate: false
+  xy: 0, 592
+  size: 400, 720
+  orig: 400, 720
+  offset: 0, 0
+  index: 5
+screens/Edyn/Edyn
+  rotate: false
+  xy: 402, 1314
+  size: 400, 720
+  orig: 400, 720
+  offset: 0, 0
+  index: 6
+screens/Edyn/Edyn
+  rotate: false
+  xy: 402, 592
+  size: 400, 720
+  orig: 400, 720
+  offset: 0, 0
+  index: 7
+screens/Edyn/Eyes
+  rotate: false
+  xy: 804, 1314
+  size: 400, 720
+  orig: 400, 720
+  offset: 0, 0
+  index: 1
+screens/Edyn/Eyes
+  rotate: false
+  xy: 804, 592
+  size: 400, 720
+  orig: 400, 720
+  offset: 0, 0
+  index: 2
+screens/Edyn/Eyes
+  rotate: false
+  xy: 1206, 1314
+  size: 400, 720
+  orig: 400, 720
+  offset: 0, 0
+  index: 3
+screens/Edyn/Eyes
+  rotate: false
+  xy: 1206, 592
+  size: 400, 720
+  orig: 400, 720
+  offset: 0, 0
+  index: 4
+screens/Title
+  rotate: false
+  xy: 0, 362
+  size: 876, 228
+  orig: 876, 228
+  offset: 0, 0
+  index: -1
+tunnel/Wall_Window_Male
+  rotate: false
+  xy: 878, 80
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 2
+tunnel/Wall_Window_Nessie
+  rotate: false
+  xy: 1392, 80
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 1
+walls/Glass_Wall
+  rotate: false
+  xy: 1608, 1314
+  size: 263, 720
+  orig: 263, 720
+  offset: 0, 0
+  index: 1
+walls/Glass_Wall
+  rotate: false
+  xy: 1608, 592
+  size: 263, 720
+  orig: 263, 720
+  offset: 0, 0
+  index: 2
+walls/Glass_Wall_Break_Left
+  rotate: false
+  xy: 1873, 1314
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 3
+walls/Glass_Wall_Left
+  rotate: false
+  xy: 1873, 592
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 1
+
+animations7.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Shields/Blue
+  rotate: false
+  xy: 1858, 168
+  size: 175, 175
+  orig: 175, 175
+  offset: 0, 0
+  index: 2
 player/FIRE
   rotate: false
-  xy: 0, 2896
+  xy: 0, 143
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 7
 player/Female_Puke
   rotate: false
-  xy: 362, 3258
+  xy: 362, 143
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 1
 player/Female_Puke
   rotate: false
-  xy: 724, 3620
+  xy: 724, 143
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 2
 player/Female_Puke
   rotate: false
-  xy: 0, 2534
+  xy: 1086, 143
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 3
+screens/Edison/Edison
+  rotate: false
+  xy: 1807, 1319
+  size: 200, 720
+  orig: 200, 720
+  offset: 0, 0
+  index: 3
+screens/Edison/Edison
+  rotate: false
+  xy: 1807, 1319
+  size: 200, 720
+  orig: 200, 720
+  offset: 0, 0
+  index: 11
+screens/Edison/Edison
+  rotate: false
+  xy: 1807, 597
+  size: 200, 720
+  orig: 200, 720
+  offset: 0, 0
+  index: 4
+screens/Edison/Edison
+  rotate: false
+  xy: 1807, 597
+  size: 200, 720
+  orig: 200, 720
+  offset: 0, 0
+  index: 10
+screens/Escape
+  rotate: false
+  xy: 0, 28
+  size: 526, 113
+  orig: 526, 113
+  offset: 0, 0
+  index: 2
+screens/Fannie_Moon
+  rotate: false
+  xy: 1858, 0
+  size: 165, 166
+  orig: 165, 166
+  offset: 0, 0
+  index: -1
+screens/options/Edison_Select
+  rotate: false
+  xy: 1542, 345
+  size: 408, 250
+  orig: 408, 250
+  offset: 0, 0
+  index: 1
+screens/options/Edison_Select_Default
+  rotate: false
+  xy: 1542, 345
+  size: 408, 250
+  orig: 408, 250
+  offset: 0, 0
+  index: 1
+screens/options/Edison_Select
+  rotate: false
+  xy: 1448, 93
+  size: 408, 250
+  orig: 408, 250
+  offset: 0, 0
+  index: 2
+tunnel/Wall_Window_Nessie
+  rotate: false
+  xy: 0, 1529
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 2
+tunnel/Wall_Window_Nessie
+  rotate: false
+  xy: 0, 1017
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 3
+tunnel/Wall_Window_Nessie
+  rotate: false
+  xy: 514, 1529
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 4
+tunnel/Wall_Window_Nessie
+  rotate: false
+  xy: 0, 505
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 5
+tunnel/Wall_Window_Sassie
+  rotate: false
+  xy: 514, 1017
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 1
+tunnel/Wall_Window_Sassie
+  rotate: false
+  xy: 1028, 1529
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 2
+tunnel/Wall_Window_Sassie
+  rotate: false
+  xy: 514, 505
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 3
+tunnel/Wall_Window_Sassie
+  rotate: false
+  xy: 1028, 1017
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 4
+tunnel/Wall_Window_Sassie
+  rotate: false
+  xy: 1028, 505
+  size: 512, 510
+  orig: 512, 510
+  offset: 0, 0
+  index: 5
+walls/Glass_Wall
+  rotate: false
+  xy: 1542, 1319
+  size: 263, 720
+  orig: 263, 720
+  offset: 0, 0
+  index: 3
+walls/Glass_Wall_break
+  rotate: false
+  xy: 1542, 597
+  size: 263, 720
+  orig: 263, 720
+  offset: 0, 0
+  index: 1
+
+animations8.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Shields/Blue
+  rotate: false
+  xy: 1810, 402
+  size: 175, 175
+  orig: 175, 175
+  offset: 0, 0
+  index: 3
+Shields/Green
+  rotate: false
+  xy: 1810, 225
+  size: 175, 175
+  orig: 175, 175
+  offset: 0, 0
+  index: 1
 player/Female_Puke
   rotate: false
-  xy: 362, 2896
+  xy: 0, 217
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 4
 player/Female_Puke
   rotate: false
-  xy: 724, 3258
+  xy: 362, 217
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 5
 player/Female_Puke
   rotate: false
-  xy: 1086, 3620
+  xy: 724, 217
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 6
 player/Female_Punch
   rotate: false
-  xy: 0, 2172
+  xy: 1086, 217
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 1
 player/Female_Punch
   rotate: false
-  xy: 362, 2534
+  xy: 1448, 217
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 2
+screens/Edison/Edison
+  rotate: false
+  xy: 265, 1301
+  size: 200, 720
+  orig: 200, 720
+  offset: 0, 0
+  index: 5
+screens/Edison/Edison
+  rotate: false
+  xy: 265, 1301
+  size: 200, 720
+  orig: 200, 720
+  offset: 0, 0
+  index: 9
+screens/Edison/Edison
+  rotate: false
+  xy: 265, 579
+  size: 200, 720
+  orig: 200, 720
+  offset: 0, 0
+  index: 6
+screens/Edison/Edison
+  rotate: false
+  xy: 265, 579
+  size: 200, 720
+  orig: 200, 720
+  offset: 0, 0
+  index: 8
+screens/Edison/Edison
+  rotate: false
+  xy: 467, 1301
+  size: 200, 720
+  orig: 200, 720
+  offset: 0, 0
+  index: 7
+screens/options/Tech_A
+  rotate: false
+  xy: 0, 0
+  size: 400, 215
+  orig: 400, 215
+  offset: 0, 0
+  index: 1
+screens/options/Tech_A
+  rotate: false
+  xy: 402, 0
+  size: 400, 215
+  orig: 400, 215
+  offset: 0, 0
+  index: 2
+screens/options/Tech_A
+  rotate: false
+  xy: 804, 0
+  size: 400, 215
+  orig: 400, 215
+  offset: 0, 0
+  index: 3
+screens/options/Tech_A
+  rotate: false
+  xy: 1206, 0
+  size: 400, 215
+  orig: 400, 215
+  offset: 0, 0
+  index: 4
+screens/options/Tech_A
+  rotate: false
+  xy: 1608, 0
+  size: 400, 215
+  orig: 400, 215
+  offset: 0, 0
+  index: 5
+walls/Glass_Wall_Break_Right
+  rotate: false
+  xy: 1405, 579
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 1
+walls/Glass_Wall_Break_Right
+  rotate: false
+  xy: 1607, 1301
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 2
+walls/Glass_Wall_Break_Right
+  rotate: false
+  xy: 1538, 579
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 3
+walls/Glass_Wall_Left
+  rotate: false
+  xy: 467, 579
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 2
+walls/Glass_Wall_Left
+  rotate: false
+  xy: 669, 1301
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 3
+walls/Glass_Wall_Right
+  rotate: false
+  xy: 1740, 1301
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 1
+walls/Glass_Wall_Right
+  rotate: false
+  xy: 1671, 579
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 2
+walls/Glass_Wall_Right
+  rotate: false
+  xy: 1873, 1301
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 3
+walls/Glass_Wall_break
+  rotate: false
+  xy: 0, 1301
+  size: 263, 720
+  orig: 263, 720
+  offset: 0, 0
+  index: 2
+walls/Glass_Wall_break
+  rotate: false
+  xy: 0, 579
+  size: 263, 720
+  orig: 263, 720
+  offset: 0, 0
+  index: 3
+walls/Laser_Wall_Break_Left
+  rotate: false
+  xy: 601, 579
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 1
+walls/Laser_Wall_Break_Left
+  rotate: false
+  xy: 803, 1301
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 2
+walls/Laser_Wall_Break_Left
+  rotate: false
+  xy: 735, 579
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 3
+walls/Laser_Wall_Break_Right
+  rotate: false
+  xy: 1804, 579
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 1
+walls/Laser_Wall_Left
+  rotate: false
+  xy: 937, 1301
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 1
+walls/Laser_Wall_Left
+  rotate: false
+  xy: 869, 579
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 2
+walls/Laser_Wall_Left
+  rotate: false
+  xy: 1071, 1301
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 3
+walls/Tesla_Wall_Break_Left
+  rotate: false
+  xy: 1003, 579
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 1
+walls/Tesla_Wall_Break_Left
+  rotate: false
+  xy: 1205, 1301
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 2
+walls/Tesla_Wall_Break_Left
+  rotate: false
+  xy: 1137, 579
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 3
+walls/Tesla_Wall_Left
+  rotate: false
+  xy: 1339, 1301
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 1
+walls/Tesla_Wall_Left
+  rotate: false
+  xy: 1271, 579
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 2
+walls/Tesla_Wall_Left
+  rotate: false
+  xy: 1473, 1301
+  size: 132, 720
+  orig: 132, 720
+  offset: 0, 0
+  index: 3
+
+animations9.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Shields/Green
+  rotate: false
+  xy: 402, 40
+  size: 175, 175
+  orig: 175, 175
+  offset: 0, 0
+  index: 2
+Shields/Green
+  rotate: false
+  xy: 1751, 1122
+  size: 175, 175
+  orig: 175, 175
+  offset: 0, 0
+  index: 3
+Shields/Red
+  rotate: false
+  xy: 1751, 945
+  size: 175, 175
+  orig: 175, 175
+  offset: 0, 0
+  index: 1
+Shields/Red
+  rotate: false
+  xy: 1810, 508
+  size: 175, 175
+  orig: 175, 175
+  offset: 0, 0
+  index: 2
+Shields/Red
+  rotate: false
+  xy: 1810, 331
+  size: 175, 175
+  orig: 175, 175
+  offset: 0, 0
+  index: 3
 player/Female_Punch
   rotate: false
-  xy: 724, 2896
+  xy: 0, 217
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 3
 player/Female_Punch
   rotate: false
-  xy: 1086, 3258
+  xy: 798, 1661
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 4
 player/Female_Punch
   rotate: false
-  xy: 1448, 3620
+  xy: 1160, 1661
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 5
 player/Female_Punch
   rotate: false
-  xy: 0, 1810
+  xy: 1522, 1661
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 6
 player/Female_Run
   rotate: false
-  xy: 362, 2172
+  xy: 798, 1299
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 1
 player/Female_Run
   rotate: false
-  xy: 724, 2534
+  xy: 1160, 1299
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 2
 player/Female_Run
   rotate: false
-  xy: 1086, 2896
+  xy: 1522, 1299
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 3
 player/Female_Run
   rotate: false
-  xy: 1448, 3258
+  xy: 362, 217
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 4
 player/Female_Run
   rotate: false
-  xy: 1810, 3620
+  xy: 665, 937
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 5
 player/Female_Run
   rotate: false
-  xy: 0, 1448
+  xy: 1027, 937
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 6
 player/Female_Shock
   rotate: false
-  xy: 362, 1810
+  xy: 1389, 937
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 1
 player/Female_Shock
   rotate: false
-  xy: 724, 2172
+  xy: 724, 323
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 2
 player/Female_Shock
   rotate: false
-  xy: 724, 2172
+  xy: 724, 323
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 8
 player/Female_Shock
   rotate: false
-  xy: 724, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 6
-player/Female_Shock
-  rotate: false
-  xy: 724, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
-player/Female_Shock
-  rotate: false
-  xy: 724, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 10
-player/Female_Shock
-  rotate: false
-  xy: 724, 2172
+  xy: 724, 323
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 14
 player/Female_Shock
   rotate: false
-  xy: 724, 2172
+  xy: 724, 323
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 12
 player/Female_Shock
   rotate: false
-  xy: 1086, 2534
+  xy: 724, 323
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 10
+player/Female_Shock
+  rotate: false
+  xy: 724, 323
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 4
+player/Female_Shock
+  rotate: false
+  xy: 724, 323
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 6
+player/Female_Shock
+  rotate: false
+  xy: 1086, 323
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 3
 player/Female_Shock
   rotate: false
-  xy: 1086, 2534
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 7
-player/Female_Shock
-  rotate: false
-  xy: 1086, 2534
+  xy: 1086, 323
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 5
 player/Female_Shock
   rotate: false
-  xy: 1086, 2534
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 11
-player/Female_Shock
-  rotate: false
-  xy: 1086, 2534
+  xy: 1086, 323
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 9
 player/Female_Shock
   rotate: false
-  xy: 1086, 2534
+  xy: 1086, 323
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 11
+player/Female_Shock
+  rotate: false
+  xy: 1086, 323
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 15
 player/Female_Shock
   rotate: false
-  xy: 1086, 2534
+  xy: 1086, 323
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 7
+player/Female_Shock
+  rotate: false
+  xy: 1086, 323
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 13
 player/Female_Shock
   rotate: false
-  xy: 1448, 2896
+  xy: 1448, 323
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 16
+screens/options/Edison_Select
+  rotate: false
+  xy: 665, 685
+  size: 408, 250
+  orig: 408, 250
+  offset: 0, 0
+  index: 3
+screens/options/Edison_Select
+  rotate: false
+  xy: 1075, 685
+  size: 408, 250
+  orig: 408, 250
+  offset: 0, 0
+  index: 4
+screens/options/Edison_Select
+  rotate: false
+  xy: 1485, 685
+  size: 408, 250
+  orig: 408, 250
+  offset: 0, 0
+  index: 5
+screens/options/Edison_Select
+  rotate: false
+  xy: 724, 71
+  size: 408, 250
+  orig: 408, 250
+  offset: 0, 0
+  index: 6
+screens/options/Edison_Select
+  rotate: false
+  xy: 1134, 71
+  size: 408, 250
+  orig: 408, 250
+  offset: 0, 0
+  index: 7
+screens/options/Edison_Select
+  rotate: false
+  xy: 1544, 71
+  size: 408, 250
+  orig: 408, 250
+  offset: 0, 0
+  index: 8
+screens/options/Tech_A
+  rotate: false
+  xy: 0, 0
+  size: 400, 215
+  orig: 400, 215
+  offset: 0, 0
+  index: 6
+walls/Laser_Wall_Break_Right
+  rotate: false
+  xy: 0, 1301
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 2
+walls/Laser_Wall_Break_Right
+  rotate: false
+  xy: 0, 579
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 3
+walls/Laser_Wall_Right
+  rotate: false
+  xy: 133, 1301
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 1
+walls/Laser_Wall_Right
+  rotate: false
+  xy: 133, 579
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 2
+walls/Laser_Wall_Right
+  rotate: false
+  xy: 266, 1301
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 3
+walls/Tesla_Wall_Break_Right
+  rotate: false
+  xy: 266, 579
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 1
+walls/Tesla_Wall_Break_Right
+  rotate: false
+  xy: 399, 1301
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 2
+walls/Tesla_Wall_Break_Right
+  rotate: false
+  xy: 399, 579
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 3
+walls/Tesla_Wall_Right
+  rotate: false
+  xy: 532, 1301
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 1
+walls/Tesla_Wall_Right
+  rotate: false
+  xy: 532, 579
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 2
+walls/Tesla_Wall_Right
+  rotate: false
+  xy: 665, 1301
+  size: 131, 720
+  orig: 131, 720
+  offset: 0, 0
+  index: 3
+
+animations10.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
 player/Female_Shock
   rotate: false
-  xy: 1810, 3258
+  xy: 754, 1086
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 17
 player/Female_Wall
   rotate: false
-  xy: 2172, 3620
+  xy: 1116, 1086
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 1
 player/Female_Wall
   rotate: false
-  xy: 0, 1086
+  xy: 1478, 1086
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 2
 player/Female_Wall
   rotate: false
-  xy: 362, 1448
+  xy: 0, 834
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 3
 player/Female_Wall
   rotate: false
-  xy: 724, 1810
+  xy: 362, 834
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 4
 player/Female_Wall
   rotate: false
-  xy: 1086, 2172
+  xy: 724, 724
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 5
 player/Female_Wall
   rotate: false
-  xy: 1448, 2534
+  xy: 1086, 724
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 6
 player/Female_Wall
   rotate: false
-  xy: 1810, 2896
+  xy: 1448, 724
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 7
 player/Male_Puke
   rotate: false
-  xy: 2172, 3258
+  xy: 0, 472
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 1
 player/Male_Puke
   rotate: false
-  xy: 2534, 3620
+  xy: 362, 472
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 2
 player/Male_Puke
+  rotate: false
+  xy: 724, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 3
+player/Male_Puke
+  rotate: false
+  xy: 1086, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 4
+player/Male_Puke
+  rotate: false
+  xy: 1448, 362
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 5
+player/Male_Puke
+  rotate: false
+  xy: 0, 110
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 6
+player/Male_Punch
+  rotate: false
+  xy: 362, 110
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 1
+player/Male_Punch
+  rotate: false
+  xy: 724, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 2
+player/Male_Punch
+  rotate: false
+  xy: 1086, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 3
+player/Male_Punch
+  rotate: false
+  xy: 1448, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 4
+screens/options/Edison_Select
+  rotate: false
+  xy: 0, 1700
+  size: 408, 250
+  orig: 408, 250
+  offset: 0, 0
+  index: 9
+screens/options/Edison_Select
+  rotate: false
+  xy: 410, 1700
+  size: 408, 250
+  orig: 408, 250
+  offset: 0, 0
+  index: 10
+screens/options/Edyn_Select
+  rotate: false
+  xy: 820, 1700
+  size: 375, 250
+  orig: 375, 250
+  offset: 0, 0
+  index: 1
+screens/options/Edyn_Select_Default
+  rotate: false
+  xy: 820, 1700
+  size: 375, 250
+  orig: 375, 250
+  offset: 0, 0
+  index: 1
+screens/options/Edyn_Select
+  rotate: false
+  xy: 1197, 1700
+  size: 375, 250
+  orig: 375, 250
+  offset: 0, 0
+  index: 2
+screens/options/Edyn_Select
+  rotate: false
+  xy: 1574, 1700
+  size: 375, 250
+  orig: 375, 250
+  offset: 0, 0
+  index: 3
+screens/options/Edyn_Select
+  rotate: false
+  xy: 0, 1448
+  size: 375, 250
+  orig: 375, 250
+  offset: 0, 0
+  index: 4
+screens/options/Edyn_Select
+  rotate: false
+  xy: 377, 1448
+  size: 375, 250
+  orig: 375, 250
+  offset: 0, 0
+  index: 5
+screens/options/Edyn_Select
+  rotate: false
+  xy: 754, 1448
+  size: 375, 250
+  orig: 375, 250
+  offset: 0, 0
+  index: 6
+screens/options/Edyn_Select
+  rotate: false
+  xy: 1131, 1448
+  size: 375, 250
+  orig: 375, 250
+  offset: 0, 0
+  index: 7
+screens/options/Edyn_Select
+  rotate: false
+  xy: 1508, 1448
+  size: 375, 250
+  orig: 375, 250
+  offset: 0, 0
+  index: 8
+screens/options/Edyn_Select
+  rotate: false
+  xy: 0, 1196
+  size: 375, 250
+  orig: 375, 250
+  offset: 0, 0
+  index: 9
+screens/options/Edyn_Select
+  rotate: false
+  xy: 377, 1196
+  size: 375, 250
+  orig: 375, 250
+  offset: 0, 0
+  index: 10
+
+animations11.png
+size: 2048,2048
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+player/Male_Punch
+  rotate: false
+  xy: 0, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 5
+player/Male_Punch
+  rotate: false
+  xy: 0, 1086
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 6
+player/Male_Run
+  rotate: false
+  xy: 362, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 1
+player/Male_Run
   rotate: false
   xy: 0, 724
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 3
-player/Male_Puke
+  index: 2
+player/Male_Run
   rotate: false
   xy: 362, 1086
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 4
-player/Male_Puke
+  index: 3
+player/Male_Run
   rotate: false
   xy: 724, 1448
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 5
-player/Male_Puke
-  rotate: false
-  xy: 1086, 1810
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 6
-player/Male_Punch
-  rotate: false
-  xy: 1448, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 1
-player/Male_Punch
-  rotate: false
-  xy: 1810, 2534
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 2
-player/Male_Punch
-  rotate: false
-  xy: 2172, 2896
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 3
-player/Male_Punch
-  rotate: false
-  xy: 2534, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
   index: 4
-player/Male_Punch
-  rotate: false
-  xy: 2896, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 5
-player/Male_Punch
+player/Male_Run
   rotate: false
   xy: 0, 362
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 6
+  index: 5
 player/Male_Run
   rotate: false
   xy: 362, 724
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 1
-player/Male_Run
+  index: 6
+player/Male_Shock
   rotate: false
   xy: 724, 1086
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 2
-player/Male_Run
+  index: 1
+player/Male_Shock
   rotate: false
   xy: 1086, 1448
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 3
-player/Male_Run
-  rotate: false
-  xy: 1448, 1810
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
-player/Male_Run
-  rotate: false
-  xy: 1810, 2172
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 5
-player/Male_Run
-  rotate: false
-  xy: 2172, 2534
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 6
-player/Male_Shock
-  rotate: false
-  xy: 2534, 2896
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 1
-player/Male_Shock
-  rotate: false
-  xy: 2896, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
   index: 2
 player/Male_Shock
   rotate: false
-  xy: 2896, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 12
-player/Male_Shock
-  rotate: false
-  xy: 2896, 3258
+  xy: 1086, 1448
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 14
 player/Male_Shock
   rotate: false
-  xy: 2896, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 4
-player/Male_Shock
-  rotate: false
-  xy: 2896, 3258
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 8
-player/Male_Shock
-  rotate: false
-  xy: 2896, 3258
+  xy: 1086, 1448
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 10
 player/Male_Shock
   rotate: false
-  xy: 2896, 3258
+  xy: 1086, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 12
+player/Male_Shock
+  rotate: false
+  xy: 1086, 1448
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 6
 player/Male_Shock
   rotate: false
-  xy: 3258, 3620
+  xy: 1086, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 4
+player/Male_Shock
+  rotate: false
+  xy: 1086, 1448
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 8
+player/Male_Shock
+  rotate: false
+  xy: 0, 0
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 3
 player/Male_Shock
   rotate: false
-  xy: 3258, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 5
-player/Male_Shock
-  rotate: false
-  xy: 3258, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 11
-player/Male_Shock
-  rotate: false
-  xy: 3258, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 13
-player/Male_Shock
-  rotate: false
-  xy: 3258, 3620
+  xy: 0, 0
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 15
 player/Male_Shock
   rotate: false
-  xy: 3258, 3620
-  size: 360, 360
-  orig: 360, 360
-  offset: 0, 0
-  index: 7
-player/Male_Shock
-  rotate: false
-  xy: 3258, 3620
+  xy: 0, 0
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
@@ -1807,144 +1911,88 @@ player/Male_Shock
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 16
+  index: 13
+player/Male_Shock
+  rotate: false
+  xy: 0, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 5
+player/Male_Shock
+  rotate: false
+  xy: 0, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 11
+player/Male_Shock
+  rotate: false
+  xy: 0, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
+  index: 7
 player/Male_Shock
   rotate: false
   xy: 362, 362
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 17
-player/Male_Wall
+  index: 16
+player/Male_Shock
   rotate: false
   xy: 724, 724
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 1
+  index: 17
 player/Male_Wall
   rotate: false
   xy: 1086, 1086
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
-  index: 2
+  index: 1
 player/Male_Wall
   rotate: false
   xy: 1448, 1448
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
+  index: 2
+player/Male_Wall
+  rotate: false
+  xy: 362, 0
+  size: 360, 360
+  orig: 360, 360
+  offset: 0, 0
   index: 3
 player/Male_Wall
   rotate: false
-  xy: 1810, 1810
+  xy: 724, 362
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 4
 player/Male_Wall
   rotate: false
-  xy: 2172, 2172
+  xy: 1086, 724
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 5
 player/Male_Wall
   rotate: false
-  xy: 2534, 2534
+  xy: 1448, 1086
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 6
 player/Male_Wall
   rotate: false
-  xy: 2896, 2896
+  xy: 724, 0
   size: 360, 360
   orig: 360, 360
   offset: 0, 0
   index: 7
-screens/options/Edison_Select
-  rotate: false
-  xy: 3620, 3730
-  size: 408, 250
-  orig: 408, 250
-  offset: 0, 0
-  index: 10
-screens/options/Edyn_Select
-  rotate: false
-  xy: 3258, 3368
-  size: 375, 250
-  orig: 375, 250
-  offset: 0, 0
-  index: 4
-screens/options/Edyn_Select
-  rotate: false
-  xy: 3258, 3116
-  size: 375, 250
-  orig: 375, 250
-  offset: 0, 0
-  index: 5
-screens/options/Edyn_Select
-  rotate: false
-  xy: 362, 110
-  size: 375, 250
-  orig: 375, 250
-  offset: 0, 0
-  index: 6
-screens/options/Edyn_Select
-  rotate: false
-  xy: 1086, 834
-  size: 375, 250
-  orig: 375, 250
-  offset: 0, 0
-  index: 7
-screens/options/Edyn_Select
-  rotate: false
-  xy: 1810, 1558
-  size: 375, 250
-  orig: 375, 250
-  offset: 0, 0
-  index: 8
-screens/options/Edyn_Select
-  rotate: false
-  xy: 2534, 2282
-  size: 375, 250
-  orig: 375, 250
-  offset: 0, 0
-  index: 9
-screens/options/Edyn_Select
-  rotate: false
-  xy: 724, 472
-  size: 375, 250
-  orig: 375, 250
-  offset: 0, 0
-  index: 10
-screens/options/Tech_A
-  rotate: false
-  xy: 3258, 2899
-  size: 400, 215
-  orig: 400, 215
-  offset: 0, 0
-  index: 3
-screens/options/Tech_A
-  rotate: false
-  xy: 1448, 1231
-  size: 400, 215
-  orig: 400, 215
-  offset: 0, 0
-  index: 4
-screens/options/Tech_A
-  rotate: false
-  xy: 2172, 1955
-  size: 400, 215
-  orig: 400, 215
-  offset: 0, 0
-  index: 5
-screens/options/Tech_A
-  rotate: false
-  xy: 2896, 2679
-  size: 400, 215
-  orig: 400, 215
-  offset: 0, 0
-  index: 6
