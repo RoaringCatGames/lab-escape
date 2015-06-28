@@ -964,8 +964,7 @@ public class BubbleRunnerStage extends BaseStage {
 
     private void resetGame() {
         if(isDead){
-            bgVolume = gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
-            sfxVolume = gameProcessor.getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY);
+            initializeVolumes();
             String charSelect = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY);
             if(!"".equals(charSelect) && !charSelect.equals(characterSelected)){
                 characterSelected = charSelect;
@@ -1095,7 +1094,13 @@ public class BubbleRunnerStage extends BaseStage {
 //--------------
     private void initializeVolumes(){
         bgVolume = gameProcessor.getStoredFloat(GameOptions.BG_MUSIC_VOLUME_PREF_KEY);
+        if(bgVolume < 0){
+            bgVolume = 0f;
+        }
         sfxVolume = gameProcessor.getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY);
+        if(sfxVolume < 0){
+            sfxVolume = 0f;
+        }
     }
 
     private void initializeAmbience() {

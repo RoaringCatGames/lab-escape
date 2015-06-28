@@ -60,6 +60,16 @@ public class BubbleRunnerGame extends Game implements IGameProcessor {
                });
         }
 
+        float sfxVal = getStoredFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY);
+        if(sfxVal < 0f){
+            saveGameData(new IDataSaver() {
+                @Override
+                public void updatePreferences(Preferences preferences) {
+                    preferences.putFloat(GameOptions.SFX_MUSIC_VOLUME_PREF_KEY, 0.5f);
+                }
+            });
+        }
+
         input = new InputMultiplexer();
 	}
 
