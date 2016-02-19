@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kasetagen.engine.IDataSaver;
@@ -188,8 +189,10 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
     private TextButton clearScoresButton;
     private Label highScoreLabel;
     private Label highComboLabel;
+    private Label highScoreNameLabel;
     private int scoreValue;
     private int comboValue;
+    private String scoreName = "";
 
 
 
@@ -269,11 +272,17 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
     private void assignScoreValues() {
         scoreValue = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
         comboValue = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
+        scoreName = gameProcessor.getStoredString(GameStats.HIGH_SCORE_NAME_KEY);
+
         if(scoreValue < 0){
             scoreValue = 0;
         }
         if(comboValue < 0){
             comboValue = 0;
+        }
+
+        if(scoreName == null || scoreName == ""){
+            scoreName = "AAA_____";
         }
     }
 
@@ -585,9 +594,11 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
          */
         Label.LabelStyle style = new Label.LabelStyle();
         style.font = gameProcessor.getAssetManager().get(AssetsUtil.NEUROPOL_64, AssetsUtil.BITMAP_FONT);
+        highScoreNameLabel = new Label("Player: " + scoreName, style);
         highScoreLabel = new Label("High Score: " + UIUtil.convertIntToDigitsString(GameStats.MAX_SCORE_DIGITS, 0), style);
         highComboLabel = new Label("High Combo: " + UIUtil.convertIntToDigitsString(GameStats.MAX_COMBO_DIGITS, 0), style);
-        adjustHighScores(scoreValue, comboValue);
+        adjustHighScores(scoreValue, comboValue, scoreName);
+        highScoreGroup.addActor(highScoreNameLabel);
         highScoreGroup.addActor(highScoreLabel);
         highScoreGroup.addActor(highComboLabel);
 
@@ -608,12 +619,13 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
                     preferences.putInteger(GameStats.HIGH_SCORE_KEY, 0);
                     preferences.putInteger(GameStats.HIGH_COMBO_KEY, 0);
                     preferences.putInteger(GameStats.MOST_MISSES_KEY, 0);
+                    preferences.putString(GameStats.HIGH_SCORE_NAME_KEY, "");
                 }
             };
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 gameProcessor.saveGameData(scoreClearer);
-                adjustHighScores(0, 0);
+                adjustHighScores(0, 0, "AAA_____");
             }
         });
         clearScoresButton.setPosition(tbXPadding, tbYPadding);
@@ -631,14 +643,17 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         highScoreGroup.addActor(closeScoresButton);
     }
 
-    private void adjustHighScores(int newScoreValue, int newComboValue) {
+    private void adjustHighScores(int newScoreValue, int newComboValue, String name) {
         String scoreDisplay = UIUtil.convertIntToDigitsString(GameStats.MAX_SCORE_DIGITS, newScoreValue);
         String comboDisplay = UIUtil.convertIntToDigitsString(GameStats.MAX_COMBO_DIGITS, newComboValue);
+        highScoreNameLabel.setText("Player: " + name);
+        highScoreNameLabel.setAlignment(Align.center);
         highScoreLabel.setText("High Score: " + scoreDisplay);
         highComboLabel.setText("High Combo:  " + comboDisplay);
-        float totalHeight = highScoreLabel.getHeight() + highComboLabel.getHeight();
+        float totalHeight = highScoreNameLabel.getHeight() + highScoreLabel.getHeight() + highComboLabel.getHeight();
         float yStart = (highScoreGroup.getHeight()/2f) + (totalHeight/2f);
-        highScoreLabel.setPosition(highScoreGroup.getWidth()/2f - (highScoreLabel.getWidth()/2f), yStart);
+        highScoreNameLabel.setPosition(highScoreGroup.getWidth()/2f - (highScoreNameLabel.getGlyphLayout().width/2f), yStart);
+        highScoreLabel.setPosition(highScoreGroup.getWidth()/2f - (highScoreLabel.getWidth()/2f), highScoreNameLabel.getY() - highScoreNameLabel.getHeight());
         highComboLabel.setPosition(highScoreGroup.getWidth() / 2f - (highComboLabel.getWidth() / 2f), highScoreLabel.getY() - highComboLabel.getHeight());
     }
 
@@ -839,7 +854,7 @@ public class BubbleRunnerMenu extends Kitten2dScreen{
         gameProcessor.setBGMusic(bgMusic);
 
         assignScoreValues();
-        adjustHighScores(scoreValue, comboValue);
+        adjustHighScores(scoreValue, comboValue, scoreName);
     }
 
     @Override

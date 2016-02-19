@@ -18,6 +18,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -111,6 +113,7 @@ public class BubbleRunnerStage extends BaseStage {
     //State Values
     private int highScore = 0;
     private int mostMisses = 0;
+    private String highScoreName = "";
     private boolean isDead = false;
 
     private int currentCombo = 0;
@@ -141,6 +144,7 @@ public class BubbleRunnerStage extends BaseStage {
     public Array<Wall> walls;
     public Wall collidedWall = null;
     public GameInfo info;
+    public TextField nameInput;
     public Overlay deathOverlay;
     public Overlay alarmOverlay;
     public ControlGroup leftControls;
@@ -261,6 +265,7 @@ public class BubbleRunnerStage extends BaseStage {
         highScore = gameProcessor.getStoredInt(GameStats.HIGH_SCORE_KEY);
         mostMisses = gameProcessor.getStoredInt(GameStats.MOST_MISSES_KEY);
         highestCombo = gameProcessor.getStoredInt(GameStats.HIGH_COMBO_KEY);
+        highScoreName = gameProcessor.getStoredString(GameStats.HIGH_SCORE_NAME_KEY, "--AAA--");
         characterSelected = gameProcessor.getStoredString(GameOptions.CHARACTER_SELECT_KEY, AnimationUtil.CHARACTER_2);
 
         bodyLimit = new ResourceLimitation(MAXIMUM_BODY_LIMIT);
@@ -391,6 +396,7 @@ public class BubbleRunnerStage extends BaseStage {
 
             int index = getActors().size - 1;
             cinematic.setZIndex(index--);
+            nameInput.setZIndex(index--);
             deathOverlay.setZIndex(index--);
             leftControls.setZIndex(index--);
             rightControls.setZIndex(index--);
@@ -930,7 +936,25 @@ public class BubbleRunnerStage extends BaseStage {
             needsSave = true;
         }
 
+
         if(needsSave){
+            Input.TextInputListener textListener = new Input.TextInputListener()
+            {
+                @Override
+                public void input(String input)
+                {
+                    saveHighScoreName(input);
+                }
+
+                @Override
+                public void canceled()
+                {
+                    System.out.println("Aborted");
+                }
+            };
+            nameInput.setVisible(true);
+            Gdx.input.getTextInput(textListener, "Your Name: ", "AAA", "");
+
             saveCurrentStats();
         }
 
@@ -940,6 +964,17 @@ public class BubbleRunnerStage extends BaseStage {
         deathOverlay.setVisible(true);
     }
 
+    private IDataSaver nameDataSaver = new IDataSaver() {
+        @Override
+        public void updatePreferences(Preferences prefs) {
+            prefs.putString(GameStats.HIGH_SCORE_NAME_KEY, highScoreName);
+        }
+    };
+
+    private void saveHighScoreName(String name){
+        highScoreName = name;
+        gameProcessor.saveGameData(nameDataSaver);
+    }
     private void saveCurrentStats(){
         gameProcessor.saveGameData(new IDataSaver() {
             @Override
@@ -1140,15 +1175,15 @@ public class BubbleRunnerStage extends BaseStage {
             @Override
             public void applyAdjustment(Actor actor, float delta) {
                 current += flutterSpeed * delta;
-                if(current >= max){
+                if (current >= max) {
                     current = max;
                     flutterSpeed *= -1;
-                }else if(current <= min){
+                } else if (current <= min) {
                     current = min;
                     flutterSpeed *= -1;
                 }
 
-                ((Overlay)actor).setBackgroundOpacity(current);
+                ((Overlay) actor).setBackgroundOpacity(current);
             }
         });
         addActor(alarmOverlay);
@@ -1162,14 +1197,14 @@ public class BubbleRunnerStage extends BaseStage {
 
         deathOverlay.setVisible(false);
 
-        deathOverlay.setDismissButtonEvent(new ClickListener(){
+        deathOverlay.setDismissButtonEvent(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 resetGame();
             }
         });
 
-        deathOverlay.setHomeButtonEvent(new ClickListener(){
+        deathOverlay.setHomeButtonEvent(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 gameProcessor.changeToScreen(BubbleRunnerGame.MENU);
@@ -1177,6 +1212,20 @@ public class BubbleRunnerStage extends BaseStage {
         });
         addActor(deathOverlay);
         deathOverlay.setZIndex(getActors().size - 1);
+
+
+
+        Skin tfskin = gameProcessor.getAssetManager().get(AssetsUtil.DEFAULT_SKIN, AssetsUtil.SKIN);
+
+        nameInput = new TextField("", tfskin);
+        nameInput.setMessageText("Name:");
+        nameInput.getStyle().messageFont = gameProcessor.getAssetManager().get(AssetsUtil.NEUROPOL_32, AssetsUtil.BITMAP_FONT);
+        nameInput.getStyle().messageFontColor = Color.CYAN;
+        nameInput.setPosition(getWidth() / 2f, getHeight() / 2f);
+        nameInput.setMaxLength(8);
+        nameInput.setVisible(false);
+        addActor(nameInput);
+        nameInput.setZIndex(getActors().size - 1);
     }
 
     private void setPlayerAnimations(){

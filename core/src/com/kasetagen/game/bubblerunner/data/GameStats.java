@@ -9,6 +9,7 @@ package com.kasetagen.game.bubblerunner.data;
 public class GameStats {
     //TODO: Implement GameStats
     public static final String HIGH_SCORE_KEY = "HIGH_SCORE";
+    public static final String HIGH_SCORE_NAME_KEY = "HIGH_SCORE_NAME";
     public static final String MOST_MISSES_KEY = "MOST_MISSES";
     public static final String HIGH_COMBO_KEY = "HIGHEST_COMBO";
     public static final int MAX_SCORE_DIGITS = 6;
