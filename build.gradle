@@ -17,11 +17,12 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '1.0'
+    version = '1.0.0'
     ext {
-        appName = 'bubblerunner'
+        appName = 'lab-escape'
         gdxVersion = '1.6.0'
         roboVMVersion = '1.2.0'
+        outputName = 'lab-escape'
     }
 
     repositories {
@@ -67,7 +68,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-x86"
-	compile files('../../kitten2d/core/build/libs/core-1.0.jar')
+	      compile files('../../kitten2d/core/build/libs/core-1.0.jar')
     }
 }
 
